@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31912.275
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnService_Capstone", "AnService_Capstone\AnService_Capstone.csproj", "{DBA5727E-FAA6-4CC0-A0F0-1E9FB2D31071}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnService_Capstone.Core", "AnService_Capstone.Core\AnService_Capstone.Core.csproj", "{DFEAFF97-2626-43CF-B606-DC1B8A7EF0D0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnService_Capstone.DataAccess.Dapper", "AnService_Capstone.DataAccess.Dapper\AnService_Capstone.DataAccess.Dapper.csproj", "{140387F8-3121-4D61-B0F9-5DF7E58A2D09}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DBA5727E-FAA6-4CC0-A0F0-1E9FB2D31071}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DBA5727E-FAA6-4CC0-A0F0-1E9FB2D31071}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DBA5727E-FAA6-4CC0-A0F0-1E9FB2D31071}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DBA5727E-FAA6-4CC0-A0F0-1E9FB2D31071}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DFEAFF97-2626-43CF-B606-DC1B8A7EF0D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DFEAFF97-2626-43CF-B606-DC1B8A7EF0D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DFEAFF97-2626-43CF-B606-DC1B8A7EF0D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DFEAFF97-2626-43CF-B606-DC1B8A7EF0D0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{140387F8-3121-4D61-B0F9-5DF7E58A2D09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{140387F8-3121-4D61-B0F9-5DF7E58A2D09}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{140387F8-3121-4D61-B0F9-5DF7E58A2D09}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{140387F8-3121-4D61-B0F9-5DF7E58A2D09}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DB686273-8C42-4913-AB41-128E025688C2}
+	EndGlobalSection
+EndGlobal
