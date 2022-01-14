@@ -9,6 +9,7 @@ namespace AnService_Capstone.Core.Entities
     {
         public TblUser()
         {
+            TblPromotionDetails = new HashSet<TblPromotionDetail>();
             TblRequestServices = new HashSet<TblRequestService>();
         }
 
@@ -23,10 +24,13 @@ namespace AnService_Capstone.Core.Entities
         public int Role { get; set; }
         public int? TypeJob { get; set; }
         public DateTime? CreateDate { get; set; }
-        public bool? Status { get; set; }
+        public DateTime? UpdateDate { get; set; }
+        public int? Status { get; set; }
 
         public virtual TblRole RoleNavigation { get; set; }
+        public virtual TblStatus StatusNavigation { get; set; }
         public virtual TblTypeJob TypeJobNavigation { get; set; }
+        public virtual ICollection<TblPromotionDetail> TblPromotionDetails { get; set; }
         public virtual ICollection<TblRequestService> TblRequestServices { get; set; }
     }
 }

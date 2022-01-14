@@ -18,6 +18,8 @@ namespace AnService_Capstone.Core.Entities
         }
 
         public virtual DbSet<TblMedium> TblMedia { get; set; }
+        public virtual DbSet<TblPromotion> TblPromotions { get; set; }
+        public virtual DbSet<TblPromotionDetail> TblPromotionDetails { get; set; }
         public virtual DbSet<TblRequestDetail> TblRequestDetails { get; set; }
         public virtual DbSet<TblRequestService> TblRequestServices { get; set; }
         public virtual DbSet<TblRole> TblRoles { get; set; }
@@ -57,6 +59,48 @@ namespace AnService_Capstone.Core.Entities
                     .HasForeignKey(d => d.RequestServiceId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_tblMedia_tblRequestServices");
+            });
+
+            modelBuilder.Entity<TblPromotion>(entity =>
+            {
+                entity.HasKey(e => e.PromotionId);
+
+                entity.ToTable("tblPromotion");
+
+                entity.Property(e => e.PromotionId).HasColumnName("PromotionID");
+
+                entity.Property(e => e.PromotionCode)
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.PromotionDateExpired).HasColumnType("date");
+
+                entity.Property(e => e.PromotionDescription)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<TblPromotionDetail>(entity =>
+            {
+                entity.HasKey(e => e.PromotionDetailId);
+
+                entity.ToTable("tblPromotionDetail");
+
+                entity.Property(e => e.PromotionDetailId).HasColumnName("PromotionDetailID");
+
+                entity.Property(e => e.CustomerId).HasColumnName("CustomerID");
+
+                entity.Property(e => e.PromotionId).HasColumnName("PromotionID");
+
+                entity.HasOne(d => d.Customer)
+                    .WithMany(p => p.TblPromotionDetails)
+                    .HasForeignKey(d => d.CustomerId)
+                    .HasConstraintName("FK_tblPromotionDetail_tblUsers");
+
+                entity.HasOne(d => d.Promotion)
+                    .WithMany(p => p.TblPromotionDetails)
+                    .HasForeignKey(d => d.PromotionId)
+                    .HasConstraintName("FK_tblPromotionDetail_tblPromotion");
             });
 
             modelBuilder.Entity<TblRequestDetail>(entity =>
@@ -195,6 +239,8 @@ namespace AnService_Capstone.Core.Entities
                     .HasMaxLength(10)
                     .IsUnicode(false);
 
+                entity.Property(e => e.UpdateDate).HasColumnType("date");
+
                 entity.Property(e => e.Username)
                     .HasMaxLength(50)
                     .IsUnicode(false);
@@ -204,6 +250,11 @@ namespace AnService_Capstone.Core.Entities
                     .HasForeignKey(d => d.Role)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_tblUsers_tblRoles");
+
+                entity.HasOne(d => d.StatusNavigation)
+                    .WithMany(p => p.TblUsers)
+                    .HasForeignKey(d => d.Status)
+                    .HasConstraintName("FK_tblUsers_tblStatus");
 
                 entity.HasOne(d => d.TypeJobNavigation)
                     .WithMany(p => p.TblUsers)

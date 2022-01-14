@@ -7,10 +7,16 @@ using System.Threading.Tasks;
 
 namespace AnService_Capstone.Core.Models.Request
 {
-    public class SmsMessage
+    public class CreateCustomer
     {
         [Required]
+        public string FullName { get; set; }
+        [Required]
         [Range(0, 9999999999, ErrorMessage = "Phone number incorrect format 10 numbers")]
-        public string To { get; set; }
+        public string PhoneNumber { get; set; }
+        public string Address { get; set; }
+        [Required]
+        [EmailAddress]
+        public string Email { get; set; }
     }
 }

@@ -110,6 +110,10 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
                 connection.Open();
                 var service = await connection.QueryAsync<TblRequestService>(query, new { @CustomerID = id });
                 connection.Close();
+                if (service.Count() == 0)
+                {
+                    return null;
+                }
                 return service;
             }
         }

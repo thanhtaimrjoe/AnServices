@@ -10,6 +10,12 @@ namespace AnService_Capstone.Core.Interfaces
 {
     public interface IUserRepository
     {
-        public Task<UserViewModel> Login(UserLogin login);
+        public Task<UserViewModel> LoginStaff(UserLogin login);
+
+        public Task<UserViewModel> CheckPhoneNumberExist(string phoneNumber);
+
+        public Task<int> CreateAccountCustomer(CreateCustomer customer, string inviteCode);
+
+        public Task<bool> CheckInviteCodeExist(string code);
     }
 }
