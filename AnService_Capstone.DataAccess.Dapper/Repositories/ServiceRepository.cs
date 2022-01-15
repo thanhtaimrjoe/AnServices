@@ -125,6 +125,24 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             }
         }
 
+        public async Task<IEnumerable<TblRequestService>> GetAllRequestServiceByMansonID(int id)
+        {
+            var query = "select RequestDetaiID, CustomerID, CustomerPhone, CustomerAddress, RequestServiceDescription " +
+                "from (tblRequestServices rs join tblRequestDetails rd on rs.RequestServiceID = rd.RequestServiceID) join tblRepairDetail repair on rd.RequestDetaiID = repair.RequestDetailID " +
+                "where repair.MansonID = @MansonID and RepairStatus = 2";
+
+            using (var connection = _context.CreateConnection())
+            {
+                connection.Open();
+                var service = await connection.QueryAsync<TblRequestService>(query, new { @MansonID = id });
+                if (service.Count() == 0)
+                {
+                    return null;
+                }
+                return service;
+            }
+        }
+
         public async Task<IEnumerable<TblRequestService>> GetAllRequestServiceByUserID(int id)
         {
             var query = "select RequestServiceID, CustomerID, CustomerPhone, CustomerAddress, RequestServiceDescription, RequestServiceStatus, RequestServiceCreateDate " +

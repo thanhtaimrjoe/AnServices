@@ -16,7 +16,7 @@ namespace AnService_Capstone.Core.Entities
 
         public virtual TblUser Manson { get; set; }
         public virtual TblMaterial Material { get; set; }
-        public virtual TblRepairDetail RequestDetail { get; set; }
+        public virtual TblRequestDetail RequestDetail { get; set; }
         public virtual TblStatus StatusNavigation { get; set; }
     }
 }

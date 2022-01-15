@@ -22,7 +22,7 @@ namespace AnService_Capstone.Controllers
 
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> CreateRequestService([FromForm] CreateService model)
+        public async Task<IActionResult> CreateRequestService([FromBody] CreateService model)
         {
             if (!ModelState.IsValid)
             {
@@ -127,6 +127,24 @@ namespace AnService_Capstone.Controllers
                 return Ok("Create Successfull");
             }
             return BadRequest(new ErrorResponse("Create Fail"));
+        }
+
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<IActionResult> GetAllRequestServiceByMansonID(int id)
+        {
+            if (id.Equals(""))
+            {
+                return BadRequest();
+            }
+
+            var result = await _serviceRepository.GetAllRequestServiceByMansonID(id);
+
+            if (result == null)
+            {
+                return NotFound(new ErrorResponse("No Request Service Availabe"));
+            }
+            return Ok(result);
         }
     }
 }

@@ -29,5 +29,7 @@ namespace AnService_Capstone.Core.Interfaces
         public Task<IEnumerable<TblRequestDetail>> GetRequestDetailsByRequestID(int id);
 
         public Task<bool> AssignMansonToRequest(AssignJob job);
+
+        public Task<IEnumerable<TblRequestService>> GetAllRequestServiceByMansonID(int id);
     }
 }

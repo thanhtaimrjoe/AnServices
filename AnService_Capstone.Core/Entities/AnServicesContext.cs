@@ -284,7 +284,7 @@ namespace AnService_Capstone.Core.Entities
                 entity.HasOne(d => d.RequestDetail)
                     .WithMany(p => p.TblUsedMaterials)
                     .HasForeignKey(d => d.RequestDetailId)
-                    .HasConstraintName("FK_tblUsedMaterial_tblRepairDetail");
+                    .HasConstraintName("FK_tblUsedMaterial_tblRequestDetails");
 
                 entity.HasOne(d => d.StatusNavigation)
                     .WithMany(p => p.TblUsedMaterials)
