@@ -21,6 +21,32 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             _context = context;
         }
 
+        public async Task<bool> AssignMansonToRequest(AssignJob job)
+        {
+            var query = "insert into tblRepairDetail(RequestDetailID, MansonID, RepairStatus) values(@RequestDetailID, @MansonID, @RepairStatus)";
+            int row;
+
+            foreach (var manson in job.MansonList)
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("RequestDetailID", job.RequestDetail, DbType.Int32);
+                parameters.Add("MansonID", manson, DbType.String);
+                parameters.Add("RepairStatus", 2, DbType.Int32);
+
+                using (var connection = _context.CreateConnection())
+                {
+                    connection.Open();
+                    row = await connection.ExecuteAsync(query, parameters);
+                    connection.Close();
+                    if (row == 0)
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
         public async Task<bool> CreateMedia(int requestID, string url)
         {
             var query = "insert into tblMedia (RequestServiceID, MediaUrl) values (@RequestServiceID, @MediaUrl)";
@@ -132,6 +158,25 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             }
         }
 
+        public async Task<IEnumerable<TblRequestDetail>> GetRequestDetailsByRequestID(int id)
+        {
+            var query = "select RequestDetaiID, RequestServiceID, ServiceID " +
+                "from tblRequestDetails " +
+                "where RequestServiceID = @RequestServiceID";
+            
+            using (var connection = _context.CreateConnection())
+            {
+                connection.Open();
+                var service = await connection.QueryAsync<TblRequestDetail>(query, new { @RequestServiceID = id});
+                connection.Close();
+                if (service.Count() == 0)
+                {
+                    return null;
+                }
+                return service;
+            }
+        }
+
         public async Task<TblService> GetServiceByID(int id)
         {
             var query = "select ServiceID, ServiceName, ServiceDescription, ServicePrice, ServiceStatus " +
@@ -142,6 +187,21 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             {
                 connection.Open();
                 var service = await connection.QuerySingleOrDefaultAsync<TblService>(query, new { @ServiceID = id });
+                connection.Close();
+                return service;
+            }
+        }
+
+        public async Task<IEnumerable<TblService>> GetServiceByName(string name)
+        {
+            var query = "select ServiceID, ServiceName, ServiceDescription, ServicePrice, ServiceStatus, TypeMansonJob " +
+                "from tblServices " +
+                "where ServiceName like @ServiceName";
+
+            using (var connection = _context.CreateConnection())
+            {
+                connection.Open();
+                var service = await connection.QueryAsync<TblService>(query, new { @ServiceName = "%" + name + "%"});
                 connection.Close();
                 return service;
             }

@@ -1,4 +1,5 @@
-﻿using AnService_Capstone.Core.Interfaces;
+﻿using AnService_Capstone.Core.Entities;
+using AnService_Capstone.Core.Interfaces;
 using AnService_Capstone.Core.Models.Request;
 using AnService_Capstone.Core.Models.Response;
 using AnService_Capstone.DataAccess.Dapper.Context;
@@ -88,6 +89,24 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
                     return false;
                 }
                 return true;
+            }
+        }
+
+        public async Task<IEnumerable<TblUser>> GetMansonByServiceID(int id)
+        {
+            var query = "select UserID, FullName, PhoneNumber, Status " +
+                "from (tblUsers u join tblTypeJobs t on u.TypeJob = t.TypeJobID) join tblServices s on s.TypeMansonJob = t.TypeJobID " +
+                "where s.ServiceID = @ServiceID";
+
+            using(var connection = _context.CreateConnection())
+            {
+                connection.Open();
+                var user = await connection.QueryAsync<TblUser>(query, new { @ServiceID = id });
+                if (user.Count() == 0)
+                {
+                    return null;
+                }
+                return user;
             }
         }
     }

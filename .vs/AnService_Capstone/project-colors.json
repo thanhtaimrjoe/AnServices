@@ -1,0 +1,21 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "dfeaff97-2626-43cf-b606-dc1b8a7ef0d0": {
+      "ProjectGuid": "dfeaff97-2626-43cf-b606-dc1b8a7ef0d0",
+      "DisplayName": "AnService_Capstone.Core",
+      "ColorIndex": 0
+    },
+    "dba5727e-faa6-4cc0-a0f0-1e9fb2d31071": {
+      "ProjectGuid": "dba5727e-faa6-4cc0-a0f0-1e9fb2d31071",
+      "DisplayName": "AnService_Capstone",
+      "ColorIndex": 1
+    },
+    "140387f8-3121-4d61-b0f9-5df7e58a2d09": {
+      "ProjectGuid": "140387f8-3121-4d61-b0f9-5df7e58a2d09",
+      "DisplayName": "AnService_Capstone.DataAccess.Dapper",
+      "ColorIndex": 2
+    }
+  },
+  "NextColorIndex": 3
+}

@@ -127,6 +127,20 @@ namespace AnService_Capstone.Controllers
             }
             return BadRequest(new ErrorResponse("Create Fail"));
         }
+
+        [HttpPost]
+        [Route("[action]")]
+        //get manson group by job by service id
+        public async Task<IActionResult> GetMansonByServiceID(int id)
+        {
+            var manson = await _userRepository.GetMansonByServiceID(id);
+
+            if (manson == null)
+            {
+                return NotFound(new ErrorResponse("No Manson Is Available"));
+            }
+            return Ok(manson);
+        }
     }
 }
 

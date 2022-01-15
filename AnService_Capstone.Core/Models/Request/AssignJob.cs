@@ -7,10 +7,11 @@ using System.Threading.Tasks;
 
 namespace AnService_Capstone.Core.Models.Request
 {
-    public class SmsMessage
+    public class AssignJob
     {
         [Required]
-        //[Range(100000000000, 999999999999, ErrorMessage = "Phone number incorrect format 10 numbers")]
-        public string To { get; set; }
+        public int RequestDetail { get; set; }
+        [Required]
+        public IEnumerable<int> MansonList { get; set; }
     }
 }

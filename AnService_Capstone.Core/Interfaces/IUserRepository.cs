@@ -1,4 +1,5 @@
-﻿using AnService_Capstone.Core.Models.Request;
+﻿using AnService_Capstone.Core.Entities;
+using AnService_Capstone.Core.Models.Request;
 using AnService_Capstone.Core.Models.Response;
 using System;
 using System.Collections.Generic;
@@ -17,5 +18,7 @@ namespace AnService_Capstone.Core.Interfaces
         public Task<int> CreateAccountCustomer(CreateCustomer customer, string inviteCode);
 
         public Task<bool> CheckInviteCodeExist(string code);
+
+        public Task<IEnumerable<TblUser>> GetMansonByServiceID(int id);
     }
 }

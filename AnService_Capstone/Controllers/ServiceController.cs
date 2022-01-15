@@ -76,7 +76,20 @@ namespace AnService_Capstone.Controllers
 
         [HttpGet]
         [Route("[action]")]
-        [Authorize(Roles = "Customer")]
+        /*[Authorize(Roles = "Customer")]*/
+        public async Task<IActionResult> GetServiceByName(string name)
+        {
+            var service = await _serviceRepository.GetServiceByName(name);
+            if (service == null)
+            {
+                return NotFound(new ErrorResponse("No Service"));
+            }
+            return Ok(service);
+        }
+
+        [HttpGet]
+        [Route("[action]")]
+        /*[Authorize(Roles = "Customer")]*/
         public async Task<IActionResult> GetAllService()
         {
             var service = await _serviceRepository.GetAllService();
@@ -85,6 +98,35 @@ namespace AnService_Capstone.Controllers
                 return BadRequest();
             }
             return Ok(service);
+        }
+
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<IActionResult> GetRequestDetailByRequestID(int id)
+        {
+            var service = await _serviceRepository.GetRequestDetailsByRequestID(id);
+            if (service == null)
+            {
+                return BadRequest(new ErrorResponse("Request service in not exist"));
+            }
+            return Ok(service);
+        }
+
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> AssignMansonToRequest(AssignJob job)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            var result = await _serviceRepository.AssignMansonToRequest(job);
+            if (result)
+            {
+                return Ok("Create Successfull");
+            }
+            return BadRequest(new ErrorResponse("Create Fail"));
         }
     }
 }

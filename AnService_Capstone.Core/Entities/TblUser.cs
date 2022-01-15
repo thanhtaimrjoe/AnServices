@@ -10,7 +10,9 @@ namespace AnService_Capstone.Core.Entities
         public TblUser()
         {
             TblPromotionDetails = new HashSet<TblPromotionDetail>();
+            TblRepairDetails = new HashSet<TblRepairDetail>();
             TblRequestServices = new HashSet<TblRequestService>();
+            TblUsedMaterials = new HashSet<TblUsedMaterial>();
         }
 
         public int UserId { get; set; }
@@ -31,6 +33,8 @@ namespace AnService_Capstone.Core.Entities
         public virtual TblStatus StatusNavigation { get; set; }
         public virtual TblTypeJob TypeJobNavigation { get; set; }
         public virtual ICollection<TblPromotionDetail> TblPromotionDetails { get; set; }
+        public virtual ICollection<TblRepairDetail> TblRepairDetails { get; set; }
         public virtual ICollection<TblRequestService> TblRequestServices { get; set; }
+        public virtual ICollection<TblUsedMaterial> TblUsedMaterials { get; set; }
     }
 }
