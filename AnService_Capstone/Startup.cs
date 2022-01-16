@@ -36,6 +36,19 @@ namespace AnService_Capstone
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddPolicy("MyAllowSpecificOrigins",
+                    builder =>
+                    {
+                        builder
+                        .WithOrigins("https://localhost:8000")
+                        .AllowAnyOrigin()
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                    });
+            });
+
             services.AddSingleton<DapperContext>();
             services.AddControllers();
             services.AddSwaggerGen(c =>
@@ -89,11 +102,12 @@ namespace AnService_Capstone
                 };
             });
 
-            services.AddHttpClient<ITwilioRestClient, TwilioClient>();
+            services.AddHttpClient<ITwilioRestClient, TwilioService>();
 
             services.AddScoped<AccessTokenGenerator>();
             services.AddScoped<RefreshTokenGenerator>();
             services.AddScoped<OTPGenerator>();
+            services.AddScoped<TwilioService>();
 
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IServiceRepository, ServiceRepository>();
@@ -112,6 +126,8 @@ namespace AnService_Capstone
             }
 
             app.UseHttpsRedirection();
+
+            app.UseCors("MyAllowSpecificOrigins");
 
             app.UseRouting();
 

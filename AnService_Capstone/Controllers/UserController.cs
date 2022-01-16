@@ -2,10 +2,13 @@
 using AnService_Capstone.Core.Models.Request;
 using AnService_Capstone.Core.Models.Response;
 using AnService_Capstone.DataAccess.Dapper.Customize;
+using AnService_Capstone.DataAccess.Dapper.Services.SendSMS;
 using AnService_Capstone.DataAccess.Dapper.TokenGenerator;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using Twilio;
 using Twilio.Clients;
 using Twilio.Rest.Api.V2010.Account;
 using Twilio.Types;
@@ -22,10 +25,11 @@ namespace AnService_Capstone.Controllers
         private readonly ITwilioRestClient _client;
         private readonly OTPGenerator _otpGenerator;
         private readonly IPromotionRepository _promotionRepository;
+        private readonly TwilioService _twilioService;
 
         public UserController(IUserRepository userRepository, AccessTokenGenerator accessTokenGenerator, 
             RefreshTokenGenerator refreshTokenGenerator, ITwilioRestClient client, OTPGenerator otpGenerator,
-            IPromotionRepository promotionRepository)
+            IPromotionRepository promotionRepository, TwilioService twilioService)
         {
             _userRepository = userRepository;
             _accessTokenGenerator = accessTokenGenerator;
@@ -33,11 +37,13 @@ namespace AnService_Capstone.Controllers
             _client = client;
             _otpGenerator = otpGenerator;
             _promotionRepository = promotionRepository;
+            _twilioService = twilioService;
         }
 
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> LoginStaff([FromForm] UserLogin login)
+        [EnableCors("MyAllowSpecificOrigins")]
+        public async Task<IActionResult> LoginStaff([FromBody] UserLogin login)
         {
             if (!ModelState.IsValid)
             {
@@ -93,6 +99,13 @@ namespace AnService_Capstone.Controllers
                 body: "Your OTP: " + code,
                 client: _client); // pass in the custom client
             return Ok(code);
+        }
+
+        [HttpPost]
+        [Route("[action]")]
+        public IActionResult AddNewOutgoingCallerID([FromBody] SmsMessage model)
+        {
+            return Ok(_twilioService.AddNewOutgoingCallerID(model.To));
         }
 
         [HttpPost]
