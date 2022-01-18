@@ -188,6 +188,8 @@ namespace AnService_Capstone.Core.Entities
 
                 entity.Property(e => e.CustomerId).HasColumnName("CustomerID");
 
+                entity.Property(e => e.CustomerName).HasMaxLength(50);
+
                 entity.Property(e => e.CustomerPhone)
                     .HasMaxLength(10)
                     .IsUnicode(false);

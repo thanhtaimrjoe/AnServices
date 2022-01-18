@@ -1,6 +1,7 @@
 ﻿using AnService_Capstone.Core.Entities;
 using AnService_Capstone.Core.Interfaces;
 using AnService_Capstone.Core.Models.Request;
+using AnService_Capstone.Core.Models.Response;
 using AnService_Capstone.DataAccess.Dapper.Context;
 using Dapper;
 using System;
@@ -21,21 +22,28 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             _dapperContext = dapperContext;
         }
 
-        public async Task<IEnumerable<TblUsedMaterial>> GetAllRequestMaterial()
+        public async Task<IEnumerable<MaterialViewModel>> GetAllRequestMaterial()
         {
-            var query = "select UsedMaterialID, MaterialID, RequestDetailID, MansonID, quantity, Status " +
-                "from tblUsedMaterial";
+            var query = "select UsedMaterialID, used.MaterialID, RequestDetailID, MansonID, quantity, mate.MaterialID, MaterialName, UserID, FullName, PhoneNumber, Address, StatusID, StatusName " +
+                "from ((tblUsedMaterial used join tblMaterial mate on used.MaterialID = mate.MaterialID) join tblUsers us on used.MansonID = us.UserID) " +
+                "join tblStatus sta on used.Status = sta.StatusID";
 
             using (var connection = _dapperContext.CreateConnection())
             {
                 connection.Open();
-                var result = await connection.QueryAsync<TblUsedMaterial>(query);
+                var res = await connection.QueryAsync<MaterialViewModel, TblMaterial, UserViewModel, TblStatus, MaterialViewModel>(query, (requestService, material, user, status) =>
+                {
+                    requestService.Material = material;
+                    requestService.Manson = user;
+                    requestService.Status = status;
+                    return requestService;
+                }, splitOn: "MaterialID, UserID, StatusID");
                 connection.Close();
-                if (result.Count() == 0)
+                if (res.Count() == 0)
                 {
                     return null;
                 }
-                return result;
+                return res;
             }
         }
 
@@ -67,6 +75,11 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             return true;
         }
 
+        public Task<bool> UpdateRequestMaterial(RequestMaterial material)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<bool> UpdateStatusRequestMaterial(int id, int status)
         {
             var query = "update tblUsedMaterial set Status = @Status " +
@@ -88,5 +101,6 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
                 return true;
             }
         }
+
     }
 }

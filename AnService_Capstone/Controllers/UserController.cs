@@ -42,7 +42,6 @@ namespace AnService_Capstone.Controllers
 
         [HttpPost]
         [Route("[action]")]
-        [EnableCors("MyAllowSpecificOrigins")]
         public async Task<IActionResult> LoginStaff([FromBody] UserLogin login)
         {
             if (!ModelState.IsValid)

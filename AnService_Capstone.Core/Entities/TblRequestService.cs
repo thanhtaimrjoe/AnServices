@@ -15,6 +15,7 @@ namespace AnService_Capstone.Core.Entities
 
         public int RequestServiceId { get; set; }
         public int CustomerId { get; set; }
+        public string CustomerName { get; set; }
         public string CustomerPhone { get; set; }
         public string CustomerAddress { get; set; }
         public string RequestServiceDescription { get; set; }

@@ -1,5 +1,6 @@
 ﻿using AnService_Capstone.Core.Entities;
 using AnService_Capstone.Core.Models.Request;
+using AnService_Capstone.Core.Models.Response;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,18 +19,22 @@ namespace AnService_Capstone.Core.Interfaces
 
         public Task<bool> CreateMedia(int requestID, string url);
 
-        public Task<IEnumerable<TblRequestService>> GetAllRequestService();
+        /*public Task<IEnumerable<TblRequestService>> GetAllRequestService();*/
 
-        public Task<IEnumerable<TblRequestService>> GetAllRequestServiceByUserID(int id);
+        public Task<IEnumerable<RequestService>> GetAllRequestService2();
+
+        public Task<RequestService> GetRequestServiceByID(int id);
+
+        public Task<IEnumerable<RequestService>> GetAllRequestServiceByUserID(int id);
 
         public Task<IEnumerable<TblService>> GetAllService();
 
         public Task<IEnumerable<TblService>> GetServiceByName(string name);
 
-        public Task<IEnumerable<TblRequestDetail>> GetRequestDetailsByRequestID(int id);
-
         public Task<bool> AssignMansonToRequest(AssignJob job);
 
-        public Task<IEnumerable<TblRequestService>> GetAllRequestServiceByMansonID(int id);
+        public Task<IEnumerable<RequestService>> GetAllRequestServiceByMansonID(int id);
+
+        public Task<IEnumerable<RequestServiceDetailViewModel>> GetRequestServiceDetailsByRequestServiceID(int id);
     }
 }

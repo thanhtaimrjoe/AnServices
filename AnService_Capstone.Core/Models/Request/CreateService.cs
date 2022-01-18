@@ -11,6 +11,8 @@ namespace AnService_Capstone.Core.Models.Request
     {
         [Required(ErrorMessage = "Cant be blank")]
         public int CustomerId { get; set; }
+        [Required(ErrorMessage = "Cant be blank")]
+        public string CustomerName { get; set; }
         [Required]
         [Range(0, 9999999999, ErrorMessage = "Phone number incorrect format 10 numbers")]
         public string CustomerPhone { get; set; }

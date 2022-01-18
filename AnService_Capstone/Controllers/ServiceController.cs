@@ -51,9 +51,27 @@ namespace AnService_Capstone.Controllers
         [HttpGet]
         [Route("[action]")]
         /*[Authorize(Roles = "Customer")]*/
+        public async Task<IActionResult> GetRequestServiceByID(int id)
+        {
+            if (id == 0)
+            {
+                return BadRequest(new ErrorResponse("Please enter id"));
+            }
+
+            var service = await _serviceRepository.GetRequestServiceByID(id);
+            if (service == null)
+            {
+                return NotFound(new ErrorResponse("No Record"));
+            }
+            return Ok(service);
+        }
+
+        [HttpGet]
+        [Route("[action]")]
+        /*[Authorize(Roles = "Customer")]*/
         public async Task<IActionResult> GetAllRequestService()
         {
-            var service = await _serviceRepository.GetAllRequestService();
+            var service = await _serviceRepository.GetAllRequestService2();
             if (service == null)
             {
                 return BadRequest();
@@ -66,6 +84,11 @@ namespace AnService_Capstone.Controllers
         /*[Authorize(Roles = "Customer")]*/
         public async Task<IActionResult> GetAllRequestServiceByUserID(int id)
         {
+            if (id == 0)
+            {
+                return BadRequest(new ErrorResponse("Please enter id"));
+            }
+
             var service = await _serviceRepository.GetAllRequestServiceByUserID(id);
             if (service == null)
             {
@@ -100,18 +123,6 @@ namespace AnService_Capstone.Controllers
             return Ok(service);
         }
 
-        [HttpGet]
-        [Route("[action]")]
-        public async Task<IActionResult> GetRequestDetailByRequestID(int id)
-        {
-            var service = await _serviceRepository.GetRequestDetailsByRequestID(id);
-            if (service == null)
-            {
-                return BadRequest(new ErrorResponse("Request service in not exist"));
-            }
-            return Ok(service);
-        }
-
         [HttpPost]
         [Route("[action]")]
         public async Task<IActionResult> AssignMansonToRequest(AssignJob job)
@@ -133,12 +144,30 @@ namespace AnService_Capstone.Controllers
         [Route("[action]")]
         public async Task<IActionResult> GetAllRequestServiceByMansonID(int id)
         {
-            if (id.Equals(""))
+            if (id == 0)
             {
-                return BadRequest();
+                return BadRequest(new ErrorResponse("Please enter id"));
             }
 
             var result = await _serviceRepository.GetAllRequestServiceByMansonID(id);
+
+            if (result == null)
+            {
+                return NotFound(new ErrorResponse("No Request Service Availabe"));
+            }
+            return Ok(result);
+        }
+
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<IActionResult> GetRequestServiceDetailsByRequestServiceID(int id)
+        {
+            if (id == 0)
+            {
+                return BadRequest(new ErrorResponse("Please enter id"));
+            }
+
+            var result = await _serviceRepository.GetRequestServiceDetailsByRequestServiceID(id);
 
             if (result == null)
             {
