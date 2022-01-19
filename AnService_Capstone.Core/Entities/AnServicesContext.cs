@@ -231,6 +231,10 @@ namespace AnService_Capstone.Core.Entities
 
                 entity.Property(e => e.ServiceDescription).HasMaxLength(150);
 
+                entity.Property(e => e.ServiceImg)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.ServiceName).HasMaxLength(50);
             });
 
@@ -268,6 +272,8 @@ namespace AnService_Capstone.Core.Entities
                 entity.Property(e => e.MansonId).HasColumnName("MansonID");
 
                 entity.Property(e => e.MaterialId).HasColumnName("MaterialID");
+
+                entity.Property(e => e.Message).HasMaxLength(50);
 
                 entity.Property(e => e.Quantity).HasColumnName("quantity");
 

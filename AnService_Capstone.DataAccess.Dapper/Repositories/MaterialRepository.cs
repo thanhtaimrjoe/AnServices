@@ -22,9 +22,41 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             _dapperContext = dapperContext;
         }
 
+        public async Task<bool> ApproveRequestMaterial(int id)
+        {
+            var query = "update tblUsedMaterial set Status = 3 where UsedMaterialID = @UsedMaterialID";
+
+            using (var connection = _dapperContext.CreateConnection())
+            {
+                connection.Open();
+                var rs = await connection.ExecuteAsync(query, new { @UsedMaterialID = id });
+                if (rs == 0)
+                {
+                    return false;
+                }
+                return true;
+            }
+        }
+
+        public async Task<bool> DenyRequestMaterial(int id, string message)
+        {
+            var query = "update tblUsedMaterial set Status = 1, Message = @Message where UsedMaterialID = @UsedMaterialID";
+
+            using (var connection = _dapperContext.CreateConnection())
+            {
+                connection.Open();
+                var rs = await connection.ExecuteAsync(query, new { @UsedMaterialID = id, @Message = message });
+                if (rs == 0)
+                {
+                    return false;
+                }
+                return true;
+            }
+        }
+
         public async Task<IEnumerable<MaterialViewModel>> GetAllRequestMaterial()
         {
-            var query = "select UsedMaterialID, used.MaterialID, RequestDetailID, MansonID, quantity, mate.MaterialID, MaterialName, UserID, FullName, PhoneNumber, Address, StatusID, StatusName " +
+            var query = "select UsedMaterialID, used.MaterialID, RequestDetailID, MansonID, quantity, Message, mate.MaterialID, MaterialName, UserID, FullName, PhoneNumber, Address, StatusID, StatusName " +
                 "from ((tblUsedMaterial used join tblMaterial mate on used.MaterialID = mate.MaterialID) join tblUsers us on used.MansonID = us.UserID) " +
                 "join tblStatus sta on used.Status = sta.StatusID";
 
@@ -73,11 +105,6 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
                 }
             }
             return true;
-        }
-
-        public Task<bool> UpdateRequestMaterial(RequestMaterial material)
-        {
-            throw new NotImplementedException();
         }
 
         public async Task<bool> UpdateStatusRequestMaterial(int id, int status)

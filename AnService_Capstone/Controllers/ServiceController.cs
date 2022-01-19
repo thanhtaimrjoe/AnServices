@@ -5,6 +5,7 @@ using AnService_Capstone.Core.Models.Response;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -172,6 +173,65 @@ namespace AnService_Capstone.Controllers
             if (result == null)
             {
                 return NotFound(new ErrorResponse("No Request Service Availabe"));
+            }
+            return Ok(result);
+        }
+
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<IActionResult> GetRequestServiceByUserIDAndStatus(int id, int status)
+        {
+            if (id == 0)
+            {
+                return BadRequest(new ErrorResponse("Please enter id"));
+            }
+
+            if (status == 0)
+            {
+                return BadRequest(new ErrorResponse("Please enter status"));
+            }
+
+            var result = await _serviceRepository.GetAllServiceByStatusAndUserID(id, status);
+
+            if (result == null)
+            {
+                return NotFound(new ErrorResponse("No Request Service Availabe"));
+            }
+            return Ok(result);
+        }
+
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<IActionResult> GetRequestServiceStatus(int status)
+        {
+            if (status == 0)
+            {
+                return BadRequest(new ErrorResponse("Please enter status"));
+            }
+
+            var result = await _serviceRepository.GetAllServiceByStatus(status);
+
+            if (result == null)
+            {
+                return NotFound(new ErrorResponse("No Request Service Availabe"));
+            }
+            return Ok(result);
+        }
+
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<IActionResult> GetRequestServiceDate(DateTime? date)
+        {
+            if (date == null)
+            {
+                return BadRequest(new ErrorResponse("Please enter date"));
+            }
+
+            var result = await _serviceRepository.GetAllServiceByDate(date);
+
+            if (result == null)
+            {
+                return NotFound(new ErrorResponse("No Request Service Availabe, format : yyyy-mm-ddT00:00:00"));
             }
             return Ok(result);
         }

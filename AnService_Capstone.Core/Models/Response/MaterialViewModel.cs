@@ -15,5 +15,6 @@ namespace AnService_Capstone.Core.Models.Response
         public UserViewModel Manson { get; set; }
         public int? Quantity { get; set; }
         public TblStatus Status { get; set; }
+        public string Message { get; set; }
     }
 }

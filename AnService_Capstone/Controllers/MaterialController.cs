@@ -51,7 +51,56 @@ namespace AnService_Capstone.Controllers
         [Route("[action]")]
         public async Task<IActionResult> UpdateStatusRequestMaterial(int id, int status)
         {
+            if (id == 0)
+            {
+                return BadRequest(new ErrorResponse("Please enter id"));
+            }
+
+            if (status == 0)
+            {
+                return BadRequest(new ErrorResponse("Please enter status"));
+            }
+
             var result = await _materialReposiory.UpdateStatusRequestMaterial(id, status);
+            if (result)
+            {
+                return Ok("Update Successfull");
+            }
+            return BadRequest(new ErrorResponse("Update Fail"));
+        }
+
+        [HttpPut]
+        [Route("[action]")]
+        public async Task<IActionResult> ApproveRequestMaterial(int id)
+        {
+            if (id == 0)
+            {
+                return BadRequest(new ErrorResponse("Please enter id"));
+            }
+
+            var result = await _materialReposiory.ApproveRequestMaterial(id);
+            if (result)
+            {
+                return Ok("Update Successfull");
+            }
+            return BadRequest(new ErrorResponse("Update Fail"));
+        }
+
+        [HttpPut]
+        [Route("[action]")]
+        public async Task<IActionResult> DenyRequestMaterial(int id, string message)
+        {
+            if (id == 0)
+            {
+                return BadRequest(new ErrorResponse("Please enter id"));
+            }
+
+            if (message == null)
+            {
+                return BadRequest(new ErrorResponse("Please enter the reason that you deny this request"));
+            }
+
+            var result = await _materialReposiory.DenyRequestMaterial(id, message);
             if (result)
             {
                 return Ok("Update Successfull");

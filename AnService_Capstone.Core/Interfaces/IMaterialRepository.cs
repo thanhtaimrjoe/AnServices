@@ -17,6 +17,9 @@ namespace AnService_Capstone.Core.Interfaces
 
         public Task<bool> UpdateStatusRequestMaterial(int id, int status);
 
-        public Task<bool> UpdateRequestMaterial(RequestMaterial material);
+        //public Task<bool> UpdateRequestMaterial(RequestMaterial material);
+
+        public Task<bool> ApproveRequestMaterial(int id);
+        public Task<bool> DenyRequestMaterial(int id, string message);
     }
 }

@@ -13,6 +13,7 @@ namespace AnService_Capstone.Core.Entities
         public int? MansonId { get; set; }
         public int? Quantity { get; set; }
         public int? Status { get; set; }
+        public string Message { get; set; }
 
         public virtual TblUser Manson { get; set; }
         public virtual TblMaterial Material { get; set; }

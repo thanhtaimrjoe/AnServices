@@ -288,6 +288,105 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             }
         }
 
+        public async Task<IEnumerable<RequestService>> GetAllServiceByDate(DateTime? date)
+        {
+            var query = "select rs.RequestServiceID, CustomerID, CustomerName, CustomerPhone, CustomerAddress, RequestServiceDescription, RequestServiceCreateDate, UserID, FullName, PhoneNumber, Address, Email, StatusID, StatusName, MediaID, MediaUrl " +
+                "from ((tblRequestServices rs join tblUsers u on rs.CustomerID = u.UserID) join tblStatus sta on rs.RequestServiceStatus = sta.StatusID) join tblMedia media on rs.RequestServiceID = media.RequestServiceID " +
+                "where RequestServiceCreateDate = @RequestServiceCreateDate";
+
+            using (var connection = _context.CreateConnection())
+            {
+                connection.Open();
+                var requestDict = new Dictionary<int, RequestService>();
+                var res = await connection.QueryAsync<RequestService, UserViewModel, TblStatus, TblMedium, RequestService>(query, (requestService, user, status, media) =>
+                {
+                    RequestService currentRequest;
+                    if (!requestDict.TryGetValue(requestService.RequestServiceId, out currentRequest))
+                    {
+                        currentRequest = requestService;
+                        currentRequest.User = user;
+                        currentRequest.RequestServiceStatus = status;
+                        currentRequest.Media = new List<TblMedium>();
+                        requestDict.Add(currentRequest.RequestServiceId, currentRequest);
+                    }
+                    currentRequest.Media.Add(media);
+                    return currentRequest;
+                }, param: new { @RequestServiceCreateDate = date }, splitOn: "UserID, StatusID, MediaID");
+                connection.Close();
+                if (res.Count() == 0)
+                {
+                    return null;
+                }
+                return res.Distinct().ToList();
+            }
+        }
+
+        public async Task<IEnumerable<RequestService>> GetAllServiceByStatus(int status)
+        {
+            var query = "select rs.RequestServiceID, CustomerID, CustomerName, CustomerPhone, CustomerAddress, RequestServiceDescription, RequestServiceCreateDate, UserID, FullName, PhoneNumber, Address, Email, StatusID, StatusName, MediaID, MediaUrl " +
+                "from ((tblRequestServices rs join tblUsers u on rs.CustomerID = u.UserID) join tblStatus sta on rs.RequestServiceStatus = sta.StatusID) join tblMedia media on rs.RequestServiceID = media.RequestServiceID " +
+                "where RequestServiceStatus = @RequestServiceStatus";
+
+            using (var connection = _context.CreateConnection())
+            {
+                connection.Open();
+                var requestDict = new Dictionary<int, RequestService>();
+                var res = await connection.QueryAsync<RequestService, UserViewModel, TblStatus, TblMedium, RequestService>(query, (requestService, user, status, media) =>
+                {
+                    RequestService currentRequest;
+                    if (!requestDict.TryGetValue(requestService.RequestServiceId, out currentRequest))
+                    {
+                        currentRequest = requestService;
+                        currentRequest.User = user;
+                        currentRequest.RequestServiceStatus = status;
+                        currentRequest.Media = new List<TblMedium>();
+                        requestDict.Add(currentRequest.RequestServiceId, currentRequest);
+                    }
+                    currentRequest.Media.Add(media);
+                    return currentRequest;
+                }, param: new { @RequestServiceStatus = status }, splitOn: "UserID, StatusID, MediaID");
+                connection.Close();
+                if (res.Count() == 0)
+                {
+                    return null;
+                }
+                return res.Distinct().ToList();
+            }
+        }
+
+        public async Task<IEnumerable<RequestService>> GetAllServiceByStatusAndUserID(int user, int status)
+        {
+            var query = "select rs.RequestServiceID, CustomerID, CustomerName, CustomerPhone, CustomerAddress, RequestServiceDescription, RequestServiceCreateDate, UserID, FullName, PhoneNumber, Address, Email, StatusID, StatusName, MediaID, MediaUrl " +
+                "from ((tblRequestServices rs join tblUsers u on rs.CustomerID = u.UserID) join tblStatus sta on rs.RequestServiceStatus = sta.StatusID) join tblMedia media on rs.RequestServiceID = media.RequestServiceID " +
+                "where CustomerID = @CustomerID and RequestServiceStatus = @RequestServiceStatus";
+
+            using (var connection = _context.CreateConnection())
+            {
+                connection.Open();
+                var requestDict = new Dictionary<int, RequestService>();
+                var res = await connection.QueryAsync<RequestService, UserViewModel, TblStatus, TblMedium, RequestService>(query, (requestService, user, status, media) =>
+                {
+                    RequestService currentRequest;
+                    if (!requestDict.TryGetValue(requestService.RequestServiceId, out currentRequest))
+                    {
+                        currentRequest = requestService;
+                        currentRequest.User = user;
+                        currentRequest.RequestServiceStatus = status;
+                        currentRequest.Media = new List<TblMedium>();
+                        requestDict.Add(currentRequest.RequestServiceId, currentRequest);
+                    }
+                    currentRequest.Media.Add(media);
+                    return currentRequest;
+                }, param: new { @CustomerID = user, @RequestServiceStatus = status }, splitOn: "UserID, StatusID, MediaID");
+                connection.Close();
+                if (res.Count() == 0)
+                {
+                    return null;
+                }
+                return res.Distinct().ToList();
+            }
+        }
+
         public async Task<RequestService> GetRequestServiceByID(int id)
         {
             var query = "select rs.RequestServiceID, CustomerID, CustomerName, CustomerPhone, CustomerAddress, RequestServiceDescription, RequestServiceCreateDate, UserID, FullName, PhoneNumber, Address, Email, StatusID, StatusName, MediaID, MediaUrl " +

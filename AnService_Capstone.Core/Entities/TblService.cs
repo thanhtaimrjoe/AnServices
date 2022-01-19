@@ -18,6 +18,7 @@ namespace AnService_Capstone.Core.Entities
         public double? ServicePrice { get; set; }
         public bool? ServiceStatus { get; set; }
         public int? TypeMansonJob { get; set; }
+        public string ServiceImg { get; set; }
 
         public virtual ICollection<TblRequestDetail> TblRequestDetails { get; set; }
     }
