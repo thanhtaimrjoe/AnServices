@@ -142,6 +142,33 @@ namespace AnService_Capstone.Controllers
             return BadRequest(new ErrorResponse("Update Fail"));
         }
 
+        [HttpPut]
+        [Route("[action]")]
+        public async Task<IActionResult> UpdateRequestMaterial(int id, int quantity, string message)
+        {
+            if (id == 0)
+            {
+                return BadRequest(new ErrorResponse("Please enter id"));
+            }
+
+            if (quantity == 0)
+            {
+                return BadRequest(new ErrorResponse("Please enter quantity > 0"));
+            }
+
+            if (message == null)
+            {
+                return BadRequest(new ErrorResponse("Please enter the reason that you deny this request"));
+            }
+
+            var result = await _materialReposiory.UpdateRequestMaterial(id, quantity, message);
+            if (result)
+            {
+                return Ok("Update Successfull");
+            }
+            return BadRequest(new ErrorResponse("Update Fail"));
+        }
+
         [HttpGet]
         [Route("[action]")]
         public async Task<IActionResult> GetAllMaterial()

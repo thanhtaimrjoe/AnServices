@@ -1,4 +1,5 @@
 ﻿using AnService_Capstone.Core.Entities;
+using AnService_Capstone.Core.Models;
 using AnService_Capstone.Core.Models.Request;
 using AnService_Capstone.Core.Models.Response;
 using System;
@@ -17,7 +18,7 @@ namespace AnService_Capstone.Core.Interfaces
 
         public Task<bool> UpdateStatusRequestMaterial(int id, int status);
 
-        //public Task<bool> UpdateRequestMaterial(RequestMaterial material);
+        public Task<bool> UpdateRequestMaterial(int id, int quantity, string msg);
 
         public Task<bool> ApproveRequestMaterial(int id);
 

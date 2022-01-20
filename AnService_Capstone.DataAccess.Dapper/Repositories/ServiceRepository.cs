@@ -422,7 +422,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
 
         public async Task<IEnumerable<RequestServiceDetailViewModel>> GetRequestServiceDetailsByRequestServiceID(int id)
         {
-            var query = "select RequestDetaiID, RequestServiceID, detail.ServiceID, ser.ServiceID, ServiceName " +
+            var query = "select RequestDetaiID, RequestServiceID, detail.ServiceID, ser.ServiceID, ServiceName, ServiceDescription, ServicePrice " +
                 "from tblRequestDetails detail join tblServices ser on detail.ServiceID = ser.ServiceID " +
                 "where RequestServiceID = @RequestServiceID";
 

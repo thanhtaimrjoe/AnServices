@@ -174,6 +174,29 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             return true;
         }
 
+        public async Task<bool> UpdateRequestMaterial(int id, int quantity, string msg)
+        {
+            var query = "update tblUsedMaterial set quantity = @quantity, Message = @Message, Status = 3 " +
+                "where UsedMaterialID = @UsedMaterialID";
+
+            var parameters = new DynamicParameters();
+            parameters.Add("quantity", quantity, DbType.Int32);
+            parameters.Add("Message", msg, DbType.String);
+            parameters.Add("UsedMaterialID", id, DbType.Int32);
+
+            using (var con = _dapperContext.CreateConnection())
+            {
+                con.Open();
+                var rs = await con.ExecuteAsync(query, parameters);
+                con.Close();
+                if (rs == 0)
+                {
+                    return false;
+                }
+                return true;
+            }
+        }
+
         public async Task<bool> UpdateStatusRequestMaterial(int id, int status)
         {
             var query = "update tblUsedMaterial set Status = @Status " +
