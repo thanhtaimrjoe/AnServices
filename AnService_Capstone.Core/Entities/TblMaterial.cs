@@ -14,6 +14,7 @@ namespace AnService_Capstone.Core.Entities
 
         public int MaterialId { get; set; }
         public string MaterialName { get; set; }
+        public string Unit { get; set; }
 
         public virtual ICollection<TblUsedMaterial> TblUsedMaterials { get; set; }
     }

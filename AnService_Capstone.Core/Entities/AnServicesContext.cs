@@ -52,6 +52,8 @@ namespace AnService_Capstone.Core.Entities
                 entity.Property(e => e.MaterialId).HasColumnName("MaterialID");
 
                 entity.Property(e => e.MaterialName).HasMaxLength(50);
+
+                entity.Property(e => e.Unit).HasMaxLength(50);
             });
 
             modelBuilder.Entity<TblMedium>(entity =>
@@ -63,7 +65,7 @@ namespace AnService_Capstone.Core.Entities
                 entity.Property(e => e.MediaId).HasColumnName("MediaID");
 
                 entity.Property(e => e.MediaUrl)
-                    .HasMaxLength(200)
+                    .HasMaxLength(250)
                     .IsUnicode(false);
 
                 entity.Property(e => e.RequestServiceId).HasColumnName("RequestServiceID");
@@ -232,7 +234,7 @@ namespace AnService_Capstone.Core.Entities
                 entity.Property(e => e.ServiceDescription).HasMaxLength(150);
 
                 entity.Property(e => e.ServiceImg)
-                    .HasMaxLength(50)
+                    .HasMaxLength(250)
                     .IsUnicode(false);
 
                 entity.Property(e => e.ServiceName).HasMaxLength(50);

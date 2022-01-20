@@ -47,6 +47,40 @@ namespace AnService_Capstone.Controllers
             return NotFound(new ErrorResponse("No Record"));
         }
 
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<IActionResult> GetAllMaterialByRequestDetailID(int id)
+        {
+            if (id == 0)
+            {
+                return BadRequest(new ErrorResponse("Please enter id"));
+            }
+
+            var result = await _materialReposiory.GetAllMaterialByRequestDetailID(id);
+            if (result != null)
+            {
+                return Ok(result);
+            }
+            return NotFound(new ErrorResponse("No Record"));
+        }
+
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<IActionResult> GetAllMaterialByRequestServiceID(int id)
+        {
+            if (id == 0)
+            {
+                return BadRequest(new ErrorResponse("Please enter id"));
+            }
+
+            var result = await _materialReposiory.GetAllMaterialByRequestServiceID(id);
+            if (result != null)
+            {
+                return Ok(result);
+            }
+            return NotFound(new ErrorResponse("No Record"));
+        }
+
         [HttpPut]
         [Route("[action]")]
         public async Task<IActionResult> UpdateStatusRequestMaterial(int id, int status)
@@ -106,6 +140,18 @@ namespace AnService_Capstone.Controllers
                 return Ok("Update Successfull");
             }
             return BadRequest(new ErrorResponse("Update Fail"));
+        }
+
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<IActionResult> GetAllMaterial()
+        {
+            var rs = await _materialReposiory.GetAllMaterial();
+            if (rs == null)
+            {
+                return NotFound();
+            }
+            return Ok(rs);
         }
     }
 }

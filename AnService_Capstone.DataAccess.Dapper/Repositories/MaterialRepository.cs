@@ -54,9 +54,76 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             }
         }
 
+        public async Task<IEnumerable<TblMaterial>> GetAllMaterial()
+        {
+            var query = "select MaterialID, MaterialName, Unit from tblMaterial";
+
+            using (var conn = _dapperContext.CreateConnection())
+            {
+                conn.Open();
+                var rs = await conn.QueryAsync<TblMaterial>(query);
+                conn.Close();
+                if (!rs.Any())
+                {
+                    return null;
+                }
+                return rs;
+            }
+        }
+
+        public async Task<IEnumerable<MaterialViewModel>> GetAllMaterialByRequestDetailID(int id)
+        {
+            var query = "select UsedMaterialID, used.MaterialID, RequestDetailID, MansonID, quantity, Message, mate.MaterialID, MaterialName, Unit, UserID, FullName, PhoneNumber, Address, StatusID, StatusName " +
+                "from ((tblUsedMaterial used join tblMaterial mate on used.MaterialID = mate.MaterialID) join tblUsers us on used.MansonID = us.UserID) " +
+                "join tblStatus sta on used.Status = sta.StatusID " +
+                "where RequestDetailID = @RequestDetailID";
+
+            using (var connection = _dapperContext.CreateConnection())
+            {
+                connection.Open();
+                var res = await connection.QueryAsync<MaterialViewModel, TblMaterial, UserViewModel, TblStatus, MaterialViewModel>(query, (requestService, material, user, status) =>
+                {
+                    requestService.Material = material;
+                    requestService.Manson = user;
+                    requestService.Status = status;
+                    return requestService;
+                }, param: new { @RequestDetailID = id }, splitOn: "MaterialID, UserID, StatusID");
+                connection.Close();
+                if (res.Count() == 0)
+                {
+                    return null;
+                }
+                return res;
+            }
+        }
+
+        public async Task<IEnumerable<MaterialViewModel>> GetAllMaterialByRequestServiceID(int id)
+        {
+            var query = "select UsedMaterialID, used.MaterialID, mate.MaterialID, MaterialName, Unit, quantity " +
+                "from ((tblMaterial mate join tblUsedMaterial used on mate.MaterialID = used.MaterialID) " +
+                "join tblRequestDetails detail on used.RequestDetailID = RequestDetaiID) " +
+                "join tblRequestServices rs on detail.RequestServiceID = rs.RequestServiceID " +
+                "where rs.RequestServiceID = @RequestServiceID and Status = 3";
+
+            using (var connection = _dapperContext.CreateConnection())
+            {
+                connection.Open();
+                var res = await connection.QueryAsync<MaterialViewModel, TblMaterial, MaterialViewModel>(query, (requestService, material) =>
+                {
+                    requestService.Material = material;
+                    return requestService;
+                }, param: new { @RequestServiceID = id }, splitOn: "MaterialID");
+                connection.Close();
+                if (res.Count() == 0)
+                {
+                    return null;
+                }
+                return res;
+            }
+        }
         public async Task<IEnumerable<MaterialViewModel>> GetAllRequestMaterial()
         {
-            var query = "select UsedMaterialID, used.MaterialID, RequestDetailID, MansonID, quantity, Message, mate.MaterialID, MaterialName, UserID, FullName, PhoneNumber, Address, StatusID, StatusName " +
+            var query = "select UsedMaterialID, used.MaterialID, RequestDetailID, MansonID, quantity, Message, mate.MaterialID, MaterialName, Unit, UserID, FullName, PhoneNumber, Address, StatusID, StatusName " +
                 "from ((tblUsedMaterial used join tblMaterial mate on used.MaterialID = mate.MaterialID) join tblUsers us on used.MansonID = us.UserID) " +
                 "join tblStatus sta on used.Status = sta.StatusID";
 

@@ -20,6 +20,13 @@ namespace AnService_Capstone.Core.Interfaces
         //public Task<bool> UpdateRequestMaterial(RequestMaterial material);
 
         public Task<bool> ApproveRequestMaterial(int id);
+
         public Task<bool> DenyRequestMaterial(int id, string message);
+
+        public Task<IEnumerable<TblMaterial>> GetAllMaterial();
+
+        public Task<IEnumerable<MaterialViewModel>> GetAllMaterialByRequestDetailID(int id);
+
+        public Task<IEnumerable<MaterialViewModel>> GetAllMaterialByRequestServiceID(int id);
     }
 }
