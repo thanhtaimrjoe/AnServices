@@ -227,5 +227,27 @@ namespace AnService_Capstone.Controllers
             }
             return Ok(rs);
         }
+
+        /// <summary>
+        /// lấy request vật liệu theo id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<IActionResult> GetRequestMaterialByID(int id)
+        {
+            if (id == 0)
+            {
+                return BadRequest(new ErrorResponse("Please enter id"));
+            }
+
+            var res = await _materialReposiory.GetRequestMaterialByID(id);
+            if (res == null)
+            {
+                return NotFound(new ErrorResponse("No record"));
+            }
+            return Ok(res);
+        }
     }
 }

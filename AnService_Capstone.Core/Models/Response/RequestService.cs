@@ -11,6 +11,7 @@ namespace AnService_Capstone.Core.Models.Response
     {
         public int RequestServiceId { get; set; }
         public UserViewModel User { get; set; }
+        public int Status { get; set; }
         public string CustomerName  { get; set; }
         public string CustomerPhone { get; set; }
         public string CustomerAddress { get; set; }
