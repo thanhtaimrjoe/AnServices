@@ -21,6 +21,11 @@ namespace AnService_Capstone.Controllers
             _serviceRepository = serviceRepository;
         }
 
+        /// <summary>
+        /// customer tạo request service
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("[action]")]
         public async Task<IActionResult> CreateRequestService([FromBody] CreateService model)
@@ -49,6 +54,11 @@ namespace AnService_Capstone.Controllers
             return BadRequest(new ErrorResponse("Create Fail"));
         }
 
+        /// <summary>
+        /// lấy thông tin request service bằng request service id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route("[action]")]
         /*[Authorize(Roles = "Customer")]*/
@@ -67,6 +77,10 @@ namespace AnService_Capstone.Controllers
             return Ok(service);
         }
 
+        /// <summary>
+        /// lấy danh sách request service có trong db
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [Route("[action]")]
         /*[Authorize(Roles = "Customer")]*/
@@ -80,6 +94,11 @@ namespace AnService_Capstone.Controllers
             return Ok(service);
         }
 
+        /// <summary>
+        /// lấy request service của 1 customer thông qua customerid
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route("[action]")]
         /*[Authorize(Roles = "Customer")]*/
@@ -98,6 +117,11 @@ namespace AnService_Capstone.Controllers
             return Ok(service);
         }
 
+        /// <summary>
+        /// tìm kiếm service by name
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route("[action]")]
         /*[Authorize(Roles = "Customer")]*/
@@ -111,6 +135,10 @@ namespace AnService_Capstone.Controllers
             return Ok(service);
         }
 
+        /// <summary>
+        /// load danh sách service có trong db
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [Route("[action]")]
         /*[Authorize(Roles = "Customer")]*/
@@ -124,6 +152,11 @@ namespace AnService_Capstone.Controllers
             return Ok(service);
         }
 
+        /// <summary>
+        /// điều phối nhân viên vào service của khách hàng đã đặt
+        /// </summary>
+        /// <param name="job"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("[action]")]
         public async Task<IActionResult> AssignMansonToRequest(AssignJob job)
@@ -141,6 +174,11 @@ namespace AnService_Capstone.Controllers
             return BadRequest(new ErrorResponse("Create Fail"));
         }
 
+        /// <summary>
+        /// lấy danh sách request service mà manson được điều phối bằng mansonid
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route("[action]")]
         public async Task<IActionResult> GetAllRequestServiceByMansonID(int id)
@@ -159,6 +197,11 @@ namespace AnService_Capstone.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// lấy detail của request service bằng request service id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route("[action]")]
         public async Task<IActionResult> GetRequestServiceDetailsByRequestServiceID(int id)
@@ -177,6 +220,12 @@ namespace AnService_Capstone.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// lấy request service của 1 customer bằng customerid và status (approve, pending, deny, processing)
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route("[action]")]
         public async Task<IActionResult> GetRequestServiceByUserIDAndStatus(int id, int status)
@@ -200,6 +249,11 @@ namespace AnService_Capstone.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// filter request service theo status (approve, pending, deny, processing)
+        /// </summary>
+        /// <param name="status"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route("[action]")]
         public async Task<IActionResult> GetRequestServiceStatus(int status)
@@ -218,6 +272,11 @@ namespace AnService_Capstone.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="date"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route("[action]")]
         public async Task<IActionResult> GetRequestServiceDate(DateTime? date)

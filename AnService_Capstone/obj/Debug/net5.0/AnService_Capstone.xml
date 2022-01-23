@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>AnService_Capstone</name>
+    </assembly>
+    <members>
+        <member name="M:AnService_Capstone.Controllers.MaterialController.InsertRequestMaterial(AnService_Capstone.Core.Models.Request.RequestMaterial)">
+            <summary>
+            tạo request vật liệu
+            </summary>
+            <param name="model">Cần manson id, request detail id, 1 list vật liệu cần nhập</param>
+            <returns></returns>
+        </member>
+        <member name="M:AnService_Capstone.Startup.ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            
+            </summary>
+            <param name="services"></param>
+        </member>
+    </members>
+</doc>

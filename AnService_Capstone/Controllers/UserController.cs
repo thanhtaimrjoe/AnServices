@@ -40,6 +40,12 @@ namespace AnService_Capstone.Controllers
             _twilioService = twilioService;
         }
 
+
+        /// <summary>
+        /// login cho staff với username và password
+        /// </summary>
+        /// <param name="login"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("[action]")]
         public async Task<IActionResult> LoginStaff([FromBody] UserLogin login)
@@ -61,6 +67,11 @@ namespace AnService_Capstone.Controllers
             return Ok(token);
         }
 
+        /// <summary>
+        /// login bằng số điện thoại cho customer hoặc manson
+        /// </summary>
+        /// <param name="phoneNumber"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("[action]")]
         public async Task<IActionResult> LoginCustomerOrManson(string phoneNumber)
@@ -86,7 +97,12 @@ namespace AnService_Capstone.Controllers
             var token = _accessTokenGenerator.GenerateToken(user, refreshToken);
             return Ok(token);
         }
-
+        
+        /// <summary>
+        /// gửi otp qua tin nhắn
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("[action]")]
         public IActionResult SendSms([FromBody] SmsMessage model)
@@ -100,6 +116,11 @@ namespace AnService_Capstone.Controllers
             return Ok(code);
         }
 
+        /// <summary>
+        /// thêm số điện để được gửi otp (chưa dùng đc)
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("[action]")]
         public IActionResult AddNewOutgoingCallerID([FromBody] SmsMessage model)
@@ -107,6 +128,11 @@ namespace AnService_Capstone.Controllers
             return Ok(_twilioService.AddNewOutgoingCallerID(model.To));
         }
 
+        /// <summary>
+        /// tạo tài khoản customer
+        /// </summary>
+        /// <param name="model">bao gồm tên, số điện thoại, địa chỉ, email</param>
+        /// <returns></returns>
         [HttpPost]
         [Route("[action]")]
         public async Task<IActionResult> CreateCustomerAccount(CreateCustomer model)
@@ -140,6 +166,11 @@ namespace AnService_Capstone.Controllers
             return BadRequest(new ErrorResponse("Create Fail"));
         }
 
+        /// <summary>
+        /// lấy danh sách manson theo service id, manson làm cho service nào
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("[action]")]
         //get manson group by job by service id
