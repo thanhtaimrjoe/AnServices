@@ -92,10 +92,10 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             }
         }
 
-        public async Task<IEnumerable<TblUser>> GetMansonByServiceID(int id)
+        public async Task<IEnumerable<TblUser>> GetMasonByServiceID(int id)
         {
             var query = "select UserID, FullName, PhoneNumber, Status " +
-                "from (tblUsers u join tblTypeJobs t on u.TypeJob = t.TypeJobID) join tblServices s on s.TypeMansonJob = t.TypeJobID " +
+                "from (tblUsers u join tblTypeJobs t on u.TypeJob = t.TypeJobID) join tblServices s on s.TypeMasonJob = t.TypeJobID " +
                 "where s.ServiceID = @ServiceID";
 
             using(var connection = _context.CreateConnection())

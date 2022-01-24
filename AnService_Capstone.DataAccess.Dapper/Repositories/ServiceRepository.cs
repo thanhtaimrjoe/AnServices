@@ -22,16 +22,16 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             _context = context;
         }
 
-        public async Task<bool> AssignMansonToRequest(AssignJob job)
+        public async Task<bool> AssignMasonToRequest(AssignJob job)
         {
-            var query = "insert into tblRepairDetail(RequestDetailID, MansonID, RepairStatus) values(@RequestDetailID, @MansonID, @RepairStatus)";
+            var query = "insert into tblRepairDetail(RequestDetailID, MasonID, RepairStatus) values(@RequestDetailID, @MasonID, @RepairStatus)";
             int row;
 
-            foreach (var manson in job.MansonList)
+            foreach (var mason in job.MasonList)
             {
                 var parameters = new DynamicParameters();
                 parameters.Add("RequestDetailID", job.RequestDetail, DbType.Int32);
-                parameters.Add("MansonID", manson, DbType.String);
+                parameters.Add("MasonID", mason, DbType.String);
                 parameters.Add("RepairStatus", 2, DbType.Int32);
 
                 using (var connection = _context.CreateConnection())
@@ -175,12 +175,12 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
 
         }
 
-        public async Task<IEnumerable<RequestService>> GetAllRequestServiceByMansonID(int id)
+        public async Task<IEnumerable<RequestService>> GetAllRequestServiceByMasonID(int id)
         {
             var query = "select rs.RequestServiceID, CustomerID, CustomerName, CustomerPhone, CustomerAddress, RequestServiceDescription, RequestServiceCreateDate, UserID, FullName, PhoneNumber, Address, Email, StatusID, StatusName, MediaID, MediaUrl " +
                 "from ((((tblRequestServices rs join tblRequestDetails rd on rs.RequestServiceID = rd.RequestServiceID) join tblRepairDetail repair on rd.RequestDetaiID = repair.RequestDetailID) " +
                 "join tblUsers u on u.UserID = rs.CustomerID) join tblStatus sta on rs.RequestServiceStatus = sta.StatusID) join tblMedia media on rs.RequestServiceID = media.RequestServiceID " +
-                "where MansonID = @MansonID";
+                "where MasonID = @MasonID";
 
             using (var connection = _context.CreateConnection())
             {
@@ -190,7 +190,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
                     requestService.User = user;
                     requestService.RequestServiceStatus = status;
                     return requestService;
-                }, param: new { @MansonID = id}, splitOn: "UserID, StatusID");
+                }, param: new { @MasonID = id}, splitOn: "UserID, StatusID");
 
                 if (service.Count() == 0)
                 {
@@ -213,7 +213,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
                     }
                     currentRequest.Media.Add(media);
                     return currentRequest;
-                }, param: new { @MansonID = id }, splitOn: "UserID, StatusID, MediaID");
+                }, param: new { @MasonID = id }, splitOn: "UserID, StatusID, MediaID");
                 connection.Close();
                 if (res.Count() == 0)
                 {
@@ -460,7 +460,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
 
         public async Task<IEnumerable<TblService>> GetServiceByName(string name)
         {
-            var query = "select ServiceID, ServiceName, ServiceDescription, ServicePrice, ServiceStatus, TypeMansonJob " +
+            var query = "select ServiceID, ServiceName, ServiceDescription, ServicePrice, ServiceStatus, TypeMasonJob " +
                 "from tblServices " +
                 "where ServiceName like @ServiceName";
 

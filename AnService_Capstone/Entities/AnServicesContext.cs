@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 #nullable disable
 
-namespace AnService_Capstone.Core.Entities
+namespace AnService_Capstone.Entities
 {
     public partial class AnServicesContext : DbContext
     {

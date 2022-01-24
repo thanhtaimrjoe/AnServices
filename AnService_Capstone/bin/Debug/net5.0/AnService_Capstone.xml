@@ -8,7 +8,7 @@
             <summary>
             tạo request vật liệu
             </summary>
-            <param name="model">Cần manson id, request detail id, 1 list vật liệu cần nhập</param>
+            <param name="model">Cần mason id, request detail id, 1 list vật liệu cần nhập</param>
             <returns></returns>
         </member>
         <member name="M:AnService_Capstone.Controllers.MaterialController.GetAllRequestMaterial">
@@ -116,16 +116,16 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:AnService_Capstone.Controllers.ServiceController.AssignMansonToRequest(AnService_Capstone.Core.Models.Request.AssignJob)">
+        <member name="M:AnService_Capstone.Controllers.ServiceController.AssignMasonToRequest(AnService_Capstone.Core.Models.Request.AssignJob)">
             <summary>
             điều phối nhân viên vào service của khách hàng đã đặt
             </summary>
             <param name="job"></param>
             <returns></returns>
         </member>
-        <member name="M:AnService_Capstone.Controllers.ServiceController.GetAllRequestServiceByMansonID(System.Int32)">
+        <member name="M:AnService_Capstone.Controllers.ServiceController.GetAllRequestServiceByMasonID(System.Int32)">
             <summary>
-            lấy danh sách request service mà manson được điều phối bằng mansonid
+            lấy danh sách request service mà mason được điều phối bằng masonid
             </summary>
             <param name="id"></param>
             <returns></returns>
@@ -166,9 +166,9 @@
             <param name="login"></param>
             <returns></returns>
         </member>
-        <member name="M:AnService_Capstone.Controllers.UserController.LoginCustomerOrManson(System.String)">
+        <member name="M:AnService_Capstone.Controllers.UserController.LoginCustomerOrMason(System.String)">
             <summary>
-            login bằng số điện thoại cho customer hoặc manson
+            login bằng số điện thoại cho customer hoặc mason
             </summary>
             <param name="phoneNumber"></param>
             <returns></returns>
@@ -194,9 +194,9 @@
             <param name="model">bao gồm tên, số điện thoại, địa chỉ, email</param>
             <returns></returns>
         </member>
-        <member name="M:AnService_Capstone.Controllers.UserController.GetMansonByServiceID(System.Int32)">
+        <member name="M:AnService_Capstone.Controllers.UserController.GetMasonByServiceID(System.Int32)">
             <summary>
-            lấy danh sách manson theo service id, manson làm cho service nào
+            lấy danh sách manson theo service id, mason làm cho service nào
             </summary>
             <param name="id"></param>
             <returns></returns>

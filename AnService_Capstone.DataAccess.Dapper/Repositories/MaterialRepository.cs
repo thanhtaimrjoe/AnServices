@@ -73,8 +73,8 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
 
         public async Task<IEnumerable<MaterialViewModel>> GetAllMaterialByRequestDetailID(int id)
         {
-            var query = "select UsedMaterialID, used.MaterialID, used.RequestDetailID, MansonID, quantity, Message, RequestServiceDescription, CustomerName, mate.MaterialID, MaterialName, Unit, UserID, FullName, PhoneNumber, Address, StatusID, StatusName " +
-                "from ((((tblUsedMaterial used join tblMaterial mate on used.MaterialID = mate.MaterialID) join tblUsers us on used.MansonID = us.UserID) " +
+            var query = "select UsedMaterialID, used.MaterialID, used.RequestDetailID, MasonID, quantity, Message, RequestServiceDescription, CustomerName, mate.MaterialID, MaterialName, Unit, UserID, FullName, PhoneNumber, Address, StatusID, StatusName " +
+                "from ((((tblUsedMaterial used join tblMaterial mate on used.MaterialID = mate.MaterialID) join tblUsers us on used.MasonID = us.UserID) " +
                 "join tblStatus sta on used.Status = sta.StatusID) join tblRequestDetails details on used.RequestDetailID = details.RequestDetaiID) " +
                 "join tblRequestServices rs on rs.RequestServiceID = details.RequestServiceID " +
                 "where RequestDetailID = @RequestDetailID";
@@ -85,7 +85,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
                 var res = await connection.QueryAsync<MaterialViewModel, TblMaterial, UserViewModel, TblStatus, MaterialViewModel>(query, (requestService, material, user, status) =>
                 {
                     requestService.Material = material;
-                    requestService.Manson = user;
+                    requestService.Mason = user;
                     requestService.Status = status;
                     return requestService;
                 }, param: new { @RequestDetailID = id }, splitOn: "MaterialID, UserID, StatusID");
@@ -100,8 +100,8 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
 
         /*public async Task<IEnumerable<MaterialViewModel>> GetAllMaterialByRequestDetailID(int id)
         {
-            var query = "select UsedMaterialID, used.MaterialID, RequestDetailID, MansonID, quantity, Message, mate.MaterialID, MaterialName, Unit, UserID, FullName, PhoneNumber, Address, StatusID, StatusName " +
-                "from ((tblUsedMaterial used join tblMaterial mate on used.MaterialID = mate.MaterialID) join tblUsers us on used.MansonID = us.UserID) " +
+            var query = "select UsedMaterialID, used.MaterialID, RequestDetailID, MasonID, quantity, Message, mate.MaterialID, MaterialName, Unit, UserID, FullName, PhoneNumber, Address, StatusID, StatusName " +
+                "from ((tblUsedMaterial used join tblMaterial mate on used.MaterialID = mate.MaterialID) join tblUsers us on used.MasonID = us.UserID) " +
                 "join tblStatus sta on used.Status = sta.StatusID " +
                 "where RequestDetailID = @RequestDetailID";
 
@@ -111,7 +111,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
                 var res = await connection.QueryAsync<MaterialViewModel, TblMaterial, UserViewModel, TblStatus, MaterialViewModel>(query, (requestService, material, user, status) =>
                 {
                     requestService.Material = material;
-                    requestService.Manson = user;
+                    requestService.Mason = user;
                     requestService.Status = status;
                     return requestService;
                 }, param: new { @RequestDetailID = id }, splitOn: "MaterialID, UserID, StatusID");
@@ -150,8 +150,8 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
         }
         public async Task<IEnumerable<MaterialViewModel>> GetAllRequestMaterial()
         {
-            var query = "select UsedMaterialID, used.MaterialID, RequestDetailID, MansonID, quantity, Message, RequestServiceDescription, CustomerName, mate.MaterialID, MaterialName, Unit, UserID, FullName, PhoneNumber, Address, StatusID, StatusName " +
-                "from ((((tblUsedMaterial used join tblMaterial mate on used.MaterialID = mate.MaterialID) join tblUsers us on used.MansonID = us.UserID) " +
+            var query = "select UsedMaterialID, used.MaterialID, RequestDetailID, MasonID, quantity, Message, RequestServiceDescription, CustomerName, mate.MaterialID, MaterialName, Unit, UserID, FullName, PhoneNumber, Address, StatusID, StatusName " +
+                "from ((((tblUsedMaterial used join tblMaterial mate on used.MaterialID = mate.MaterialID) join tblUsers us on used.MasonID = us.UserID) " +
                 "join tblStatus sta on used.Status = sta.StatusID) join tblRequestDetails details on used.RequestDetailID = details.RequestDetaiID) " +
                 "join tblRequestServices rs on rs.RequestServiceID = details.RequestServiceID";
 
@@ -161,7 +161,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
                 var res = await connection.QueryAsync<MaterialViewModel, TblMaterial, UserViewModel, TblStatus, MaterialViewModel>(query, (requestService, material, user, status) =>
                 {
                     requestService.Material = material;
-                    requestService.Manson = user;
+                    requestService.Mason = user;
                     requestService.Status = status;
                     return requestService;
                 }, splitOn: "MaterialID, UserID, StatusID");
@@ -176,8 +176,8 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
 
         public async Task<MaterialViewModel> GetRequestMaterialByID(int id)
         {
-            var query = "select UsedMaterialID, used.MaterialID, RequestDetailID, MansonID, quantity, Message, RequestServiceDescription, CustomerName, mate.MaterialID, MaterialName, Unit, UserID, FullName, PhoneNumber, Address, StatusID, StatusName " +
-                "from ((((tblUsedMaterial used join tblMaterial mate on used.MaterialID = mate.MaterialID) join tblUsers us on used.MansonID = us.UserID) " +
+            var query = "select UsedMaterialID, used.MaterialID, RequestDetailID, MasonID, quantity, Message, RequestServiceDescription, CustomerName, mate.MaterialID, MaterialName, Unit, UserID, FullName, PhoneNumber, Address, StatusID, StatusName " +
+                "from ((((tblUsedMaterial used join tblMaterial mate on used.MaterialID = mate.MaterialID) join tblUsers us on used.MasonID = us.UserID) " +
                 "join tblStatus sta on used.Status = sta.StatusID) join tblRequestDetails details on used.RequestDetailID = details.RequestDetaiID) " +
                 "join tblRequestServices rs on rs.RequestServiceID = details.RequestServiceID " +
                 "where UsedMaterialID = @UsedMaterialID";
@@ -188,7 +188,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
                 var res = await connection.QueryAsync<MaterialViewModel, TblMaterial, UserViewModel, TblStatus, MaterialViewModel>(query, (requestService, material, user, status) =>
                 {
                     requestService.Material = material;
-                    requestService.Manson = user;
+                    requestService.Mason = user;
                     requestService.Status = status;
                     return requestService;
                 }, param: new { @UsedMaterialID = id}, splitOn: "MaterialID, UserID, StatusID");
@@ -204,15 +204,15 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
 
         public async Task<bool> InsertMaterial(RequestMaterial material)
         {
-            var query = "insert into tblUsedMaterial(MaterialID, RequestDetailID, MansonID, quantity, Status) " +
-                "values(@MaterialID, @RequestDetailID, @MansonID, @quantity, @Status)";
+            var query = "insert into tblUsedMaterial(MaterialID, RequestDetailID, MasonID, quantity, Status) " +
+                "values(@MaterialID, @RequestDetailID, @MasonID, @quantity, @Status)";
 
             foreach (var item in material.MaterialList)
             {
                 var parameters = new DynamicParameters();
                 parameters.Add("MaterialID", item.Id, DbType.Int32);
                 parameters.Add("RequestDetailID", material.RequestDetailID, DbType.Int32);
-                parameters.Add("MansonID", material.MansonID, DbType.Int32);
+                parameters.Add("MasonID", material.MasonID, DbType.Int32);
                 parameters.Add("quantity", item.quantity, DbType.Int32);
                 parameters.Add("Status", 2, DbType.Int32);
 

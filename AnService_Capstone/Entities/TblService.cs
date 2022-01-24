@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 #nullable disable
 
-namespace AnService_Capstone.Core.Entities
+namespace AnService_Capstone.Entities
 {
     public partial class TblService
     {

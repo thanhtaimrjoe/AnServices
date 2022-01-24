@@ -31,9 +31,9 @@ namespace AnService_Capstone.Core.Interfaces
 
         public Task<IEnumerable<TblService>> GetServiceByName(string name);
 
-        public Task<bool> AssignMansonToRequest(AssignJob job);
+        public Task<bool> AssignMasonToRequest(AssignJob job);
 
-        public Task<IEnumerable<RequestService>> GetAllRequestServiceByMansonID(int id);
+        public Task<IEnumerable<RequestService>> GetAllRequestServiceByMasonID(int id);
 
         public Task<IEnumerable<RequestServiceDetailViewModel>> GetRequestServiceDetailsByRequestServiceID(int id);
 
