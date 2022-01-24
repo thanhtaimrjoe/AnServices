@@ -12,6 +12,6 @@ namespace AnService_Capstone.Core.Models.Request
         [Required]
         public int RequestDetail { get; set; }
         [Required]
-        public IEnumerable<int> MansonList { get; set; }
+        public IEnumerable<int> MasonList { get; set; }
     }
 }

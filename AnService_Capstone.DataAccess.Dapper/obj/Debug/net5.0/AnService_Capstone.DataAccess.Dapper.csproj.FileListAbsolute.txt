@@ -28,3 +28,18 @@ E:\Capstone\API\AnService_Capstone.DataAccess.Dapper\obj\Debug\net5.0\AnService_
 E:\Capstone\API\AnService_Capstone.DataAccess.Dapper\obj\Debug\net5.0\AnService_Capstone.DataAccess.Dapper.dll
 E:\Capstone\API\AnService_Capstone.DataAccess.Dapper\obj\Debug\net5.0\ref\AnService_Capstone.DataAccess.Dapper.dll
 E:\Capstone\API\AnService_Capstone.DataAccess.Dapper\obj\Debug\net5.0\AnService_Capstone.DataAccess.Dapper.pdb
+E:\clone Anservices\AnService_Capstone.DataAccess.Dapper\bin\Debug\net5.0\AnService_Capstone.DataAccess.Dapper.deps.json
+E:\clone Anservices\AnService_Capstone.DataAccess.Dapper\bin\Debug\net5.0\AnService_Capstone.DataAccess.Dapper.dll
+E:\clone Anservices\AnService_Capstone.DataAccess.Dapper\bin\Debug\net5.0\ref\AnService_Capstone.DataAccess.Dapper.dll
+E:\clone Anservices\AnService_Capstone.DataAccess.Dapper\bin\Debug\net5.0\AnService_Capstone.DataAccess.Dapper.pdb
+E:\clone Anservices\AnService_Capstone.DataAccess.Dapper\bin\Debug\net5.0\AnService_Capstone.Core.dll
+E:\clone Anservices\AnService_Capstone.DataAccess.Dapper\bin\Debug\net5.0\AnService_Capstone.Core.pdb
+E:\clone Anservices\AnService_Capstone.DataAccess.Dapper\obj\Debug\net5.0\AnService_Capstone.DataAccess.Dapper.csproj.AssemblyReference.cache
+E:\clone Anservices\AnService_Capstone.DataAccess.Dapper\obj\Debug\net5.0\AnService_Capstone.DataAccess.Dapper.GeneratedMSBuildEditorConfig.editorconfig
+E:\clone Anservices\AnService_Capstone.DataAccess.Dapper\obj\Debug\net5.0\AnService_Capstone.DataAccess.Dapper.AssemblyInfoInputs.cache
+E:\clone Anservices\AnService_Capstone.DataAccess.Dapper\obj\Debug\net5.0\AnService_Capstone.DataAccess.Dapper.AssemblyInfo.cs
+E:\clone Anservices\AnService_Capstone.DataAccess.Dapper\obj\Debug\net5.0\AnService_Capstone.DataAccess.Dapper.csproj.CoreCompileInputs.cache
+E:\clone Anservices\AnService_Capstone.DataAccess.Dapper\obj\Debug\net5.0\AnService_Capstone.DataAccess.Dapper.csproj.CopyComplete
+E:\clone Anservices\AnService_Capstone.DataAccess.Dapper\obj\Debug\net5.0\AnService_Capstone.DataAccess.Dapper.dll
+E:\clone Anservices\AnService_Capstone.DataAccess.Dapper\obj\Debug\net5.0\ref\AnService_Capstone.DataAccess.Dapper.dll
+E:\clone Anservices\AnService_Capstone.DataAccess.Dapper\obj\Debug\net5.0\AnService_Capstone.DataAccess.Dapper.pdb

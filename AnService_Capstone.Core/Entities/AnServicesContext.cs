@@ -127,7 +127,7 @@ namespace AnService_Capstone.Core.Entities
 
                 entity.Property(e => e.RepairDetailId).HasColumnName("RepairDetailID");
 
-                entity.Property(e => e.MansonId).HasColumnName("MansonID");
+                entity.Property(e => e.MasonId).HasColumnName("MasonID");
 
                 entity.Property(e => e.RepairDateBegin).HasColumnType("date");
 
@@ -135,9 +135,9 @@ namespace AnService_Capstone.Core.Entities
 
                 entity.Property(e => e.RequestDetailId).HasColumnName("RequestDetailID");
 
-                entity.HasOne(d => d.Manson)
+                entity.HasOne(d => d.Mason)
                     .WithMany(p => p.TblRepairDetails)
-                    .HasForeignKey(d => d.MansonId)
+                    .HasForeignKey(d => d.MasonId)
                     .HasConstraintName("FK_tblRepairDetail_tblUsers");
 
                 entity.HasOne(d => d.RepairStatusNavigation)
@@ -271,7 +271,7 @@ namespace AnService_Capstone.Core.Entities
 
                 entity.Property(e => e.UsedMaterialId).HasColumnName("UsedMaterialID");
 
-                entity.Property(e => e.MansonId).HasColumnName("MansonID");
+                entity.Property(e => e.MasonId).HasColumnName("MasonID");
 
                 entity.Property(e => e.MaterialId).HasColumnName("MaterialID");
 
@@ -281,9 +281,9 @@ namespace AnService_Capstone.Core.Entities
 
                 entity.Property(e => e.RequestDetailId).HasColumnName("RequestDetailID");
 
-                entity.HasOne(d => d.Manson)
+                entity.HasOne(d => d.Mason)
                     .WithMany(p => p.TblUsedMaterials)
-                    .HasForeignKey(d => d.MansonId)
+                    .HasForeignKey(d => d.MasonId)
                     .HasConstraintName("FK_tblUsedMaterial_tblUsers");
 
                 entity.HasOne(d => d.Material)

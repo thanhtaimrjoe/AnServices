@@ -159,14 +159,14 @@ namespace AnService_Capstone.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> AssignMansonToRequest(AssignJob job)
+        public async Task<IActionResult> AssignMasonToRequest(AssignJob job)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
 
-            var result = await _serviceRepository.AssignMansonToRequest(job);
+            var result = await _serviceRepository.AssignMasonToRequest(job);
             if (result)
             {
                 return Ok("Create Successfull");
@@ -175,20 +175,20 @@ namespace AnService_Capstone.Controllers
         }
 
         /// <summary>
-        /// lấy danh sách request service mà manson được điều phối bằng mansonid
+        /// lấy danh sách request service mà mason được điều phối bằng masonid
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet]
         [Route("[action]")]
-        public async Task<IActionResult> GetAllRequestServiceByMansonID(int id)
+        public async Task<IActionResult> GetAllRequestServiceByMasonID(int id)
         {
             if (id == 0)
             {
                 return BadRequest(new ErrorResponse("Please enter id"));
             }
 
-            var result = await _serviceRepository.GetAllRequestServiceByMansonID(id);
+            var result = await _serviceRepository.GetAllRequestServiceByMasonID(id);
 
             if (result == null)
             {

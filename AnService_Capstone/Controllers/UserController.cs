@@ -68,13 +68,13 @@ namespace AnService_Capstone.Controllers
         }
 
         /// <summary>
-        /// login bằng số điện thoại cho customer hoặc manson
+        /// login bằng số điện thoại cho customer hoặc mason
         /// </summary>
         /// <param name="phoneNumber"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> LoginCustomerOrManson(string phoneNumber)
+        public async Task<IActionResult> LoginCustomerOrMason(string phoneNumber)
         {
             if (!ModelState.IsValid)
             {
@@ -167,22 +167,22 @@ namespace AnService_Capstone.Controllers
         }
 
         /// <summary>
-        /// lấy danh sách manson theo service id, manson làm cho service nào
+        /// lấy danh sách manson theo service id, mason làm cho service nào
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("[action]")]
-        //get manson group by job by service id
-        public async Task<IActionResult> GetMansonByServiceID(int id)
+        //get mason group by job by service id
+        public async Task<IActionResult> GetMasonByServiceID(int id)
         {
-            var manson = await _userRepository.GetMansonByServiceID(id);
+            var mason = await _userRepository.GetMasonByServiceID(id);
 
-            if (manson == null)
+            if (mason == null)
             {
-                return NotFound(new ErrorResponse("No Manson Is Available"));
+                return NotFound(new ErrorResponse("No Mason Is Available"));
             }
-            return Ok(manson);
+            return Ok(mason);
         }
     }
 }

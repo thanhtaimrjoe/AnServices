@@ -5552,23 +5552,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\ADMIN\\.nuget\\packages\\": {},
-    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
+    "C:\\Users\\THUONGPP\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\Capstone\\API\\AnService_Capstone.DataAccess.Dapper\\AnService_Capstone.DataAccess.Dapper.csproj",
+      "projectUniqueName": "E:\\demoFolder\\AnServices\\AnService_Capstone.DataAccess.Dapper\\AnService_Capstone.DataAccess.Dapper.csproj",
       "projectName": "AnService_Capstone.DataAccess.Dapper",
-      "projectPath": "E:\\Capstone\\API\\AnService_Capstone.DataAccess.Dapper\\AnService_Capstone.DataAccess.Dapper.csproj",
-      "packagesPath": "C:\\Users\\ADMIN\\.nuget\\packages\\",
-      "outputPath": "E:\\Capstone\\API\\AnService_Capstone.DataAccess.Dapper\\obj\\",
+      "projectPath": "E:\\demoFolder\\AnServices\\AnService_Capstone.DataAccess.Dapper\\AnService_Capstone.DataAccess.Dapper.csproj",
+      "packagesPath": "C:\\Users\\THUONGPP\\.nuget\\packages\\",
+      "outputPath": "E:\\demoFolder\\AnServices\\AnService_Capstone.DataAccess.Dapper\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-      ],
       "configFilePaths": [
-        "C:\\Users\\ADMIN\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\THUONGPP\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -5582,8 +5578,8 @@
         "net5.0": {
           "targetAlias": "net5.0",
           "projectReferences": {
-            "E:\\Capstone\\API\\AnService_Capstone.Core\\AnService_Capstone.Core.csproj": {
-              "projectPath": "E:\\Capstone\\API\\AnService_Capstone.Core\\AnService_Capstone.Core.csproj"
+            "E:\\demoFolder\\AnServices\\AnService_Capstone.Core\\AnService_Capstone.Core.csproj": {
+              "projectPath": "E:\\demoFolder\\AnServices\\AnService_Capstone.Core\\AnService_Capstone.Core.csproj"
             }
           }
         }
@@ -5626,7 +5622,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.100\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.404\\RuntimeIdentifierGraph.json"
       }
     }
   }

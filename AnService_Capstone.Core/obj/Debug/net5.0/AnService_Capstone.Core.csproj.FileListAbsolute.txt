@@ -28,3 +28,18 @@ E:\Capstone\API\AnService_Capstone.Core\obj\Debug\net5.0\AnService_Capstone.Core
 E:\Capstone\API\AnService_Capstone.Core\obj\Debug\net5.0\ref\AnService_Capstone.Core.dll
 E:\Capstone\API\AnService_Capstone.Core\obj\Debug\net5.0\AnService_Capstone.Core.pdb
 E:\Capstone\API\AnService_Capstone.Core\obj\Debug\net5.0\AnService_Capstone.Core.genruntimeconfig.cache
+E:\clone Anservices\AnService_Capstone.Core\bin\Debug\net5.0\AnService_Capstone.Core.deps.json
+E:\clone Anservices\AnService_Capstone.Core\bin\Debug\net5.0\AnService_Capstone.Core.runtimeconfig.json
+E:\clone Anservices\AnService_Capstone.Core\bin\Debug\net5.0\AnService_Capstone.Core.runtimeconfig.dev.json
+E:\clone Anservices\AnService_Capstone.Core\bin\Debug\net5.0\AnService_Capstone.Core.dll
+E:\clone Anservices\AnService_Capstone.Core\bin\Debug\net5.0\ref\AnService_Capstone.Core.dll
+E:\clone Anservices\AnService_Capstone.Core\bin\Debug\net5.0\AnService_Capstone.Core.pdb
+E:\clone Anservices\AnService_Capstone.Core\obj\Debug\net5.0\AnService_Capstone.Core.csproj.AssemblyReference.cache
+E:\clone Anservices\AnService_Capstone.Core\obj\Debug\net5.0\AnService_Capstone.Core.GeneratedMSBuildEditorConfig.editorconfig
+E:\clone Anservices\AnService_Capstone.Core\obj\Debug\net5.0\AnService_Capstone.Core.AssemblyInfoInputs.cache
+E:\clone Anservices\AnService_Capstone.Core\obj\Debug\net5.0\AnService_Capstone.Core.AssemblyInfo.cs
+E:\clone Anservices\AnService_Capstone.Core\obj\Debug\net5.0\AnService_Capstone.Core.csproj.CoreCompileInputs.cache
+E:\clone Anservices\AnService_Capstone.Core\obj\Debug\net5.0\AnService_Capstone.Core.dll
+E:\clone Anservices\AnService_Capstone.Core\obj\Debug\net5.0\ref\AnService_Capstone.Core.dll
+E:\clone Anservices\AnService_Capstone.Core\obj\Debug\net5.0\AnService_Capstone.Core.pdb
+E:\clone Anservices\AnService_Capstone.Core\obj\Debug\net5.0\AnService_Capstone.Core.genruntimeconfig.cache
