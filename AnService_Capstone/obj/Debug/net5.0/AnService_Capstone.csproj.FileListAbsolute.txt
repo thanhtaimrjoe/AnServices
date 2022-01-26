@@ -298,3 +298,4 @@ E:\Capstone\API_Thuong\AnService_Capstone\obj\Debug\net5.0\ref\AnService_Capston
 E:\Capstone\API_Thuong\AnService_Capstone\obj\Debug\net5.0\AnService_Capstone.xml
 E:\Capstone\API_Thuong\AnService_Capstone\obj\Debug\net5.0\AnService_Capstone.pdb
 E:\Capstone\API_Thuong\AnService_Capstone\obj\Debug\net5.0\AnService_Capstone.genruntimeconfig.cache
+E:\Capstone\API\AnService_Capstone\bin\Debug\net5.0\AnService_Capstone.StaticWebAssets.xml

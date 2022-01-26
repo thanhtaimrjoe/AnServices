@@ -276,7 +276,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
 
         public async Task<IEnumerable<TblService>> GetAllService()
         {
-            var query = "select ServiceID, ServiceName, ServiceDescription, ServicePrice, ServiceStatus " +
+            var query = "select ServiceID, ServiceName, ServiceDescription, ServicePrice, ServiceStatus, ServiceImg " +
                 "from tblServices";
 
             using (var connection = _context.CreateConnection())
@@ -422,7 +422,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
 
         public async Task<IEnumerable<RequestServiceDetailViewModel>> GetRequestServiceDetailsByRequestServiceID(int id)
         {
-            var query = "select RequestDetaiID, RequestServiceID, detail.ServiceID, ser.ServiceID, ServiceName, ServiceDescription, ServicePrice " +
+            var query = "select RequestDetaiID, RequestServiceID, detail.ServiceID, ser.ServiceID, ServiceName, ServiceDescription, ServicePrice, ServiceImg " +
                 "from tblRequestDetails detail join tblServices ser on detail.ServiceID = ser.ServiceID " +
                 "where RequestServiceID = @RequestServiceID";
 
