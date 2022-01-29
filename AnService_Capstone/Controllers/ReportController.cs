@@ -1,0 +1,50 @@
+﻿using AnService_Capstone.Core.Interfaces;
+using AnService_Capstone.Core.Models.Request;
+using AnService_Capstone.Core.Models.Response;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
+
+namespace AnService_Capstone.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class ReportController : ControllerBase
+    {
+        private readonly IReport _report;
+        public ReportController(IReport report)
+        {
+            _report = report;
+        }
+
+        /// <summary>
+        /// mason tạo report khi sửa xong hoặc có lỗi mới trong quá trình sửa
+        /// </summary>
+        /// <param name="model">bao gồm request detail id, mason id, description, img hoặc video url</param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> CreateReport([FromBody] CreateReport model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            bool media = false;
+
+            var reqService = await _report.CreateReport(model);
+            
+            foreach (var mediaItem in model.MediaList)
+            {
+                media = await _report.CreateMedia(reqService, mediaItem);
+            }
+
+            if (media)
+            {
+                return Ok("Create Successfull");
+            }
+            return BadRequest(new ErrorResponse("Create Fail"));
+        }
+    }
+}

@@ -76,6 +76,28 @@
             <param name="id"></param>
             <returns></returns>
         </member>
+        <member name="M:AnService_Capstone.Controllers.RepairDetailController.ConfirmResult(System.Int32)">
+            <summary>
+            update lại status của repair detail (customer dùng khi kiểm tra kết quả khi mason sửa xong), 
+            status approve có sắn, ngày kết thúc công việc tự gán ngày hiện tại
+            </summary>
+            <param name="id">id của repaird detail</param>
+            <returns></returns>
+        </member>
+        <member name="M:AnService_Capstone.Controllers.RepairDetailController.GetRepairDetailByRequestDetailID(System.Int32)">
+            <summary>
+            lấy danh sách việc đã giao cho mason bằng id dịch vụ (request detail) của customer
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AnService_Capstone.Controllers.ReportController.CreateReport(AnService_Capstone.Core.Models.Request.CreateReport)">
+            <summary>
+            mason tạo report khi sửa xong hoặc có lỗi mới trong quá trình sửa
+            </summary>
+            <param name="model">bao gồm request detail id, mason id, description, img hoặc video url</param>
+            <returns></returns>
+        </member>
         <member name="M:AnService_Capstone.Controllers.ServiceController.CreateRequestService(AnService_Capstone.Core.Models.Request.CreateService)">
             <summary>
             customer tạo request service
@@ -200,12 +222,6 @@
             </summary>
             <param name="id"></param>
             <returns></returns>
-        </member>
-        <member name="M:AnService_Capstone.Startup.ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
-            <summary>
-            
-            </summary>
-            <param name="services"></param>
         </member>
     </members>
 </doc>

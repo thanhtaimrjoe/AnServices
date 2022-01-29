@@ -10,6 +10,7 @@ namespace AnService_Capstone.Core.Entities
         public TblRequestDetail()
         {
             TblRepairDetails = new HashSet<TblRepairDetail>();
+            TblReports = new HashSet<TblReport>();
             TblUsedMaterials = new HashSet<TblUsedMaterial>();
         }
 
@@ -20,6 +21,7 @@ namespace AnService_Capstone.Core.Entities
         public virtual TblRequestService RequestService { get; set; }
         public virtual TblService Service { get; set; }
         public virtual ICollection<TblRepairDetail> TblRepairDetails { get; set; }
+        public virtual ICollection<TblReport> TblReports { get; set; }
         public virtual ICollection<TblUsedMaterial> TblUsedMaterials { get; set; }
     }
 }

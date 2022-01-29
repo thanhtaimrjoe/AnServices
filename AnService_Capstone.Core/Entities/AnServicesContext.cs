@@ -22,6 +22,7 @@ namespace AnService_Capstone.Core.Entities
         public virtual DbSet<TblPromotion> TblPromotions { get; set; }
         public virtual DbSet<TblPromotionDetail> TblPromotionDetails { get; set; }
         public virtual DbSet<TblRepairDetail> TblRepairDetails { get; set; }
+        public virtual DbSet<TblReport> TblReports { get; set; }
         public virtual DbSet<TblRequestDetail> TblRequestDetails { get; set; }
         public virtual DbSet<TblRequestService> TblRequestServices { get; set; }
         public virtual DbSet<TblRole> TblRoles { get; set; }
@@ -68,12 +69,18 @@ namespace AnService_Capstone.Core.Entities
                     .HasMaxLength(250)
                     .IsUnicode(false);
 
+                entity.Property(e => e.ReportId).HasColumnName("ReportID");
+
                 entity.Property(e => e.RequestServiceId).HasColumnName("RequestServiceID");
+
+                entity.HasOne(d => d.Report)
+                    .WithMany(p => p.TblMedia)
+                    .HasForeignKey(d => d.ReportId)
+                    .HasConstraintName("FK_tblMedia_tblReport");
 
                 entity.HasOne(d => d.RequestService)
                     .WithMany(p => p.TblMedia)
                     .HasForeignKey(d => d.RequestServiceId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_tblMedia_tblRequestServices");
             });
 
@@ -150,6 +157,35 @@ namespace AnService_Capstone.Core.Entities
                     .WithMany(p => p.TblRepairDetails)
                     .HasForeignKey(d => d.RequestDetailId)
                     .HasConstraintName("FK_tblRepairDetail_tblRequestDetails");
+            });
+
+            modelBuilder.Entity<TblReport>(entity =>
+            {
+                entity.HasKey(e => e.ReportId);
+
+                entity.ToTable("tblReport");
+
+                entity.Property(e => e.ReportId).HasColumnName("ReportID");
+
+                entity.Property(e => e.MasonId).HasColumnName("MasonID");
+
+                entity.Property(e => e.ReportDate).HasColumnType("date");
+
+                entity.Property(e => e.ReportDescription).HasMaxLength(250);
+
+                entity.Property(e => e.RequestDetailId).HasColumnName("RequestDetailID");
+
+                entity.HasOne(d => d.Mason)
+                    .WithMany(p => p.TblReports)
+                    .HasForeignKey(d => d.MasonId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_tblReport_tblUsers");
+
+                entity.HasOne(d => d.RequestDetail)
+                    .WithMany(p => p.TblReports)
+                    .HasForeignKey(d => d.RequestDetailId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_tblReport_tblRequestDetails");
             });
 
             modelBuilder.Entity<TblRequestDetail>(entity =>
