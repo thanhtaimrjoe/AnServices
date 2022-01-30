@@ -102,11 +102,48 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             {
                 connection.Open();
                 var user = await connection.QueryAsync<TblUser>(query, new { @ServiceID = id });
+                connection.Close();
                 if (user.Count() == 0)
                 {
                     return null;
                 }
                 return user;
+            }
+        }
+
+        public async Task<IEnumerable<UserViewModel>> GetAllMason()
+        {
+            var query = "select UserID, FullName, PhoneNumber, Address, Email, Role, TypeJob, CreateDate, Status " +
+                "from tblUsers " +
+                "where Role = 2";
+            using (var connections = _context.CreateConnection())
+            {
+                connections.Open();
+                var res = await connections.QueryAsync<UserViewModel>(query);
+                connections.Close();
+                if (res.Count() == 0)
+                {
+                    return null;
+                }
+                return res;
+            }
+        }
+
+        public async Task<UserViewModel> GetMasonByID(int id)
+        {
+            var query = "select UserID, FullName, PhoneNumber, Address, Email, Role, TypeJob, CreateDate, Status " +
+                "from tblUsers " +
+                "where Role = 2 and UserID = @UserID";
+            using (var connections = _context.CreateConnection())
+            {
+                connections.Open();
+                var res = await connections.QuerySingleOrDefaultAsync<UserViewModel>(query, new { @UserID = id});
+                connections.Close();
+                if (res == null)
+                {
+                    return null;
+                }
+                return res;
             }
         }
     }

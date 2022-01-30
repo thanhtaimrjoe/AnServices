@@ -20,5 +20,9 @@ namespace AnService_Capstone.Core.Interfaces
         public Task<bool> CheckInviteCodeExist(string code);
 
         public Task<IEnumerable<TblUser>> GetMasonByServiceID(int id);
+
+        public Task<IEnumerable<UserViewModel>> GetAllMason();
+
+        public Task<UserViewModel> GetMasonByID(int id);
     }
 }

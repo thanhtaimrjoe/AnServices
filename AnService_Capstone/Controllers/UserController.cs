@@ -184,6 +184,44 @@ namespace AnService_Capstone.Controllers
             }
             return Ok(mason);
         }
+
+        /// <summary>
+        /// lấy dữ liệu mason theo id của mason
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<IActionResult> GetMasonById(int id)
+        {
+            if (id == 0)
+            {
+                return BadRequest(new ErrorResponse("Please enter id"));
+            }
+
+            var res = await _userRepository.GetMasonByID(id);
+            if (res == null)
+            {
+                return NotFound(new ErrorResponse("No record"));
+            }
+            return Ok(res);
+        }
+
+        /// <summary>
+        /// lấy tất cả mason có trong db
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<IActionResult> GetAllMason()
+        {
+            var res = await _userRepository.GetAllMason();
+            if (res == null)
+            {
+                return NotFound(new ErrorResponse("No record"));
+            }
+            return Ok(res);
+        }
     }
 }
 
