@@ -17,6 +17,7 @@ namespace AnService_Capstone.Core.Entities
         {
         }
 
+        public virtual DbSet<TblInvoice> TblInvoices { get; set; }
         public virtual DbSet<TblMaterial> TblMaterials { get; set; }
         public virtual DbSet<TblMedium> TblMedia { get; set; }
         public virtual DbSet<TblPromotion> TblPromotions { get; set; }
@@ -43,6 +44,30 @@ namespace AnService_Capstone.Core.Entities
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
+
+            modelBuilder.Entity<TblInvoice>(entity =>
+            {
+                entity.HasKey(e => e.InvoiceId);
+
+                entity.ToTable("tblInvoice");
+
+                entity.HasIndex(e => e.RequestServiceId, "IX_tblInvoice")
+                    .IsUnique();
+
+                entity.Property(e => e.InvoiceId).HasColumnName("InvoiceID");
+
+                entity.Property(e => e.Date).HasColumnType("date");
+
+                entity.Property(e => e.Note).HasMaxLength(150);
+
+                entity.Property(e => e.RequestServiceId).HasColumnName("RequestServiceID");
+
+                entity.HasOne(d => d.RequestService)
+                    .WithOne(p => p.TblInvoice)
+                    .HasForeignKey<TblInvoice>(d => d.RequestServiceId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_tblInvoice_tblRequestServices");
+            });
 
             modelBuilder.Entity<TblMaterial>(entity =>
             {

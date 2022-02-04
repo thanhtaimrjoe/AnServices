@@ -223,5 +223,18 @@
             <param name="id"></param>
             <returns></returns>
         </member>
+        <member name="M:AnService_Capstone.Controllers.UserController.GetMasonById(System.Int32)">
+            <summary>
+            lấy dữ liệu mason theo id của mason
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AnService_Capstone.Controllers.UserController.GetAllMason">
+            <summary>
+            lấy tất cả mason có trong db
+            </summary>
+            <returns></returns>
+        </member>
     </members>
 </doc>

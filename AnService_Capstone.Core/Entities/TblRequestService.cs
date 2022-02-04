@@ -24,6 +24,7 @@ namespace AnService_Capstone.Core.Entities
 
         public virtual TblUser Customer { get; set; }
         public virtual TblStatus RequestServiceStatusNavigation { get; set; }
+        public virtual TblInvoice TblInvoice { get; set; }
         public virtual ICollection<TblMedium> TblMedia { get; set; }
         public virtual ICollection<TblRequestDetail> TblRequestDetails { get; set; }
     }
