@@ -177,7 +177,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
 
         public async Task<IEnumerable<RequestService>> GetAllRequestServiceByMasonID(int id)
         {
-            var query = "select rs.RequestServiceID, CustomerID, CustomerName, CustomerPhone, CustomerAddress, RequestServiceDescription, RequestServiceCreateDate, UserID, FullName, PhoneNumber, Address, Email, StatusID, StatusName, MediaID, MediaUrl " +
+            var query = "select distinct rs.RequestServiceID, CustomerID, CustomerName, CustomerPhone, CustomerAddress, RequestServiceDescription, RequestServiceCreateDate, UserID, FullName, PhoneNumber, Address, Email, StatusID, StatusName, MediaID, MediaUrl " +
                 "from ((((tblRequestServices rs join tblRequestDetails rd on rs.RequestServiceID = rd.RequestServiceID) join tblRepairDetail repair on rd.RequestDetaiID = repair.RequestDetailID) " +
                 "join tblUsers u on u.UserID = rs.CustomerID) join tblStatus sta on rs.RequestServiceStatus = sta.StatusID) join tblMedia media on rs.RequestServiceID = media.RequestServiceID " +
                 "where MasonID = @MasonID";
@@ -434,6 +434,30 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
                     requestDetail.Service = service;
                     return requestDetail;
                 }, param: new { @RequestServiceID = id }, splitOn: "ServiceID");
+                connection.Close();
+                if (res.Count() == 0)
+                {
+                    return null;
+                }
+                return res;
+            }
+        }
+
+        public async Task<IEnumerable<RequestServiceDetailViewModel>> GetRequestServiceDetailsByRequestServiceIDAndMasonID(int request, int mason)
+        {
+            var query = "select RequestDetaiID, RequestServiceID, detail.ServiceID, ser.ServiceID, ServiceName, ServiceDescription, ServicePrice, ServiceImg " +
+                "from (tblRequestDetails detail join tblServices ser on detail.ServiceID = ser.ServiceID) " +
+                "join tblRepairDetail repair on detail.RequestDetaiID = repair.RequestDetailID " +
+                "where RequestServiceID = @RequestServiceID and MasonID = @MasonID";
+
+            using (var connection = _context.CreateConnection())
+            {
+                connection.Open();
+                var res = await connection.QueryAsync<RequestServiceDetailViewModel, TblService, RequestServiceDetailViewModel>(query, (requestDetail, service) =>
+                {
+                    requestDetail.Service = service;
+                    return requestDetail;
+                }, param: new { @RequestServiceID = request, @MasonID = mason }, splitOn: "ServiceID");
                 connection.Close();
                 if (res.Count() == 0)
                 {

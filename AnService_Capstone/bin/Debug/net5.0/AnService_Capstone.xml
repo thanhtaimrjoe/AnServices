@@ -4,6 +4,13 @@
         <name>AnService_Capstone</name>
     </assembly>
     <members>
+        <member name="M:AnService_Capstone.Controllers.InvoiceController.CreateInvoice(System.Int32)">
+            <summary>
+            tạo hóa đơn theo request service id
+            </summary>
+            <param name="id">request service id</param>
+            <returns></returns>
+        </member>
         <member name="M:AnService_Capstone.Controllers.MaterialController.InsertRequestMaterial(AnService_Capstone.Core.Models.Request.RequestMaterial)">
             <summary>
             tạo request vật liệu
@@ -157,6 +164,14 @@
             lấy detail của request service bằng request service id
             </summary>
             <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AnService_Capstone.Controllers.ServiceController.GetRequestServiceDetailsByRequestServiceIDAndMasonID(System.Int32,System.Int32)">
+            <summary>
+            lấy detail của request service bằng request service id và mason id
+            </summary>
+            <param name="requestID"></param>
+            <param name="masonID"></param>
             <returns></returns>
         </member>
         <member name="M:AnService_Capstone.Controllers.ServiceController.GetRequestServiceByUserIDAndStatus(System.Int32,System.Int32)">

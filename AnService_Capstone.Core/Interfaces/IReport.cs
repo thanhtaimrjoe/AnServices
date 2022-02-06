@@ -1,4 +1,5 @@
-﻿using AnService_Capstone.Core.Models.Request;
+﻿using AnService_Capstone.Core.Entities;
+using AnService_Capstone.Core.Models.Request;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,5 +13,7 @@ namespace AnService_Capstone.Core.Interfaces
         public Task<int> CreateReport(CreateReport model);
 
         public Task<bool> CreateMedia(int requestID, string url);
+
+        public Task<IEnumerable<TblReport>> GetAllReportByMasonID(int id);
     }
 }

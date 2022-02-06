@@ -221,6 +221,35 @@ namespace AnService_Capstone.Controllers
         }
 
         /// <summary>
+        /// lấy detail của request service bằng request service id và mason id
+        /// </summary>
+        /// <param name="requestID"></param>
+        /// <param name="masonID"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<IActionResult> GetRequestServiceDetailsByRequestServiceIDAndMasonID(int requestID, int masonID)
+        {
+            if (requestID == 0)
+            {
+                return BadRequest(new ErrorResponse("Please enter request id"));
+            }
+
+            if (masonID == 0)
+            {
+                return BadRequest(new ErrorResponse("Please enter mason id"));
+            }
+
+            var result = await _serviceRepository.GetRequestServiceDetailsByRequestServiceIDAndMasonID(requestID, masonID);
+
+            if (result == null)
+            {
+                return NotFound(new ErrorResponse("No Request Service Availabe"));
+            }
+            return Ok(result);
+        }
+
+        /// <summary>
         /// lấy request service của 1 customer bằng customerid và status (approve, pending, deny, processing)
         /// </summary>
         /// <param name="id"></param>

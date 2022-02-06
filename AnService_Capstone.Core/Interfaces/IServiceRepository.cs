@@ -42,5 +42,7 @@ namespace AnService_Capstone.Core.Interfaces
         public Task<IEnumerable<RequestService>> GetAllServiceByStatus(int status);
 
         public Task<IEnumerable<RequestService>> GetAllServiceByDate(DateTime? date);
+
+        public Task<IEnumerable<RequestServiceDetailViewModel>> GetRequestServiceDetailsByRequestServiceIDAndMasonID(int request, int mason);
     }
 }

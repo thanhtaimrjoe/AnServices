@@ -46,5 +46,28 @@ namespace AnService_Capstone.Controllers
             }
             return BadRequest(new ErrorResponse("Create Fail"));
         }
+
+        /// <summary>
+        /// lấy tất cả report theo mason id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<IActionResult> GetAllReportByMasonID(int id)
+        {
+            if (id == 0)
+            {
+                return BadRequest(new ErrorResponse("Please enter id"));
+            }
+
+            var res = await _report.GetAllReportByMasonID(id);
+
+            if(res != null)
+            {
+                return Ok(res);
+            }
+            return NotFound(new ErrorResponse("No record"));
+        }
     }
 }

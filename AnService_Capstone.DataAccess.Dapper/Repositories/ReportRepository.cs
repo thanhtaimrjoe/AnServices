@@ -1,4 +1,5 @@
-﻿using AnService_Capstone.Core.Interfaces;
+﻿using AnService_Capstone.Core.Entities;
+using AnService_Capstone.Core.Interfaces;
 using AnService_Capstone.Core.Models.Request;
 using AnService_Capstone.DataAccess.Dapper.Context;
 using Dapper;
@@ -59,6 +60,25 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
                 var id = await connection.QuerySingleAsync<int>(query, parameters);
                 connection.Close();
                 return id;
+            }
+        }
+
+        public async Task<IEnumerable<TblReport>> GetAllReportByMasonID(int id)
+        {
+            var query = "select ReportID, RequestDetailID, MasonID, ReportDescription, ReportDate " +
+                "from tblReport " +
+                "where MasonID = @MasonID";  
+            
+            using (var connection = _context.CreateConnection())
+            {
+                connection.Open();
+                var res = await connection.QueryAsync<TblReport>(query, new { @MasonID = id });
+                connection.Close();
+                if (!res.Any())
+                {
+                    return null;
+                }
+                return res;
             }
         }
     }
