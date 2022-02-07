@@ -105,6 +105,13 @@
             <param name="model">bao gồm request detail id, mason id, description, img hoặc video url</param>
             <returns></returns>
         </member>
+        <member name="M:AnService_Capstone.Controllers.ReportController.GetAllReportByMasonID(System.Int32)">
+            <summary>
+            lấy tất cả report theo mason id
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
         <member name="M:AnService_Capstone.Controllers.ServiceController.CreateRequestService(AnService_Capstone.Core.Models.Request.CreateService)">
             <summary>
             customer tạo request service

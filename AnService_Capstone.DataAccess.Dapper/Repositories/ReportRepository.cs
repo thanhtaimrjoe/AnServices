@@ -65,14 +65,26 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
 
         public async Task<IEnumerable<TblReport>> GetAllReportByMasonID(int id)
         {
-            var query = "select ReportID, RequestDetailID, MasonID, ReportDescription, ReportDate " +
-                "from tblReport " +
+            var query = "select report.ReportID, RequestDetailID, MasonID, ReportDescription, ReportDate, MediaID, MediaUrl " +
+                "from tblReport report join tblMedia media on report.ReportID = media.ReportID " +
                 "where MasonID = @MasonID";  
             
             using (var connection = _context.CreateConnection())
             {
                 connection.Open();
-                var res = await connection.QueryAsync<TblReport>(query, new { @MasonID = id });
+                var requestDict = new Dictionary<int, TblReport>();
+                var res = await connection.QueryAsync<TblReport, TblMedium, TblReport>(query, (report, media) =>
+                {
+                    TblReport currentReport;
+                    if (!requestDict.TryGetValue(report.ReportId, out currentReport))
+                    {
+                        currentReport = report;
+                        currentReport.TblMedia = new List<TblMedium>();
+                        requestDict.Add(currentReport.ReportId, currentReport);
+                    }
+                    currentReport.TblMedia.Add(media);
+                    return currentReport;
+                }, param: new { @MasonID = id }, splitOn: "MediaID");
                 connection.Close();
                 if (!res.Any())
                 {
