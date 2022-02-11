@@ -222,6 +222,59 @@ namespace AnService_Capstone.Controllers
             }
             return Ok(res);
         }
+
+        /// <summary>
+        /// xóa tài khoản của mason
+        /// </summary>
+        /// <param name="id">id của mason cần xóa</param>
+        /// <returns></returns>
+        [HttpPut]
+        [Route("[action]")]
+        public async Task<IActionResult> RemoveMason([FromBody] int id)
+        {
+            if (id == 0)
+            {
+                return BadRequest(new ErrorResponse("Please enter id"));
+            }
+
+            var res = await _userRepository.RemoveMason(id);
+
+            if (res)
+            {
+                return Ok("Remove Successful");
+            }
+            return BadRequest(new ErrorResponse("Remove Fail"));
+        }
+
+        /// <summary>
+        /// update mason
+        /// </summary>
+        /// <param name="mason"></param>
+        /// <returns></returns>
+        [HttpPut]
+        [Route("[action]")]
+        public async Task<IActionResult> UpdateMason([FromBody]UpdateMason mason)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            var check = await _userRepository.CheckPhoneNumberExist(mason.MasonPhoneNumber);
+
+            if (check != null)
+            {
+                return BadRequest(new ErrorResponse("Phone number is existed"));
+            }
+
+            var res = await _userRepository.UpdateMason(mason);
+
+            if (res)
+            {
+                return Ok("Update Successful");
+            }
+            return BadRequest(new ErrorResponse("Update Fail"));
+        }
     }
 }
 

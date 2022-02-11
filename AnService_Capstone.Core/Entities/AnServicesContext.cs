@@ -198,6 +198,8 @@ namespace AnService_Capstone.Core.Entities
 
                 entity.Property(e => e.ReportDescription).HasMaxLength(250);
 
+                entity.Property(e => e.ReportTitle).HasMaxLength(50);
+
                 entity.Property(e => e.RequestDetailId).HasColumnName("RequestDetailID");
 
                 entity.HasOne(d => d.Mason)
@@ -247,7 +249,7 @@ namespace AnService_Capstone.Core.Entities
 
                 entity.Property(e => e.RequestServiceId).HasColumnName("RequestServiceID");
 
-                entity.Property(e => e.CustomerAddress).HasMaxLength(100);
+                entity.Property(e => e.CustomerAddress).HasMaxLength(150);
 
                 entity.Property(e => e.CustomerId).HasColumnName("CustomerID");
 
@@ -292,7 +294,7 @@ namespace AnService_Capstone.Core.Entities
 
                 entity.Property(e => e.ServiceId).HasColumnName("ServiceID");
 
-                entity.Property(e => e.ServiceDescription).HasMaxLength(150);
+                entity.Property(e => e.ServiceDescription).HasMaxLength(250);
 
                 entity.Property(e => e.ServiceImg)
                     .HasMaxLength(250)
@@ -338,7 +340,11 @@ namespace AnService_Capstone.Core.Entities
 
                 entity.Property(e => e.Message).HasMaxLength(50);
 
+                entity.Property(e => e.Note).HasMaxLength(50);
+
                 entity.Property(e => e.Quantity).HasColumnName("quantity");
+
+                entity.Property(e => e.QuantityNew).HasColumnName("quantityNew");
 
                 entity.Property(e => e.RequestDetailId).HasColumnName("RequestDetailID");
 
@@ -368,6 +374,9 @@ namespace AnService_Capstone.Core.Entities
                 entity.HasKey(e => e.UserId);
 
                 entity.ToTable("tblUsers");
+
+                entity.HasIndex(e => e.PhoneNumber, "IX_tblUsers")
+                    .IsUnique();
 
                 entity.Property(e => e.UserId).HasColumnName("UserID");
 

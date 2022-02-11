@@ -285,7 +285,7 @@ namespace AnService_Capstone.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("[action]")]
-        public async Task<IActionResult> GetRequestServiceStatus(int status)
+        public async Task<IActionResult> GetRequestServiceByStatus(int status)
         {
             if (status == 0)
             {
@@ -322,6 +322,29 @@ namespace AnService_Capstone.Controllers
                 return NotFound(new ErrorResponse("No Request Service Availabe, format : yyyy-mm-ddT00:00:00"));
             }
             return Ok(result);
+        }
+
+        /// <summary>
+        /// Từ chối hoặc hủy bỏ request service
+        /// </summary>
+        /// <param name="id">request service</param>
+        /// <returns></returns>
+        [HttpPut]
+        [Route("[action]")]
+        public async Task<IActionResult> CancelRequestService(int id)
+        {
+            if (id == 0)
+            {
+                return BadRequest(new ErrorResponse("Please enter id"));
+            }
+
+            var result = await _serviceRepository.CancelRequestServiceByID(id);
+
+            if (!result)
+            {
+                return NotFound(new ErrorResponse("Cancel Fail"));
+            }
+            return Ok("Cancel Successful");
         }
     }
 }

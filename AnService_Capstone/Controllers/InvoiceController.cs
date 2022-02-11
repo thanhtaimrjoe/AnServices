@@ -19,7 +19,7 @@ namespace AnService_Capstone.Controllers
             _serviceRepository = serviceRepository;
         }
 
-        /// <summary>
+        /*/// <summary>
         /// tạo hóa đơn theo request service id
         /// </summary>
         /// <param name="id">request service id</param>
@@ -54,6 +54,6 @@ namespace AnService_Capstone.Controllers
                 return Ok("Create Successful");
             }
             return BadRequest(new ErrorResponse("Create Fail"));
-        }
+        }*/
     }
 }

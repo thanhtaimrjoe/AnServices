@@ -15,7 +15,6 @@ namespace AnService_Capstone.Core.Entities
         public int ServiceId { get; set; }
         public string ServiceName { get; set; }
         public string ServiceDescription { get; set; }
-        public double? ServicePrice { get; set; }
         public bool? ServiceStatus { get; set; }
         public int? TypeMasonJob { get; set; }
         public string ServiceImg { get; set; }

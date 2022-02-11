@@ -24,5 +24,11 @@ namespace AnService_Capstone.Core.Interfaces
         public Task<IEnumerable<UserViewModel>> GetAllMason();
 
         public Task<UserViewModel> GetMasonByID(int id);
+
+        public Task<bool> RemoveMason(int id);
+
+        public Task<bool> UpdateMason(UpdateMason mason);
+
+        /*public Task<bool> ChangeMasonPhoneNumber();*/
     }
 }

@@ -44,5 +44,7 @@ namespace AnService_Capstone.Core.Interfaces
         public Task<IEnumerable<RequestService>> GetAllServiceByDate(DateTime? date);
 
         public Task<IEnumerable<RequestServiceDetailViewModel>> GetRequestServiceDetailsByRequestServiceIDAndMasonID(int request, int mason);
+
+        public Task<bool> CancelRequestServiceByID(int id);
     }
 }

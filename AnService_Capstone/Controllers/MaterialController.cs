@@ -181,8 +181,8 @@ namespace AnService_Capstone.Controllers
         /// <summary>
         /// update số lượng vật liệu của request theo id, message thông báo cập nhật lại số lượng, status approve
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="quantity"></param>
+        /// <param name="id">usermaterialid</param>
+        /// <param name="quantity">số lượng mới</param>
         /// <param name="message"></param>
         /// <returns></returns>
         [HttpPut]

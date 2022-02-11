@@ -146,5 +146,53 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
                 return res;
             }
         }
+
+        public async Task<bool> RemoveMason(int id)
+        {
+            var query = "update tblUsers set Status = 5, UpdateDate = @UpdateDate where UserID = @UserID";
+            var parameters = new DynamicParameters();
+            
+            parameters.Add("UpdateDate", DateTime.Now, DbType.DateTime);
+            parameters.Add("UserID", id, DbType.Int32);
+
+            using (var connections = _context.CreateConnection())
+            {
+                connections.Open();
+                var res = await connections.ExecuteAsync(query, parameters);
+                connections.Close();
+                if (res == 0)
+                {
+                    return false;
+                }
+                return true;
+            }
+        }
+
+        public async Task<bool> UpdateMason(UpdateMason mason)
+        {
+            var query = "update tblUsers set FullName = @FullName, PhoneNumber = @PhoneNumber, Address = @Address, Email = @Email, Role = 2, TypeJob = @TypeJob, UpdateDate = @UpdateDate, Status = 4 " +
+                "where UserID = @UserID";
+
+            var parameters = new DynamicParameters();
+            parameters.Add("FullName", mason.MasonName, DbType.String);
+            parameters.Add("PhoneNumber", mason.MasonPhoneNumber, DbType.String);
+            parameters.Add("Address", mason.MasonAddress, DbType.String);
+            parameters.Add("Email", mason.MasonEmail, DbType.String);
+            parameters.Add("TypeJob", mason.TypeJob, DbType.Int32);
+            parameters.Add("UpdateDate", DateTime.Now, DbType.DateTime);
+            parameters.Add("UserID", mason.MasonId, DbType.Int32);
+
+            using (var connections = _context.CreateConnection())
+            {
+                connections.Open();
+                var res = await connections.ExecuteAsync(query, parameters);
+                connections.Close();
+                if (res == 0)
+                {
+                    return false;
+                }
+                return true;
+            }
+        }
     }
 }

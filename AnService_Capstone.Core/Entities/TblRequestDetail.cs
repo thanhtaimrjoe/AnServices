@@ -17,6 +17,7 @@ namespace AnService_Capstone.Core.Entities
         public int RequestDetaiId { get; set; }
         public int RequestServiceId { get; set; }
         public int ServiceId { get; set; }
+        public double? RequestDetailPrice { get; set; }
 
         public virtual TblRequestService RequestService { get; set; }
         public virtual TblService Service { get; set; }

@@ -73,7 +73,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
 
         public async Task<IEnumerable<MaterialViewModel>> GetAllMaterialByRequestDetailID(int id)
         {
-            var query = "select UsedMaterialID, used.MaterialID, used.RequestDetailID, MasonID, quantity, Message, RequestServiceDescription, CustomerName, mate.MaterialID, MaterialName, Unit, UserID, FullName, PhoneNumber, Address, StatusID, StatusName " +
+            var query = "select UsedMaterialID, used.MaterialID, used.RequestDetailID, MasonID, quantity, quantityNew, Note, Message, RequestServiceDescription, CustomerName, mate.MaterialID, MaterialName, Unit, UserID, FullName, PhoneNumber, Address, StatusID, StatusName " +
                 "from ((((tblUsedMaterial used join tblMaterial mate on used.MaterialID = mate.MaterialID) join tblUsers us on used.MasonID = us.UserID) " +
                 "join tblStatus sta on used.Status = sta.StatusID) join tblRequestDetails details on used.RequestDetailID = details.RequestDetaiID) " +
                 "join tblRequestServices rs on rs.RequestServiceID = details.RequestServiceID " +
@@ -204,8 +204,8 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
 
         public async Task<bool> InsertMaterial(RequestMaterial material)
         {
-            var query = "insert into tblUsedMaterial(MaterialID, RequestDetailID, MasonID, quantity, Status) " +
-                "values(@MaterialID, @RequestDetailID, @MasonID, @quantity, @Status)";
+            var query = "insert into tblUsedMaterial(MaterialID, RequestDetailID, MasonID, quantity, Status, Note) " +
+                "values(@MaterialID, @RequestDetailID, @MasonID, @quantity, @Status, @Note)";
 
             foreach (var item in material.MaterialList)
             {
@@ -215,6 +215,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
                 parameters.Add("MasonID", material.MasonID, DbType.Int32);
                 parameters.Add("quantity", item.quantity, DbType.Int32);
                 parameters.Add("Status", 2, DbType.Int32);
+                parameters.Add("Note", item.Note, DbType.String);
 
                 using (var connection = _dapperContext.CreateConnection())
                 {
@@ -232,11 +233,11 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
 
         public async Task<bool> UpdateRequestMaterial(int id, int quantity, string msg)
         {
-            var query = "update tblUsedMaterial set quantity = @quantity, Message = @Message, Status = 3 " +
+            var query = "update tblUsedMaterial set quantityNew = @quantityNew, Message = @Message, Status = 3 " +
                 "where UsedMaterialID = @UsedMaterialID";
 
             var parameters = new DynamicParameters();
-            parameters.Add("quantity", quantity, DbType.Int32);
+            parameters.Add("quantityNew", quantity, DbType.Int32);
             parameters.Add("Message", msg, DbType.String);
             parameters.Add("UsedMaterialID", id, DbType.Int32);
 

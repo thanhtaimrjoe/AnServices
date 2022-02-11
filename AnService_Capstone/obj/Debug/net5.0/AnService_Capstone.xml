@@ -4,13 +4,6 @@
         <name>AnService_Capstone</name>
     </assembly>
     <members>
-        <member name="M:AnService_Capstone.Controllers.InvoiceController.CreateInvoice(System.Int32)">
-            <summary>
-            tạo hóa đơn theo request service id
-            </summary>
-            <param name="id">request service id</param>
-            <returns></returns>
-        </member>
         <member name="M:AnService_Capstone.Controllers.MaterialController.InsertRequestMaterial(AnService_Capstone.Core.Models.Request.RequestMaterial)">
             <summary>
             tạo request vật liệu
@@ -189,7 +182,7 @@
             <param name="status"></param>
             <returns></returns>
         </member>
-        <member name="M:AnService_Capstone.Controllers.ServiceController.GetRequestServiceStatus(System.Int32)">
+        <member name="M:AnService_Capstone.Controllers.ServiceController.GetRequestServiceByStatus(System.Int32)">
             <summary>
             filter request service theo status (approve, pending, deny, processing)
             </summary>
@@ -201,6 +194,13 @@
             
             </summary>
             <param name="date"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AnService_Capstone.Controllers.ServiceController.CancelRequestService(System.Int32)">
+            <summary>
+            Từ chối hoặc hủy bỏ request service
+            </summary>
+            <param name="id">request service</param>
             <returns></returns>
         </member>
         <member name="M:AnService_Capstone.Controllers.UserController.LoginStaff(AnService_Capstone.Core.Models.Request.UserLogin)">
@@ -256,6 +256,20 @@
             <summary>
             lấy tất cả mason có trong db
             </summary>
+            <returns></returns>
+        </member>
+        <member name="M:AnService_Capstone.Controllers.UserController.RemoveMason(System.Int32)">
+            <summary>
+            xóa tài khoản của mason
+            </summary>
+            <param name="id">id của mason cần xóa</param>
+            <returns></returns>
+        </member>
+        <member name="M:AnService_Capstone.Controllers.UserController.UpdateMason(AnService_Capstone.Core.Models.Request.UpdateMason)">
+            <summary>
+            update mason
+            </summary>
+            <param name="mason"></param>
             <returns></returns>
         </member>
     </members>

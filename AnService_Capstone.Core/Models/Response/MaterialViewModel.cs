@@ -14,7 +14,9 @@ namespace AnService_Capstone.Core.Models.Response
         public int? RequestDetailId { get; set; }
         public UserViewModel Mason { get; set; }
         public int? Quantity { get; set; }
+        public int? QuantityNew { get; set; }
         public TblStatus Status { get; set; }
+        public string Note { get; set; }
         public string Message { get; set; }
         public string RequestServiceDescription { get; set; }
         public string CustomerName { get; set; }

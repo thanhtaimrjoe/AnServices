@@ -44,13 +44,14 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
 
         public async Task<int> CreateReport(CreateReport model)
         {
-            var query = "insert into tblReport(RequestDetailID, MasonID, ReportDescription, ReportDate) " +
-                "values(@RequestDetailID, @MasonID, @ReportDescription, @ReportDate) " +
+            var query = "insert into tblReport(RequestDetailID, MasonID, ReportTitle, ReportDescription, ReportDate) " +
+                "values(@RequestDetailID, @MasonID, @ReportTitle, @ReportDescription, @ReportDate) " +
                 "SELECT CAST(SCOPE_IDENTITY() as int)";
 
             var parameters = new DynamicParameters();
             parameters.Add("RequestDetailID", model.RequestDetailID, DbType.Int32);
             parameters.Add("MasonID", model.MasonID, DbType.Int32);
+            parameters.Add("ReportTitle", model.ReportTitle, DbType.String);
             parameters.Add("ReportDescription", model.ReportDescription, DbType.String);
             parameters.Add("ReportDate", DateTime.Now, DbType.DateTime);
 
@@ -65,7 +66,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
 
         public async Task<IEnumerable<TblReport>> GetAllReportByMasonID(int id)
         {
-            var query = "select report.ReportID, RequestDetailID, MasonID, ReportDescription, ReportDate, MediaID, MediaUrl " +
+            var query = "select distinct report.ReportID, RequestDetailID, MasonID, ReportTitle, ReportDescription, ReportDate, MediaID, MediaUrl " +
                 "from tblReport report join tblMedia media on report.ReportID = media.ReportID " +
                 "where MasonID = @MasonID";  
             
@@ -90,7 +91,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
                 {
                     return null;
                 }
-                return res;
+                return res.Distinct().ToList();
             }
         }
     }
