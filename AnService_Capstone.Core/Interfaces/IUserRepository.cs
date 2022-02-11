@@ -30,5 +30,7 @@ namespace AnService_Capstone.Core.Interfaces
         public Task<bool> UpdateMason(UpdateMason mason);
 
         /*public Task<bool> ChangeMasonPhoneNumber();*/
+
+        public Task<bool> CreateAccountMason(CreateMason mason);
     }
 }

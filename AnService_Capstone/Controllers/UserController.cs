@@ -275,6 +275,29 @@ namespace AnService_Capstone.Controllers
             }
             return BadRequest(new ErrorResponse("Update Fail"));
         }
+
+        /// <summary>
+        /// tạo tài khoản mason
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> CreateMasonAccount(CreateMason model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+            
+            var res = await _userRepository.CreateAccountMason(model);
+
+            if (res)
+            {
+                return Ok("Create Successfull");
+            }
+            return BadRequest(new ErrorResponse("Create Fail"));
+        }
     }
 }
 

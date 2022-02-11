@@ -122,6 +122,7 @@ namespace AnService_Capstone
             services.AddScoped<IRepairDetail, RepairDetailRepository>();
             services.AddScoped<IReport, ReportRepository>();
             services.AddScoped<IInvoiceRepository, InvoiceRepository>();
+            services.AddScoped<ITypeJobRepository, TypeJobRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

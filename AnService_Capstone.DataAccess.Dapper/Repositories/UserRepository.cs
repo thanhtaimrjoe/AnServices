@@ -194,5 +194,33 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
                 return true;
             }
         }
+
+        public async Task<bool> CreateAccountMason(CreateMason mason)
+        {
+            var query = "insert into tblUsers(FullName, PhoneNumber, Address, Email, Role, TypeJob, CreateDate, Status) " +
+                "values(@FullName, @PhoneNumber, @Address, @Email, @Role, @TypeJob, @CreateDate, @Status) ";
+
+            var parameters = new DynamicParameters();
+            parameters.Add("FullName", mason.FullName, DbType.String);
+            parameters.Add("PhoneNumber", mason.PhoneNumber, DbType.String);
+            parameters.Add("Address", mason.Address, DbType.String);
+            parameters.Add("Email", mason.Email, DbType.String);
+            parameters.Add("TypeJob", mason.TypeJob, DbType.String);
+            parameters.Add("Role", 2, DbType.Int32);
+            parameters.Add("CreateDate", DateTime.Now, DbType.DateTime);
+            parameters.Add("Status", 4, DbType.Int32);
+
+            using (var connection = _context.CreateConnection())
+            {
+                connection.Open();
+                var check = await connection.ExecuteAsync(query, parameters);
+                connection.Close();
+                if (check == 0)
+                {
+                    return false;
+                }
+                return true;
+            }
+        }
     }
 }

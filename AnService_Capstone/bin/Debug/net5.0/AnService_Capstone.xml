@@ -58,8 +58,8 @@
             <summary>
             update số lượng vật liệu của request theo id, message thông báo cập nhật lại số lượng, status approve
             </summary>
-            <param name="id"></param>
-            <param name="quantity"></param>
+            <param name="id">usermaterialid</param>
+            <param name="quantity">số lượng mới</param>
             <param name="message"></param>
             <returns></returns>
         </member>
@@ -201,6 +201,12 @@
             Từ chối hoặc hủy bỏ request service
             </summary>
             <param name="id">request service</param>
+            <returns></returns>
+        </member>
+        <member name="M:AnService_Capstone.Controllers.TypeJobController.GetAll">
+            <summary>
+            lấy danh sách nghề của mason
+            </summary>
             <returns></returns>
         </member>
         <member name="M:AnService_Capstone.Controllers.UserController.LoginStaff(AnService_Capstone.Core.Models.Request.UserLogin)">
