@@ -17,6 +17,7 @@ namespace AnService_Capstone.Core.Entities
         {
         }
 
+        public virtual DbSet<TblContract> TblContracts { get; set; }
         public virtual DbSet<TblInvoice> TblInvoices { get; set; }
         public virtual DbSet<TblMaterial> TblMaterials { get; set; }
         public virtual DbSet<TblMedium> TblMedia { get; set; }
@@ -44,6 +45,29 @@ namespace AnService_Capstone.Core.Entities
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
+
+            modelBuilder.Entity<TblContract>(entity =>
+            {
+                entity.HasKey(e => e.ContactId)
+                    .HasName("PK_tblContact");
+
+                entity.ToTable("tblContract");
+
+                entity.Property(e => e.ContactId).HasColumnName("ContactID");
+
+                entity.Property(e => e.ContactTitle).HasMaxLength(50);
+
+                entity.Property(e => e.ContactUrl)
+                    .HasMaxLength(250)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.CustomerId).HasColumnName("CustomerID");
+
+                entity.HasOne(d => d.Customer)
+                    .WithMany(p => p.TblContracts)
+                    .HasForeignKey(d => d.CustomerId)
+                    .HasConstraintName("FK_tblContact_tblUsers");
+            });
 
             modelBuilder.Entity<TblInvoice>(entity =>
             {

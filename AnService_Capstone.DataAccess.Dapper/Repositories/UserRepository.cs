@@ -131,8 +131,8 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
 
         public async Task<UserViewModel> GetMasonByID(int id)
         {
-            var query = "select UserID, FullName, PhoneNumber, Address, Email, Role, TypeJob, CreateDate, Status " +
-                "from tblUsers " +
+            var query = "select UserID, FullName, PhoneNumber, Address, Email, Role, TypeJobName as 'TypeJob', CreateDate, Status " +
+                "from tblUsers u join tblTypeJobs job on u.TypeJob = job.TypeJobID " +
                 "where Role = 2 and UserID = @UserID";
             using (var connections = _context.CreateConnection())
             {

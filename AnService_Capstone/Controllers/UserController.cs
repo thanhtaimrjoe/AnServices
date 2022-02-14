@@ -230,7 +230,7 @@ namespace AnService_Capstone.Controllers
         /// <returns></returns>
         [HttpPut]
         [Route("[action]")]
-        public async Task<IActionResult> RemoveMason([FromBody] int id)
+        public async Task<IActionResult> RemoveMason(int id)
         {
             if (id == 0)
             {
