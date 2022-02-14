@@ -31,5 +31,7 @@ namespace AnService_Capstone.Core.Interfaces
         public Task<IEnumerable<MaterialViewModel>> GetAllMaterialByRequestServiceID(int id);
 
         public Task<MaterialViewModel> GetRequestMaterialByID(int id);
+
+        public Task<IEnumerable<string>> GetListUnit();
     }
 }

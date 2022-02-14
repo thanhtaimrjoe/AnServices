@@ -378,7 +378,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
         {
             var query = "select rs.RequestServiceID, CustomerID, CustomerName, CustomerPhone, CustomerAddress, RequestServiceDescription, RequestServiceCreateDate, UserID, FullName, PhoneNumber, Address, Email, StatusID, StatusName, MediaID, MediaUrl " +
                 "from ((tblRequestServices rs join tblUsers u on rs.CustomerID = u.UserID) join tblStatus sta on rs.RequestServiceStatus = sta.StatusID) join tblMedia media on rs.RequestServiceID = media.RequestServiceID " +
-                "where CustomerID = @CustomerID and RequestServiceStatus = @RequestServiceStatus" +
+                "where CustomerID = @CustomerID and RequestServiceStatus = @RequestServiceStatus " +
                 "order by RequestServiceCreateDate desc";
 
             using (var connection = _context.CreateConnection())

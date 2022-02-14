@@ -278,5 +278,12 @@
             <param name="mason"></param>
             <returns></returns>
         </member>
+        <member name="M:AnService_Capstone.Controllers.UserController.CreateMasonAccount(AnService_Capstone.Core.Models.Request.CreateMason)">
+            <summary>
+            tạo tài khoản mason
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
     </members>
 </doc>

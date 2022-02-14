@@ -174,6 +174,23 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             }
         }
 
+        public async Task<IEnumerable<string>> GetListUnit()
+        {
+            var query = "select distinct Unit from tblMaterial";
+
+            using (var connection = _dapperContext.CreateConnection())
+            {
+                connection.Open();
+                var res = await connection.QueryAsync<string>(query);
+                connection.Close();
+                if (!res.Any())
+                {
+                    return null;
+                }
+                return res;
+            }
+        }
+
         public async Task<MaterialViewModel> GetRequestMaterialByID(int id)
         {
             var query = "select UsedMaterialID, used.MaterialID, RequestDetailID, MasonID, quantity, Message, RequestServiceDescription, CustomerName, mate.MaterialID, MaterialName, Unit, UserID, FullName, PhoneNumber, Address, StatusID, StatusName " +

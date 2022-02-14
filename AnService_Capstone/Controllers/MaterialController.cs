@@ -249,5 +249,18 @@ namespace AnService_Capstone.Controllers
             }
             return Ok(res);
         }
+
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<IActionResult> GetUnitList()
+        {
+            var res = await _materialReposiory.GetListUnit();
+            
+            if (res == null)
+            {
+                return NotFound(new ErrorResponse("No record"));
+            }
+            return Ok(res);
+        }
     }
 }
