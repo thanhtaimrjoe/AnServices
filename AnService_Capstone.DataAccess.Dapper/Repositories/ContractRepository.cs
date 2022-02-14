@@ -4,6 +4,7 @@ using AnService_Capstone.DataAccess.Dapper.Context;
 using Dapper;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,6 +18,65 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
         public ContractRepository(DapperContext context)
         {
             _context = context;
+        }
+
+        public async Task<bool> ApproveContract(int id)
+        {
+            var query = "update tblContract set ContractStatus = @ContractStatus, ContractUpdateDate = @ContractUpdateDate  where ContractID = @ContractID";
+
+            using (var connection = _context.CreateConnection())
+            {
+                connection.Open();
+                var res = await connection.ExecuteAsync(query, new { @ContractStatus = 3, @ContractID = id, @ContractUpdateDate = DateTime.Now }); ;
+                connection.Close();
+                if (res == 0)
+                {
+                    return false;
+                }
+                return true;
+            }
+        }
+
+        public async Task<bool> CreateContract(int id, string name, string url)
+        {
+            var query = "insert into tblContract(CustomerID,ContractTitle,ContractUrl,ContractStatus,ContractCreateDate) " +
+                "values (@CustomerID,@ContractTitle,@ContractUrl,@ContractStatus,@ContractCreateDate)";
+
+            var parameters = new DynamicParameters();
+            parameters.Add("CustomerID", id, DbType.Int32);
+            parameters.Add("ContractTitle", "Hợp đồng " + name, DbType.String);
+            parameters.Add("ContractUrl", url, DbType.String);
+            parameters.Add("ContractStatus", 2, DbType.Int32);
+            parameters.Add("ContractCreateDate", DateTime.Now, DbType.DateTime);
+
+            using(var connection = _context.CreateConnection())
+            {
+                connection.Open();
+                var res = await connection.ExecuteAsync(query, parameters);
+                connection.Close();
+                if (res == 0)
+                {
+                    return false;
+                }
+                return true;
+            }
+        }
+
+        public async Task<bool> DenyContract(int id)
+        {
+            var query = "update tblContract set ContractStatus = @ContractStatus, ContractUpdateDate = @ContractUpdateDate  where ContractID = @ContractID";
+
+            using (var connection = _context.CreateConnection())
+            {
+                connection.Open();
+                var res = await connection.ExecuteAsync(query, new { @ContractStatus = 1, @ContractID = id, @ContractUpdateDate = DateTime.Now }); ;
+                connection.Close();
+                if (res == 0)
+                {
+                    return false;
+                }
+                return true;
+            }
         }
 
         public async Task<IEnumerable<TblContract>> GetContractListByUserID(int id)
@@ -33,6 +93,40 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
                     return null;
                 }
                 return res;
+            }
+        }
+
+        public async Task<bool> RequestUpdateContract(int id)
+        {
+            var query = "update tblContract set ContractStatus = @ContractStatus, ContractUpdateDate = @ContractUpdateDate  where ContractID = @ContractID";
+
+            using (var connection = _context.CreateConnection())
+            {
+                connection.Open();
+                var res = await connection.ExecuteAsync(query, new { @ContractStatus = 7, @ContractID = id, @ContractUpdateDate = DateTime.Now }); ;
+                connection.Close();
+                if (res == 0)
+                {
+                    return false;
+                }
+                return true;
+            }
+        }
+
+        public async Task<bool> UpdateStatusContract(int id, int status)
+        {
+            var query = "update tblContract set ContractStatus = @ContractStatus, ContractUpdateDate = @ContractUpdateDate  where ContractID = @ContractID";
+
+            using (var connection = _context.CreateConnection())
+            {
+                connection.Open();
+                var res = await connection.ExecuteAsync(query, new { @ContractStatus = status, @ContractID = id, @ContractUpdateDate = DateTime.Now }); ;
+                connection.Close();
+                if (res == 0)
+                {
+                    return false;
+                }
+                return true;
             }
         }
     }

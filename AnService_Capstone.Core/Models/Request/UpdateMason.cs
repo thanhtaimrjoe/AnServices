@@ -13,7 +13,7 @@ namespace AnService_Capstone.Core.Models.Request
         public int MasonId { get; set; }
         [Required(ErrorMessage = "Cant be blank")]
         public string MasonName { get; set;}
-        [Range(0, 9999999999, ErrorMessage = "Phone number incorrect format 10 numbers")]
+        [RegularExpression("^(?!0+$)(\\+\\d{1,3}[- ]?)?(?!0+$)\\d{10}$", ErrorMessage = "Please enter valid phone no.")]
         [Required]
         public string MasonPhoneNumber { get; set;}
         [Required(ErrorMessage = "Cant be blank")]

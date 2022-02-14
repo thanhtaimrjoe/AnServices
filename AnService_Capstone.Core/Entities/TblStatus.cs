@@ -9,6 +9,7 @@ namespace AnService_Capstone.Core.Entities
     {
         public TblStatus()
         {
+            TblContracts = new HashSet<TblContract>();
             TblRepairDetails = new HashSet<TblRepairDetail>();
             TblRequestServices = new HashSet<TblRequestService>();
             TblUsedMaterials = new HashSet<TblUsedMaterial>();
@@ -18,6 +19,7 @@ namespace AnService_Capstone.Core.Entities
         public int StatusId { get; set; }
         public string StatusName { get; set; }
 
+        public virtual ICollection<TblContract> TblContracts { get; set; }
         public virtual ICollection<TblRepairDetail> TblRepairDetails { get; set; }
         public virtual ICollection<TblRequestService> TblRequestServices { get; set; }
         public virtual ICollection<TblUsedMaterial> TblUsedMaterials { get; set; }

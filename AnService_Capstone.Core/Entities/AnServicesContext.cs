@@ -48,20 +48,26 @@ namespace AnService_Capstone.Core.Entities
 
             modelBuilder.Entity<TblContract>(entity =>
             {
-                entity.HasKey(e => e.ContactId)
+                entity.HasKey(e => e.ContractId)
                     .HasName("PK_tblContact");
 
                 entity.ToTable("tblContract");
 
-                entity.Property(e => e.ContactId).HasColumnName("ContactID");
+                entity.Property(e => e.ContractId).HasColumnName("ContractID");
 
-                entity.Property(e => e.ContactTitle).HasMaxLength(50);
+                entity.Property(e => e.ContractTitle).HasMaxLength(50);
 
-                entity.Property(e => e.ContactUrl)
+                entity.Property(e => e.ContractUrl)
                     .HasMaxLength(250)
                     .IsUnicode(false);
 
                 entity.Property(e => e.CustomerId).HasColumnName("CustomerID");
+
+                entity.HasOne(d => d.ContractStatusNavigation)
+                    .WithMany(p => p.TblContracts)
+                    .HasForeignKey(d => d.ContractStatus)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_tblContract_tblStatus");
 
                 entity.HasOne(d => d.Customer)
                     .WithMany(p => p.TblContracts)

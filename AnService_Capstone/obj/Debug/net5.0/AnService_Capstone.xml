@@ -4,6 +4,44 @@
         <name>AnService_Capstone</name>
     </assembly>
     <members>
+        <member name="M:AnService_Capstone.Controllers.ContractController.UpdateStatusContract(System.Int32,System.Int32)">
+            <summary>
+            update status contract
+            </summary>
+            <param name="id">của contract</param>
+            <param name="status">đồng ý - 3, từ chối - 1, yêu cầu sửa lại - 7</param>
+            <returns></returns>
+        </member>
+        <member name="M:AnService_Capstone.Controllers.ContractController.ApproveContract(System.Int32)">
+            <summary>
+            đồng ý hợp đồng
+            </summary>
+            <param name="id">của contract</param>
+            <returns></returns>
+        </member>
+        <member name="M:AnService_Capstone.Controllers.ContractController.DenyContract(System.Int32)">
+            <summary>
+            từ chối/hủy bỏ hợp đồng
+            </summary>
+            <param name="id">của contract</param>
+            <returns></returns>
+        </member>
+        <member name="M:AnService_Capstone.Controllers.ContractController.RequestUpdateContract(System.Int32)">
+            <summary>
+            yêu cầu sửa lại hợp đồng
+            </summary>
+            <param name="id">của contract</param>
+            <returns></returns>
+        </member>
+        <member name="M:AnService_Capstone.Controllers.ContractController.CreateContract(System.Int32,System.String,System.String)">
+            <summary>
+            tạo contract
+            </summary>
+            <param name="id">của user đăng ký request</param>
+            <param name="name">của user được đăng ký request</param>
+            <param name="url">của contract</param>
+            <returns></returns>
+        </member>
         <member name="M:AnService_Capstone.Controllers.MaterialController.InsertRequestMaterial(AnService_Capstone.Core.Models.Request.RequestMaterial)">
             <summary>
             tạo request vật liệu
