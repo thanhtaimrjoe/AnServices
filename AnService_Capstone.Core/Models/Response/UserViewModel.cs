@@ -18,6 +18,6 @@ namespace AnService_Capstone.Core.Models.Response
         public string RoleName { get; set; }
         public string TypeJob { get; set; }
         public DateTime CreateDate { get; set; }
-        public bool Status { get; set; }
+        public int Status { get; set; }
     }
 }

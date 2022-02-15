@@ -115,7 +115,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
         {
             var query = "select UserID, FullName, PhoneNumber, Address, Email, Role, TypeJob, CreateDate, Status " +
                 "from tblUsers " +
-                "where Role = 2";
+                "where Role = 2 and and Status = 4";
             using (var connections = _context.CreateConnection())
             {
                 connections.Open();
