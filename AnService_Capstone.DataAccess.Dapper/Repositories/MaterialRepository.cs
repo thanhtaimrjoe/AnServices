@@ -73,10 +73,11 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
 
         public async Task<IEnumerable<MaterialViewModel>> GetAllMaterialByRequestDetailID(int id)
         {
-            var query = "select UsedMaterialID, used.MaterialID, used.RequestDetailID, MasonID, quantity, quantityNew, Note, Message, RequestServiceDescription, CustomerName, mate.MaterialID, MaterialName, Unit, UserID, FullName, PhoneNumber, Address, StatusID, StatusName " +
-                "from ((((tblUsedMaterial used join tblMaterial mate on used.MaterialID = mate.MaterialID) join tblUsers us on used.MasonID = us.UserID) " +
+            var query = "select UsedMaterialID, used.MaterialID, used.RequestDetailID, MasonID, quantity, quantityNew, ServiceName, Note, Message, RequestServiceDescription, CustomerName, mate.MaterialID, MaterialName, Unit, UserID, FullName, PhoneNumber, Address, StatusID, StatusName, ServiceName " +
+                "from (((((tblUsedMaterial used join tblMaterial mate on used.MaterialID = mate.MaterialID) join tblUsers us on used.MasonID = us.UserID) " +
                 "join tblStatus sta on used.Status = sta.StatusID) join tblRequestDetails details on used.RequestDetailID = details.RequestDetaiID) " +
-                "join tblRequestServices rs on rs.RequestServiceID = details.RequestServiceID " +
+                "join tblRequestServices rs on rs.RequestServiceID = details.RequestServiceID) " +
+                "join tblServices s on details.ServiceID = s.ServiceID " +
                 "where RequestDetailID = @RequestDetailID";
 
             using (var connection = _dapperContext.CreateConnection())

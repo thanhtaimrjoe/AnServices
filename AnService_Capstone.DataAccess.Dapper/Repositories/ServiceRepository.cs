@@ -441,7 +441,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             }
         }
 
-        public async Task<IEnumerable<RequestServiceDetailViewModel>> GetRequestServiceDetailsByRequestServiceID(int id)
+        public async Task<IEnumerable<TblRequestDetail>> GetRequestServiceDetailsByRequestServiceID(int id)
         {
             var query = "select RequestDetaiID, RequestServiceID, detail.ServiceID, ser.ServiceID, ServiceName, ServiceDescription, ServiceImg " +
                 "from tblRequestDetails detail join tblServices ser on detail.ServiceID = ser.ServiceID " +
@@ -450,7 +450,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             using (var connection = _context.CreateConnection())
             {
                 connection.Open();
-                var res = await connection.QueryAsync<RequestServiceDetailViewModel, TblService, RequestServiceDetailViewModel>(query, (requestDetail, service) =>
+                var res = await connection.QueryAsync<TblRequestDetail, TblService, TblRequestDetail>(query, (requestDetail, service) =>
                 {
                     requestDetail.Service = service;
                     return requestDetail;
@@ -464,7 +464,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             }
         }
 
-        public async Task<IEnumerable<RequestServiceDetailViewModel>> GetRequestServiceDetailsByRequestServiceIDAndMasonID(int request, int mason)
+        public async Task<IEnumerable<TblRequestDetail>> GetRequestServiceDetailsByRequestServiceIDAndMasonID(int request, int mason)
         {
             var query = "select RequestDetaiID, RequestServiceID, detail.ServiceID, ser.ServiceID, ServiceName, ServiceDescription, ServiceImg " +
                 "from (tblRequestDetails detail join tblServices ser on detail.ServiceID = ser.ServiceID) " +
@@ -474,7 +474,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             using (var connection = _context.CreateConnection())
             {
                 connection.Open();
-                var res = await connection.QueryAsync<RequestServiceDetailViewModel, TblService, RequestServiceDetailViewModel>(query, (requestDetail, service) =>
+                var res = await connection.QueryAsync<TblRequestDetail, TblService, TblRequestDetail>(query, (requestDetail, service) =>
                 {
                     requestDetail.Service = service;
                     return requestDetail;
