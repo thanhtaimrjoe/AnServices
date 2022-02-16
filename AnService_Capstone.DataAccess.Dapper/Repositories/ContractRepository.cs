@@ -99,7 +99,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
 
         public async Task<IEnumerable<TblContract>> GetContractListByUserID(int id)
         {
-            var query = "select * from tblContract where CustomerID = @CustomerID";
+            var query = "select * from tblContract where CustomerID = @CustomerID and ContractStatus = 3";
 
             using (var connection = _context.CreateConnection())
             {
