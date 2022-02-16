@@ -33,13 +33,14 @@
             <param name="id">của contract</param>
             <returns></returns>
         </member>
-        <member name="M:AnService_Capstone.Controllers.ContractController.CreateContract(System.Int32,System.String,System.String)">
+        <member name="M:AnService_Capstone.Controllers.ContractController.CreateContract(System.Int32,System.String,System.String,System.Int32)">
             <summary>
             tạo contract
             </summary>
             <param name="id">của user đăng ký request</param>
             <param name="name">của user được đăng ký request</param>
             <param name="url">của contract</param>
+            /// <param name="requestID">của request service</param>
             <returns></returns>
         </member>
         <member name="M:AnService_Capstone.Controllers.MaterialController.InsertRequestMaterial(AnService_Capstone.Core.Models.Request.RequestMaterial)">

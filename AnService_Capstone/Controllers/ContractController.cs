@@ -135,14 +135,22 @@ namespace AnService_Capstone.Controllers
         /// <param name="id">của user đăng ký request</param>
         /// <param name="name">của user được đăng ký request</param>
         /// <param name="url">của contract</param>
+        /// /// <param name="requestID">của request service</param>
         /// <returns></returns>
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> CreateContract(int id, string name, string url)
+        public async Task<IActionResult> CreateContract(int id, string name, string url, int requestID)
         {
+            bool res = false;
+
             if (id == 0)
             {
                 return BadRequest(new ErrorResponse("Please enter id"));
+            }
+
+            if (requestID == 0)
+            {
+                return BadRequest(new ErrorResponse("Please enter requestID"));
             }
 
             if (name.Equals(""))
@@ -155,7 +163,17 @@ namespace AnService_Capstone.Controllers
                 return BadRequest(new ErrorResponse("Please enter url"));
             }
 
-            var res = await _contractRepository.CreateContract(id, name, url);
+            var check = await _contractRepository.CheckContractExist(requestID);
+
+            if (check != null)
+            {
+                res = await _contractRepository.UpdateContractURL(url, check.ContractId);
+            }
+            else
+            {
+                res = await _contractRepository.CreateContract(id, name, url, requestID);
+            }
+
             if (res)
             {
                 return Ok("Create successfull");

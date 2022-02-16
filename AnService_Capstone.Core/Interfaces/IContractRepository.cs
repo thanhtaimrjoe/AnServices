@@ -19,6 +19,10 @@ namespace AnService_Capstone.Core.Interfaces
 
         public Task<bool> RequestUpdateContract(int id);
 
-        public Task<bool> CreateContract(int id, string name, string url);
+        public Task<bool> CreateContract(int id, string name, string url, int requestID);
+
+        public Task<TblContract> CheckContractExist(int requestID);
+
+        public Task<bool> UpdateContractURL(string url, int contractID);
     }
 }
