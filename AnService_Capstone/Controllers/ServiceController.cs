@@ -86,21 +86,21 @@ namespace AnService_Capstone.Controllers
         [HttpGet]
         [Route("[action]")]
         /*[Authorize(Roles = "Customer")]*/
-        public async Task<IActionResult> GetAllRequestServiceStatusOrDate(int status, DateTime? date)
+        public async Task<IActionResult> GetAllRequestServiceStatusOrDate(int RequestServiceStatus, DateTime? RequestServiceCreateDate)
         {
             IEnumerable<RequestService> service;
 
-            if (status == 0 && date == null)
+            if (RequestServiceStatus == 0 && RequestServiceCreateDate == null)
             {
                 service = await _serviceRepository.GetAllRequestService2();
             }
-            else if (status != 0 && date == null)
+            else if (RequestServiceStatus != 0 && RequestServiceCreateDate == null)
             {
-                service = await _serviceRepository.GetAllServiceByStatus(status);
+                service = await _serviceRepository.GetAllServiceByStatus(RequestServiceStatus);
             }
             else
             {
-                service = await _serviceRepository.GetAllServiceByDate(date);
+                service = await _serviceRepository.GetAllServiceByDate(RequestServiceCreateDate);
             }
 
             if (service == null)

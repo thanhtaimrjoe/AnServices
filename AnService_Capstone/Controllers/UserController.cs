@@ -233,25 +233,25 @@ namespace AnService_Capstone.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("[action]")]
-        public async Task<IActionResult> GetAllMason(int typeJobID, string name, string phone)
+        public async Task<IActionResult> GetAllMason(int typeJobID, string fullName, string phoneNumber)
         {
             IEnumerable<UserViewModel> res;
 
-            if (typeJobID == 0 && name == null && phone == null)
+            if (typeJobID == 0 && fullName == null && phoneNumber == null)
             {
                 res = await _userRepository.GetAllMason();
             }
-            else if (typeJobID != 0 && name == null && phone == null)
+            else if (typeJobID != 0 && fullName == null && phoneNumber == null)
             {
                 res = await _userRepository.GetAllMasonByTypeJob(typeJobID);
             }
-            else if (typeJobID == 0 && name != null && phone == null)
+            else if (typeJobID == 0 && fullName != null && phoneNumber == null)
             {
-                res = await _userRepository.GetAllMasonByName(name);
+                res = await _userRepository.GetAllMasonByName(fullName);
             }
             else
             {
-                res = await _userRepository.GetAllMasonByPhone(phone);
+                res = await _userRepository.GetAllMasonByPhone(phoneNumber);
             }
 
             if (res == null)
