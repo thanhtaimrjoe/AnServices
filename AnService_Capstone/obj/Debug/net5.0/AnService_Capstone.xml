@@ -158,6 +158,12 @@
             <param name="id"></param>
             <returns></returns>
         </member>
+        <member name="M:AnService_Capstone.Controllers.ServiceController.GetAllRequestServiceStatusOrDate(System.Int32,System.Nullable{System.DateTime})">
+            <summary>
+            lấy danh sách request service có trong db
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:AnService_Capstone.Controllers.ServiceController.GetAllRequestService">
             <summary>
             lấy danh sách request service có trong db
@@ -295,12 +301,6 @@
             lấy dữ liệu mason theo id của mason
             </summary>
             <param name="id"></param>
-            <returns></returns>
-        </member>
-        <member name="M:AnService_Capstone.Controllers.UserController.GetAllMason">
-            <summary>
-            lấy tất cả mason có trong db
-            </summary>
             <returns></returns>
         </member>
         <member name="M:AnService_Capstone.Controllers.UserController.RemoveMason(System.Int32)">

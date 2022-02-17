@@ -78,6 +78,39 @@ namespace AnService_Capstone.Controllers
         }
 
         /// <summary>
+        /// lấy danh sách request service (note: hiện chỉ filter từng param)
+        /// </summary>
+        /// <param name="status"></param>
+        /// <param name="date">yyyy-mm-ddT00:00:00</param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("[action]")]
+        /*[Authorize(Roles = "Customer")]*/
+        public async Task<IActionResult> GetAllRequestServiceStatusOrDate(int status, DateTime? date)
+        {
+            IEnumerable<RequestService> service;
+
+            if (status == 0 && date == null)
+            {
+                service = await _serviceRepository.GetAllRequestService2();
+            }
+            else if (status != 0 && date == null)
+            {
+                service = await _serviceRepository.GetAllServiceByStatus(status);
+            }
+            else
+            {
+                service = await _serviceRepository.GetAllServiceByDate(date);
+            }
+
+            if (service == null)
+            {
+                return NotFound(new ErrorResponse("No record"));
+            }
+            return Ok(service);
+        }
+
+        /// <summary>
         /// lấy danh sách request service có trong db
         /// </summary>
         /// <returns></returns>
@@ -87,6 +120,7 @@ namespace AnService_Capstone.Controllers
         public async Task<IActionResult> GetAllRequestService()
         {
             var service = await _serviceRepository.GetAllRequestService2();
+
             if (service == null)
             {
                 return BadRequest();

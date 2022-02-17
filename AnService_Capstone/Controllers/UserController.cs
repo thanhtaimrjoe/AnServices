@@ -7,6 +7,7 @@ using AnService_Capstone.DataAccess.Dapper.TokenGenerator;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Twilio;
 using Twilio.Clients;
@@ -207,7 +208,7 @@ namespace AnService_Capstone.Controllers
             return Ok(res);
         }
 
-        /// <summary>
+        /*/// <summary>
         /// lấy tất cả mason có trong db
         /// </summary>
         /// <returns></returns>
@@ -216,6 +217,43 @@ namespace AnService_Capstone.Controllers
         public async Task<IActionResult> GetAllMason()
         {
             var res = await _userRepository.GetAllMason();
+            if (res == null)
+            {
+                return NotFound(new ErrorResponse("No record"));
+            }
+            return Ok(res);
+        }*/
+
+        /// <summary>
+        /// lấy danh sách mason (note: hiện chỉ filter từng param)
+        /// </summary>
+        /// <param name="typeJobID">của nghề</param>
+        /// <param name="name">full name mason</param>
+        /// <param name="phone">số điện thoại mason</param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<IActionResult> GetAllMason(int typeJobID, string name, string phone)
+        {
+            IEnumerable<UserViewModel> res;
+
+            if (typeJobID == 0 && name == null && phone == null)
+            {
+                res = await _userRepository.GetAllMason();
+            }
+            else if (typeJobID != 0 && name == null && phone == null)
+            {
+                res = await _userRepository.GetAllMasonByTypeJob(typeJobID);
+            }
+            else if (typeJobID == 0 && name != null && phone == null)
+            {
+                res = await _userRepository.GetAllMasonByName(name);
+            }
+            else
+            {
+                res = await _userRepository.GetAllMasonByPhone(phone);
+            }
+
             if (res == null)
             {
                 return NotFound(new ErrorResponse("No record"));

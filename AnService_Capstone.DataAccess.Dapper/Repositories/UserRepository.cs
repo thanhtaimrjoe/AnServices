@@ -113,13 +113,17 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
 
         public async Task<IEnumerable<UserViewModel>> GetAllMason()
         {
-            var query = "select UserID, FullName, PhoneNumber, Address, Email, Role, TypeJob, CreateDate, Status " +
-                "from tblUsers " +
+            var query = "select UserID, FullName, PhoneNumber, Address, Email, CreateDate, Status, TypeJobID, TypeJobName " +
+                "from tblUsers u join tblTypeJobs job on u.TypeJob = job.TypeJobID " +
                 "where Role = 2 and Status = 4";
             using (var connections = _context.CreateConnection())
             {
                 connections.Open();
-                var res = await connections.QueryAsync<UserViewModel>(query);
+                var res = await connections.QueryAsync<UserViewModel, TblTypeJob, UserViewModel>(query, (user, typeJob) =>
+                {
+                    user.TypeJob = typeJob;
+                    return user;
+                }, splitOn: "TypeJobID");
                 connections.Close();
                 if (res.Count() == 0)
                 {
@@ -131,19 +135,22 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
 
         public async Task<UserViewModel> GetMasonByID(int id)
         {
-            var query = "select UserID, FullName, PhoneNumber, Address, Email, Role, TypeJobName as 'TypeJob', CreateDate, Status " +
+            var query = "select UserID, FullName, PhoneNumber, Address, Email, CreateDate, Status, TypeJobID, TypeJobName " +
                 "from tblUsers u join tblTypeJobs job on u.TypeJob = job.TypeJobID " +
                 "where Role = 2 and UserID = @UserID";
             using (var connections = _context.CreateConnection())
             {
                 connections.Open();
-                var res = await connections.QuerySingleOrDefaultAsync<UserViewModel>(query, new { @UserID = id});
-                connections.Close();
+                var res = await connections.QueryAsync<UserViewModel, TblTypeJob, UserViewModel>(query, (user, typeJob) =>
+                {
+                    user.TypeJob = typeJob;
+                    return user;
+                }, param: new { @UserID = id} , splitOn: "TypeJobID");
                 if (res == null)
                 {
                     return null;
                 }
-                return res;
+                return res.FirstOrDefault();
             }
         }
 
@@ -220,6 +227,72 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
                     return false;
                 }
                 return true;
+            }
+        }
+
+        public async Task<IEnumerable<UserViewModel>> GetAllMasonByTypeJob(int id)
+        {
+            var query = "select UserID, FullName, PhoneNumber, Address, Email, CreateDate, Status, TypeJobID, TypeJobName " +
+                "from tblUsers u join tblTypeJobs job on u.TypeJob = job.TypeJobID " +
+                "where Role = 2 and Status = 4 and TypeJobID = @TypeJobID";
+            using (var connections = _context.CreateConnection())
+            {
+                connections.Open();
+                var res = await connections.QueryAsync<UserViewModel, TblTypeJob, UserViewModel>(query, (user, typeJob) =>
+                {
+                    user.TypeJob = typeJob;
+                    return user;
+                }, param: new { @TypeJobID = id}, splitOn: "TypeJobID");
+                connections.Close();
+                if (res.Count() == 0)
+                {
+                    return null;
+                }
+                return res;
+            }
+        }
+
+        public async Task<IEnumerable<UserViewModel>> GetAllMasonByName(string name)
+        {
+            var query = "select UserID, FullName, PhoneNumber, Address, Email, CreateDate, Status, TypeJobID, TypeJobName " +
+                "from tblUsers u join tblTypeJobs job on u.TypeJob = job.TypeJobID " +
+                "where Role = 2 and Status = 4 and FullName like @FullName";
+            using (var connections = _context.CreateConnection())
+            {
+                connections.Open();
+                var res = await connections.QueryAsync<UserViewModel, TblTypeJob, UserViewModel>(query, (user, typeJob) =>
+                {
+                    user.TypeJob = typeJob;
+                    return user;
+                }, param: new { @FullName = "%" + name + "%" }, splitOn: "TypeJobID");
+                connections.Close();
+                if (res.Count() == 0)
+                {
+                    return null;
+                }
+                return res;
+            }
+        }
+
+        public async Task<IEnumerable<UserViewModel>> GetAllMasonByPhone(string phone)
+        {
+            var query = "select UserID, FullName, PhoneNumber, Address, Email, CreateDate, Status, TypeJobID, TypeJobName " +
+                "from tblUsers u join tblTypeJobs job on u.TypeJob = job.TypeJobID " +
+                "where Role = 2 and Status = 4 and PhoneNumber = @PhoneNumber";
+            using (var connections = _context.CreateConnection())
+            {
+                connections.Open();
+                var res = await connections.QueryAsync<UserViewModel, TblTypeJob, UserViewModel>(query, (user, typeJob) =>
+                {
+                    user.TypeJob = typeJob;
+                    return user;
+                }, param: new { @PhoneNumber = phone }, splitOn: "TypeJobID");
+                connections.Close();
+                if (res.Count() == 0)
+                {
+                    return null;
+                }
+                return res;
             }
         }
     }

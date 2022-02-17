@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AnService_Capstone.Core.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,7 +17,7 @@ namespace AnService_Capstone.Core.Models.Response
         public string Email { get; set; }
         public string InviteCode { get; set; }
         public string RoleName { get; set; }
-        public string TypeJob { get; set; }
+        public TblTypeJob TypeJob { get; set; }
         public DateTime CreateDate { get; set; }
         public int Status { get; set; }
     }
