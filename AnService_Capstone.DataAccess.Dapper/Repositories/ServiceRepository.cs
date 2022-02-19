@@ -184,10 +184,10 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
                     return currentRequest;
                 }, splitOn: "UserID, StatusID, MediaID");
                 connection.Close();
-                if (res.Count() == 0)
+                /*if (res.Count() == 0)
                 {
                     return null;
-                }
+                }*/
                 return res.Distinct().ToList();
             }
 
@@ -334,10 +334,10 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
                     return currentRequest;
                 }, param: new { @RequestServiceCreateDate = date }, splitOn: "UserID, StatusID, MediaID");
                 connection.Close();
-                if (res.Count() == 0)
+                /*if (res.Count() == 0)
                 {
                     return null;
-                }
+                }*/
                 return res.Distinct().ToList();
             }
         }
@@ -368,10 +368,10 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
                     return currentRequest;
                 }, param: new { @RequestServiceStatus = status }, splitOn: "UserID, StatusID, MediaID");
                 connection.Close();
-                if (res.Count() == 0)
+                /*if (res.Count() == 0)
                 {
                     return null;
-                }
+                }*/
                 return res.Distinct().ToList();
             }
         }
@@ -439,11 +439,11 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
                 {
                     return null;
                 }
-                return res.First();
+                return res.FirstOrDefault();
             }
         }
 
-        public async Task<IEnumerable<TblRequestDetail>> GetRequestServiceDetailsByRequestServiceID(int id)
+        public async Task<IEnumerable<TblRequestDetail>> GetAllRequestServiceDetailsByRequestServiceID(int id)
         {
             var query = "select RequestDetaiID, RequestServiceID, detail.ServiceID, ser.ServiceID, ServiceName, ServiceDescription, ServiceImg " +
                 "from tblRequestDetails detail join tblServices ser on detail.ServiceID = ser.ServiceID " +
@@ -458,10 +458,10 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
                     return requestDetail;
                 }, param: new { @RequestServiceID = id }, splitOn: "ServiceID");
                 connection.Close();
-                if (res.Count() == 0)
+                /*if (res.Count() == 0)
                 {
                     return null;
-                }
+                }*/
                 return res;
             }
         }

@@ -80,8 +80,8 @@ namespace AnService_Capstone.Controllers
         /// <summary>
         /// lấy danh sách request service (note: hiện chỉ filter từng param)
         /// </summary>
-        /// <param name="status"></param>
-        /// <param name="date">yyyy-mm-ddT00:00:00</param>
+        /// <param name="RequestServiceStatus"></param>
+        /// <param name="RequestServiceCreateDate">yyyy-mm-ddT00:00:00</param>
         /// <returns></returns>
         [HttpGet]
         [Route("[action]")]
@@ -103,10 +103,10 @@ namespace AnService_Capstone.Controllers
                 service = await _serviceRepository.GetAllServiceByDate(RequestServiceCreateDate);
             }
 
-            if (service == null)
+            /*if (service == null)
             {
                 return NotFound(new ErrorResponse("No record"));
-            }
+            }*/
             return Ok(service);
         }
 
@@ -238,19 +238,19 @@ namespace AnService_Capstone.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("[action]")]
-        public async Task<IActionResult> GetRequestServiceDetailsByRequestServiceID(int id)
+        public async Task<IActionResult> GetAllRequestServiceDetailsByRequestServiceID(int id)
         {
             if (id == 0)
             {
                 return BadRequest(new ErrorResponse("Please enter id"));
             }
 
-            var result = await _serviceRepository.GetRequestServiceDetailsByRequestServiceID(id);
+            var result = await _serviceRepository.GetAllRequestServiceDetailsByRequestServiceID(id);
 
-            if (result == null)
+            /*if (result == null)
             {
                 return NotFound(new ErrorResponse("No Request Service Availabe"));
-            }
+            }*/
             return Ok(result);
         }
 

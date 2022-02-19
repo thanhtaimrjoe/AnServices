@@ -160,8 +160,10 @@
         </member>
         <member name="M:AnService_Capstone.Controllers.ServiceController.GetAllRequestServiceStatusOrDate(System.Int32,System.Nullable{System.DateTime})">
             <summary>
-            lấy danh sách request service có trong db
+            lấy danh sách request service (note: hiện chỉ filter từng param)
             </summary>
+            <param name="RequestServiceStatus"></param>
+            <param name="RequestServiceCreateDate">yyyy-mm-ddT00:00:00</param>
             <returns></returns>
         </member>
         <member name="M:AnService_Capstone.Controllers.ServiceController.GetAllRequestService">
@@ -204,7 +206,7 @@
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:AnService_Capstone.Controllers.ServiceController.GetRequestServiceDetailsByRequestServiceID(System.Int32)">
+        <member name="M:AnService_Capstone.Controllers.ServiceController.GetAllRequestServiceDetailsByRequestServiceID(System.Int32)">
             <summary>
             lấy detail của request service bằng request service id
             </summary>
@@ -301,6 +303,15 @@
             lấy dữ liệu mason theo id của mason
             </summary>
             <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AnService_Capstone.Controllers.UserController.GetAllMason(System.Int32,System.String,System.String)">
+            <summary>
+            lấy danh sách mason (note: hiện chỉ filter từng param)
+            </summary>
+            <param name="typeJobId">của nghề</param>
+            <param name="fullName">full name mason</param>
+            <param name="phoneNumber">số điện thoại mason</param>
             <returns></returns>
         </member>
         <member name="M:AnService_Capstone.Controllers.UserController.RemoveMason(System.Int32)">

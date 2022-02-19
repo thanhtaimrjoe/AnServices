@@ -20,6 +20,6 @@ namespace AnService_Capstone.Core.Models.Request
         public string Email { get; set; }
         [Required]
         [Range(1, int.MaxValue, ErrorMessage = "Must be greater then 0")]
-        public int TypeJob { get; set; }
+        public int TypeJobId { get; set; }
     }
 }

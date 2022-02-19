@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Twilio;
 using Twilio.Clients;
@@ -227,25 +228,25 @@ namespace AnService_Capstone.Controllers
         /// <summary>
         /// lấy danh sách mason (note: hiện chỉ filter từng param)
         /// </summary>
-        /// <param name="typeJobID">của nghề</param>
-        /// <param name="name">full name mason</param>
-        /// <param name="phone">số điện thoại mason</param>
+        /// <param name="typeJobId">của nghề</param>
+        /// <param name="fullName">full name mason</param>
+        /// <param name="phoneNumber">số điện thoại mason</param>
         /// <returns></returns>
         [HttpGet]
         [Route("[action]")]
-        public async Task<IActionResult> GetAllMason(int typeJobID, string fullName, string phoneNumber)
+        public async Task<IActionResult> GetAllMason(int typeJobId, string fullName, string phoneNumber)
         {
             IEnumerable<UserViewModel> res;
 
-            if (typeJobID == 0 && fullName == null && phoneNumber == null)
+            if (typeJobId == 0 && fullName == null && phoneNumber == null)
             {
                 res = await _userRepository.GetAllMason();
             }
-            else if (typeJobID != 0 && fullName == null && phoneNumber == null)
+            else if (typeJobId != 0 && fullName == null && phoneNumber == null)
             {
-                res = await _userRepository.GetAllMasonByTypeJob(typeJobID);
+                res = await _userRepository.GetAllMasonByTypeJob(typeJobId);
             }
-            else if (typeJobID == 0 && fullName != null && phoneNumber == null)
+            else if (typeJobId == 0 && fullName != null && phoneNumber == null)
             {
                 res = await _userRepository.GetAllMasonByName(fullName);
             }
@@ -254,10 +255,10 @@ namespace AnService_Capstone.Controllers
                 res = await _userRepository.GetAllMasonByPhone(phoneNumber);
             }
 
-            if (res == null)
+            /*if (res == null)
             {
                 return NotFound(new ErrorResponse("No record"));
-            }
+            }*/
             return Ok(res);
         }
 
@@ -321,7 +322,7 @@ namespace AnService_Capstone.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> CreateMasonAccount(CreateMason model)
+        public async Task<IActionResult> CreateMasonAccount([FromBody]CreateMason model)
         {
             if (!ModelState.IsValid)
             {

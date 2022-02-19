@@ -37,7 +37,7 @@ namespace AnService_Capstone.Core.Interfaces
 
         /*public Task<IEnumerable<RequestServiceDetailViewModel>> GetRequestServiceDetailsByRequestServiceID(int id);*/
 
-        public Task<IEnumerable<TblRequestDetail>> GetRequestServiceDetailsByRequestServiceID(int id);
+        public Task<IEnumerable<TblRequestDetail>> GetAllRequestServiceDetailsByRequestServiceID(int id);
 
         public Task<IEnumerable<RequestService>> GetAllServiceByStatusAndUserID(int user, int status);
 

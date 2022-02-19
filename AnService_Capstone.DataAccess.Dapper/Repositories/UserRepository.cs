@@ -212,7 +212,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             parameters.Add("PhoneNumber", mason.PhoneNumber, DbType.String);
             parameters.Add("Address", mason.Address, DbType.String);
             parameters.Add("Email", mason.Email, DbType.String);
-            parameters.Add("TypeJob", mason.TypeJob, DbType.String);
+            parameters.Add("TypeJob", mason.TypeJobId, DbType.String);
             parameters.Add("Role", 2, DbType.Int32);
             parameters.Add("CreateDate", DateTime.Now, DbType.DateTime);
             parameters.Add("Status", 4, DbType.Int32);
@@ -266,10 +266,10 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
                     return user;
                 }, param: new { @FullName = "%" + name + "%" }, splitOn: "TypeJobID");
                 connections.Close();
-                if (res.Count() == 0)
+                /*if (res.Count() == 0)
                 {
                     return null;
-                }
+                }*/
                 return res;
             }
         }
@@ -278,7 +278,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
         {
             var query = "select UserID, FullName, PhoneNumber, Address, Email, CreateDate, Status, TypeJobID, TypeJobName " +
                 "from tblUsers u join tblTypeJobs job on u.TypeJob = job.TypeJobID " +
-                "where Role = 2 and Status = 4 and PhoneNumber = @PhoneNumber";
+                "where Role = 2 and Status = 4 and PhoneNumber like @PhoneNumber";
             using (var connections = _context.CreateConnection())
             {
                 connections.Open();
@@ -286,12 +286,12 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
                 {
                     user.TypeJob = typeJob;
                     return user;
-                }, param: new { @PhoneNumber = phone }, splitOn: "TypeJobID");
+                }, param: new { @PhoneNumber = "%" + phone + "%"}, splitOn: "TypeJobID");
                 connections.Close();
-                if (res.Count() == 0)
+                /*if (res.Count() == 0)
                 {
                     return null;
-                }
+                }*/
                 return res;
             }
         }
