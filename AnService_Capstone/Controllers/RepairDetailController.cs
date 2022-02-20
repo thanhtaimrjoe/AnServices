@@ -17,7 +17,7 @@ namespace AnService_Capstone.Controllers
             _repairDetail = repairDetail;
         }
 
-        /// <summary>
+        /*/// <summary>
         /// update lại status của repair detail (customer dùng khi kiểm tra kết quả khi mason sửa xong), 
         /// status approve có sắn, ngày kết thúc công việc tự gán ngày hiện tại
         /// </summary>
@@ -63,6 +63,6 @@ namespace AnService_Capstone.Controllers
                 return NotFound(new ErrorResponse("No Record"));
             }
             return Ok(res);
-        }
+        }*/
     }
 }

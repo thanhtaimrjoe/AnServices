@@ -22,7 +22,7 @@ namespace AnService_Capstone.Core.Models.Request
         [EmailAddress]
         public string MasonEmail { get; set;}
         [Required]
-        public int TypeJob { get; set; }
+        public int TypeJobId { get; set; }
 
     }
 }

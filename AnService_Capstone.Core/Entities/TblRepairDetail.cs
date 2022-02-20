@@ -12,10 +12,8 @@ namespace AnService_Capstone.Core.Entities
         public int? MasonId { get; set; }
         public DateTime? RepairDateBegin { get; set; }
         public DateTime? RepairDateEnd { get; set; }
-        public int RepairStatus { get; set; }
 
         public virtual TblUser Mason { get; set; }
-        public virtual TblStatus RepairStatusNavigation { get; set; }
         public virtual TblRequestDetail RequestDetail { get; set; }
     }
 }

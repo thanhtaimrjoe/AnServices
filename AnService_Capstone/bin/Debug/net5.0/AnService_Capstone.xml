@@ -115,21 +115,6 @@
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:AnService_Capstone.Controllers.RepairDetailController.ConfirmResult(System.Int32)">
-            <summary>
-            update lại status của repair detail (customer dùng khi kiểm tra kết quả khi mason sửa xong), 
-            status approve có sắn, ngày kết thúc công việc tự gán ngày hiện tại
-            </summary>
-            <param name="id">id của repaird detail</param>
-            <returns></returns>
-        </member>
-        <member name="M:AnService_Capstone.Controllers.RepairDetailController.GetRepairDetailByRequestDetailID(System.Int32)">
-            <summary>
-            lấy danh sách việc đã giao cho mason bằng id dịch vụ (request detail) của customer
-            </summary>
-            <param name="id"></param>
-            <returns></returns>
-        </member>
         <member name="M:AnService_Capstone.Controllers.ReportController.CreateReport(AnService_Capstone.Core.Models.Request.CreateReport)">
             <summary>
             mason tạo report khi sửa xong hoặc có lỗi mới trong quá trình sửa
@@ -142,6 +127,13 @@
             lấy tất cả report theo mason id
             </summary>
             <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AnService_Capstone.Controllers.ReportController.GetAllReportByRequestServiceID(System.Int32)">
+            <summary>
+            lấy tất cả report theo request service id
+            </summary>
+            <param name="RequestServiceId"></param>
             <returns></returns>
         </member>
         <member name="M:AnService_Capstone.Controllers.ServiceController.CreateRequestService(AnService_Capstone.Core.Models.Request.CreateService)">
@@ -213,7 +205,7 @@
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:AnService_Capstone.Controllers.ServiceController.GetRequestServiceDetailsByRequestServiceIDAndMasonID(System.Int32,System.Int32)">
+        <member name="M:AnService_Capstone.Controllers.ServiceController.GetAllRequestServiceDetailsByRequestServiceIDAndMasonID(System.Int32,System.Int32)">
             <summary>
             lấy detail của request service bằng request service id và mason id
             </summary>
@@ -243,7 +235,14 @@
             <param name="date"></param>
             <returns></returns>
         </member>
-        <member name="M:AnService_Capstone.Controllers.ServiceController.CancelRequestService(System.Int32)">
+        <member name="M:AnService_Capstone.Controllers.ServiceController.CancelRequestServiceForCustomer(System.Int32)">
+            <summary>
+            Từ chối hoặc hủy bỏ request service
+            </summary>
+            <param name="id">request service</param>
+            <returns></returns>
+        </member>
+        <member name="M:AnService_Capstone.Controllers.ServiceController.CancelRequestServiceForStaff(System.Int32)">
             <summary>
             Từ chối hoặc hủy bỏ request service
             </summary>

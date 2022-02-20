@@ -106,10 +106,10 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
                 connection.Open();
                 var res = await connection.QueryAsync<TblContract>(query, new { @CustomerID = id});
                 connection.Close();
-                if (!res.Any())
+                /*if (!res.Any())
                 {
                     return null;
-                }
+                }*/
                 return res;
             }
         }

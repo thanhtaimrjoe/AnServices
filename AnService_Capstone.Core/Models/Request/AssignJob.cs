@@ -10,7 +10,7 @@ namespace AnService_Capstone.Core.Models.Request
     public class AssignJob
     {
         [Required]
-        public int RequestDetail { get; set; }
+        public int RequestDetailId { get; set; }
         [Required]
         public IEnumerable<int> MasonList { get; set; }
     }

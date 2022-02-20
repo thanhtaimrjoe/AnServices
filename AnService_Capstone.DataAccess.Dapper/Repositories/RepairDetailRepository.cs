@@ -23,7 +23,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
 
         public async Task<IEnumerable<TblRepairDetail>> GetRepairDetailByRequestDetailID(int id)
         {
-            var query = "select RepairDetailID, RequestDetailID, MasonID, RepairDateBegin, RepairDateEnd, RepairStatus, UserID, FullName, PhoneNumber, Email, Status " +
+            var query = "select RepairDetailID, RequestDetailID, MasonID, RepairDateBegin, RepairDateEnd, UserID, FullName, PhoneNumber, Email, Status " +
                 "from tblRepairDetail repair join tblUsers u on repair.MasonID = u.UserID " +
                 "where RequestDetailID = @RequestDetailID";
             /*using (var connection = _dapperContext.CreateConnection())

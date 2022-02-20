@@ -70,10 +70,10 @@ namespace AnService_Capstone.Controllers
             }
 
             var service = await _serviceRepository.GetRequestServiceByID(id);
-            if (service == null)
+            /*if (service == null)
             {
                 return NotFound(new ErrorResponse("No Record"));
-            }
+            }*/
             return Ok(service);
         }
 
@@ -98,9 +98,13 @@ namespace AnService_Capstone.Controllers
             {
                 service = await _serviceRepository.GetAllServiceByStatus(RequestServiceStatus);
             }
-            else
+            else if (RequestServiceStatus == 0 && RequestServiceCreateDate != null)
             {
                 service = await _serviceRepository.GetAllServiceByDate(RequestServiceCreateDate);
+            }
+            else
+            {
+                service = await _serviceRepository.GetAllServiceByDateAndStatus(RequestServiceCreateDate, RequestServiceStatus);
             }
 
             /*if (service == null)
@@ -201,7 +205,8 @@ namespace AnService_Capstone.Controllers
             }
 
             var result = await _serviceRepository.AssignMasonToRequest(job);
-            if (result)
+            var update = await _serviceRepository.UpdateStatusRequestServiceDetail(job.RequestDetailId, 6);
+            if (result == true && update == true)
             {
                 return Ok("Create Successfull");
             }
@@ -262,7 +267,7 @@ namespace AnService_Capstone.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("[action]")]
-        public async Task<IActionResult> GetRequestServiceDetailsByRequestServiceIDAndMasonID(int requestID, int masonID)
+        public async Task<IActionResult> GetAllRequestServiceDetailsByRequestServiceIDAndMasonID(int requestID, int masonID)
         {
             if (requestID == 0)
             {
@@ -274,7 +279,7 @@ namespace AnService_Capstone.Controllers
                 return BadRequest(new ErrorResponse("Please enter mason id"));
             }
 
-            var result = await _serviceRepository.GetRequestServiceDetailsByRequestServiceIDAndMasonID(requestID, masonID);
+            var result = await _serviceRepository.GetAllRequestServiceDetailsByRequestServiceIDAndMasonID(requestID, masonID);
 
             if (result == null)
             {
@@ -365,14 +370,37 @@ namespace AnService_Capstone.Controllers
         /// <returns></returns>
         [HttpPut]
         [Route("[action]")]
-        public async Task<IActionResult> CancelRequestService(int id)
+        public async Task<IActionResult> CancelRequestServiceForCustomer(int id)
         {
             if (id == 0)
             {
                 return BadRequest(new ErrorResponse("Please enter id"));
             }
 
-            var result = await _serviceRepository.CancelRequestServiceByID(id);
+            var result = await _serviceRepository.CancelRequestServiceByIDForCustomer(id);
+
+            if (!result)
+            {
+                return NotFound(new ErrorResponse("Cancel Fail"));
+            }
+            return Ok("Cancel Successful");
+        }
+
+        /// <summary>
+        /// Từ chối hoặc hủy bỏ request service
+        /// </summary>
+        /// <param name="id">request service</param>
+        /// <returns></returns>
+        [HttpPut]
+        [Route("[action]")]
+        public async Task<IActionResult> CancelRequestServiceForStaff(int id)
+        {
+            if (id == 0)
+            {
+                return BadRequest(new ErrorResponse("Please enter id"));
+            }
+
+            var result = await _serviceRepository.CancelRequestServiceByIDForStaff(id);
 
             if (!result)
             {

@@ -55,13 +55,19 @@ namespace AnService_Capstone.Core.Entities
 
                 entity.Property(e => e.ContractId).HasColumnName("ContractID");
 
+                entity.Property(e => e.ContractCreateDate).HasColumnType("datetime");
+
                 entity.Property(e => e.ContractTitle).HasMaxLength(50);
+
+                entity.Property(e => e.ContractUpdateDate).HasColumnType("datetime");
 
                 entity.Property(e => e.ContractUrl)
                     .HasMaxLength(250)
                     .IsUnicode(false);
 
                 entity.Property(e => e.CustomerId).HasColumnName("CustomerID");
+
+                entity.Property(e => e.RequestServiceId).HasColumnName("RequestServiceID");
 
                 entity.HasOne(d => d.ContractStatusNavigation)
                     .WithMany(p => p.TblContracts)
@@ -72,7 +78,14 @@ namespace AnService_Capstone.Core.Entities
                 entity.HasOne(d => d.Customer)
                     .WithMany(p => p.TblContracts)
                     .HasForeignKey(d => d.CustomerId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_tblContact_tblUsers");
+
+                entity.HasOne(d => d.RequestService)
+                    .WithMany(p => p.TblContracts)
+                    .HasForeignKey(d => d.RequestServiceId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_tblContract_tblRequestServices");
             });
 
             modelBuilder.Entity<TblInvoice>(entity =>
@@ -202,12 +215,6 @@ namespace AnService_Capstone.Core.Entities
                     .HasForeignKey(d => d.MasonId)
                     .HasConstraintName("FK_tblRepairDetail_tblUsers");
 
-                entity.HasOne(d => d.RepairStatusNavigation)
-                    .WithMany(p => p.TblRepairDetails)
-                    .HasForeignKey(d => d.RepairStatus)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_tblRepairDetail_tblStatus");
-
                 entity.HasOne(d => d.RequestDetail)
                     .WithMany(p => p.TblRepairDetails)
                     .HasForeignKey(d => d.RequestDetailId)
@@ -256,6 +263,11 @@ namespace AnService_Capstone.Core.Entities
                 entity.Property(e => e.RequestServiceId).HasColumnName("RequestServiceID");
 
                 entity.Property(e => e.ServiceId).HasColumnName("ServiceID");
+
+                entity.HasOne(d => d.RequestDetailStatusNavigation)
+                    .WithMany(p => p.TblRequestDetails)
+                    .HasForeignKey(d => d.RequestDetailStatus)
+                    .HasConstraintName("FK_tblRequestDetails_tblStatus");
 
                 entity.HasOne(d => d.RequestService)
                     .WithMany(p => p.TblRequestDetails)

@@ -71,11 +71,12 @@ namespace AnService_Capstone.Controllers
             }
 
             var result = await _materialReposiory.GetAllMaterialByRequestDetailID(id);
-            if (result != null)
+            /*if (result != null)
             {
                 return Ok(result);
             }
-            return NotFound(new ErrorResponse("No Record"));
+            return NotFound(new ErrorResponse("No Record"));*/
+            return Ok(result);
         }
 
         /// <summary>

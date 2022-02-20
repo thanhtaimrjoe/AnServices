@@ -91,10 +91,10 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
                     return requestService;
                 }, param: new { @RequestDetailID = id }, splitOn: "MaterialID, UserID, StatusID");
                 connection.Close();
-                if (res.Count() == 0)
+                /*if (res.Count() == 0)
                 {
                     return null;
-                }
+                }*/
                 return res;
             }
         }

@@ -10,7 +10,7 @@ namespace AnService_Capstone.Core.Entities
         public TblStatus()
         {
             TblContracts = new HashSet<TblContract>();
-            TblRepairDetails = new HashSet<TblRepairDetail>();
+            TblRequestDetails = new HashSet<TblRequestDetail>();
             TblRequestServices = new HashSet<TblRequestService>();
             TblUsedMaterials = new HashSet<TblUsedMaterial>();
             TblUsers = new HashSet<TblUser>();
@@ -20,7 +20,7 @@ namespace AnService_Capstone.Core.Entities
         public string StatusName { get; set; }
 
         public virtual ICollection<TblContract> TblContracts { get; set; }
-        public virtual ICollection<TblRepairDetail> TblRepairDetails { get; set; }
+        public virtual ICollection<TblRequestDetail> TblRequestDetails { get; set; }
         public virtual ICollection<TblRequestService> TblRequestServices { get; set; }
         public virtual ICollection<TblUsedMaterial> TblUsedMaterials { get; set; }
         public virtual ICollection<TblUser> TblUsers { get; set; }

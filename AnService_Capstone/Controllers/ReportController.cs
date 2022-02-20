@@ -69,5 +69,23 @@ namespace AnService_Capstone.Controllers
             }
             return NotFound(new ErrorResponse("No record"));
         }
+
+        /// <summary>
+        /// lấy tất cả report theo request service id
+        /// </summary>
+        /// <param name="RequestServiceId"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<IActionResult> GetAllReportByRequestServiceID(int RequestServiceId)
+        {
+            if (RequestServiceId == 0)
+            {
+                return BadRequest(new ErrorResponse("Please enter RequestServiceId"));
+            }
+
+            var res = await _report.GetAllReportByRequestServiceID(RequestServiceId);
+            return Ok(res);
+        }
     }
 }

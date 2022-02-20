@@ -45,10 +45,16 @@ namespace AnService_Capstone.Core.Interfaces
 
         public Task<IEnumerable<RequestService>> GetAllServiceByDate(DateTime? date);
 
+        public Task<IEnumerable<RequestService>> GetAllServiceByDateAndStatus(DateTime? date, int status);
+
         /*public Task<IEnumerable<RequestServiceDetailViewModel>> GetRequestServiceDetailsByRequestServiceIDAndMasonID(int request, int mason);*/
 
-        public Task<IEnumerable<TblRequestDetail>> GetRequestServiceDetailsByRequestServiceIDAndMasonID(int request, int mason);
+        public Task<IEnumerable<TblRequestDetail>> GetAllRequestServiceDetailsByRequestServiceIDAndMasonID(int request, int mason);
 
-        public Task<bool> CancelRequestServiceByID(int id);
+        public Task<bool> CancelRequestServiceByIDForCustomer(int id);
+
+        public Task<bool> CancelRequestServiceByIDForStaff(int id);
+
+        public Task<bool> UpdateStatusRequestServiceDetail(int id, int status);
     }
 }

@@ -28,10 +28,10 @@ namespace AnService_Capstone.Controllers
 
             var res = await _contractRepository.GetContractListByUserID(id);
 
-            if (res == null)
+            /*if (res == null)
             {
                 return NotFound(new ErrorResponse("No record"));
-            }
+            }*/
             return Ok(res);
         }
 

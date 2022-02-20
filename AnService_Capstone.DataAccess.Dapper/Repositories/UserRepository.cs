@@ -38,16 +38,35 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
 
         public async Task<UserViewModel> CheckPhoneNumberExist(string phoneNumber)
         {
-            var query = "select UserID, Username, Password, FullName, PhoneNumber, Address, Email, InviteCode, RoleName, TypeJob, CreateDate, Status " +
-                "from tblUsers u join tblRoles r on u.Role = r.RoleID " +
+            /*var query = "select UserID, Username, Password, FullName, PhoneNumber, Address, Email, InviteCode, RoleName, CreateDate, Status, TypeJobID, TypeJobName " +
+                "from (tblUsers u join tblRoles r on u.Role = r.RoleID) " +
+                "join tblTypeJobs job on u.TypeJob = job.TypeJobID " +
+                "where PhoneNumber = @PhoneNumber and Status = 4";*/
+            var query = "select UserID, Username, Password, FullName, PhoneNumber, Address, Email, InviteCode, RoleName, CreateDate, Status " +
+                "from (tblUsers u join tblRoles r on u.Role = r.RoleID) " +
                 "where PhoneNumber = @PhoneNumber and Status = 4";
             using (var connection = _context.CreateConnection())
             {
                 connection.Open();
-                var user = await connection.QuerySingleOrDefaultAsync<UserViewModel>(query, new { @PhoneNumber = phoneNumber});
+                var user = await connection.QuerySingleOrDefaultAsync<UserViewModel>(query, new { @PhoneNumber = phoneNumber });
                 connection.Close();
                 return user;
             }
+            /*using (var connections = _context.CreateConnection())
+            {
+                connections.Open();
+                var res = await connections.QueryAsync<UserViewModel, TblTypeJob, UserViewModel>(query, (user, typeJob) =>
+                {
+                    user.TypeJob = typeJob;
+                    return user;
+                }, param: new { @PhoneNumber = phoneNumber}, splitOn: "TypeJobID");
+                connections.Close();
+                if (res.Count() == 0)
+                {
+                    return null;
+                }
+                return res.FirstOrDefault();
+            }*/
         }
 
         public async Task<int> CreateAccountCustomer(CreateCustomer customer, string inviteCode)
@@ -185,7 +204,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             parameters.Add("PhoneNumber", mason.MasonPhoneNumber, DbType.String);
             parameters.Add("Address", mason.MasonAddress, DbType.String);
             parameters.Add("Email", mason.MasonEmail, DbType.String);
-            parameters.Add("TypeJob", mason.TypeJob, DbType.Int32);
+            parameters.Add("TypeJob", mason.TypeJobId, DbType.Int32);
             parameters.Add("UpdateDate", DateTime.Now, DbType.DateTime);
             parameters.Add("UserID", mason.MasonId, DbType.Int32);
 
