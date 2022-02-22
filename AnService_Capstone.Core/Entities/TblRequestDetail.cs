@@ -14,7 +14,7 @@ namespace AnService_Capstone.Core.Entities
             TblUsedMaterials = new HashSet<TblUsedMaterial>();
         }
 
-        public int RequestDetaiId { get; set; }
+        public int RequestDetailId { get; set; }
         public int RequestServiceId { get; set; }
         public int ServiceId { get; set; }
         public int? RequestDetailStatus { get; set; }

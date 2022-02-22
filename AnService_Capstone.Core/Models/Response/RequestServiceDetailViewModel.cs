@@ -9,7 +9,7 @@ namespace AnService_Capstone.Core.Models.Response
 {
     public class RequestServiceDetailViewModel
     {
-        public int RequestDetaiId { get; set; }
+        public int RequestDetailId { get; set; }
         public int RequestServiceId { get; set; }
         public TblService Service { get; set; }
     }

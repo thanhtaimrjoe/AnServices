@@ -92,10 +92,10 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
         {
             var query = "select UsedMaterialID, used.MaterialID, used.RequestDetailID, MasonID, Quantity, QuantityNew, ServiceName, Note, Message, RequestServiceDescription, CustomerName, mate.MaterialID, MaterialName, Unit, UserID, FullName, PhoneNumber, Address, StatusID, StatusName, ServiceName " +
                 "from (((((tblUsedMaterial used join tblMaterial mate on used.MaterialID = mate.MaterialID) join tblUsers us on used.MasonID = us.UserID) " +
-                "join tblStatus sta on used.Status = sta.StatusID) join tblRequestDetails details on used.RequestDetailID = details.RequestDetaiID) " +
+                "join tblStatus sta on used.Status = sta.StatusID) join tblRequestDetails details on used.RequestDetailID = details.RequestDetailID) " +
                 "join tblRequestServices rs on rs.RequestServiceID = details.RequestServiceID) " +
                 "join tblServices s on details.ServiceID = s.ServiceID " +
-                "where RequestDetailID = @RequestDetailID";
+                "where details.RequestDetailID = @RequestDetailID";
 
             using (var connection = _dapperContext.CreateConnection())
             {
@@ -144,9 +144,9 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
 
         public async Task<IEnumerable<MaterialViewModel>> GetAllMaterialByRequestServiceID(int id)
         {
-            var query = "select UsedMaterialID, used.MaterialID, Quantity, QuantityNew, Note, mate.MaterialID, MaterialName, Unit, UserID, FullName, StatusID, StatusName  " +
+            var query = "select UsedMaterialID, used.MaterialID, Quantity, QuantityNew, Note, mate.MaterialID, MaterialName, Unit, UserID, FullName, StatusID, StatusName " +
                 "from ((((tblMaterial mate join tblUsedMaterial used on mate.MaterialID = used.MaterialID) " +
-                "join tblRequestDetails detail on used.RequestDetailID = RequestDetaiID) " +
+                "join tblRequestDetails detail on used.RequestDetailID = detail.RequestDetailID) " +
                 "join tblRequestServices rs on detail.RequestServiceID = rs.RequestServiceID) " +
                 "join tblStatus sta on used.Status = sta.StatusID) " +
                 "join tblUsers u on u.UserID = used.MasonID " +
@@ -175,7 +175,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
         {
             var query = "select UsedMaterialID, used.MaterialID, RequestDetailID, MasonID, Quantity, Message, RequestServiceDescription, CustomerName, mate.MaterialID, MaterialName, Unit, UserID, FullName, PhoneNumber, Address, StatusID, StatusName " +
                 "from ((((tblUsedMaterial used join tblMaterial mate on used.MaterialID = mate.MaterialID) join tblUsers us on used.MasonID = us.UserID) " +
-                "join tblStatus sta on used.Status = sta.StatusID) join tblRequestDetails details on used.RequestDetailID = details.RequestDetaiID) " +
+                "join tblStatus sta on used.Status = sta.StatusID) join tblRequestDetails details on used.RequestDetailID = details.RequestDetailID) " +
                 "join tblRequestServices rs on rs.RequestServiceID = details.RequestServiceID";
 
             using (var connection = _dapperContext.CreateConnection())
@@ -216,9 +216,9 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
 
         public async Task<MaterialViewModel> GetRequestMaterialByID(int id)
         {
-            var query = "select UsedMaterialID, used.MaterialID, RequestDetailID, MasonID, Quantity, Message, RequestServiceDescription, CustomerName, mate.MaterialID, MaterialName, Unit, UserID, FullName, PhoneNumber, Address, StatusID, StatusName " +
+            var query = "select UsedMaterialID, used.MaterialID, used.RequestDetailID, MasonID, Quantity, Message, RequestServiceDescription, CustomerName, mate.MaterialID, MaterialName, Unit, UserID, FullName, PhoneNumber, Address, StatusID, StatusName " +
                 "from ((((tblUsedMaterial used join tblMaterial mate on used.MaterialID = mate.MaterialID) join tblUsers us on used.MasonID = us.UserID) " +
-                "join tblStatus sta on used.Status = sta.StatusID) join tblRequestDetails details on used.RequestDetailID = details.RequestDetaiID) " +
+                "join tblStatus sta on used.Status = sta.StatusID) join tblRequestDetails details on used.RequestDetailID = details.RequestDetailID) " +
                 "join tblRequestServices rs on rs.RequestServiceID = details.RequestServiceID " +
                 "where UsedMaterialID = @UsedMaterialID";
 

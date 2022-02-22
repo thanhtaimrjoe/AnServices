@@ -14,7 +14,7 @@ namespace AnService_Capstone.Core.Interfaces
 
         public Task<bool> CreateMedia(int requestID, string url);
 
-        public Task<IEnumerable<TblReport>> GetAllReportByMasonID(int id);
+        public Task<IEnumerable<TblReport>> GetAllReportByRequestDetailID(int id);
 
         public Task<IEnumerable<TblReport>> GetAllReportByRequestServiceID(int id);
     }

@@ -54,14 +54,14 @@ namespace AnService_Capstone.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("[action]")]
-        public async Task<IActionResult> GetAllReportByMasonID(int id)
+        public async Task<IActionResult> GetAllReportByRequestDetailID(int id)
         {
             if (id == 0)
             {
                 return BadRequest(new ErrorResponse("Please enter id"));
             }
 
-            var res = await _report.GetAllReportByMasonID(id);
+            var res = await _report.GetAllReportByRequestDetailID(id);
 
             if(res != null)
             {

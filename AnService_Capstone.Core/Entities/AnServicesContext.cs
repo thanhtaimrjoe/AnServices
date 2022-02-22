@@ -254,11 +254,11 @@ namespace AnService_Capstone.Core.Entities
 
             modelBuilder.Entity<TblRequestDetail>(entity =>
             {
-                entity.HasKey(e => e.RequestDetaiId);
+                entity.HasKey(e => e.RequestDetailId);
 
                 entity.ToTable("tblRequestDetails");
 
-                entity.Property(e => e.RequestDetaiId).HasColumnName("RequestDetaiID");
+                entity.Property(e => e.RequestDetailId).HasColumnName("RequestDetailID");
 
                 entity.Property(e => e.RequestServiceId).HasColumnName("RequestServiceID");
 
@@ -383,10 +383,6 @@ namespace AnService_Capstone.Core.Entities
                 entity.Property(e => e.Message).HasMaxLength(50);
 
                 entity.Property(e => e.Note).HasMaxLength(50);
-
-                entity.Property(e => e.Quantity).HasColumnName("quantity");
-
-                entity.Property(e => e.QuantityNew).HasColumnName("quantityNew");
 
                 entity.Property(e => e.RequestDetailId).HasColumnName("RequestDetailID");
 

@@ -21,7 +21,7 @@ namespace AnService_Capstone.Controllers
             _serviceRepository = serviceRepository;
         }
 
-        /// <summary>
+        /*/// <summary>
         /// customer tạo request service
         /// </summary>
         /// <param name="model"></param>
@@ -52,7 +52,35 @@ namespace AnService_Capstone.Controllers
                 return Ok("Create Successfull");
             }
             return BadRequest(new ErrorResponse("Create Fail"));
-        }
+        }*/
+
+        /*[HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> CreateRequestService([FromBody] CreateService model, )
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            bool serviceDetail = false;
+            bool media = false;
+
+            var reqService = await _serviceRepository.CreateRequestService(model);
+            foreach (var serviceItem in model.ServiceList)
+            {
+                serviceDetail = await _serviceRepository.CreateRequestDetai(reqService, serviceItem);
+            }
+            foreach (var mediaItem in model.MediaList)
+            {
+                media = await _serviceRepository.CreateMedia(reqService, mediaItem);
+            }
+            if (serviceDetail != false && media != false)
+            {
+                return Ok("Create Successfull");
+            }
+            return BadRequest(new ErrorResponse("Create Fail"));
+        }*/
 
         /// <summary>
         /// lấy thông tin request service bằng request service id

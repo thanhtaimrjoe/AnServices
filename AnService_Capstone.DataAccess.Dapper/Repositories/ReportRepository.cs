@@ -64,11 +64,11 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             }
         }
 
-        public async Task<IEnumerable<TblReport>> GetAllReportByMasonID(int id)
+        public async Task<IEnumerable<TblReport>> GetAllReportByRequestDetailID(int id)
         {
             var query = "select distinct report.ReportID, RequestDetailID, MasonID, ReportTitle, ReportDescription, ReportDate, MediaID, MediaUrl " +
                 "from tblReport report join tblMedia media on report.ReportID = media.ReportID " +
-                "where MasonID = @MasonID";
+                "where RequestDetailID = @RequestDetailID";
 
             using (var connection = _context.CreateConnection())
             {
@@ -85,7 +85,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
                     }
                     currentReport.TblMedia.Add(media);
                     return currentReport;
-                }, param: new { @MasonID = id }, splitOn: "MediaID");
+                }, param: new { @RequestDetailID = id }, splitOn: "MediaID");
                 connection.Close();
                 if (!res.Any())
                 {
@@ -97,8 +97,8 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
 
         public async Task<IEnumerable<TblReport>> GetAllReportByRequestServiceID(int id)
         {
-            var query = "select report.ReportID, RequestDetailID, MasonID, ReportTitle, ReportDescription, ReportDate, MediaID, MediaUrl " +
-                "from ((tblReport report join tblRequestDetails detail on report.RequestDetailID = detail.RequestDetaiID) " +
+            var query = "select report.ReportID, report.RequestDetailID, MasonID, ReportTitle, ReportDescription, ReportDate, MediaID, MediaUrl " +
+                "from ((tblReport report join tblRequestDetails detail on report.RequestDetailID = detail.RequestDetailID) " +
                 "join tblRequestServices ser on detail.RequestServiceID = ser.RequestServiceID) " +
                 "join tblMedia media on report.ReportID = media.ReportID " +
                 "where ser.RequestServiceID = @RequestServiceID";

@@ -17,7 +17,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Services.Firebase
         private static string AuthEmail = "anservice@gmail.com";
         private static string AuthPassword = "1234321aA";
 
-        public async Task<string> Upload(Stream stream, string fileName)
+        public async Task<string> Upload(Stream stream, string filePath, string fileFolder)
         {
             var auth = new FirebaseAuthProvider(new FirebaseConfig(ApiKey));
             var a = await auth.SignInWithEmailAndPasswordAsync(AuthEmail, AuthPassword);
@@ -31,7 +31,8 @@ namespace AnService_Capstone.DataAccess.Dapper.Services.Firebase
                     AuthTokenAsyncFactory = () => Task.FromResult(a.FirebaseToken),
                     ThrowOnCancel = true
                 })
-                .Child(fileName)
+                .Child(fileFolder)
+                .Child(filePath)
                 .PutAsync(stream, cancellation.Token);
 
             try

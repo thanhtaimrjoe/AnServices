@@ -1,4 +1,5 @@
 ﻿using AnService_Capstone.Core.Interfaces;
+using AnService_Capstone.Core.Models.Request;
 using AnService_Capstone.Core.Models.Response;
 using AnService_Capstone.DataAccess.Dapper.Services.Firebase;
 using Microsoft.AspNetCore.Http;
@@ -188,11 +189,42 @@ namespace AnService_Capstone.Controllers
             return BadRequest(new ErrorResponse("Create fail"));
         }
 
+        /*[HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> Test(List<IFormFile> files)
+        {
+            List<string> stringFile = new List<string>();
+            foreach (var file in files)
+            {
+                string res = await _firebaseService.Upload(file.OpenReadStream(), file.FileName, "RequestServices");
+                stringFile.Add(res);
+            }
+
+            return Ok(stringFile);
+        }*/
+
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Test(IFormFile stream, string fileName)
+        public async Task<IActionResult> Test([FromForm] UploadMedia files)
         {
-            var res = await _firebaseService.Upload(stream.OpenReadStream(), fileName);
+            /*List<string> stringFile = new List<string>();
+            foreach (var file in files)
+            {
+                var req = System.Net.WebRequest.Create(file.File.Uri);
+                using (Stream stream = req.GetResponse().GetResponseStream())
+                {
+                    string res = await _firebaseService.Upload(stream, file.File.Name, "RequestServices");
+                    stringFile.Add(res);
+                }
+            }*/
+
+            /*return Ok(stringFile);*/
+            string res;
+            var req = System.Net.WebRequest.Create(files.Uri);
+            using (Stream stream = req.GetResponse().GetResponseStream())
+            {
+                res = await _firebaseService.Upload(stream, files.Name, "RequestServices");
+            }
             return Ok(res);
         }
     }

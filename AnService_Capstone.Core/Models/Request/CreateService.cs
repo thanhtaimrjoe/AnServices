@@ -22,7 +22,7 @@ namespace AnService_Capstone.Core.Models.Request
         public IEnumerable<int> ServiceList { get; set; }
         [Required]
         public string RequestServiceDescription { get; set; }
-        [Required]
-        public IEnumerable<string> MediaList { get; set; }
+        /*[Required]
+        public IEnumerable<string> MediaList { get; set; }*/
     }
 }
