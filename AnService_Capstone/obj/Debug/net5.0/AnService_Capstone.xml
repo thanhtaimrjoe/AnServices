@@ -33,7 +33,7 @@
             <param name="id">của contract</param>
             <returns></returns>
         </member>
-        <member name="M:AnService_Capstone.Controllers.ContractController.CreateContract(System.Int32,System.String,System.String,System.Int32)">
+        <member name="M:AnService_Capstone.Controllers.ContractController.CreateContract(AnService_Capstone.Core.Models.Request.CreateContract)">
             <summary>
             tạo contract
             </summary>

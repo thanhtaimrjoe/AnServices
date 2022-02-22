@@ -28,6 +28,34 @@ namespace AnService_Capstone.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("[action]")]
+        public async Task<IActionResult> CreateRequestService([FromForm] CreateService model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            bool serviceDetail = false;
+            bool media = false;
+
+            var reqService = await _serviceRepository.CreateRequestService(model);
+            foreach (var serviceItem in model.ServiceList)
+            {
+                serviceDetail = await _serviceRepository.CreateRequestDetai(reqService, serviceItem);
+            }
+            foreach (var mediaItem in model.MediaList)
+            {
+                media = await _serviceRepository.CreateMedia(reqService, mediaItem);
+            }
+            if (serviceDetail != false && media != false)
+            {
+                return Ok("Create Successfull");
+            }
+            return BadRequest(new ErrorResponse("Create Fail"));
+        }*/
+
+        [HttpPost]
+        [Route("[action]")]
         public async Task<IActionResult> CreateRequestService([FromBody] CreateService model)
         {
             if (!ModelState.IsValid)
@@ -37,34 +65,6 @@ namespace AnService_Capstone.Controllers
 
             bool serviceDetail = false;
             bool media = false;
-            
-            var reqService = await _serviceRepository.CreateRequestService(model);
-            foreach (var serviceItem in model.ServiceList)
-            {
-                serviceDetail = await _serviceRepository.CreateRequestDetai(reqService, serviceItem);
-            }
-            foreach (var mediaItem in model.MediaList)
-            {
-                media = await _serviceRepository.CreateMedia(reqService, mediaItem);
-            }
-            if (serviceDetail != false && media != false)
-            {
-                return Ok("Create Successfull");
-            }
-            return BadRequest(new ErrorResponse("Create Fail"));
-        }*/
-
-        /*[HttpPost]
-        [Route("[action]")]
-        public async Task<IActionResult> CreateRequestService([FromBody] CreateService model, )
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest();
-            }
-
-            bool serviceDetail = false;
-            bool media = false;
 
             var reqService = await _serviceRepository.CreateRequestService(model);
             foreach (var serviceItem in model.ServiceList)
@@ -80,7 +80,7 @@ namespace AnService_Capstone.Controllers
                 return Ok("Create Successfull");
             }
             return BadRequest(new ErrorResponse("Create Fail"));
-        }*/
+        }
 
         /// <summary>
         /// lấy thông tin request service bằng request service id
@@ -435,6 +435,36 @@ namespace AnService_Capstone.Controllers
                 return NotFound(new ErrorResponse("Cancel Fail"));
             }
             return Ok("Cancel Successful");
+        }
+
+        [HttpPut]
+        [Route("[action]")]
+        public async Task<IActionResult> AcceptRequestService(int requestServiceID, IEnumerable<UpdatePriceRequestDetail> requestDetail)
+        {
+            if (requestServiceID == 0)
+            {
+                return BadRequest(new ErrorResponse("Please enter requestServiceID"));
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            bool checkUpdatePrice = false;
+
+            foreach (var detail in requestDetail)
+            {
+                checkUpdatePrice = await _serviceRepository.UpdatePriceRequestServiceDetail(detail.RequestDetailID, detail.RequestDetailPrice);
+            }
+
+            var checkUpdateStatus = await _serviceRepository.UpdateStatusRequestService(requestServiceID, 6);
+
+            if (checkUpdatePrice == true && checkUpdateStatus == true)
+            {
+                return Ok("Accept Successful");
+            }
+            return BadRequest("Accept Error");
         }
     }
 }

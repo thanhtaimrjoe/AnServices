@@ -147,7 +147,51 @@ namespace AnService_Capstone.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> CreateContract(int id, string name, string url, int requestID)
+        public async Task<IActionResult> CreateContract(CreateContract contract)
+        {
+            bool res = false;
+
+            if (contract.UserId == 0)
+            {
+                return BadRequest(new ErrorResponse("Please enter id"));
+            }
+
+            if (contract.RequestId == 0)
+            {
+                return BadRequest(new ErrorResponse("Please enter requestID"));
+            }
+
+            if (contract.Username.Equals(""))
+            {
+                return BadRequest(new ErrorResponse("Please enter name"));
+            }
+
+            if (contract.ContractUrl.Equals(""))
+            {
+                return BadRequest(new ErrorResponse("Please enter url"));
+            }
+
+            var check = await _contractRepository.CheckContractExist(contract.RequestId);
+
+            if (check != null)
+            {
+                res = await _contractRepository.UpdateContractURL(contract.ContractUrl, check.ContractId);
+            }
+            else
+            {
+                res = await _contractRepository.CreateContract(contract.UserId, contract.Username, contract.ContractUrl, contract.RequestId);
+            }
+
+            if (res)
+            {
+                return Ok("Create successfull");
+            }
+            return BadRequest(new ErrorResponse("Create fail"));
+        }
+
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> CreateContract2(int id, string name, int requestID, IFormFile file)
         {
             bool res = false;
 
@@ -166,10 +210,7 @@ namespace AnService_Capstone.Controllers
                 return BadRequest(new ErrorResponse("Please enter name"));
             }
 
-            if (url.Equals(""))
-            {
-                return BadRequest(new ErrorResponse("Please enter url"));
-            }
+            string url = await _firebaseService.Upload(file.OpenReadStream(), file.FileName, "Contracts");
 
             var check = await _contractRepository.CheckContractExist(requestID);
 
@@ -189,25 +230,26 @@ namespace AnService_Capstone.Controllers
             return BadRequest(new ErrorResponse("Create fail"));
         }
 
-        /*[HttpPost]
+        [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Test(List<IFormFile> files)
+        public async Task<IActionResult> Test([FromForm(Name = "file")]List<IFormFile> files)
         {
             List<string> stringFile = new List<string>();
             foreach (var file in files)
             {
+                var t = file.OpenReadStream();
                 string res = await _firebaseService.Upload(file.OpenReadStream(), file.FileName, "RequestServices");
                 stringFile.Add(res);
             }
 
             return Ok(stringFile);
-        }*/
+        }
 
-        [HttpPost]
+        /*[HttpPost]
         [Route("[action]")]
         public async Task<IActionResult> Test([FromForm] UploadMedia files)
         {
-            /*List<string> stringFile = new List<string>();
+            *//*List<string> stringFile = new List<string>();
             foreach (var file in files)
             {
                 var req = System.Net.WebRequest.Create(file.File.Uri);
@@ -218,14 +260,14 @@ namespace AnService_Capstone.Controllers
                 }
             }*/
 
-            /*return Ok(stringFile);*/
-            string res;
-            var req = System.Net.WebRequest.Create(files.Uri);
-            using (Stream stream = req.GetResponse().GetResponseStream())
-            {
-                res = await _firebaseService.Upload(stream, files.Name, "RequestServices");
-            }
-            return Ok(res);
+        /*return Ok(stringFile);*//*
+        string res;
+        var req = System.Net.WebRequest.Create(files.Uri);
+        using (Stream stream = req.GetResponse().GetResponseStream())
+        {
+            res = await _firebaseService.Upload(stream, files.Name, "RequestServices");
         }
+        return Ok(res);
+    }*/
     }
 }

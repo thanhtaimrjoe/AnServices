@@ -61,9 +61,7 @@ namespace AnService_Capstone.Core.Entities
 
                 entity.Property(e => e.ContractUpdateDate).HasColumnType("datetime");
 
-                entity.Property(e => e.ContractUrl)
-                    .HasMaxLength(250)
-                    .IsUnicode(false);
+                entity.Property(e => e.ContractUrl).IsUnicode(false);
 
                 entity.Property(e => e.CustomerId).HasColumnName("CustomerID");
 

@@ -3,17 +3,19 @@ i:{00000000-0000-0000-0000-000000000000}:AnService_Capstone.sln
 ++AnService_Capstone
 i:{00000000-0000-0000-0000-000000000000}:AnService_Capstone
 ++Connected Services 
-i:{dba5727e-faa6-4cc0-a0f0-1e9fb2d31071}:>1122
+i:{dba5727e-faa6-4cc0-a0f0-1e9fb2d31071}:>587
 ++Dependencies
-i:{dba5727e-faa6-4cc0-a0f0-1e9fb2d31071}:>1121
-i:{dfeaff97-2626-43cf-b606-dc1b8a7ef0d0}:>785
-i:{140387f8-3121-4d61-b0f9-5df7e58a2d09}:>858
+i:{dba5727e-faa6-4cc0-a0f0-1e9fb2d31071}:>586
+i:{dfeaff97-2626-43cf-b606-dc1b8a7ef0d0}:>430
+i:{140387f8-3121-4d61-b0f9-5df7e58a2d09}:>349
 ++Properties
 i:{dba5727e-faa6-4cc0-a0f0-1e9fb2d31071}:e:\capstone\api\anservice_capstone\properties\
 ++launchSettings.json
 i:{dba5727e-faa6-4cc0-a0f0-1e9fb2d31071}:e:\capstone\api\anservice_capstone\properties\launchsettings.json
 ++Controllers
 i:{dba5727e-faa6-4cc0-a0f0-1e9fb2d31071}:e:\capstone\api\anservice_capstone\controllers\
+++ContractController.cs
+i:{dba5727e-faa6-4cc0-a0f0-1e9fb2d31071}:e:\capstone\api\anservice_capstone\controllers\contractcontroller.cs
 ++InvoiceController.cs
 i:{dba5727e-faa6-4cc0-a0f0-1e9fb2d31071}:e:\capstone\api\anservice_capstone\controllers\invoicecontroller.cs
 ++MaterialController.cs
@@ -24,6 +26,8 @@ i:{dba5727e-faa6-4cc0-a0f0-1e9fb2d31071}:e:\capstone\api\anservice_capstone\cont
 i:{dba5727e-faa6-4cc0-a0f0-1e9fb2d31071}:e:\capstone\api\anservice_capstone\controllers\reportcontroller.cs
 ++ServiceController.cs
 i:{dba5727e-faa6-4cc0-a0f0-1e9fb2d31071}:e:\capstone\api\anservice_capstone\controllers\servicecontroller.cs
+++TypeJobController.cs
+i:{dba5727e-faa6-4cc0-a0f0-1e9fb2d31071}:e:\capstone\api\anservice_capstone\controllers\typejobcontroller.cs
 ++UserController.cs
 i:{dba5727e-faa6-4cc0-a0f0-1e9fb2d31071}:e:\capstone\api\anservice_capstone\controllers\usercontroller.cs
 ++appsettings.json
@@ -33,7 +37,7 @@ i:{dba5727e-faa6-4cc0-a0f0-1e9fb2d31071}:e:\capstone\api\anservice_capstone\prog
 ++Startup.cs
 i:{dba5727e-faa6-4cc0-a0f0-1e9fb2d31071}:e:\capstone\api\anservice_capstone\startup.cs
 ++No service dependencies discovered
-i:{dba5727e-faa6-4cc0-a0f0-1e9fb2d31071}:>1123
+i:{dba5727e-faa6-4cc0-a0f0-1e9fb2d31071}:>588
 ++Analyzers
 i:{dba5727e-faa6-4cc0-a0f0-1e9fb2d31071}:analyzers
 i:{dfeaff97-2626-43cf-b606-dc1b8a7ef0d0}:analyzers
@@ -76,22 +80,24 @@ i:{dba5727e-faa6-4cc0-a0f0-1e9fb2d31071}:e:\capstone\api\anservice_capstone\micr
 i:{dfeaff97-2626-43cf-b606-dc1b8a7ef0d0}:e:\capstone\api\anservice_capstone.core\microsoft.netcore.app
 i:{140387f8-3121-4d61-b0f9-5df7e58a2d09}:e:\capstone\api\anservice_capstone.dataaccess.dapper\microsoft.netcore.app
 ++Microsoft.AspNetCore.Authentication.JwtBearer (5.0.13)
-i:{dba5727e-faa6-4cc0-a0f0-1e9fb2d31071}:>1136
+i:{dba5727e-faa6-4cc0-a0f0-1e9fb2d31071}:>626
 ++Microsoft.EntityFrameworkCore.Design (5.0.13)
-i:{dba5727e-faa6-4cc0-a0f0-1e9fb2d31071}:>1134
+i:{dba5727e-faa6-4cc0-a0f0-1e9fb2d31071}:>624
 ++Swashbuckle.AspNetCore (5.6.3)
-i:{dba5727e-faa6-4cc0-a0f0-1e9fb2d31071}:>1135
+i:{dba5727e-faa6-4cc0-a0f0-1e9fb2d31071}:>625
 ++AnService_Capstone.Core
-i:{dba5727e-faa6-4cc0-a0f0-1e9fb2d31071}:e:\capstone\api\anservice_capstone.core\anservice_capstone.core.csproj
+i:{dba5727e-faa6-4cc0-a0f0-1e9fb2d31071}:e:\capstone\api\anservice_capstone.core\bin\debug\net5.0\anservice_capstone.core.dll
 i:{00000000-0000-0000-0000-000000000000}:AnService_Capstone.Core
 i:{140387f8-3121-4d61-b0f9-5df7e58a2d09}:e:\capstone\api\anservice_capstone.core\bin\debug\net5.0\anservice_capstone.core.dll
 ++AnService_Capstone.DataAccess.Dapper
-i:{dba5727e-faa6-4cc0-a0f0-1e9fb2d31071}:e:\capstone\api\anservice_capstone.dataaccess.dapper\anservice_capstone.dataaccess.dapper.csproj
+i:{dba5727e-faa6-4cc0-a0f0-1e9fb2d31071}:e:\capstone\api\anservice_capstone.dataaccess.dapper\bin\debug\net5.0\anservice_capstone.dataaccess.dapper.dll
 i:{00000000-0000-0000-0000-000000000000}:AnService_Capstone.DataAccess.Dapper
 ++Entities
 i:{dfeaff97-2626-43cf-b606-dc1b8a7ef0d0}:e:\capstone\api\anservice_capstone.core\entities\
 ++AnServicesContext.cs
 i:{dfeaff97-2626-43cf-b606-dc1b8a7ef0d0}:e:\capstone\api\anservice_capstone.core\entities\anservicescontext.cs
+++TblContract.cs
+i:{dfeaff97-2626-43cf-b606-dc1b8a7ef0d0}:e:\capstone\api\anservice_capstone.core\entities\tblcontract.cs
 ++TblInvoice.cs
 i:{dfeaff97-2626-43cf-b606-dc1b8a7ef0d0}:e:\capstone\api\anservice_capstone.core\entities\tblinvoice.cs
 ++TblMaterial.cs
@@ -124,6 +130,8 @@ i:{dfeaff97-2626-43cf-b606-dc1b8a7ef0d0}:e:\capstone\api\anservice_capstone.core
 i:{dfeaff97-2626-43cf-b606-dc1b8a7ef0d0}:e:\capstone\api\anservice_capstone.core\entities\tbluser.cs
 ++Interfaces
 i:{dfeaff97-2626-43cf-b606-dc1b8a7ef0d0}:e:\capstone\api\anservice_capstone.core\interfaces\
+++IContractRepository.cs
+i:{dfeaff97-2626-43cf-b606-dc1b8a7ef0d0}:e:\capstone\api\anservice_capstone.core\interfaces\icontractrepository.cs
 ++IInvoiceRepository.cs
 i:{dfeaff97-2626-43cf-b606-dc1b8a7ef0d0}:e:\capstone\api\anservice_capstone.core\interfaces\iinvoicerepository.cs
 ++IMaterialRepository.cs
@@ -136,6 +144,8 @@ i:{dfeaff97-2626-43cf-b606-dc1b8a7ef0d0}:e:\capstone\api\anservice_capstone.core
 i:{dfeaff97-2626-43cf-b606-dc1b8a7ef0d0}:e:\capstone\api\anservice_capstone.core\interfaces\ireport.cs
 ++IServiceRepository.cs
 i:{dfeaff97-2626-43cf-b606-dc1b8a7ef0d0}:e:\capstone\api\anservice_capstone.core\interfaces\iservicerepository.cs
+++ITypeJobRepository.cs
+i:{dfeaff97-2626-43cf-b606-dc1b8a7ef0d0}:e:\capstone\api\anservice_capstone.core\interfaces\itypejobrepository.cs
 ++IUserRepository.cs
 i:{dfeaff97-2626-43cf-b606-dc1b8a7ef0d0}:e:\capstone\api\anservice_capstone.core\interfaces\iuserrepository.cs
 ++Models
@@ -146,6 +156,8 @@ i:{dfeaff97-2626-43cf-b606-dc1b8a7ef0d0}:e:\capstone\api\anservice_capstone.core
 i:{dfeaff97-2626-43cf-b606-dc1b8a7ef0d0}:e:\capstone\api\anservice_capstone.core\models\request\assignjob.cs
 ++CreateCustomer.cs
 i:{dfeaff97-2626-43cf-b606-dc1b8a7ef0d0}:e:\capstone\api\anservice_capstone.core\models\request\createcustomer.cs
+++CreateMason.cs
+i:{dfeaff97-2626-43cf-b606-dc1b8a7ef0d0}:e:\capstone\api\anservice_capstone.core\models\request\createmason.cs
 ++CreateReport.cs
 i:{dfeaff97-2626-43cf-b606-dc1b8a7ef0d0}:e:\capstone\api\anservice_capstone.core\models\request\createreport.cs
 ++CreateService.cs
@@ -175,17 +187,21 @@ i:{dfeaff97-2626-43cf-b606-dc1b8a7ef0d0}:e:\capstone\api\anservice_capstone.core
 ++Material.cs
 i:{dfeaff97-2626-43cf-b606-dc1b8a7ef0d0}:e:\capstone\api\anservice_capstone.core\models\material.cs
 ++Microsoft.EntityFrameworkCore.SqlServer (5.0.13)
-i:{dfeaff97-2626-43cf-b606-dc1b8a7ef0d0}:>1155
+i:{dfeaff97-2626-43cf-b606-dc1b8a7ef0d0}:>603
 ++Microsoft.EntityFrameworkCore.Tools (5.0.13)
-i:{dfeaff97-2626-43cf-b606-dc1b8a7ef0d0}:>1156
+i:{dfeaff97-2626-43cf-b606-dc1b8a7ef0d0}:>607
+++Newtonsoft.Json (13.0.1)
+i:{dfeaff97-2626-43cf-b606-dc1b8a7ef0d0}:>605
 ++Context
 i:{140387f8-3121-4d61-b0f9-5df7e58a2d09}:e:\capstone\api\anservice_capstone.dataaccess.dapper\context\
 ++Customize
 i:{140387f8-3121-4d61-b0f9-5df7e58a2d09}:e:\capstone\api\anservice_capstone.dataaccess.dapper\customize\
-++OTPGenerator.cs
-i:{140387f8-3121-4d61-b0f9-5df7e58a2d09}:e:\capstone\api\anservice_capstone.dataaccess.dapper\customize\otpgenerator.cs
+++UtilHelper.cs
+i:{140387f8-3121-4d61-b0f9-5df7e58a2d09}:e:\capstone\api\anservice_capstone.dataaccess.dapper\customize\utilhelper.cs
 ++Repositories
 i:{140387f8-3121-4d61-b0f9-5df7e58a2d09}:e:\capstone\api\anservice_capstone.dataaccess.dapper\repositories\
+++ContractRepository.cs
+i:{140387f8-3121-4d61-b0f9-5df7e58a2d09}:e:\capstone\api\anservice_capstone.dataaccess.dapper\repositories\contractrepository.cs
 ++InvoiceRepository.cs
 i:{140387f8-3121-4d61-b0f9-5df7e58a2d09}:e:\capstone\api\anservice_capstone.dataaccess.dapper\repositories\invoicerepository.cs
 ++MaterialRepository.cs
@@ -198,10 +214,16 @@ i:{140387f8-3121-4d61-b0f9-5df7e58a2d09}:e:\capstone\api\anservice_capstone.data
 i:{140387f8-3121-4d61-b0f9-5df7e58a2d09}:e:\capstone\api\anservice_capstone.dataaccess.dapper\repositories\reportrepository.cs
 ++ServiceRepository.cs
 i:{140387f8-3121-4d61-b0f9-5df7e58a2d09}:e:\capstone\api\anservice_capstone.dataaccess.dapper\repositories\servicerepository.cs
+++TypeJobRepository.cs
+i:{140387f8-3121-4d61-b0f9-5df7e58a2d09}:e:\capstone\api\anservice_capstone.dataaccess.dapper\repositories\typejobrepository.cs
 ++UserRepository.cs
 i:{140387f8-3121-4d61-b0f9-5df7e58a2d09}:e:\capstone\api\anservice_capstone.dataaccess.dapper\repositories\userrepository.cs
 ++Services
 i:{140387f8-3121-4d61-b0f9-5df7e58a2d09}:e:\capstone\api\anservice_capstone.dataaccess.dapper\services\
+++Firebase
+i:{140387f8-3121-4d61-b0f9-5df7e58a2d09}:e:\capstone\api\anservice_capstone.dataaccess.dapper\services\firebase\
+++FirebaseService.cs
+i:{140387f8-3121-4d61-b0f9-5df7e58a2d09}:e:\capstone\api\anservice_capstone.dataaccess.dapper\services\firebase\firebaseservice.cs
 ++SendSMS
 i:{140387f8-3121-4d61-b0f9-5df7e58a2d09}:e:\capstone\api\anservice_capstone.dataaccess.dapper\services\sendsms\
 ++TwilioService.cs
@@ -215,229 +237,14 @@ i:{140387f8-3121-4d61-b0f9-5df7e58a2d09}:e:\capstone\api\anservice_capstone.data
 ++RefreshTokenGenerator.cs
 i:{140387f8-3121-4d61-b0f9-5df7e58a2d09}:e:\capstone\api\anservice_capstone.dataaccess.dapper\services\tokengenerator\refreshtokengenerator.cs
 ++Dapper (2.0.123)
-i:{140387f8-3121-4d61-b0f9-5df7e58a2d09}:>1154
+i:{140387f8-3121-4d61-b0f9-5df7e58a2d09}:>604
+++Firebase.Auth (1.0.0)
+i:{140387f8-3121-4d61-b0f9-5df7e58a2d09}:>606
+++FirebaseStorage.net (1.0.3)
+i:{140387f8-3121-4d61-b0f9-5df7e58a2d09}:>609
 ++System.Data.SqlClient (4.8.3)
-i:{140387f8-3121-4d61-b0f9-5df7e58a2d09}:>1157
+i:{140387f8-3121-4d61-b0f9-5df7e58a2d09}:>608
 ++Twilio (5.70.0)
-i:{140387f8-3121-4d61-b0f9-5df7e58a2d09}:>1158
-++bin
-++Debug
-++net5.0
-++ref
-++runtimes
-++AnService_Capstone.Core.dll
-++AnService_Capstone.Core.pdb
-++AnService_Capstone.DataAccess.Dapper.dll
-++AnService_Capstone.DataAccess.Dapper.pdb
-++AnService_Capstone.deps.json
-++AnService_Capstone.dll
-++AnService_Capstone.exe
-++AnService_Capstone.pdb
-++AnService_Capstone.runtimeconfig.dev.json
-++AnService_Capstone.runtimeconfig.json
-++AnService_Capstone.StaticWebAssets.xml
-++AnService_Capstone.xml
-++Dapper.dll
-++Humanizer.dll
-++Microsoft.AspNetCore.Authentication.JwtBearer.dll
-++Microsoft.Data.SqlClient.dll
-++Microsoft.EntityFrameworkCore.Abstractions.dll
-++Microsoft.EntityFrameworkCore.Design.dll
-++Microsoft.EntityFrameworkCore.dll
-++Microsoft.EntityFrameworkCore.Relational.dll
-++Microsoft.EntityFrameworkCore.SqlServer.dll
-++Microsoft.Extensions.DependencyInjection.dll
-++Microsoft.Identity.Client.dll
-++Microsoft.IdentityModel.JsonWebTokens.dll
-++Microsoft.IdentityModel.Logging.dll
-++Microsoft.IdentityModel.Protocols.dll
-++Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
-++Microsoft.IdentityModel.Tokens.dll
-++Microsoft.OpenApi.dll
-++Newtonsoft.Json.dll
-++Swashbuckle.AspNetCore.Swagger.dll
-++Swashbuckle.AspNetCore.SwaggerGen.dll
-++Swashbuckle.AspNetCore.SwaggerUI.dll
-++System.Configuration.ConfigurationManager.dll
-++System.Data.SqlClient.dll
-++System.Diagnostics.DiagnosticSource.dll
-++System.IdentityModel.Tokens.Jwt.dll
-++System.Runtime.Caching.dll
-++System.Security.Cryptography.ProtectedData.dll
-++Twilio.dll
-++unix
-++win
-++win-arm
-++win-arm64
-++win-x64
-++win-x86
-++lib
-++native
-++netcoreapp2.1
-++netcoreapp3.1
-++netstandard2.0
-++Microsoft.Data.SqlClient.SNI.dll
-++Microsoft.Data.SqlClient.SNI.pdb
-++sni.dll
-++obj
-++AnService_Capstone.csproj.nuget.dgspec.json
-++AnService_Capstone.csproj.nuget.g.props
-++AnService_Capstone.csproj.nuget.g.targets
-++project.assets.json
-++project.nuget.cache
-++staticwebassets
-++.NETCoreApp,Version=v5.0.AssemblyAttributes.cs
-++AnService_Capstone.AssemblyInfo.cs
-++AnService_Capstone.AssemblyInfoInputs.cache
-++AnService_Capstone.assets.cache
-++AnService_Capstone.csproj.AssemblyReference.cache
-++AnService_Capstone.csproj.CopyComplete
-++AnService_Capstone.csproj.CoreCompileInputs.cache
-++AnService_Capstone.csproj.FileListAbsolute.txt
-++AnService_Capstone.GeneratedMSBuildEditorConfig.editorconfig
-++AnService_Capstone.genruntimeconfig.cache
-++AnService_Capstone.MvcApplicationPartsAssemblyInfo.cache
-++AnService_Capstone.MvcApplicationPartsAssemblyInfo.cs
-++AnService_Capstone.RazorAssemblyInfo.cache
-++AnService_Capstone.RazorAssemblyInfo.cs
-++AnService_Capstone.RazorTargetAssemblyInfo.cache
-++apphost.exe
-++AnService_Capstone.StaticWebAssets.Manifest.cache
-++Imports
-++Sdk.props
-++Sdk.targets
-++Sdk.props (C:\Program Files\dotnet\sdk\6.0.100\Sdks\Microsoft.NET.Sdk\Sdk)
-++Sdk.props (C:\Program Files\dotnet\sdk\6.0.100\Sdks\Microsoft.NET.Sdk.Razor\Sdk)
-++Sdk.props (C:\Program Files\dotnet\sdk\6.0.100\Sdks\Microsoft.NET.Sdk.Web.ProjectSystem\Sdk)
-++Sdk.props (C:\Program Files\dotnet\sdk\6.0.100\Sdks\Microsoft.NET.Sdk.Publish\Sdk)
-++Sdk.targets (C:\Program Files\dotnet\sdk\6.0.100\Sdks\Microsoft.NET.Sdk\Sdk)
-++Sdk.targets (C:\Program Files\dotnet\sdk\6.0.100\Sdks\Microsoft.NET.Sdk.Razor\Sdk)
-++Sdk.targets (C:\Program Files\dotnet\sdk\6.0.100\Sdks\Microsoft.NET.Sdk.Web.ProjectSystem\Sdk)
-++Sdk.targets (C:\Program Files\dotnet\sdk\6.0.100\Sdks\Microsoft.NET.Sdk.Publish\Sdk)
-++Microsoft.Common.props
-++Microsoft.NET.Sdk.props
-++Sdk.Razor.CurrentVersion.props
-++Microsoft.NET.Sdk.Web.ProjectSystem.props
-++Microsoft.NET.Sdk.Publish.props
-++Microsoft.NET.Sdk.BeforeCommon.targets
-++Microsoft.CSharp.targets
-++Microsoft.NET.Sdk.targets
-++Microsoft.NET.Compatibility.targets
-++NuGet.Build.Tasks.Pack.targets
-++Sdk.Razor.CurrentVersion.targets
-++Microsoft.NET.Sdk.Web.ProjectSystem.targets
-++Microsoft.NET.Sdk.Publish.targets
-++Microsoft.NuGet.ImportBefore.props
-++NuGet.props
-++Microsoft.NET.Sdk.DefaultItems.props
-++Microsoft.NET.Sdk.ImportWorkloads.props
-++Microsoft.NET.SupportedTargetFrameworks.props
-++Microsoft.NET.SupportedPlatforms.props
-++Microsoft.NET.WindowsSdkSupportedTargetPlatforms.props
-++Microsoft.NET.Sdk.CSharp.props
-++Microsoft.NET.ILLink.props
-++Microsoft.NET.Compatibility.props
-++Microsoft.NET.PackTool.props
-++Microsoft.NET.PackProjectTool.props
-++Microsoft.NET.Sdk.WindowsDesktop.props
-++Microsoft.NET.Windows.props
-++Sdk.Razor.StaticAssets.ProjectSystem.props
-++Microsoft.TypeScript.Default.props
-++Microsoft.NET.Sdk.Web.DefaultItems.props
-++Microsoft.NET.DefaultAssemblyInfo.targets
-++Microsoft.NET.DefaultOutputPaths.targets
-++Microsoft.NET.Sdk.ImportPublishProfile.targets
-++Microsoft.NET.TargetFrameworkInference.targets
-++Microsoft.NET.Sdk.Razor.BeforeCommon.targets
-++Microsoft.NET.Sdk.ImportWorkloads.targets
-++Microsoft.NET.RuntimeIdentifierInference.targets
-++Microsoft.NET.EolTargetFrameworks.targets
-++Microsoft.NET.NuGetOfflineCache.targets
-++Microsoft.Managed.Before.targets
-++Microsoft.CSharp.CurrentVersion.targets
-++Microsoft.Managed.After.targets
-++Microsoft.NET.Sdk.Common.targets
-++Microsoft.PackageDependencyResolution.targets
-++Microsoft.NET.Sdk.DefaultItems.targets
-++Microsoft.NET.Sdk.FrameworkReferenceResolution.targets
-++Microsoft.NET.Sdk.Shared.targets
-++Microsoft.NET.DisableStandardFrameworkResolution.targets
-++Microsoft.NET.DesignerSupport.targets
-++Microsoft.NET.GenerateAssemblyInfo.targets
-++Microsoft.NET.GenerateGlobalUsings.targets
-++Microsoft.NET.GenerateSupportedRuntime.targets
-++Microsoft.NET.ComposeStore.targets
-++Microsoft.NET.CrossGen.targets
-++Microsoft.NET.ObsoleteReferences.targets
-++Microsoft.NET.Publish.targets
-++Microsoft.NET.PackTool.targets
-++Microsoft.NET.PackProjectTool.targets
-++Microsoft.NET.PreserveCompilationContext.targets
-++Microsoft.NET.ConflictResolution.targets
-++Microsoft.NET.Sdk.CSharp.targets
-++Microsoft.NET.ILLink.targets
-++Microsoft.NET.Sdk.Analyzers.targets
-++Microsoft.NET.Compatibility.Common.targets
-++Microsoft.NET.Sdk.Razor.Compilation.targets
-++Microsoft.NET.Sdk.Razor.Configuration.targets
-++Microsoft.NET.Sdk.Razor.CodeGeneration.targets
-++Microsoft.NET.Sdk.Razor.Component.targets
-++Microsoft.NET.Sdk.Razor.StaticWebAssets.5_0.targets
-++Microsoft.NET.Sdk.Razor.ScopedCss.5_0.targets
-++Microsoft.NET.Sdk.Razor.GenerateAssemblyInfo.targets
-++Microsoft.NET.Sdk.Razor.MvcApplicationPartsDiscovery.targets
-++Microsoft.NET.Sdk.Razor.DesignTime.targets
-++Microsoft.TypeScript.targets
-++Microsoft.TypeScript.DotNetCore.targets
-++Microsoft.Web.Designtime.targets
-++Default.pubxml
-++Microsoft.NET.Sdk.Publish.ComputeFiles.targets
-++Microsoft.NET.Sdk.Publish.FilterFiles.targets
-++Microsoft.NET.Sdk.Publish.CopyFiles.targets
-++Microsoft.NET.Sdk.Publish.TransformFiles.targets
-++Microsoft.NET.Sdk.Publish.FileSystem.targets
-++Microsoft.NET.Sdk.DotNetCLITool.targets
-++Microsoft.Extensions.ApiDescription.Server.props
-++Swashbuckle.AspNetCore.props
-++Microsoft.EntityFrameworkCore.Design.props
-++Microsoft.NuGet.props
-++Microsoft.NETCoreSdk.BundledVersions.props
-++Microsoft.NET.Sdk.WindowsDesktop.WindowsForms.props
-++Microsoft.NET.Sdk.WindowsDesktop.WPF.props
-++WorkloadManifest.targets (C:\Program Files\dotnet\sdk-manifests\6.0.100\microsoft.net.sdk.android)
-++WorkloadManifest.targets (C:\Program Files\dotnet\sdk-manifests\6.0.100\microsoft.net.sdk.ios)
-++WorkloadManifest.targets (C:\Program Files\dotnet\sdk-manifests\6.0.100\microsoft.net.sdk.maccatalyst)
-++WorkloadManifest.targets (C:\Program Files\dotnet\sdk-manifests\6.0.100\microsoft.net.sdk.macos)
-++WorkloadManifest.targets (C:\Program Files\dotnet\sdk-manifests\6.0.100\microsoft.net.sdk.maui)
-++WorkloadManifest.targets (C:\Program Files\dotnet\sdk-manifests\6.0.100\microsoft.net.sdk.tvos)
-++WorkloadManifest.targets (C:\Program Files\dotnet\sdk-manifests\6.0.100\microsoft.net.workload.emscripten)
-++WorkloadManifest.targets (C:\Program Files\dotnet\sdk-manifests\6.0.100\microsoft.net.workload.mono.toolchain)
-++Microsoft.CSharp.Core.targets
-++Microsoft.CSharp.DesignTime.targets
-++Microsoft.Common.targets
-++Microsoft.ServiceModel.targets
-++Microsoft.NET.Sdk.DefaultItems.Shared.targets
-++Microsoft.NETCoreSdk.BundledCliTools.props
-++Microsoft.NET.DefaultPackageConflictOverrides.targets
-++Microsoft.CodeAnalysis.NetAnalyzers.props
-++Microsoft.CodeAnalysis.NetAnalyzers.targets
-++Microsoft.NET.ILLink.Tasks.props
-++System.Windows.Forms.Analyzers.props
-++Microsoft.Managed.Core.targets
-++Microsoft.Managed.DesignTime.targets
-++Microsoft.Common.CurrentVersion.targets
-++Microsoft.Managed.Core.CurrentVersions.targets
-++AnService_Capstone.csproj.user
-++Microsoft.NET.props
-++Microsoft.CodeAnalysis.targets
-++Microsoft.Xaml.targets
-++Microsoft.WorkflowBuildExtensions.targets
-++Microsoft.TeamTest.targets
-++NuGet.targets
-++Microsoft.Docker.ImportAfter.targets
-++Microsoft.NET.Build.Extensions.targets
-++Microsoft.NuGet.ImportAfter.targets
-++Microsoft.Web.ImportAfter.targets
-++Microsoft.Extensions.ApiDescription.Server.targets
-++Microsoft.Docker.targets
-++Microsoft.Web.IISSupport.targets
+i:{140387f8-3121-4d61-b0f9-5df7e58a2d09}:>610
+++UploadMedia.cs
+i:{dfeaff97-2626-43cf-b606-dc1b8a7ef0d0}:e:\capstone\api\anservice_capstone.core\models\request\uploadmedia.cs

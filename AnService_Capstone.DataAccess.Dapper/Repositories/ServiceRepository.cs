@@ -592,5 +592,39 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
                 return true;
             }
         }
+
+        public async Task<bool> UpdatePriceRequestServiceDetail(int id, float price)
+        {
+            var query = "update tblRequestDetails set RequestDetailPrice = @RequestDetailPrice where RequestDetailID = @RequestDetailID";
+
+            using (var connection = _context.CreateConnection())
+            {
+                connection.Open();
+                var res = await connection.ExecuteAsync(query, new { @RequestDetailPrice = price, @RequestDetailID = id });
+                connection.Close();
+                if (res == 0)
+                {
+                    return false;
+                }
+                return true;
+            }
+        }
+
+        public async Task<bool> UpdateStatusRequestService(int id, int status)
+        {
+            var query = "update tblRequestServices set RequestServiceStatus = @RequestServiceStatus where RequestServiceID = @RequestServiceID";
+
+            using (var connection = _context.CreateConnection())
+            {
+                connection.Open();
+                var res = await connection.ExecuteAsync(query, new { @RequestServiceStatus = status, @RequestServiceID = id });
+                connection.Close();
+                if (res == 0)
+                {
+                    return false;
+                }
+                return true;
+            }
+        }
     }
 }
