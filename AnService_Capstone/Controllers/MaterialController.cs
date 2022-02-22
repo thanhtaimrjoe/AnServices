@@ -94,11 +94,12 @@ namespace AnService_Capstone.Controllers
             }
 
             var result = await _materialReposiory.GetAllMaterialByRequestServiceID(id);
-            if (result != null)
+            /*if (result != null)
             {
                 return Ok(result);
             }
-            return NotFound(new ErrorResponse("No Record"));
+            return NotFound(new ErrorResponse("No Record"));*/
+            return Ok(result);
         }
 
         /// <summary>
@@ -183,21 +184,21 @@ namespace AnService_Capstone.Controllers
         /// update số lượng vật liệu của request theo id, message thông báo cập nhật lại số lượng, status approve
         /// </summary>
         /// <param name="id">usermaterialid</param>
-        /// <param name="quantity">số lượng mới</param>
+        /// <param name="quantityNew">số lượng mới</param>
         /// <param name="message"></param>
         /// <returns></returns>
         [HttpPut]
         [Route("[action]")]
-        public async Task<IActionResult> UpdateRequestMaterial(int id, int quantity, string message)
+        public async Task<IActionResult> UpdateRequestMaterial(int id, int quantityNew, string message)
         {
             if (id == 0)
             {
                 return BadRequest(new ErrorResponse("Please enter id"));
             }
 
-            if (quantity == 0)
+            if (quantityNew == 0)
             {
-                return BadRequest(new ErrorResponse("Please enter quantity > 0"));
+                return BadRequest(new ErrorResponse("Please enter quantityNew > 0"));
             }
 
             if (message == null)
@@ -205,12 +206,34 @@ namespace AnService_Capstone.Controllers
                 return BadRequest(new ErrorResponse("Please enter the reason that you deny this request"));
             }
 
-            var result = await _materialReposiory.UpdateRequestMaterial(id, quantity, message);
+            var result = await _materialReposiory.UpdateRequestMaterial(id, quantityNew, message);
             if (result)
             {
                 return Ok("Update Successfull");
             }
             return BadRequest(new ErrorResponse("Update Fail"));
+        }
+
+        /// <summary>
+        /// cancel yêu cầu vật liệu
+        /// </summary>
+        /// <param name="id">usermaterialid</param>
+        /// <returns></returns>
+        [HttpDelete]
+        [Route("[action]")]
+        public async Task<IActionResult> CancelRequestMaterial(int id)
+        {
+            if (id == 0)
+            {
+                return BadRequest(new ErrorResponse("Please enter id"));
+            }
+            
+            var res = await _materialReposiory.CacelRequestMaterial(id);
+            if (res)
+            {
+                return Ok("Cancel Successfull");
+            }
+            return BadRequest(new ErrorResponse("Cancel Fail"));
         }
 
         /// <summary>

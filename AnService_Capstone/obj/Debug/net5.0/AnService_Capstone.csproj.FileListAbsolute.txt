@@ -299,3 +299,6 @@ E:\Capstone\API_Thuong\AnService_Capstone\obj\Debug\net5.0\AnService_Capstone.xm
 E:\Capstone\API_Thuong\AnService_Capstone\obj\Debug\net5.0\AnService_Capstone.pdb
 E:\Capstone\API_Thuong\AnService_Capstone\obj\Debug\net5.0\AnService_Capstone.genruntimeconfig.cache
 E:\Capstone\API\AnService_Capstone\bin\Debug\net5.0\AnService_Capstone.StaticWebAssets.xml
+E:\Capstone\API\AnService_Capstone\bin\Debug\net5.0\Firebase.Auth.dll
+E:\Capstone\API\AnService_Capstone\bin\Debug\net5.0\Firebase.Storage.dll
+E:\Capstone\API\AnService_Capstone\bin\Debug\net5.0\System.ServiceModel.dll

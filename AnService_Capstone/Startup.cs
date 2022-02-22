@@ -2,6 +2,7 @@ using AnService_Capstone.Core.Interfaces;
 using AnService_Capstone.DataAccess.Dapper.Context;
 using AnService_Capstone.DataAccess.Dapper.Customize;
 using AnService_Capstone.DataAccess.Dapper.Repositories;
+using AnService_Capstone.DataAccess.Dapper.Services.Firebase;
 using AnService_Capstone.DataAccess.Dapper.Services.SendSMS;
 using AnService_Capstone.DataAccess.Dapper.TokenGenerator;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -112,8 +113,9 @@ namespace AnService_Capstone
 
             services.AddScoped<AccessTokenGenerator>();
             services.AddScoped<RefreshTokenGenerator>();
-            services.AddScoped<OTPGenerator>();
+            services.AddScoped<UtilHelper>();
             services.AddScoped<TwilioService>();
+            services.AddScoped<FirebaseService>();
 
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IServiceRepository, ServiceRepository>();

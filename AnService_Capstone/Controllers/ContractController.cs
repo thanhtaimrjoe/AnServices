@@ -1,7 +1,12 @@
 ﻿using AnService_Capstone.Core.Interfaces;
 using AnService_Capstone.Core.Models.Response;
+using AnService_Capstone.DataAccess.Dapper.Services.Firebase;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace AnService_Capstone.Controllers
@@ -11,10 +16,12 @@ namespace AnService_Capstone.Controllers
     public class ContractController : ControllerBase
     {
         private readonly IContractRepository _contractRepository;
+        private readonly FirebaseService _firebaseService;
 
-        public ContractController(IContractRepository contractRepository)
+        public ContractController(IContractRepository contractRepository, FirebaseService firebaseService)
         {
             _contractRepository = contractRepository;
+            _firebaseService = firebaseService;
         }
 
         [HttpGet]
@@ -179,6 +186,14 @@ namespace AnService_Capstone.Controllers
                 return Ok("Create successfull");
             }
             return BadRequest(new ErrorResponse("Create fail"));
+        }
+
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> Test(IFormFile stream, string fileName)
+        {
+            var res = await _firebaseService.Upload(stream.OpenReadStream(), fileName);
+            return Ok(res);
         }
     }
 }

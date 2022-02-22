@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AnService_Capstone.DataAccess.Dapper.Customize
 {
-    public class OTPGenerator
+    public class UtilHelper
     {
         public string GeneratorOTP()
         {

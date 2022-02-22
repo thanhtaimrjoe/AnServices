@@ -26,12 +26,12 @@ namespace AnService_Capstone.Controllers
         private readonly AccessTokenGenerator _accessTokenGenerator;
         private readonly RefreshTokenGenerator _refreshTokenGenerator;
         private readonly ITwilioRestClient _client;
-        private readonly OTPGenerator _otpGenerator;
+        private readonly UtilHelper _otpGenerator;
         private readonly IPromotionRepository _promotionRepository;
         private readonly TwilioService _twilioService;
 
         public UserController(IUserRepository userRepository, AccessTokenGenerator accessTokenGenerator, 
-            RefreshTokenGenerator refreshTokenGenerator, ITwilioRestClient client, OTPGenerator otpGenerator,
+            RefreshTokenGenerator refreshTokenGenerator, ITwilioRestClient client, UtilHelper otpGenerator,
             IPromotionRepository promotionRepository, TwilioService twilioService)
         {
             _userRepository = userRepository;

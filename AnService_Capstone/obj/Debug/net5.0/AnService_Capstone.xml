@@ -98,8 +98,15 @@
             update số lượng vật liệu của request theo id, message thông báo cập nhật lại số lượng, status approve
             </summary>
             <param name="id">usermaterialid</param>
-            <param name="quantity">số lượng mới</param>
+            <param name="quantityNew">số lượng mới</param>
             <param name="message"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AnService_Capstone.Controllers.MaterialController.CancelRequestMaterial(System.Int32)">
+            <summary>
+            cancel yêu cầu vật liệu
+            </summary>
+            <param name="id">usermaterialid</param>
             <returns></returns>
         </member>
         <member name="M:AnService_Capstone.Controllers.MaterialController.GetAllMaterial">
