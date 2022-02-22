@@ -1,0 +1,86 @@
+@import "callout";
+@import 'e-commerce';
+@import "pricing-tables";
+@import "login";
+@import "dashboard";
+@import "error";
+@import "editor";
+@import "testimonials";
+
+
+tr:nth-child(odd){
+    background:inherit !important;
+}
+.ant-modal-content {
+    .ant-modal-close{
+        color: #fff !important;
+    }
+    .ant-modal-header {
+        background-color: #000000;
+        .ant-modal-title {
+            color: #fff !important;
+        }
+    }
+}
+
+.table-wrapper {
+    .ant-btn {
+        padding: 0 10px;
+        height: 30px;
+        font-size: 13px;
+        > .anticon {
+             + span {
+                margin-left: 5px;
+             }
+            } 
+        &.ant-btn-success {
+            color: #3d8918;
+            border-color: #d9d9d9;
+            &:hover {
+                background-color:#3d8918;
+                color: #fff;
+            }
+        }
+        &.ant-btn-danger {
+            color: #c70d17;
+            background-color:#fff;
+            &:hover{
+                background-color:#c70d17;
+                color: #fff;
+            }
+        }
+    }
+    .actions {
+       text-align: right;
+       .ant-input {
+          border-radius: 2px;
+          padding:0 10px;
+          font-size: 13px;
+          height: 30px;
+       }
+    }
+    .table-layout {
+        .ant-table-small{
+            > .ant-table-content{
+                > .ant-table-body {
+                    margin: 0 !important;
+                    > table {
+                        > .ant-table-tbody{
+                            > tr{
+                                > td{
+                                    padding: 2px 8px !important;
+                                    font-size: 13px !important; 
+                                    text-align:center;
+                                    min-width: 80px;
+                                    .ant-btn {
+                                        width:100px;
+                                    }
+                                 }
+                            } 
+                        }
+                    }   
+                }
+            }
+        }
+    }
+}
