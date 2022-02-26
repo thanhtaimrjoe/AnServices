@@ -40,5 +40,7 @@ namespace AnService_Capstone.Core.Interfaces
         public Task<bool> CreateAccountMason(CreateMason mason);
 
         public Task<UserViewModel> GetCustomerByID(int id);
+
+        public Task<bool> UpdateStatusUserByID(int id, int status);
     }
 }

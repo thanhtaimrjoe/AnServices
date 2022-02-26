@@ -637,7 +637,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             using (var connection = _context.CreateConnection())
             {
                 connection.Open();
-                var res = await connection.QueryAsync(query, new { @CustomerID = id, @RequestServiceCreateDate = DateTime.Now });
+                var res = await connection.QueryAsync(query, new { @CustomerID = id, @RequestServiceCreateDate = DateTime.Today.ToString("d") });
                 connection.Close();
                 if (res.Count() < 3)
                 {

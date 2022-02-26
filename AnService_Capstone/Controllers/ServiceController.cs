@@ -2,6 +2,7 @@
 using AnService_Capstone.Core.Interfaces;
 using AnService_Capstone.Core.Models.Request;
 using AnService_Capstone.Core.Models.Response;
+using AnService_Capstone.DataAccess.Dapper.Customize;
 using AnService_Capstone.DataAccess.Dapper.Services.Firebase;
 using AnService_Capstone.DataAccess.Dapper.Services.SendSMS;
 using Microsoft.AspNetCore.Authorization;
@@ -21,13 +22,15 @@ namespace AnService_Capstone.Controllers
         private readonly TwilioService _twilioService;
         private readonly IUserRepository _userRepository;
         private readonly FirebaseService _firebaseService;
+        private readonly UtilHelper _utilHelper;
         public ServiceController(IServiceRepository serviceRepository, TwilioService twilioService, IUserRepository userRepository,
-            FirebaseService firebaseService)
+            FirebaseService firebaseService, UtilHelper utilHelper)
         {
             _serviceRepository = serviceRepository;
             _twilioService = twilioService;
             _userRepository = userRepository;
             _firebaseService = firebaseService;
+            _utilHelper = utilHelper;
         }
 
         /*/// <summary>
@@ -97,7 +100,9 @@ namespace AnService_Capstone.Controllers
                 if (!check)
                 {
                     var user = await _userRepository.GetCustomerByID(model.CustomerId);
-                    _twilioService.SendSMS(user.PhoneNumber, "Your account has been blocked because you have submitted more than 3 service requests. ");
+                    var formatPhone = _utilHelper.FormatPhoneNumber(user.PhoneNumber);
+                    _twilioService.SendSMS(formatPhone, "Your account has been blocked because you have submitted more than 3 service requests. ");
+                    _ = _userRepository.UpdateStatusUserByID(model.CustomerId, 10);
                 }
                 return Ok("Create Successfull");
             }
@@ -253,6 +258,12 @@ namespace AnService_Capstone.Controllers
             {
                 return BadRequest();
             }
+            /*var result = await _serviceRepository.AssignMasonToRequest(workerIDPri);*/
+
+            /*foreach (var worker in job.MasonList)
+            {
+                var result = await _serviceRepository.AssignMasonToRequest(worker);
+            }*/
 
             var result = await _serviceRepository.AssignMasonToRequest(job);
             var update = await _serviceRepository.UpdateStatusRequestServiceDetail(job.RequestDetailId, 6);

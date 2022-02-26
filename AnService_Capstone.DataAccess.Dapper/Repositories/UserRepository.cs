@@ -331,5 +331,21 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
                 return res.FirstOrDefault();
             }
         }
+
+        public async Task<bool> UpdateStatusUserByID(int id, int status)
+        {
+            var query = "update tblUsers set Status = @Status where UserID = @UserID";
+
+            using (var connections = _context.CreateConnection())
+            {
+                connections.Open();
+                var res = await connections.ExecuteAsync(query, new { @Status = status, @UserID = id });
+                if (res == 0)
+                {
+                    return false;
+                }
+                return true;
+            }
+        }
     }
 }
