@@ -127,8 +127,8 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
 
         public async Task<int> CreateRequestService(CreateService model)
         {
-            var query = "INSERT INTO tblRequestServices(CustomerID, CustomerName, CustomerPhone, CustomerAddress, RequestServiceDescription, RequestServiceStatus, RequestServiceCreateDate) " +
-                "VALUES (@CustomerID, @CustomerName, @CustomerPhone, @CustomerAddress, @RequestServiceDescription, 2, @RequestServiceCreateDate) " +
+            var query = "INSERT INTO tblRequestServices(CustomerID, CustomerName, CustomerPhone, CustomerAddress, RequestServiceDescription, RequestServiceStatus, RequestServiceCreateDate, RequestServicePackage) " +
+                "VALUES (@CustomerID, @CustomerName, @CustomerPhone, @CustomerAddress, @RequestServiceDescription, 2, @RequestServiceCreateDate, @RequestServicePackage) " +
                 "SELECT CAST(SCOPE_IDENTITY() as int)";
 
             var parameters = new DynamicParameters();
@@ -138,6 +138,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             parameters.Add("CustomerAddress", model.CustomerAddress, DbType.String);
             parameters.Add("RequestServiceDescription", model.RequestServiceDescription, DbType.String);
             parameters.Add("RequestServiceCreateDate", DateTime.Now, DbType.DateTime);
+            parameters.Add("RequestServicePackage", model.RequestServicePackage, DbType.Int32);
 
             using (var connection = _context.CreateConnection())
             {
@@ -624,6 +625,25 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
                     return false;
                 }
                 return true;
+            }
+        }
+
+        public async Task<bool> CheckRequestServiceByUserIDOfTheDay(int id)
+        {
+            var query = "select RequestServiceID, CustomerID, CustomerName, CustomerPhone, CustomerAddress, RequestServiceDescription, RequestServiceCreateDate, RequestServicePackage " +
+                "from tblRequestServices " +
+                "where CustomerID = @CustomerID and RequestServiceCreateDate = @RequestServiceCreateDate";
+
+            using (var connection = _context.CreateConnection())
+            {
+                connection.Open();
+                var res = await connection.QueryAsync(query, new { @CustomerID = id, @RequestServiceCreateDate = DateTime.Now });
+                connection.Close();
+                if (res.Count() < 3)
+                {
+                    return true;
+                }
+                return false;
             }
         }
     }

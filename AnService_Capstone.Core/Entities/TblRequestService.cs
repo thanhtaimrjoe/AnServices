@@ -22,6 +22,7 @@ namespace AnService_Capstone.Core.Entities
         public string RequestServiceDescription { get; set; }
         public int? RequestServiceStatus { get; set; }
         public DateTime? RequestServiceCreateDate { get; set; }
+        public int? RequestServicePackage { get; set; }
 
         public virtual TblUser Customer { get; set; }
         public virtual TblStatus RequestServiceStatusNavigation { get; set; }

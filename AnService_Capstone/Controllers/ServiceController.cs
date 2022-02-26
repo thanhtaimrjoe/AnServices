@@ -2,6 +2,8 @@
 using AnService_Capstone.Core.Interfaces;
 using AnService_Capstone.Core.Models.Request;
 using AnService_Capstone.Core.Models.Response;
+using AnService_Capstone.DataAccess.Dapper.Services.Firebase;
+using AnService_Capstone.DataAccess.Dapper.Services.SendSMS;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -16,9 +18,16 @@ namespace AnService_Capstone.Controllers
     public class ServiceController : ControllerBase
     {
         private readonly IServiceRepository _serviceRepository;
-        public ServiceController(IServiceRepository serviceRepository)
+        private readonly TwilioService _twilioService;
+        private readonly IUserRepository _userRepository;
+        private readonly FirebaseService _firebaseService;
+        public ServiceController(IServiceRepository serviceRepository, TwilioService twilioService, IUserRepository userRepository,
+            FirebaseService firebaseService)
         {
             _serviceRepository = serviceRepository;
+            _twilioService = twilioService;
+            _userRepository = userRepository;
+            _firebaseService = firebaseService;
         }
 
         /*/// <summary>
@@ -56,7 +65,7 @@ namespace AnService_Capstone.Controllers
 
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> CreateRequestService([FromBody] CreateService model)
+        public async Task<IActionResult> CreateRequestService([FromForm] CreateService model)
         {
             if (!ModelState.IsValid)
             {
@@ -66,17 +75,30 @@ namespace AnService_Capstone.Controllers
             bool serviceDetail = false;
             bool media = false;
 
+            List<string> stringFile = new List<string>();
+            foreach (var file in model.File)
+            {
+                string res = await _firebaseService.Upload(file.OpenReadStream(), file.FileName, "RequestServices");
+                stringFile.Add(res);
+            }
+
             var reqService = await _serviceRepository.CreateRequestService(model);
             foreach (var serviceItem in model.ServiceList)
             {
                 serviceDetail = await _serviceRepository.CreateRequestDetai(reqService, serviceItem);
             }
-            foreach (var mediaItem in model.MediaList)
+            foreach (var mediaItem in stringFile)
             {
                 media = await _serviceRepository.CreateMedia(reqService, mediaItem);
             }
             if (serviceDetail != false && media != false)
             {
+                var check = await _serviceRepository.CheckRequestServiceByUserIDOfTheDay(model.CustomerId);
+                if (!check)
+                {
+                    var user = await _userRepository.GetCustomerByID(model.CustomerId);
+                    _twilioService.SendSMS(user.PhoneNumber, "Your account has been blocked because you have submitted more than 3 service requests. ");
+                }
                 return Ok("Create Successfull");
             }
             return BadRequest(new ErrorResponse("Create Fail"));

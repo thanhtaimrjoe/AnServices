@@ -8,6 +8,7 @@ using Twilio;
 using Twilio.Clients;
 using Twilio.Http;
 using Twilio.Rest.Api.V2010.Account;
+using Twilio.Types;
 
 namespace AnService_Capstone.DataAccess.Dapper.Services.SendSMS
 {
@@ -36,6 +37,15 @@ namespace AnService_Capstone.DataAccess.Dapper.Services.SendSMS
             );
 
             return validationRequest.ValidationCode;
+        }
+
+        public void SendSMS(string phone, string msg)
+        {
+            var message = MessageResource.Create(
+                to: new PhoneNumber(phone),
+                from: new PhoneNumber("+17752695428"),
+                body: msg,
+                client: _innerClient);
         }
 
         public Response Request(Request request) => _innerClient.Request(request);

@@ -314,5 +314,22 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
                 return res;
             }
         }
+
+        public async Task<UserViewModel> GetCustomerByID(int id)
+        {
+            var query = "select UserID, FullName, PhoneNumber, Address, Email, InviteCode, CreateDate, Status " +
+                "from tblUsers " +
+                "where Role = 3 and UserID = @UserID";
+            using (var connections = _context.CreateConnection())
+            {
+                connections.Open();
+                var res = await connections.QueryAsync<UserViewModel>(query, new { @UserID = id});
+                if (!res.Any())
+                {
+                    return null;
+                }
+                return res.FirstOrDefault();
+            }
+        }
     }
 }

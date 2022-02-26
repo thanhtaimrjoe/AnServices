@@ -38,5 +38,7 @@ namespace AnService_Capstone.Core.Interfaces
         /*public Task<bool> ChangeMasonPhoneNumber();*/
 
         public Task<bool> CreateAccountMason(CreateMason mason);
+
+        public Task<UserViewModel> GetCustomerByID(int id);
     }
 }

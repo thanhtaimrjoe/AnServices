@@ -25,19 +25,17 @@ namespace AnService_Capstone.Controllers
         private readonly IUserRepository _userRepository;
         private readonly AccessTokenGenerator _accessTokenGenerator;
         private readonly RefreshTokenGenerator _refreshTokenGenerator;
-        private readonly ITwilioRestClient _client;
         private readonly UtilHelper _otpGenerator;
         private readonly IPromotionRepository _promotionRepository;
         private readonly TwilioService _twilioService;
 
         public UserController(IUserRepository userRepository, AccessTokenGenerator accessTokenGenerator, 
-            RefreshTokenGenerator refreshTokenGenerator, ITwilioRestClient client, UtilHelper otpGenerator,
+            RefreshTokenGenerator refreshTokenGenerator, UtilHelper otpGenerator,
             IPromotionRepository promotionRepository, TwilioService twilioService)
         {
             _userRepository = userRepository;
             _accessTokenGenerator = accessTokenGenerator;
             _refreshTokenGenerator = refreshTokenGenerator;
-            _client = client;
             _otpGenerator = otpGenerator;
             _promotionRepository = promotionRepository;
             _twilioService = twilioService;
@@ -111,11 +109,12 @@ namespace AnService_Capstone.Controllers
         public IActionResult SendSms([FromBody] SmsMessage model)
         {
             var code = _otpGenerator.GeneratorOTP();
-            var message = MessageResource.Create(
+            /*var message = MessageResource.Create(
                 to: new PhoneNumber(model.To),
                 from: new PhoneNumber("+17752695428"),
                 body: "Your OTP: " + code,
-                client: _client); // pass in the custom client
+                client: _client); // pass in the custom client*/
+            _twilioService.SendSMS(model.To, "Your OTP: " + code);
             return Ok(code);
         }
 
@@ -300,12 +299,12 @@ namespace AnService_Capstone.Controllers
                 return BadRequest();
             }
 
-            var check = await _userRepository.CheckPhoneNumberExist(mason.MasonPhoneNumber);
+           /* var check = await _userRepository.CheckPhoneNumberExist(mason.MasonPhoneNumber);
 
             if (check != null)
             {
                 return BadRequest(new ErrorResponse("Phone number is existed"));
-            }
+            }*/
 
             var res = await _userRepository.UpdateMason(mason);
 

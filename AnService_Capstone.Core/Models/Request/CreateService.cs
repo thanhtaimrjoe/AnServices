@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -19,10 +20,12 @@ namespace AnService_Capstone.Core.Models.Request
         [Required(ErrorMessage = "Cant be blank")]
         public string CustomerAddress { get; set; }
         [Required]
+        [Range(1, 2, ErrorMessage = "Please enter Request Service Package (1 or 2)")]
+        public int RequestServicePackage { get; set; }
+        [Required]
         public IEnumerable<int> ServiceList { get; set; }
         [Required]
         public string RequestServiceDescription { get; set; }
-        [Required]
-        public IEnumerable<string> MediaList { get; set; }
+        public List<IFormFile> File { get; set; }
     }
 }

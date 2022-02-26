@@ -140,10 +140,6 @@ namespace AnService_Capstone.Controllers
         /// <summary>
         /// tạo contract
         /// </summary>
-        /// <param name="id">của user đăng ký request</param>
-        /// <param name="name">của user được đăng ký request</param>
-        /// <param name="url">của contract</param>
-        /// /// <param name="requestID">của request service</param>
         /// <returns></returns>
         [HttpPost]
         [Route("[action]")]

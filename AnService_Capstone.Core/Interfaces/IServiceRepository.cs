@@ -27,6 +27,8 @@ namespace AnService_Capstone.Core.Interfaces
 
         public Task<IEnumerable<RequestService>> GetAllRequestServiceByUserID(int id);
 
+        public Task<bool> CheckRequestServiceByUserIDOfTheDay(int id);
+
         public Task<IEnumerable<TblService>> GetAllService();
 
         public Task<IEnumerable<TblService>> GetServiceByName(string name);

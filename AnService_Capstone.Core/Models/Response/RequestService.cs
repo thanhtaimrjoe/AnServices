@@ -18,6 +18,7 @@ namespace AnService_Capstone.Core.Models.Response
         public string RequestServiceDescription { get; set; }
         public TblStatus RequestServiceStatus { get; set; }
         public DateTime? RequestServiceCreateDate { get; set; }
+        public int RequestServicePackage { get; set; }
         public List<TblMedium> Media { get; set; }
     }
 }
