@@ -5,7 +5,7 @@ import { Input, Row, Col } from 'antd';
 import ProForm from '@ant-design/pro-form';
 import CommonSelect from '@/components/CommonSelect/CommonSelect';
 
-const BasicStep = ({ createDate, typeJobName, typeJobId }) => {
+const BasicStep = ({ typeJobName, typeJobId }) => {
   return (
     <div bordered={false} style={{ width: '200%', marginBottom: '4em' }}>
       <div bordered={false} style={{ width: '100%', marginBottom: '2em' }}>
@@ -72,6 +72,7 @@ const BasicStep = ({ createDate, typeJobName, typeJobId }) => {
             // name="typeJobId"
             name={typeJobId}
             initialValue={typeJobName}
+            // defaultValue={typeJobName}
             label="Nhóm thợ"
             rules={[
               // {
@@ -85,7 +86,7 @@ const BasicStep = ({ createDate, typeJobName, typeJobId }) => {
               }
             ]}
           >
-            <CommonSelect.SelectMasonByTypeJob />
+            <CommonSelect.SelectWorkerByTypeJob />
           </ProForm.Item>
         </Col>
       </Row>

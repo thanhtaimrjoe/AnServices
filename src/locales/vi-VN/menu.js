@@ -11,12 +11,12 @@ export default {
   'menu.exception.404': '404',
   'menu.exception.500': '500',
 
-  // masons
-  'menu.masons': 'QUẢN LÝ THỢ',
-  'menu.masons.list': 'DANH SÁCH THỢ',  
-  'menu.masons.create': 'THÊM MỚI THỢ',
-  'menu.masons.update': 'CẬP NHẬT THỢ',
-  'menu.masons.detail': 'CHI TIẾT',
+  // workers
+  'menu.workers': 'QUẢN LÝ THỢ',
+  'menu.workers.list': 'DANH SÁCH THỢ',  
+  'menu.workers.create': 'THÊM MỚI THỢ',
+  'menu.workers.update': 'CẬP NHẬT THỢ',
+  'menu.workers.detail': 'CHI TIẾT',
 
   // requestservices
   'menu.requestservices': 'QUẢN LÝ YÊU CẦU DỊCH VỤ',

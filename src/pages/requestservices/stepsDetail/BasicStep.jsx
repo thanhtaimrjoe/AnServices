@@ -6,7 +6,6 @@ import ProForm from '@ant-design/pro-form';
 import { getRequestServiceByID } from '@/services/requestservices';
 import { Content } from 'antd/lib/layout/layout';
 import ProCard from '@ant-design/pro-card';
-// import { getCampaignById } from '@/services/campaigns';
 
 const BasicStep = ({ customerName, userID, fullName, phoneNumber, address, 
   serviceName, serviceDescription, servicePrice, 
@@ -25,15 +24,6 @@ const BasicStep = ({ customerName, userID, fullName, phoneNumber, address,
   return (
     <div bordered={false} style={{ width: '200%', marginBottom: '4em' }}>
       <div bordered={false} style={{ width: '100%', marginBottom: '2em' }}>
-        {/* <Row gutter={16}> */}
-          {/* <Col span={12}>
-          <Image
-            width={150}
-            src={image}
-          >
-          </Image>
-        </Col> */}
-        {/* </Row> */}
         {/* <Row gutter={16}>
           <Col span={12}>
             <ProForm.Item 

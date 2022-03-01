@@ -62,7 +62,7 @@ const BasicStep = ({ createDate, typeJobName }) => {
             label="Nhóm thợ"
           >
             <Input readOnly placeholder="Không có" />
-            {/* <CommonSelect.SelectMasonTypeJob disabled/> */}
+            {/* <CommonSelect.SelectWorkerTypeJob disabled/> */}
           </ProForm.Item>
         </Col>
       </Row>

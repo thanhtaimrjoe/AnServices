@@ -73,7 +73,7 @@ const BasicStep = () => {
               },
             ]}
           >
-            <CommonSelect.SelectMasonByTypeJob />
+            <CommonSelect.SelectWorkerByTypeJob />
           </ProForm.Item>
         </Col>
       </Row>

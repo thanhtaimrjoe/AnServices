@@ -69,8 +69,8 @@ const BasicStep = () => {
         </Col>
         <Col span={12}>
           <ProForm.Item
-            name="linkBrand"
-            label="Link Brand"
+            name="site"
+            label="Your site"
             rules={[
               {
                 required: true,
@@ -131,12 +131,12 @@ const BasicStep = () => {
         </Col>
         <Col span={12}>
           <ProForm.Item
-            name="brandId"
-            label="Brand Name"
+            name=""
+            label=""
             rules={[
               {
                 required: true,
-                message: 'Please select brand',
+                message: 'Please select',
               }, {
                 pattern: '^[0-9]*$',
                 type: 'integer',
@@ -144,8 +144,8 @@ const BasicStep = () => {
               }
             ]}
           >
-            <CommonSelect.SelectBrandById
-            />
+            {/* <CommonSelect.SelectBrandById /> */}
+            <Input></Input>
           </ProForm.Item>
         </Col>
       </Row>
@@ -207,8 +207,8 @@ const BasicStep = () => {
         </Col>
         <Col span={12}>
           <ProForm.Item
-            name="campaignDecription"
-            label="Campaign Description"
+            name=""
+            label="Description"
           >
             <Input.TextArea rows={4} placeholder='Skip if no notes' />
           </ProForm.Item>

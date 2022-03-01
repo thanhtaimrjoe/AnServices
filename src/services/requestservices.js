@@ -16,15 +16,6 @@ export const updatePost = (PostId, prod) => {
   });
 };
 
-// export const updateBrand = (BrandId, prod) => {
-//   return request.put(
-//     `/brands/${BrandId}?id=${BrandId}&brand-name=${prod.brand_name}&brand-code=${prod.brand_code}`,
-//     {
-//       data: prod,
-//     },
-//   );
-// };
-
 export const createRequestService = (prod) => {
   return request.post(`/Service/CreateRequestService`, {
     data: prod.update,
@@ -57,8 +48,8 @@ export const getAllRequestService = (filters) => {
     return request.get(`/Service/GetAllRequestServiceDetailsByRequestServiceID?id=${requestServiceId}`);
   };
 
-  export const getAllRequestServiceByMasonID = (MasonID) => {
-    return request.get(`/Service/GetAllRequestServiceByMasonID${MasonID}`);
+  export const getAllRequestServiceByWorkerID = (id) => {
+    return request.get(`/Service/GetAllRequestServiceByWorkerID${id}`);
   };
 
   export const getRequestServiceDate = () => {
@@ -74,8 +65,8 @@ export const getAllRequestService = (filters) => {
 //   });
 // };
 
-export const AssignMasonToRequest = (prod) => {
-  return request.post(`/Service/AssignMasonToRequest`, {
+export const assignWorkerToRequest = (prod) => {
+  return request.post(`/Service/AssignWorkerToRequest`, {
     data: prod,
   });
 };

@@ -80,7 +80,7 @@ const CreateRequestService = (props) => {
       >
         <Space style={{ width: '100%' }} direction="vertical">
           <ProCard bordered title="Thông tin yêu cầu">
-            <BasicStep campaignType={requestServiceType} onChangeProductType={setCreateRequestServiceType} />
+            <BasicStep requestServiceType={requestServiceType} onChangerequestServiceType={setCreateRequestServiceType} />
           </ProCard>
         </Space>
       </ProForm>

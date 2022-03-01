@@ -2,46 +2,49 @@
 import React, { useEffect, useState } from 'react';
 import { FooterToolbar, PageContainer } from '@ant-design/pro-layout';
 import { Card, Form, Typography, Row, Empty } from 'antd';
-import { getBrandById, updateBrand } from '@/services/brands';
+// import { updateReportAttribute } from '@/services/reportattribute';
 import AsyncButton from '@/components/AsyncButton';
 import { useHistory } from 'umi';
-import BasicStep from './stepsUpdate/BasicStep';
+import BasicStep from './stepsDetail/BasicStep';
+import { getWorkerById } from '@/services/workers';
+import moment from 'moment';
 
 import { normalizeReportForm } from '@/utils/utils';
+import { RollbackOutlined } from '@ant-design/icons';
 
-const UpdateBrand = (props) => {
+const DetailWorker = (props) => {
   const {
     history: {
-      location: { state: updateBrandState },
+      location: { state: updateWorkerState },
     },
   } = props;
 
   const [form] = Form.useForm();
   const history = useHistory();
-  const [formData, setFormData] = useState(updateBrandState);
-  const [Image, setImage] = useState();
-  const [Industry, setIndustry] = useState();
-
+  const [formData, setFormData] = useState(updateWorkerState);
   const [currentStep, setCurrentStep] = useState(0);
+
+  const [requestMaterialCreateDate, setRequestaterialCreateDate] = useState();
+  const [typeJob, setTypeJob] = useState();
+
 
   const steps = [
     {
-      title: 'Main information',
-      content: () => <BasicStep image={Image} industryId={Industry}/>,
+      title: 'Thông tin chính của thợ',
+      content: () => <BasicStep createDate={requestMaterialCreateDate} typeJobName={typeJob} />,
     },
   ];
 
   useEffect(() => {
-    // form.setFieldsValue(updateBrandState);
-    getBrandById(updateBrandState.id).then((res) => {
-      setFormData(res);
-      setImage(res.image);
-      setIndustry(res.industryId);
-      // console.log("abc123", res.industryId)
+    // form.setFieldsValue(updateWorkerState);
+    getWorkerById(updateWorkerState.userID).then((res) => {
+      setTypeJob(res.typeJob.typeJobName);
+      setRequestaterialCreateDate(res.createDate.split('T',1));
+      setRequestaterialCreateDate(moment(res.requestServiceCreateDate).format('DD/MM/YYYY'));
     });
   }, []);
 
-  if (updateBrandState == null) {
+  if (updateWorkerState == null) {
     return (
       <PageContainer>
         <Empty />
@@ -49,17 +52,14 @@ const UpdateBrand = (props) => {
     );
   }
 
-  const onUpdateBrand = () => {
-    const update = normalizeReportForm(formData);
-    return updateBrand(updateBrandState.id, update).then(() =>
-      history.replace('/brands/list'),
-    );
+  const onBackList = () => {
+      history.replace('/workers/list')
   };
   return (
     <PageContainer>
       <Form
-        onFinish={onUpdateBrand}
-        initialValues={updateBrandState}
+        onFinish={onBackList}
+        initialValues={updateWorkerState}
         colon
         form={form}
         name="reportInfo"
@@ -74,7 +74,7 @@ const UpdateBrand = (props) => {
           </Row>
           <Row style={{ width: '100%' }}>{steps[currentStep].content()}</Row>
           <FooterToolbar>
-            <AsyncButton title="Update" btnProps={{ type: 'primary' }} onClick={onUpdateBrand} />
+            <AsyncButton title="Trở về" btnProps={{ type: 'default', icon: <RollbackOutlined /> }} onClick={onBackList}  />
           </FooterToolbar>
         </Card>
       </Form>
@@ -82,4 +82,4 @@ const UpdateBrand = (props) => {
   );
 };
 
-export default UpdateBrand;
+export default DetailWorker;

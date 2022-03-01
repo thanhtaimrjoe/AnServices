@@ -6,10 +6,10 @@ import React, { useRef, useState } from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
 import AsyncButton from '@/components/AsyncButton';
 import ResoTable from '@/components/ResoTable/ResoTable';
-import { MASONS } from '@/utils/constrains';
-import { removeMason } from '@/services/masons';
+import { WORKERS } from '@/utils/constrains';
+import { removeWorker } from '@/services/workers';
 
-const MasonList = ({ history }) => {
+const WorkerList = ({ history }) => {
   const ref = useRef();
   const [selectedRows, setSelectedRows] = useState([]);
   const [currentRow, setCurrentRow] = useState();
@@ -20,12 +20,12 @@ const MasonList = ({ history }) => {
     type: 'select',
     
   };
-  const addMason = () => {
-    history.push(`/masons/create`);
+  const addWorker = () => {
+    history.push(`/workers/create`);
   };
 
-  const deleteMasonHandler = () => {
-    return removeMason(selectedRows[0]).then((res) => {ref.current?.reload()
+  const deleteWorkerHandler = () => {
+    return removeWorker(selectedRows[0]).then((res) => {ref.current?.reload()
       console.log("test1", res);
     });
   };
@@ -44,20 +44,20 @@ const MasonList = ({ history }) => {
                 cancelText: 'Huỷ',
               }}
               btnProps={{ danger: true, type: 'link' }}
-              onClick={() => deleteMasonHandler().then(onCleanSelected)}
+              onClick={() => deleteWorkerHandler().then(onCleanSelected)}
               title={`Xoá ${selectedRows.length} thợ`}
              />,
           ]}
           toolBarRender={() => [
-            <Button type="primary" onClick={addMason} icon={<PlusOutlined />}>
+            <Button type="primary" onClick={addWorker} icon={<PlusOutlined />}>
               Tạo thợ mới
             </Button>,
           ]}
           rowSelection={rowSelection}
           actionRef={ref}
           rowKey="userID"
-          columns={MASONS}
-          resource="User/GetAllMason"
+          columns={WORKERS}
+          resource="User/GetAllWorker"
         />
       </Card>
       <Drawer
@@ -74,4 +74,4 @@ const MasonList = ({ history }) => {
   );
 };
 
-export default MasonList;
+export default WorkerList;

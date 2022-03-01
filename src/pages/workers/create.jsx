@@ -6,11 +6,11 @@ import { useHistory } from 'umi';
 import { normalizeReportForm } from '@/utils/utils';
 import ProForm from '@ant-design/pro-form';
 import ProCard from '@ant-design/pro-card';
-import { createMason } from '@/services/masons';
+import { createWorker } from '@/services/workers';
 import AsyncButton from '@/components/AsyncButton';
 import { RollbackOutlined } from '@ant-design/icons';
 
-const CreateMason = (props) => {
+const CreateWorker = (props) => {
   const {
     history: {
       location: {
@@ -21,29 +21,29 @@ const CreateMason = (props) => {
 
   const [form] = Form.useForm();
   const history = useHistory();
-  const [masonType, setMasonType] = useState(+type);
-  const [createdMason, setCreatedMason] = useState(null);
+  const [workerType, setWorkerType] = useState(+type);
+  const [createdWorker, setCreatedWorker] = useState(null);
 
   useEffect(() => {
     form.setFieldsValue({ product_type_id: +type });
   }, []);
 
-  const onCreateMason = (values) => {
-    const createMasonData = normalizeReportForm(values);
-    return createMason(createMasonData).then((res) => {
+  const onCreateWorker = (values) => {
+    const createWorkerData = normalizeReportForm(values);
+    return createWorker(createWorkerData).then((res) => {
       console.log("test1", values);
       console.log("test111", res);
-      console.log("test12", createMasonData.update);
-      // setCreatedMason({ ...values, userID : res });
-      history.replace('/masons/list')
+      console.log("test12", createWorkerData.update);
+      // setCreatedWorker({ ...values, userID : res });
+      history.replace('/workers/list')
     });
   };
 
   const onBackList = () => {
-    history.replace('/masons/list')
+    history.replace('/workers/list')
 };
 
-  // if (createdMason !== null) {
+  // if (createdWorker !== null) {
   //   return (
   //     <ProCard>
   //       <Result
@@ -51,21 +51,21 @@ const CreateMason = (props) => {
   //         title="Tạo mới thợ thành công"
   //         subTitle={
   //           <Space direction="vertical">
-  //             <Typography level={5}>{`Thợ tên: ${createdMason.fullName}`}</Typography>
-  //             {/* <Typography level={5}>{`Số điện thoại: ${createdMason.phoneNumber}`}</Typography>
-  //             <Typography level={5}>{`Số điện thoại: ${createdMason.address}`}</Typography>
-  //             <Typography level={5}>{`Số điện thoại: ${createdMason.email}`}</Typography> */}
-  //             {/* <Typography level={5}>{`Số điện thoại: ${createdMason.typeJob.typeJobName}`}</Typography> */}
+  //             <Typography level={5}>{`Thợ tên: ${createdWorker.fullName}`}</Typography>
+  //             {/* <Typography level={5}>{`Số điện thoại: ${createdWorker.phoneNumber}`}</Typography>
+  //             <Typography level={5}>{`Số điện thoại: ${createdWorker.address}`}</Typography>
+  //             <Typography level={5}>{`Số điện thoại: ${createdWorker.email}`}</Typography> */}
+  //             {/* <Typography level={5}>{`Số điện thoại: ${createdWorker.typeJob.typeJobName}`}</Typography> */}
   //           </Space>
   //         }
   //         extra={[
-  //           // <Button key="buy" onClick={() => setCreatedMason(null)}>
+  //           // <Button key="buy" onClick={() => setCreatedWorker(null)}>
   //           //   Tiếp tục thêm thợ mới
   //           // </Button>,
   //           <Button
   //             type="primary"
   //             key="console"
-  //             onClick={() => history.replace('/masons/list')}
+  //             onClick={() => history.replace('/workers/list')}
   //           >
   //             Trở về danh sách thợ
   //           </Button>,
@@ -90,7 +90,7 @@ const CreateMason = (props) => {
             {/* <CheckOutlined /> */}
           </FooterToolbar>, 
         }}
-        onFinish={onCreateMason}
+        onFinish={onCreateWorker}
         colon
         form={form}
         name="createReportInfo"
@@ -98,7 +98,7 @@ const CreateMason = (props) => {
       >
         <Space style={{ width: '100%' }} direction="vertical">
           <ProCard bordered title="Thông tin thợ">
-            <BasicStep masonType={masonType} onChangeProductType={setMasonType}/>
+            <BasicStep workerType={workerType} onChangeProductType={setWorkerType}/>
           </ProCard>
         </Space>
       </ProForm>
@@ -106,5 +106,5 @@ const CreateMason = (props) => {
   );
 };
 
-export default CreateMason;
+export default CreateWorker;
 

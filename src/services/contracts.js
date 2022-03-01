@@ -1,12 +1,12 @@
 import request from '@/utils/request';
 
-export const createContract = (prod, id, name, url) => {
-    return request.post(`/Contract/CreateContract?id=${id}&name=${name}&url=${url}`, {
-      data: prod.update,
-    }); 
+export const createContract = (prop) => {
+    return request.post(`/Contract/CreateContract`, {
+      data: prop.update,
+    });
   };
 
-  export const updateBrand = (id, status, prod) => {
+  export const updateContract = (id, status, prod) => {
     return request.put(`/Contract/UpdateStatusContract?id=${id}&status=${status}`, {
       data: prod.update,
     });

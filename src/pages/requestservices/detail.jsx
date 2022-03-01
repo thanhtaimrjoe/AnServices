@@ -17,6 +17,10 @@ import {
   Upload,
   Space,
   InputNumber,
+  Avatar,
+  Tooltip,
+  Col,
+  DatePicker,
 } from 'antd';
 // import { updateReportAttribute } from '@/services/reportattribute';
 import AsyncButton from '@/components/AsyncButton';
@@ -26,7 +30,7 @@ import styles from './style.less';
 import moment from 'moment';
 import { normalizeReportForm } from '@/utils/utils';
 import {
-  AssignMasonToRequest,
+  assignWorkerToRequest,
   cancelRequestService,
   getAllRequestServiceDetailsByRequestServiceID,
   getRequestServiceByID,
@@ -39,13 +43,15 @@ import {
   getRequestMaterialByID,
   getAllMaterialByRequestServiceID,
 } from '@/services/requestmaterials';
-import { getAllMasons } from '@/services/masons';
+import { getAllWorkers } from '@/services/workers';
 import { getContractListByUserID } from '@/services/contracts';
-import ProForm, { ProFormTextArea } from '@ant-design/pro-form';
+import ProForm, { ProFormTextArea, ProFormDatePicker } from '@ant-design/pro-form';
 import ProTable from '@ant-design/pro-table';
-import { CloseOutlined, RollbackOutlined, UploadOutlined } from '@ant-design/icons';
+import { CheckOutlined, CloseOutlined, InfoCircleOutlined, LoadingOutlined, PlusOutlined, RollbackOutlined, UploadOutlined } from '@ant-design/icons';
 import Modal from 'antd/lib/modal/Modal';
 import { getAllReportByRequestServiceID } from '@/services/reports';
+import storage from '../firebase/firebase';
+import { createContract } from '@/services/contracts';
 
 const DetailRequestService = (props) => {
   const {
@@ -54,7 +60,6 @@ const DetailRequestService = (props) => {
     },
   } = props;
 
-  
   
   const [form] = Form.useForm();
   const history = useHistory();
@@ -69,15 +74,56 @@ const DetailRequestService = (props) => {
   const [serviceDescription, setServiceDescription] = useState();
   const [servicePrice, setServicePrice] = useState();
   const [requestServiceCreateDate, setRequestServiceCreateDate] = useState();
-
+  const [contractStartDateData, setContractStartDateData] = useState();
+  const [contractEndDateData, setContractEndDateData] = useState();
+  const [contractTotalPriceData, setContractTotalPriceData] = useState();
+  const [contractDepositData, setContractDepositData] = useState();
   const [visible, setVisible] = React.useState(false);
   const [confirmLoading, setConfirmLoading] = React.useState(false);
   const [isLoad, setIsLoad] = useState(false);
   const [staffCoordinator, setStaffCoordinator] = useState([]);
+  const [mainStaffCoordinator, setMainStaffCoordinator] = useState();
   const [visible1, setVisible1] = React.useState(false);
-  const sleep = (milliseconds) => {
-    return new Promise(resolve => setTimeout(resolve, milliseconds))
-  }
+  const { RangePicker } = DatePicker;
+  // const dateFormatList = ['DD-MM-YYYY', 'DD-MM-YY'];
+  const dateFormatList = ['DD-MM-YYYY', 'YY-MM-DD'];
+
+// ======================================
+  
+// Upload file to Firebase
+  const [file , setFile] = useState('');
+  const [Url, setUrl] = useState('');
+  const upload = ()=>{
+    const filesFormats = [".doc", ".docx", "application/pdf"];
+    console.log("clgfile", file);
+    const isRightFormat = filesFormats.includes(file.type);
+    console.log("clgformat", isRightFormat);
+    if (!isRightFormat) {
+      message.error("Bạn chỉ có thể tải lên file doc, docx và pdf");
+      return;
+    }
+    const isLt2M = file.size / 1024 / 1024 < 2;
+    if (!isLt2M) {
+      message.error("File phải nhỏ hơn 2MB!");
+      return;
+    }
+    if(file == null) {
+      message.error("Vui lòng chọn tệp khác");
+      return;
+    }
+    storage.ref(`/files/${file.name}`).put(file)
+    .on("state_changed", () => {
+  
+      // Getting Download Link
+      storage.ref("files").child(file.name).getDownloadURL()
+        .then((url) => {
+          setUrl(url);
+        })
+      });
+    message.success(`Tải ${file.name} lên thành công`)
+}
+// ======================================
+
   const steps = [
     {
       title: 'Thông tin chung',
@@ -123,13 +169,18 @@ const DetailRequestService = (props) => {
   }, []);
 
   const [requestMaterialRecord, setRequestMaterialRecord] = useState([]);
-  const [masonRecord, setMasonRecord] = useState([]);
+  const [workerRecord, setWorkerRecord] = useState([]);
   const [contractRecord, setContractRecord] = useState([]);
   const [imgRecord, setImgRecord] = useState([]);
   const [imgReportRecord, setImgReportRecord] = useState([]);
   const [reportRequestService, setReportRequestService] = useState([]);
 
 
+  // ====================
+    // tạo hợp đồng
+    const [contractUrl, setContractUrl] = useState();
+    // const createContractFile = "https://docs.google.com/document/d/16UhbIyXXBFTlPRNnDiU9rnv4__HEiqsX/edit?usp=sharing&ouid=106209939784621025179&rtpof=true&sd=true"
+  const createContractFile = "https://firebasestorage.googleapis.com/v0/b/anservice-986ae.appspot.com/o/files%2Fmau-hop-dong-thi-cong-xay-dung.docx?alt=media&token=9aa28548-8563-4f9a-8984-9f142d3ad256";
   // ====================
   const [messageRM, setMessageRM] = useState();
   const [updateQuantity, setUpdateQuantity] = useState();
@@ -151,8 +202,8 @@ const DetailRequestService = (props) => {
     } 
     // Data cho danh sách thợ và hợp đồng
     if (isLoad && updateRequestServiceState) {
-      getAllMasons().then((record) => {
-        setMasonRecord(record);
+      getAllWorkers().then((record) => {
+        setWorkerRecord(record);
       });
       getContractListByUserID(updateRequestServiceState.user.userID).then((record) => {
         setContractRecord(record);
@@ -176,13 +227,15 @@ const DetailRequestService = (props) => {
     else console.log('Lỗi');
   }, [isLoad]);
 
-  const images = imgRecord.map((image) => {
-    if (!image?.mediaUrl.includes('.mp4')) {
+// ===========================================
+
+  const images = imgRecord.map((img) => {
+    if (!img?.mediaUrl.includes('.mp4')) {
       return (
         <Image
           style={{ width: '150px', height: '200px', paddingLeft: '5px' }}
           width={150}
-          src={image?.mediaUrl}
+          src={img?.mediaUrl}
         ></Image>
       );
     }
@@ -190,19 +243,19 @@ const DetailRequestService = (props) => {
       <video
         controls
         style={{ width: '150px', height: '200px', paddingLeft: '5px' }}
-        key={image?.mediaId}
-        src={image?.mediaUrl}
+        key={img?.mediaId}
+        src={img?.mediaUrl}
       />
     );
   });
 
-  const imagesReport = imgReportRecord.map((image) => {
-    if (!image?.mediaUrl.includes('.mp4')) {
+  const imagesReport = imgReportRecord.map((img) => {
+    if (!img?.mediaUrl.includes('.mp4')) {
       return (
         <Image
           style={{ width: '150px', height: '200px', paddingLeft: '5px' }}
           width={150}
-          src={image?.mediaUrl}
+          src={img?.mediaUrl}
         ></Image>
       );
     }
@@ -210,8 +263,8 @@ const DetailRequestService = (props) => {
       <video
         controls
         style={{ width: '150px', height: '200px', paddingLeft: '5px' }}
-        key={image?.mediaId}
-        src={image?.mediaUrl}
+        key={img?.mediaId}
+        src={img?.mediaUrl}
       />
     );
   });
@@ -223,6 +276,8 @@ const DetailRequestService = (props) => {
       </PageContainer>
     );
   }
+
+// ===========================================
 
   const onRejectorCancelRequestService = () => {
     // const update = normalizeReportForm(formData);
@@ -236,15 +291,17 @@ const DetailRequestService = (props) => {
   };
 
   const onStaffCoordinator = (values) => {
-    const assignMason = {
+    const assignWorker = {
       requestDetailID: values,
-      masonList: staffCoordinator,
+      mainWorker: mainStaffCoordinator,
+      workerList: staffCoordinator,
     };
     // const createRequestServiceData = normalizeReportForm(formData);
-    return AssignMasonToRequest(assignMason)
+    return assignWorkerToRequest(assignWorker)
       .then((res) => {
         console.log('kt5', res);
-        console.log('kt55', staffCoordinator);
+        console.log('kt55', mainStaffCoordinator);
+        console.log('kt56', assignWorker);
         console.log('kt7', requestServiceRecord);
         setConfirmLoading(true);
       })
@@ -261,72 +318,48 @@ const DetailRequestService = (props) => {
 
   const { Option } = Select;
 
+  function onChange(value) {
+    console.log('changed', value);
+  }
+
+  function onChangeStartDate(value, date) {
+    console.log('changed', value);
+    console.log('changed2' ,date);
+    console.log('changed22' ,date[0]);
+    setContractStartDateData(date[0]);
+    setContractEndDateData(date[1]);
+  }
+
+  function onChangeEndDate(value, date) {
+    console.log('changed', value);
+    console.log('changed2' ,date);
+    console.log('changed2' ,date[1]);
+    setContractEndDateData(date[1]);
+  }
+
+  function handleChangeMainWorker(value) {
+    setMainStaffCoordinator(value);
+    console.log(`selected ${value}`);
+    // console.log('selected1', staffCoordinator);
+  }
+
   function handleChange(value) {
     setStaffCoordinator([...value]);
     console.log(`selected ${value}`);
-    console.log('selected1', staffCoordinator);
+    // console.log('selected1', staffCoordinator);
   }
 
   function handleChangeQuantity(value) {
     setUpdateQuantity(value);
     console.log(`selected ${value}`);
-    console.log(`selecte`, updateQuantity);
   }
 
   function handleChangeMessage(value) {
     setMessageRM(value);
     console.log(`selected ${value}`);
     console.log(`selecte`, messageRM);
+
   }
-
-  const uploadImg = {
-    name: 'file',
-    action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
-    headers: {
-      authorization: 'authorization-text',
-    },
-    onChange(info) {
-      if (info.file.status !== 'uploading') {
-        console.log(info.file, info.fileList);
-      }
-      if (info.file.status === 'done') {
-        message.success(`${info.file.name} file uploaded successfully`);
-      } else if (info.file.status === 'error') {
-        message.error(`${info.file.name} file upload failed.`);
-      }
-    },
-  };
-
-  // const handleUpload = () => {
-  //   const { fileList } = this.state;
-  //   const formDataFile = new FormData();
-  //   fileList.forEach(file => {
-  //     formDataFile.append('files[]', file);
-  //   });
-  //   this.setState({
-  //     uploading: true,
-  //   });
-  //   // You can use any AJAX library you like
-  //   fetch('https://www.mocky.io/v2/5cc8019d300000980a055e76', {
-  //     method: 'POST',
-  //     body: formDataFile,
-  //   })
-  //     .then(res => res.json())
-  //     .then(() => {
-  //       this.setState({
-  //         fileList: [],
-  //       });
-  //       message.success('upload successfully.');
-  //     })
-  //     .catch(() => {
-  //       message.error('upload failed.');
-  //     })
-  //     .finally(() => {
-  //       this.setState({
-  //         uploading: false,
-  //       });
-  //     });
-  // };
 
   const onAcceptRequestMaterial = (values) => {
     const update = normalizeReportForm(formData);
@@ -338,6 +371,7 @@ const DetailRequestService = (props) => {
 
   const showModal = () => {
     setVisible(true);
+
   };
 
   const showModal1 = () => {
@@ -345,14 +379,14 @@ const DetailRequestService = (props) => {
   };
 
   const onDenyModal = (values) => {
-    requestMaterialRecord
+    form
       .validateFields()
       .then((res) => {
         setConfirmLoading(true);
         return denyStatusRequestMaterial(values, res.message);
       })
       .then(() => {
-        requestMaterialRecord.resetFields();
+        form.resetFields();
         setConfirmLoading(false);
         setVisible1(false);
       })
@@ -393,7 +427,52 @@ const DetailRequestService = (props) => {
     setVisible1(false);
   };
 
+  const onCreateContract = () => {
+    const createContractValues = {
+      userId: userID,
+      username: customerName,
+      contractUrl: Url,
+      requestId: updateRequestServiceState.requestServiceId,
+      contractStartDate: contractStartDateData,
+      contractEndDate: contractEndDateData,
+      contractDeposit: contractDepositData,
+      contractTotalPrice: contractTotalPriceData,
+    };
+    const createContractData = normalizeReportForm(createContractValues);
+    return createContract(createContractData)
+    .then((res) => {
+      console.log('contract1', res);
+      console.log('contract2', createContractData);
+      console.log('contract123', contractStartDateData);
+      console.log('contract1234', contractEndDateData);
+      console.log('contract11', createContractValues);
 
+      setConfirmLoading(true);
+    })
+    .then(() => {
+      // createContractValues.resetFields();
+      setConfirmLoading(false);
+      setVisible(false);
+    })
+    .catch((info) => {
+      console.log('Xác thực không thành công:', info);
+    })
+    .finally();
+  }
+  
+  function onOpenNewWindown() {
+    window.open(contractUrl);
+  }
+
+  function componentDidMount(){
+  window.setTimeout(function () {
+      this.setState({
+          isButtonDisabled: false,
+      })
+  },5000)
+ }
+ 
+// ======================================
   
   const REQUESTSERVICEDETAIL = [
     {
@@ -422,40 +501,129 @@ const DetailRequestService = (props) => {
       },
     },
     {
-      title: 'Đơn giá dự kiến',
-      dataIndex: 'serviceDescription',
+      title: 'Giá trị sửa chữa',
+      dataIndex: 'requestDetailPrice',
       search: false,
-    },
-    {
-      title: 'Độ ưu tiên',
-      dataIndex: 'serviceDescription',
-      search: false,
+      render: (text, record) => {
+        return (
+          <InputNumber 
+            placeholder='Nhập giá' 
+            defaultValue={record.requestDetailPrice}
+            min={0} 
+            style={{ width: 150 }} 
+            formatter={value => `${value} VND`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+            parser={value => value.replace(/\s\VND?|(,*)/g, '')} 
+            onChange={onChange}
+          >
+            {record.statusName}
+          </InputNumber>
+        );
+      }
     },
     {
       title: 'Hành động',
       key: 'action',
       search: false,
       render: (text, record) => {
-        const updateMasonState = { ...record };
-        console.log('abc1', record.requestDetaiId);
+        const updateWorkerState = { ...record };
+        console.log('abc1', record.requestDetailId);
+        // console.log("abc11", record.usedMaterialId)
+        return (
+          <Space size="middle">
+            <Button>
+              Xác nhận
+            </Button>
+          </Space>
+        );
+      },
+    },
+  ];
+
+  const REQUESTSERVICEDETAIL2 = [
+    {
+      title: 'STT',
+      dataIndex: 'index',
+      search: false,
+      render: (text, object, index) => {
+        return <div>{index + 1}</div>;
+      },
+    },
+    {
+      title: 'Tên dịch vụ',
+      dataIndex: 'serviceName',
+      search: false,
+      render: (text, record) => {
+        console.log('record1', record);
+        return <div>{record?.service?.serviceName}</div>;
+      },
+    },
+    {
+      title: 'Độ ưu tiên',
+      dataIndex: 'serviceDescription',
+      tip: '1 - A, 2 - B, 3 - C, 4 - D, 5 - E',
+      search: false,
+      show:false,
+      render: (text, record) => {
+        return (
+          <InputNumber 
+            placeholder='Nhập độ ưu tiên' 
+            // defaultValue={record.requestDetailPrice}
+            min={1} 
+            max={5}
+            style={{ width: 100 }} 
+            onChange={onChange}
+          >
+            {/* {record.statusName} */}
+            {/* <Tooltip title="1">
+              <InfoCircleOutlined />
+          </Tooltip> */}
+          </InputNumber>
+        );
+      }
+    },
+    {
+      title: 'Trạng thái',
+      dataIndex: 'requestDetailStatus',
+      search: false,
+      render: (text, record) => {
+        <div>{record.requestDetailStatus}</div>
+      }
+    },
+    {
+      title: 'Hành động',
+      key: 'action',
+      search: false,
+      render: (text, record) => {
+        const updateWorkerState = { ...record };
+        console.log('abc1', record.requestDetailId);
         // console.log("abc11", record.usedMaterialId)
         return (
           <Space size="middle">
             <Select
+              allowClear
+              style={{ width: '220px' }}
+              placeholder="Chọn thợ chính"
+              onChange={handleChangeMainWorker}
+            >
+              {workerRecord.map((option) => (
+                <Option key={option.userID}>{option.fullName}</Option>
+              ))}
+            </Select>
+            <Select
               mode="tags"
               allowClear
               style={{ width: '220px' }}
-              placeholder="Chọn thợ làm việc"
+              placeholder="Chọn thợ phụ"
               onChange={handleChange}
             >
-              {masonRecord.map((option) => (
+              {workerRecord.map((option) => (
                 <Option key={option.userID}>{option.fullName}</Option>
               ))}
             </Select>
             <Button
-              onClick={() => onStaffCoordinator(updateMasonState.requestDetaiId)}
-              onChange={handleChange}
-              state={updateMasonState}
+              onClick={() => onStaffCoordinator(updateWorkerState.requestDetailId)} 
+              onChange={handleChange&&handleChangeMainWorker}
+              state={updateWorkerState}
               type="primary"
             >
               Điều phối thợ
@@ -516,16 +684,17 @@ const DetailRequestService = (props) => {
       key: 'action',
       search: false,
       render: (text, record) => {
-        // const updateRequestSMaterialState = { ...record };
+        const updateRequestSMaterialState = { ...record };
         console.log('abc1', record);
         console.log('abc11', record.usedMaterialId);
         console.log('abc11', record.contractUrl);
+        setContractUrl(record.contractUrl);
         return (
           <Space size="middle">
             {/* <Link to={{ pathname: `/requestmaterials/update`, state: updateRequestSMaterialState }}>Chi tiết</Link> */}
-            {/* <a onClick={window.open(record.contractUrl)}>Xem hợp đồng</a> */}
-            <a>Xem hợp đồng</a>
-            <a>Tải xuống & in</a>
+            <a onClick={onOpenNewWindown}>Xem hợp đồng</a>
+            {/* <a>Xem hợp đồng</a> */}
+            <a onClick={onOpenNewWindown}>Tải xuống & in</a>
           </Space>
         );
       },
@@ -594,11 +763,11 @@ const DetailRequestService = (props) => {
       dataIndex: 'serviceDescription',
       search: false,
       render: (text, record) => {
-        return <div>{record?.mason?.fullName}</div>;
+        return <div>{record?.worker?.fullName}</div>;
       },
     },
     {
-      title: 'Trạng thái hợp đồng',
+      title: 'Trạng thái',
       dataIndex: 'statusName',
       // key: 'statusName',
       search: false,
@@ -638,7 +807,7 @@ const DetailRequestService = (props) => {
 
         return (
           <Space size="middle">
-            {/* <Button onClick={() => onStaffCoordinator(updateRequestMaterialState.requestDetaiId)} onChange={handleChange} state={updateRequestMaterialState} type="primary" >Điều phối thợ</Button> */}
+            {/* <Button onClick={() => onStaffCoordinator(updateRequestMaterialState.requestDetailId)} onChange={handleChange} state={updateRequestMaterialState} type="primary" >Điều phối thợ</Button> */}
             <Button type="primary" onClick={() => onAcceptRequestMaterial(updateRequestMaterialState.usedMaterialId)} state={updateRequestMaterialState}>
               Đồng ý
             </Button>
@@ -663,7 +832,7 @@ const DetailRequestService = (props) => {
             <Modal
               title="Điều chỉnh"
               visible={visible}
-              onOk={() => onAdjustedModal(updateRequestMaterialState.usedMaterialId, updateRequestMaterialState.quantityNew, updateRequestMaterialState.message)}
+              onOk={() =>  onAdjustedModal(updateRequestMaterialState.usedMaterialId, updateRequestMaterialState.quantityNew, updateRequestMaterialState.message)}
               confirmLoading={confirmLoading}
               onCancel={handleCancel}
             >
@@ -733,30 +902,6 @@ const DetailRequestService = (props) => {
       },
     },
   ];
-    // const state1 = {
-    //   fileList: [],
-    //   uploading: false,
-    // };
-    // const { uploading, fileList } = this.state;
-    // const properties = {
-    //   onRemove: file => {
-    //     this.setState(state => {
-    //       const index = state.fileList.indexOf(file);
-    //       const newFileList = state.fileList.slice();
-    //       newFileList.splice(index, 1);
-    //       return {
-    //         fileList: newFileList,
-    //       };
-    //     });
-    //   },
-    //   beforeUpload: file => {
-    //     this.setState(state => ({
-    //       fileList: [...state.fileList, file],
-    //     }));
-    //     return false;
-    //   },
-    //   fileList,
-    // };
 
   return (
     <PageContainer title="">
@@ -772,25 +917,18 @@ const DetailRequestService = (props) => {
         }
       >
         <Card bordered={false} style={{ width: '100%', marginBottom: '2em' }}>
+          {/* THÔNG TIN CHUNG */}
           <Row>
             <Typography.Title level={3}>{steps[currentStep].title}</Typography.Title>
           </Row>
           <Row style={{ width: '100%' }}>{steps[currentStep].content()}</Row>
-          <Divider
-            style={{
-              marginBottom: 32,
-            }}
-          />
+          <Divider style={{ marginBottom: 32, }} />
 
           {/* XEM ẢNH & VIDEO */}
-          <div className={styles.title}>Hình ảnh & video của công trình</div>
+          <div className={styles.title} style={{marginBottom:'30px'}} >Hình ảnh & video của công trình</div>
           {images}
 
-          <Divider
-            style={{
-              marginBottom: 32,
-            }}
-          />
+          <Divider style={{ marginBottom: 32, }} />
 
           {/* XEM CHI TIẾT HỢP ĐỒNG */}
           <div className={styles.title}>Chi tiết hợp đồng</div>
@@ -805,26 +943,129 @@ const DetailRequestService = (props) => {
             toolBarRender={false}
             columns={CONTRACT}
             rowKey="contractId"
-            dataSource={contractRecord.map((e) => e)}
+            dataSource={contractRecord}
           />
+          
           <Row>
             <Button type="primary" style={{ marginLeft: '250px', width: '50%' }}>
-              Lập hợp đồng sửa chữa & báo giá
+              <a href={createContractFile}>Lập hợp đồng sửa chữa & báo giá</a>
             </Button>
           </Row>
-          {/* <Row style={{ width: '100%' }}>{stepsProDescriptions[currentStepProdescription].content()}</Row> */}
 
-          <Divider
-            style={{
-              marginBottom: 32,
-            }}
-          />
+          <Divider style={{ marginBottom: 32, }} />
+
+           {/* UPLOAD HỢP ĐỒNG */}
+          <div className={styles.title}>Thông tin tạo hợp đồng</div>
+          <Row gutter={16}>
+            <Col span={10}>
+              <ProForm.Item 
+                name={customerName} 
+                label="Tên chủ hợp đồng"
+                initialValue={customerName}
+                >
+                <Input readOnly placeholder='Không có'/>
+              </ProForm.Item>
+            </Col>
+          </Row>
+          <Row gutter={16}>
+            <Col span={10}>
+              <ProForm.Item 
+                name="contractStartDate&&contractEndDate"
+                label="Ngày bắt đầu và kết thúc thi công"
+                >
+                <RangePicker onChange={onChangeStartDate}  style={{ width:390 }} format="YYYY-MM-DD"/>
+              </ProForm.Item>
+            </Col>
+          </Row>
+          {/* <Row gutter={16}>
+            <Col span={10}>
+              <ProForm.Item 
+                name="contractStartDate"
+                label="Ngày bắt đầu thi công"
+                >
+                <DatePicker onChange={onChangeStartDate} style={{ width:390 }} 
+                format="YYYY-MM-DD"
+                // format="DD-MM-YYYY"
+                />
+              </ProForm.Item>
+            </Col>
+          </Row>
+          <Row gutter={16}>
+            <Col span={10}>
+              <ProForm.Item 
+                name="contractEndDate"
+                label="Ngày kết thúc thi công"
+                >
+                <DatePicker onChange={onChangeEndDate} style={{ width:390 }} 
+                // format={dateFormatList}
+                format="YYYY-MM-DD"
+                />
+              </ProForm.Item>
+            </Col>
+          </Row> */}
+          <Row gutter={16}>
+            <Col span={10}>
+              <ProForm.Item 
+                name="contractDeposit"
+                label="Đã đặt cọc"
+              >
+                <Select defaultValue="0" onChange={setContractDepositData}>
+                  <Option value="0">0%</Option>
+                  <Option value="0.1">10%</Option>
+                  <Option value="0.3">30%</Option>
+                  <Option value="0.5">50%</Option>
+                  <Option value="0.7">70%</Option>
+                </Select>
+              </ProForm.Item>
+            </Col>
+          </Row>
+          <Row gutter={16}>
+            <Col span={10}>
+              <ProForm.Item 
+                // name="contractTotalPrice"
+                name="contractTotalPrice"
+                label="Tổng giá trị hợp đồng"
+              >
+                <InputNumber 
+                  style={{ width:390 }}
+                  min={0} 
+                  formatter={value => `${value} VND`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                  parser={value => value.replace(/\s\VND?|(,*)/g, '')} 
+                  onChange={setContractTotalPriceData}
+                  />
+              </ProForm.Item>
+            </Col>
+          </Row>
+          <Row style={{ marginTop:'50px' }}>
+            {/* <Upload maxCount={1}>
+              <Button type="file" onChange={(e)=>{setFile(e.target.files[0])}} icon={<UploadOutlined />} style={{ marginLeft: '8em', width: '145%' }}>
+                Chọn file
+              </Button>
+            </Upload> */}
+            <input type="file" onChange={(e)=>{setFile(e.target.files[0])}} />
+            
+            {/* <input type="file" onChange={(e)=>{setFile(e.target.files[0])}}/> */}
+            <Button type="primary" style={{ width: '30%', marginLeft: '4em', }} onClick={upload}>
+              Tải File lên FireBase
+            </Button>
+            <Button type="primary" style={{ width: '30%', marginLeft: '4em', }} onClick={onCreateContract}>
+            {/* <Button type="primary" style={{ width: '30%', marginLeft: '4em', }} onClick={() => {upload();onCreateContract();}}> */}
+              Gửi hợp đồng
+            </Button>
+            {/* <button onClick={upload}>Upload</button> */}
+          </Row>
+
+          <Row>
+            <p><a href={Url}>{Url}</a></p>
+          </Row>
+
+          <Divider style={{ marginBottom: 32, }} />
 
           {/* XEM DỊCH VỤ */}
-          <div className={styles.title}>Chi tiết dịch vụ</div>
+          <div className={styles.title} >Chi tiết dịch vụ</div>
           <ProTable
             style={{
-              marginBottom: 24,
+              marginBottom: 50,
             }}
             pagination={false}
             search={false}
@@ -832,50 +1073,27 @@ const DetailRequestService = (props) => {
             options={false}
             toolBarRender={false}
             columns={REQUESTSERVICEDETAIL}
-            rowKey="requestDetaiId"
-            dataSource={requestServiceRecord.map((e) => e)}
+            rowKey="requestDetailId"
+            // dataSource={requestServiceRecord.map((e) => e)}
+            dataSource={requestServiceRecord}
           />
-
-          <Divider
+          
+          <div className={styles.title} >Điều phối thợ</div>
+          <ProTable
             style={{
-              marginBottom: 32,
+              marginBottom: 50,
             }}
+            pagination={false}
+            search={false}
+            // loading={loading}
+            options={false}
+            toolBarRender={false}
+            columns={REQUESTSERVICEDETAIL2}
+            rowKey="requestDetailId"
+            // dataSource={requestServiceRecord.map((e) => e)}
+            dataSource={requestServiceRecord}
           />
-
-          {/* <Row>
-            <Upload {...uploadImg} maxCount={1}>
-              <Button icon={<UploadOutlined />} style={{ marginLeft: '2em', width: '105%' }}>
-                Chọn file
-              </Button>
-            </Upload>
-          </Row>
-          <Row>
-            <Upload {...properties}>
-              <Button icon={<UploadOutlined />}>Chọn file</Button>
-            </Upload>
-            <Button
-              type="primary"
-              onClick={this.handleUpload}
-              disabled={fileList.length === 0}
-              loading={uploading}
-              style={{ marginTop: 16 }}
-            >
-            {uploading ? 'Uploading' : 'Start Upload'}
-            </Button>
-          </Row> */}
-          <br />
-          <Row>
-            <Button type="primary" style={{ width: '22%', marginLeft: '2em' }}>
-              Gửi hợp đồng
-            </Button>
-          </Row>
-
-          <Divider
-            style={{
-              marginBottom: 32,
-            }}
-          />
-
+          
           {/* XEM CHI TIẾT VẬT TƯ */}
           <div className={styles.title}>Chi tiết vật tư yêu cầu</div>
           <ProTable
@@ -889,20 +1107,15 @@ const DetailRequestService = (props) => {
             toolBarRender={false}
             dataSource={requestMaterialRecord}
             columns={REQUESTMATERIALDETAIL}
-            rowKey="requestDetaiId"
+            rowKey="requestDetailId"
           />
 
-          <Divider
-            style={{
-              marginBottom: 32,
-            }}
-          />
 
           {/* XEM BÁO CÁO */}
           <div className={styles.title}>Chi tiết báo cáo</div>
           <ProTable
             style={{
-              marginBottom: 24,
+              marginBottom: 32,
             }}
             pagination={false}
             search={false}
@@ -914,11 +1127,7 @@ const DetailRequestService = (props) => {
             rowKey="reportId"
           />
 
-          <Divider
-            style={{
-              marginBottom: 32,
-            }}
-          />
+          <Divider style={{ marginBottom: 32, }} />
 
           {/* XEM ẢNH & VIDEO */}
           <div className={styles.title}>Hình ảnh & video của báo cáo</div>
@@ -934,6 +1143,10 @@ const DetailRequestService = (props) => {
               title="Từ chối"
               btnProps={{ type: 'danger', icon: <CloseOutlined /> }}
               onClick={onRejectorCancelRequestService}
+            />
+            <AsyncButton
+            title="Xác nhận"
+            btnProps={{ type: 'primary', icon: <CheckOutlined /> }}
             />
           </FooterToolbar>
         </Card>

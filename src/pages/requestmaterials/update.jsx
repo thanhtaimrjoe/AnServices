@@ -49,8 +49,8 @@ const UpdateRequestMaterial = (props) => {
 
       setMaterialName(res.material.materialName);
       setUnit(res.material.unit);
-      setFullName(res.mason.fullName);
-      setPhoneNumber(res.mason.phoneNumber);
+      setFullName(res.worker.fullName);
+      setPhoneNumber(res.worker.phoneNumber);
     });
   }, []);
   

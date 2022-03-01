@@ -46,7 +46,7 @@ const RequestMaterialList = ({ history }) => {
           // ]}
           // toolBarRender={() => [
           //   <Button type="primary" onClick={addAccount} icon={<PlusOutlined />}>
-          //     Add new masons
+          //     Add new workers
           //   </Button>,
           // ]}
           // rowSelection={rowSelection}

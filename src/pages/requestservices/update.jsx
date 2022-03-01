@@ -44,7 +44,7 @@ const UpdateReportAttribute = (props) => {
   const onUpdateReport = () => {
     // const update = normalizeReportForm(formData);
     // return updateReportAttribute(updateReportState.id, update).then(() =>
-      history.replace('/masons/list')
+      history.replace('/workers/list')
     // );
   };
   return (

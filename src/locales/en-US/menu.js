@@ -56,33 +56,4 @@ export default {
   'menu.accounts.list': 'ACCOUNT LIST',
   'menu.accounts.create': 'CREATE NEW ACCOUNT',
 
-   // brands
-   'menu.brands': 'BRAND MANAGEMENT',
-   'menu.brands.list': 'BRAND LIST',
-   'menu.brands.create': 'CREATE NEW BRAND',
-   'menu.brands.update': 'UPDATE BRAND',
-   
-   // campaigns
-   'menu.campaigns': 'CAMPAIGN MANAGEMENT',
-   'menu.campaigns.list': 'CAMPAIGN LIST',
-   'menu.campaigns.create': 'CREATE NEW CAMPAIGN',
-   'menu.campaigns.update': 'UPDATE CAMPAIGN',
-
-    // campaigns
-    'menu.campaignapplies': 'CAMPAIGN APPLY MANAGEMENT',
-    'menu.campaignapplies.list': 'CAMPAIGN APPLY LIST',
-    'menu.campaignapplies.create': 'CREATE NEW CAMPAIGN APPLY',
-    'menu.campaignapplies.update': 'UPDATE CAMPAIGN APPLY',
-
-    // posts
-    'menu.posts': 'POST MANAGEMENT',
-    'menu.posts.list': 'POST LIST',
-    'menu.posts.detail': 'POST DETAIL',
-
-    // vouchers
-    'menu.reviewers': 'REVIEWER',
-    'menu.reviewers.detail': 'REVIEWER DETAIL',
-
-    // vouchers
-    'menu.vouchers.create': 'CREATE VOUCHER',
 };

@@ -74,6 +74,6 @@ export default {
   'pages.searchTable.batchDeletion': 'bacth deletion',
   'pages.searchTable.batchApproval': 'batch approval',
 
-  'pages.searchTable.mason': 'Vui lòng nhập',
+  'pages.searchTable.workers': 'Vui lòng nhập',
 
 };
