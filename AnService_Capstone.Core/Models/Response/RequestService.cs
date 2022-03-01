@@ -16,6 +16,7 @@ namespace AnService_Capstone.Core.Models.Response
         public string CustomerPhone { get; set; }
         public string CustomerAddress { get; set; }
         public string RequestServiceDescription { get; set; }
+        public TblContract Contract { get; set; }
         public TblStatus RequestServiceStatus { get; set; }
         public DateTime? RequestServiceCreateDate { get; set; }
         public int RequestServicePackage { get; set; }

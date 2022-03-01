@@ -78,6 +78,9 @@ namespace AnService_Capstone.Controllers
             bool serviceDetail = false;
             bool media = false;
 
+            /*bool serviceDetail = true;
+            bool media = true;*/
+
             List<string> stringFile = new List<string>();
             foreach (var file in model.File)
             {
@@ -267,9 +270,12 @@ namespace AnService_Capstone.Controllers
 
             var result = await _serviceRepository.AssignWorkerToRequest(job.RequestDetailId, job.MainWorker, 1);
 
-            foreach (var worker in job.WorkerList)
+            if (job.WorkerList != null)
             {
-                var res = await _serviceRepository.AssignWorkerToRequest(job.RequestDetailId, worker, 2);
+                foreach (var worker in job.WorkerList)
+                {
+                    var res = await _serviceRepository.AssignWorkerToRequest(job.RequestDetailId, worker, 0);
+                }
             }
 
             var update = await _serviceRepository.UpdateStatusRequestServiceDetail(job.RequestDetailId, 6);

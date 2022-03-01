@@ -13,7 +13,6 @@ namespace AnService_Capstone.Core.Models.Request
         public int RequestDetailId { get; set; }
         [Required]
         public int MainWorker { get; set; }
-        [Required]
         public IEnumerable<int> WorkerList { get; set; }
     }
 }

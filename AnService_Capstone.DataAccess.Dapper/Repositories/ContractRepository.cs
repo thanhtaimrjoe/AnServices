@@ -155,7 +155,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
 
         public async Task<bool> UpdateContract(CreateContract contract, int contractID)
         {
-            var query = "update tblContract set ContractUrl = @ContractUrl, ContractStartDate = @ContractStartDate, ContractEndDate = @ContractEndDate, ContractDeposit = @ContractDeposit, ContractTotalPrice = @ContractTotalPrice, ContractUpdateDate = @ContractUpdateDate , ContractUpdateDate = @ContractUpdateDate  where ContractID = @ContractID";
+            var query = "update tblContract set ContractUrl = @ContractUrl, ContractStartDate = @ContractStartDate, ContractEndDate = @ContractEndDate, ContractDeposit = @ContractDeposit, ContractTotalPrice = @ContractTotalPrice, ContractUpdateDate = @ContractUpdateDate where ContractID = @ContractID";
 
             var parameters = new DynamicParameters();
             
@@ -166,6 +166,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             parameters.Add("ContractTotalPrice", contract.ContractTotalPrice, DbType.Double);
             parameters.Add("ContractStatus", 2, DbType.Int32);
             parameters.Add("ContractUpdateDate", DateTime.Now, DbType.DateTime);
+            parameters.Add("ContractID", contractID, DbType.Int32); 
 
             using (var connection = _context.CreateConnection())
             {
