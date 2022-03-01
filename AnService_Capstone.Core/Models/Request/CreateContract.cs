@@ -17,5 +17,13 @@ namespace AnService_Capstone.Core.Models.Request
         public string ContractUrl { get; set; }
         [Required]
         public int RequestId { get; set; }
+        [Required]
+        public DateTime ContractStartDate { get; set; }
+        [Required]
+        public DateTime ContractEndDate { get; set; }
+        [Required]
+        public float ContractDeposit { get; set; }
+        [Required]
+        public float ContractTotalPrice { get; set; }
     }
 }

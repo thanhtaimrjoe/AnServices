@@ -9,11 +9,12 @@ namespace AnService_Capstone.Core.Entities
     {
         public int RepairDetailId { get; set; }
         public int? RequestDetailId { get; set; }
-        public int? MasonId { get; set; }
+        public int? WorkerId { get; set; }
         public DateTime? RepairDateBegin { get; set; }
         public DateTime? RepairDateEnd { get; set; }
+        public bool? IsPrimary { get; set; }
 
-        public virtual TblUser Mason { get; set; }
         public virtual TblRequestDetail RequestDetail { get; set; }
+        public virtual TblUser Worker { get; set; }
     }
 }

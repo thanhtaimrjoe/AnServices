@@ -22,33 +22,31 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             _context = context;
         }
 
-        public async Task<bool> AssignMasonToRequest(AssignJob job)
+        public async Task<bool> AssignWorkerToRequest(int RequestDetailId, int workerID, int status)
         {
-            var query = "insert into tblRepairDetail(RequestDetailID, MasonID, RepairDateBegin) values(@RequestDetailID, @MasonID, @RepairDateBegin)";
+            var query = "insert into tblRepairDetail(RequestDetailID, WorkerID, RepairDateBegin, IsPrimary) values(@RequestDetailID, @WorkerID, @RepairDateBegin, @IsPrimary)";
             int row;
 
-            foreach (var mason in job.MasonList)
-            {
-                var parameters = new DynamicParameters();
-                parameters.Add("RequestDetailID", job.RequestDetailId, DbType.Int32);
-                parameters.Add("MasonID", mason, DbType.String);
-                parameters.Add("RepairDateBegin", DateTime.Now, DbType.DateTime);
+            var parameters = new DynamicParameters();
+            parameters.Add("RequestDetailID", RequestDetailId, DbType.Int32);
+            parameters.Add("WorkerID", workerID, DbType.String);
+            parameters.Add("RepairDateBegin", DateTime.Now, DbType.DateTime);
+            parameters.Add("IsPrimary", status, DbType.Boolean);
 
-                using (var connection = _context.CreateConnection())
+            using (var connection = _context.CreateConnection())
+            {
+                connection.Open();
+                row = await connection.ExecuteAsync(query, parameters);
+                connection.Close();
+                if (row == 0)
                 {
-                    connection.Open();
-                    row = await connection.ExecuteAsync(query, parameters);
-                    connection.Close();
-                    if (row == 0)
-                    {
-                        return false;
-                    }
+                    return false;
                 }
             }
             return true;
         }
 
-        public async Task<bool> CancelRequestServiceByIDForCustomer(int id)
+        /*public async Task<bool> CancelRequestServiceByIDForCustomer(int id)
         {
             var query = "update tblRequestServices set RequestServiceStatus = 8 where RequestServiceID = @RequestServiceID";
 
@@ -63,9 +61,9 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
                 }
                 return true;
             }
-        }
+        }*/
 
-        public async Task<bool> CancelRequestServiceByIDForStaff(int id)
+        /*public async Task<bool> CancelRequestServiceByIDForStaff(int id)
         {
             var query = "update tblRequestServices set RequestServiceStatus = 1 where RequestServiceID = @RequestServiceID";
 
@@ -80,7 +78,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
                 }
                 return true;
             }
-        }
+        }*/
 
         public async Task<bool> CreateMedia(int requestID, string url)
         {
@@ -163,9 +161,9 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             }
         }*/
 
-        public async Task<IEnumerable<RequestService>> GetAllRequestService2()
+        public async Task<IEnumerable<RequestService>> GetAllRequestService()
         {
-            var query = "select rs.RequestServiceID, CustomerID, CustomerName, CustomerPhone, CustomerAddress, RequestServiceDescription, RequestServiceCreateDate, UserID, FullName, PhoneNumber, Address, Email, CreateDate, sta.StatusID, StatusName, MediaID, MediaUrl " +
+            var query = "select rs.RequestServiceID, CustomerID, CustomerName, CustomerPhone, CustomerAddress, RequestServiceDescription, RequestServiceCreateDate, RequestServicePackage, UserID, FullName, PhoneNumber, Address, Email, CreateDate, sta.StatusID, StatusName, MediaID, MediaUrl " +
                 "from ((tblRequestServices rs join tblUsers u on rs.CustomerID = u.UserID) join tblStatus sta on rs.RequestServiceStatus = sta.StatusID) join tblMedia media on rs.RequestServiceID = media.RequestServiceID " +
                 "order by StatusID ASC, RequestServiceCreateDate DESC";
 
@@ -214,12 +212,12 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
 
         }
 
-        public async Task<IEnumerable<RequestService>> GetAllRequestServiceByMasonID(int id)
+        public async Task<IEnumerable<RequestService>> GetAllRequestServiceByWorkerID(int id)
         {
-            var query = "select distinct rs.RequestServiceID, CustomerID, CustomerName, CustomerPhone, CustomerAddress, RequestServiceDescription, RequestServiceCreateDate, UserID, FullName, PhoneNumber, Address, Email, StatusID, StatusName, MediaID, MediaUrl " +
+            var query = "select distinct rs.RequestServiceID, CustomerID, CustomerName, CustomerPhone, CustomerAddress, RequestServiceDescription, RequestServiceCreateDate, RequestServicePackage, UserID, FullName, PhoneNumber, Address, Email, StatusID, StatusName, MediaID, MediaUrl " +
                 "from ((((tblRequestServices rs join tblRequestDetails rd on rs.RequestServiceID = rd.RequestServiceID) join tblRepairDetail repair on rd.RequestDetailID = repair.RequestDetailID) " +
                 "join tblUsers u on u.UserID = rs.CustomerID) join tblStatus sta on rs.RequestServiceStatus = sta.StatusID) join tblMedia media on rs.RequestServiceID = media.RequestServiceID " +
-                "where MasonID = @MasonID " +
+                "where WorkerID = @WorkerID " +
                 "order by StatusID ASC, RequestServiceCreateDate DESC";
 
             using (var connection = _context.CreateConnection())
@@ -230,7 +228,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
                     requestService.User = user;
                     requestService.RequestServiceStatus = status;
                     return requestService;
-                }, param: new { @MasonID = id}, splitOn: "UserID, StatusID");
+                }, param: new { @WorkerID = id}, splitOn: "UserID, StatusID");
 
                 if (service.Count() == 0)
                 {
@@ -253,7 +251,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
                     }
                     currentRequest.Media.Add(media);
                     return currentRequest;
-                }, param: new { @MasonID = id }, splitOn: "UserID, StatusID, MediaID");
+                }, param: new { @WorkerID = id }, splitOn: "UserID, StatusID, MediaID");
                 connection.Close();
                 if (res.Count() == 0)
                 {
@@ -265,7 +263,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
 
         public async Task<IEnumerable<RequestService>> GetAllRequestServiceByUserID(int id)
         {
-            var query = "select rs.RequestServiceID, CustomerID, CustomerName, CustomerPhone, CustomerAddress, RequestServiceDescription, RequestServiceCreateDate, UserID, FullName, PhoneNumber, Address, Email, StatusID, StatusName, MediaID, MediaUrl " +
+            var query = "select rs.RequestServiceID, CustomerID, CustomerName, CustomerPhone, CustomerAddress, RequestServiceDescription, RequestServiceCreateDate, RequestServicePackage, UserID, FullName, PhoneNumber, Address, Email, StatusID, StatusName, MediaID, MediaUrl " +
                 "from ((tblRequestServices rs join tblUsers u on rs.CustomerID = u.UserID) join tblStatus sta on rs.RequestServiceStatus = sta.StatusID) join tblMedia media on rs.RequestServiceID = media.RequestServiceID " +
                 "where CustomerID = @CustomerID " +
                 "order by RequestServiceStatus asc, RequestServiceCreateDate desc";
@@ -365,7 +363,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
 
         public async Task<IEnumerable<RequestService>> GetAllServiceByStatus(int status)
         {
-            var query = "select rs.RequestServiceID, CustomerID, CustomerName, CustomerPhone, CustomerAddress, RequestServiceDescription, RequestServiceCreateDate, UserID, FullName, PhoneNumber, Address, Email, CreateDate, StatusID, StatusName, MediaID, MediaUrl " +
+            var query = "select rs.RequestServiceID, CustomerID, CustomerName, CustomerPhone, CustomerAddress, RequestServiceDescription, RequestServiceCreateDate, RequestServicePackage, UserID, FullName, PhoneNumber, Address, Email, CreateDate, StatusID, StatusName, MediaID, MediaUrl " +
                 "from ((tblRequestServices rs join tblUsers u on rs.CustomerID = u.UserID) join tblStatus sta on rs.RequestServiceStatus = sta.StatusID) join tblMedia media on rs.RequestServiceID = media.RequestServiceID " +
                 "where RequestServiceStatus = @RequestServiceStatus " +
                 "order by RequestServiceStatus asc, RequestServiceCreateDate desc";
@@ -489,21 +487,34 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             }
         }
 
-        public async Task<IEnumerable<TblRequestDetail>> GetAllRequestServiceDetailsByRequestServiceIDAndMasonID(int request, int mason)
+        public async Task<IEnumerable<TblRequestDetail>> GetAllRequestServiceDetailsByRequestServiceIDAndWorkerID(int request, int worker)
         {
-            var query = "select detail.RequestDetailID, RequestServiceID, detail.ServiceID, ser.ServiceID, ServiceName, ServiceDescription, ServiceImg " +
+            var query = "select detail.RequestDetailID, RequestServiceID, detail.ServiceID, ser.ServiceID, ServiceName, ServiceDescription, ServiceImg, RepairDetailID, IsPrimary " +
                 "from (tblRequestDetails detail join tblServices ser on detail.ServiceID = ser.ServiceID) " +
                 "join tblRepairDetail repair on detail.RequestDetailID = repair.RequestDetailID " +
-                "where RequestServiceID = @RequestServiceID and MasonID = @MasonID";
+                "where RequestServiceID = @RequestServiceID and WorkerID = @WorkerID";
 
             using (var connection = _context.CreateConnection())
             {
                 connection.Open();
-                var res = await connection.QueryAsync<TblRequestDetail, TblService, TblRequestDetail>(query, (requestDetail, service) =>
+                var requestDict = new Dictionary<int, TblRequestDetail>();
+                var res = await connection.QueryAsync<TblRequestDetail, TblService, TblRepairDetail, TblRequestDetail>(query, (requestDetail, service, repair) =>
                 {
-                    requestDetail.Service = service;
-                    return requestDetail;
-                }, param: new { @RequestServiceID = request, @MasonID = mason }, splitOn: "ServiceID");
+                    /*requestDetail.Service = service;
+                    return requestDetail;*/
+
+                    TblRequestDetail currentRequest;
+                    if (!requestDict.TryGetValue(requestDetail.RequestDetailId, out currentRequest))
+                    {
+                        currentRequest = requestDetail;
+                        currentRequest.Service = service;
+                        currentRequest.TblRepairDetails = new List<TblRepairDetail>();
+                        requestDict.Add(currentRequest.RequestDetailId, currentRequest);
+                    }
+                    currentRequest.TblRepairDetails.Add(repair);
+                    return currentRequest;
+
+                }, param: new { @RequestServiceID = request, @WorkerID = worker }, splitOn: "ServiceID, RepairDetailID");
                 connection.Close();
                 if (res.Count() == 0)
                 {
@@ -530,7 +541,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
 
         public async Task<IEnumerable<TblService>> GetServiceByName(string name)
         {
-            var query = "select ServiceID, ServiceName, ServiceDescription, ServiceStatus, TypeMasonJob " +
+            var query = "select ServiceID, ServiceName, ServiceDescription, ServiceStatus, TypeWorkerJob " +
                 "from tblServices " +
                 "where ServiceName like @ServiceName";
 
@@ -545,7 +556,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
 
         public async Task<IEnumerable<RequestService>> GetAllServiceByDateAndStatus(DateTime? date, int status)
         {
-            var query = "select rs.RequestServiceID, CustomerID, CustomerName, CustomerPhone, CustomerAddress, RequestServiceDescription, RequestServiceCreateDate, UserID, FullName, PhoneNumber, Address, Email, CreateDate, StatusID, StatusName, MediaID, MediaUrl " +
+            var query = "select rs.RequestServiceID, CustomerID, CustomerName, CustomerPhone, CustomerAddress, RequestServiceDescription, RequestServiceCreateDate, RequestServicePackage, RequestServicePackage, UserID, FullName, PhoneNumber, Address, Email, CreateDate, StatusID, StatusName, MediaID, MediaUrl " +
                 "from ((tblRequestServices rs join tblUsers u on rs.CustomerID = u.UserID) join tblStatus sta on rs.RequestServiceStatus = sta.StatusID) join tblMedia media on rs.RequestServiceID = media.RequestServiceID " +
                 "where RequestServiceStatus = @RequestServiceStatus and RequestServiceCreateDate = @RequestServiceCreateDate " +
                 "order by RequestServiceStatus asc, RequestServiceCreateDate desc";

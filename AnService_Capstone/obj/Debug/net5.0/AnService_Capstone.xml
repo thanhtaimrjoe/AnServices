@@ -4,14 +4,6 @@
         <name>AnService_Capstone</name>
     </assembly>
     <members>
-        <member name="M:AnService_Capstone.Controllers.ContractController.UpdateStatusContract(System.Int32,System.Int32)">
-            <summary>
-            update status contract
-            </summary>
-            <param name="id">của contract</param>
-            <param name="status">đồng ý - 3, từ chối - 1, yêu cầu sửa lại - 7</param>
-            <returns></returns>
-        </member>
         <member name="M:AnService_Capstone.Controllers.ContractController.ApproveContract(System.Int32)">
             <summary>
             đồng ý hợp đồng
@@ -43,7 +35,7 @@
             <summary>
             tạo request vật liệu
             </summary>
-            <param name="model">Cần mason id, request detail id, 1 list vật liệu cần nhập</param>
+            <param name="model">Cần worker id, request detail id, 1 list vật liệu cần nhập</param>
             <returns></returns>
         </member>
         <member name="M:AnService_Capstone.Controllers.MaterialController.GetAllRequestMaterial">
@@ -120,14 +112,14 @@
         </member>
         <member name="M:AnService_Capstone.Controllers.ReportController.CreateReport(AnService_Capstone.Core.Models.Request.CreateReport)">
             <summary>
-            mason tạo report khi sửa xong hoặc có lỗi mới trong quá trình sửa
+            worker tạo report khi sửa xong hoặc có lỗi mới trong quá trình sửa
             </summary>
-            <param name="model">bao gồm request detail id, mason id, description, img hoặc video url</param>
+            <param name="model">bao gồm request detail id, worker id, description, img hoặc video url</param>
             <returns></returns>
         </member>
         <member name="M:AnService_Capstone.Controllers.ReportController.GetAllReportByRequestDetailID(System.Int32)">
             <summary>
-            lấy tất cả report theo mason id
+            lấy tất cả report theo worker id
             </summary>
             <param name="id"></param>
             <returns></returns>
@@ -154,12 +146,6 @@
             <param name="RequestServiceCreateDate">yyyy-mm-ddT00:00:00</param>
             <returns></returns>
         </member>
-        <member name="M:AnService_Capstone.Controllers.ServiceController.GetAllRequestService">
-            <summary>
-            lấy danh sách request service có trong db
-            </summary>
-            <returns></returns>
-        </member>
         <member name="M:AnService_Capstone.Controllers.ServiceController.GetAllRequestServiceByUserID(System.Int32)">
             <summary>
             lấy request service của 1 customer thông qua customerid
@@ -180,16 +166,16 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:AnService_Capstone.Controllers.ServiceController.AssignMasonToRequest(AnService_Capstone.Core.Models.Request.AssignJob)">
+        <member name="M:AnService_Capstone.Controllers.ServiceController.AssignWorkerToRequest(AnService_Capstone.Core.Models.Request.AssignJob)">
             <summary>
             điều phối nhân viên vào service của khách hàng đã đặt
             </summary>
             <param name="job"></param>
             <returns></returns>
         </member>
-        <member name="M:AnService_Capstone.Controllers.ServiceController.GetAllRequestServiceByMasonID(System.Int32)">
+        <member name="M:AnService_Capstone.Controllers.ServiceController.GetAllRequestServiceByWorkerID(System.Int32)">
             <summary>
-            lấy danh sách request service mà mason được điều phối bằng masonid
+            lấy danh sách request service mà worker được điều phối bằng workerid
             </summary>
             <param name="id"></param>
             <returns></returns>
@@ -201,12 +187,12 @@
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:AnService_Capstone.Controllers.ServiceController.GetAllRequestServiceDetailsByRequestServiceIDAndMasonID(System.Int32,System.Int32)">
+        <member name="M:AnService_Capstone.Controllers.ServiceController.GetAllRequestServiceDetailsByRequestServiceIDAndWorkerID(System.Int32,System.Int32)">
             <summary>
-            lấy detail của request service bằng request service id và mason id
+            lấy detail của request service bằng request service id và worker id
             </summary>
             <param name="requestID"></param>
-            <param name="masonID"></param>
+            <param name="workerID"></param>
             <returns></returns>
         </member>
         <member name="M:AnService_Capstone.Controllers.ServiceController.GetRequestServiceByUserIDAndStatus(System.Int32,System.Int32)">
@@ -215,20 +201,6 @@
             </summary>
             <param name="id"></param>
             <param name="status"></param>
-            <returns></returns>
-        </member>
-        <member name="M:AnService_Capstone.Controllers.ServiceController.GetRequestServiceByStatus(System.Int32)">
-            <summary>
-            filter request service theo status (approve, pending, deny, processing)
-            </summary>
-            <param name="status"></param>
-            <returns></returns>
-        </member>
-        <member name="M:AnService_Capstone.Controllers.ServiceController.GetRequestServiceDate(System.Nullable{System.DateTime})">
-            <summary>
-            
-            </summary>
-            <param name="date"></param>
             <returns></returns>
         </member>
         <member name="M:AnService_Capstone.Controllers.ServiceController.CancelRequestServiceForCustomer(System.Int32)">
@@ -247,7 +219,7 @@
         </member>
         <member name="M:AnService_Capstone.Controllers.TypeJobController.GetAll">
             <summary>
-            lấy danh sách nghề của mason
+            lấy danh sách nghề của worker
             </summary>
             <returns></returns>
         </member>
@@ -258,9 +230,9 @@
             <param name="login"></param>
             <returns></returns>
         </member>
-        <member name="M:AnService_Capstone.Controllers.UserController.LoginCustomerOrMason(System.String)">
+        <member name="M:AnService_Capstone.Controllers.UserController.LoginCustomerOrWorker(System.String)">
             <summary>
-            login bằng số điện thoại cho customer hoặc mason
+            login bằng số điện thoại cho customer hoặc worker
             </summary>
             <param name="phoneNumber"></param>
             <returns></returns>
@@ -286,48 +258,56 @@
             <param name="model">bao gồm tên, số điện thoại, địa chỉ, email</param>
             <returns></returns>
         </member>
-        <member name="M:AnService_Capstone.Controllers.UserController.GetMasonByServiceID(System.Int32)">
+        <member name="M:AnService_Capstone.Controllers.UserController.GetWorkerByServiceID(System.Int32)">
             <summary>
-            lấy danh sách manson theo service id, mason làm cho service nào
+            lấy danh sách manson theo service id, worker làm cho service nào
             </summary>
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:AnService_Capstone.Controllers.UserController.GetMasonById(System.Int32)">
+        <member name="M:AnService_Capstone.Controllers.UserController.GetWorkerById(System.Int32)">
             <summary>
-            lấy dữ liệu mason theo id của mason
+            lấy dữ liệu worker theo id của worker
             </summary>
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:AnService_Capstone.Controllers.UserController.GetAllMason(System.Int32,System.String,System.String)">
+        <member name="M:AnService_Capstone.Controllers.UserController.GetAllWorker(System.Int32,System.String,System.String)">
             <summary>
-            lấy danh sách mason (note: hiện chỉ filter từng param)
+            lấy danh sách worker (note: hiện chỉ filter từng param)
             </summary>
             <param name="typeJobId">của nghề</param>
-            <param name="fullName">full name mason</param>
-            <param name="phoneNumber">số điện thoại mason</param>
+            <param name="fullName">full name worker</param>
+            <param name="phoneNumber">số điện thoại worker</param>
             <returns></returns>
         </member>
-        <member name="M:AnService_Capstone.Controllers.UserController.RemoveMason(System.Int32)">
+        <member name="M:AnService_Capstone.Controllers.UserController.RemoveWorker(System.Int32)">
             <summary>
-            xóa tài khoản của mason
+            xóa tài khoản của worker
             </summary>
-            <param name="id">id của mason cần xóa</param>
+            <param name="id">id của worker cần xóa</param>
             <returns></returns>
         </member>
-        <member name="M:AnService_Capstone.Controllers.UserController.UpdateMason(AnService_Capstone.Core.Models.Request.UpdateMason)">
+        <member name="M:AnService_Capstone.Controllers.UserController.UpdateWorker(AnService_Capstone.Core.Models.Request.UpdateWorker)">
             <summary>
-            update mason
+            update worker
             </summary>
-            <param name="mason"></param>
+            <param name="worker"></param>
             <returns></returns>
         </member>
-        <member name="M:AnService_Capstone.Controllers.UserController.CreateMasonAccount(AnService_Capstone.Core.Models.Request.CreateMason)">
+        <member name="M:AnService_Capstone.Controllers.UserController.CreateWorkerAccount(AnService_Capstone.Core.Models.Request.CreateWorker)">
             <summary>
-            tạo tài khoản mason
+            tạo tài khoản worker
             </summary>
             <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AnService_Capstone.Controllers.UserController.GetAllCustomers(System.String,System.String)">
+            <summary>
+            lấy danh sách customer account
+            </summary>
+            <param name="name">tên khách hàng</param>
+            <param name="phoneNumber">số điện thoại</param>
             <returns></returns>
         </member>
     </members>

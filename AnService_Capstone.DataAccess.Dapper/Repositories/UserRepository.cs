@@ -111,10 +111,10 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             }
         }
 
-        public async Task<IEnumerable<TblUser>> GetMasonByServiceID(int id)
+        public async Task<IEnumerable<TblUser>> GetWorkerByServiceID(int id)
         {
             var query = "select UserID, FullName, PhoneNumber, Status " +
-                "from (tblUsers u join tblTypeJobs t on u.TypeJob = t.TypeJobID) join tblServices s on s.TypeMasonJob = t.TypeJobID " +
+                "from (tblUsers u join tblTypeJobs t on u.TypeJob = t.TypeJobID) join tblServices s on s.TypeWorkerJob = t.TypeJobID " +
                 "where s.ServiceID = @ServiceID";
 
             using(var connection = _context.CreateConnection())
@@ -130,7 +130,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             }
         }
 
-        public async Task<IEnumerable<UserViewModel>> GetAllMason()
+        public async Task<IEnumerable<UserViewModel>> GetAllWorker()
         {
             var query = "select UserID, FullName, PhoneNumber, Address, Email, CreateDate, Status, TypeJobID, TypeJobName " +
                 "from tblUsers u join tblTypeJobs job on u.TypeJob = job.TypeJobID " +
@@ -152,7 +152,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             }
         }
 
-        public async Task<UserViewModel> GetMasonByID(int id)
+        public async Task<UserViewModel> GetWorkerByID(int id)
         {
             var query = "select UserID, FullName, PhoneNumber, Address, Email, CreateDate, Status, TypeJobID, TypeJobName " +
                 "from tblUsers u join tblTypeJobs job on u.TypeJob = job.TypeJobID " +
@@ -173,7 +173,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             }
         }
 
-        public async Task<bool> RemoveMason(int id)
+        public async Task<bool> RemoveWorker(int id)
         {
             var query = "update tblUsers set Status = 5, UpdateDate = @UpdateDate where UserID = @UserID";
             var parameters = new DynamicParameters();
@@ -194,19 +194,19 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             }
         }
 
-        public async Task<bool> UpdateMason(UpdateMason mason)
+        public async Task<bool> UpdateWorker(UpdateWorker worker)
         {
             var query = "update tblUsers set FullName = @FullName, PhoneNumber = @PhoneNumber, Address = @Address, Email = @Email, Role = 2, TypeJob = @TypeJob, UpdateDate = @UpdateDate, Status = 4 " +
                 "where UserID = @UserID";
 
             var parameters = new DynamicParameters();
-            parameters.Add("FullName", mason.MasonName, DbType.String);
-            parameters.Add("PhoneNumber", mason.MasonPhoneNumber, DbType.String);
-            parameters.Add("Address", mason.MasonAddress, DbType.String);
-            parameters.Add("Email", mason.MasonEmail, DbType.String);
-            parameters.Add("TypeJob", mason.TypeJobId, DbType.Int32);
+            parameters.Add("FullName", worker.WorkerName, DbType.String);
+            parameters.Add("PhoneNumber", worker.WorkerPhoneNumber, DbType.String);
+            parameters.Add("Address", worker.WorkerAddress, DbType.String);
+            parameters.Add("Email", worker.WorkerEmail, DbType.String);
+            parameters.Add("TypeJob", worker.TypeJobId, DbType.Int32);
             parameters.Add("UpdateDate", DateTime.Now, DbType.DateTime);
-            parameters.Add("UserID", mason.MasonId, DbType.Int32);
+            parameters.Add("UserID", worker.WorkerId, DbType.Int32);
 
             using (var connections = _context.CreateConnection())
             {
@@ -221,17 +221,17 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             }
         }
 
-        public async Task<bool> CreateAccountMason(CreateMason mason)
+        public async Task<bool> CreateAccountWorker(CreateWorker worker)
         {
             var query = "insert into tblUsers(FullName, PhoneNumber, Address, Email, Role, TypeJob, CreateDate, Status) " +
                 "values(@FullName, @PhoneNumber, @Address, @Email, @Role, @TypeJob, @CreateDate, @Status) ";
 
             var parameters = new DynamicParameters();
-            parameters.Add("FullName", mason.FullName, DbType.String);
-            parameters.Add("PhoneNumber", mason.PhoneNumber, DbType.String);
-            parameters.Add("Address", mason.Address, DbType.String);
-            parameters.Add("Email", mason.Email, DbType.String);
-            parameters.Add("TypeJob", mason.TypeJobId, DbType.String);
+            parameters.Add("FullName", worker.FullName, DbType.String);
+            parameters.Add("PhoneNumber", worker.PhoneNumber, DbType.String);
+            parameters.Add("Address", worker.Address, DbType.String);
+            parameters.Add("Email", worker.Email, DbType.String);
+            parameters.Add("TypeJob", worker.TypeJobId, DbType.String);
             parameters.Add("Role", 2, DbType.Int32);
             parameters.Add("CreateDate", DateTime.Now, DbType.DateTime);
             parameters.Add("Status", 4, DbType.Int32);
@@ -249,7 +249,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             }
         }
 
-        public async Task<IEnumerable<UserViewModel>> GetAllMasonByTypeJob(int id)
+        public async Task<IEnumerable<UserViewModel>> GetAllWorkerByTypeJob(int id)
         {
             var query = "select UserID, FullName, PhoneNumber, Address, Email, CreateDate, Status, TypeJobID, TypeJobName " +
                 "from tblUsers u join tblTypeJobs job on u.TypeJob = job.TypeJobID " +
@@ -271,7 +271,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             }
         }
 
-        public async Task<IEnumerable<UserViewModel>> GetAllMasonByName(string name)
+        public async Task<IEnumerable<UserViewModel>> GetAllWorkerByName(string name)
         {
             var query = "select UserID, FullName, PhoneNumber, Address, Email, CreateDate, Status, TypeJobID, TypeJobName " +
                 "from tblUsers u join tblTypeJobs job on u.TypeJob = job.TypeJobID " +
@@ -293,7 +293,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             }
         }
 
-        public async Task<IEnumerable<UserViewModel>> GetAllMasonByPhone(string phone)
+        public async Task<IEnumerable<UserViewModel>> GetAllWorkerByPhone(string phone)
         {
             var query = "select UserID, FullName, PhoneNumber, Address, Email, CreateDate, Status, TypeJobID, TypeJobName " +
                 "from tblUsers u join tblTypeJobs job on u.TypeJob = job.TypeJobID " +
@@ -345,6 +345,82 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
                     return false;
                 }
                 return true;
+            }
+        }
+
+        public async Task<IEnumerable<UserViewModel>> GetAllCustomers()
+        {
+            var query = "select UserID, FullName, PhoneNumber, Address, Email, CreateDate, Status " +
+                "from tblUsers " +
+                "where Role = 3 and Status = 4";
+
+            using (var connection = _context.CreateConnection())
+            {
+                connection.Open();
+                var res = await connection.QueryAsync<UserViewModel>(query);
+                connection.Close();
+                /*if (!res.Any())
+                {
+                    return null;
+                }*/
+                return res;
+            }
+        }
+
+        public async Task<IEnumerable<UserViewModel>> GetAllCustomersByName(string name)
+        {
+            var query = "select UserID, FullName, PhoneNumber, Address, Email, CreateDate, Status " +
+                "from tblUsers " +
+                "where Role = 3 and Status = 4 and FullName like @FullName";
+
+            using (var connection = _context.CreateConnection())
+            {
+                connection.Open();
+                var res = await connection.QueryAsync<UserViewModel>(query, new { @FullName = "%" + name + "%"});
+                connection.Close();
+                /*if (!res.Any())
+                {
+                    return null;
+                }*/
+                return res;
+            }
+        }
+
+        public async Task<IEnumerable<UserViewModel>> GetAllCustomersByPhone(string phone)
+        {
+            var query = "select UserID, FullName, PhoneNumber, Address, Email, CreateDate, Status " +
+                "from tblUsers " +
+                "where Role = 3 and Status = 4 and PhoneNumber like @PhoneNumber";
+
+            using (var connection = _context.CreateConnection())
+            {
+                connection.Open();
+                var res = await connection.QueryAsync<UserViewModel>(query, new { @PhoneNumber = "%" + phone + "%" });
+                connection.Close();
+                /*if (!res.Any())
+                {
+                    return null;
+                }*/
+                return res;
+            }
+        }
+
+        public async Task<IEnumerable<UserViewModel>> GetAllCustomersByPhoneAndName(string phone, string name)
+        {
+            var query = "select UserID, FullName, PhoneNumber, Address, Email, CreateDate, Status " +
+                "from tblUsers " +
+                "where Role = 3 and Status = 4 and (PhoneNumber like @PhoneNumber and FullName like @FullName)";
+
+            using (var connection = _context.CreateConnection())
+            {
+                connection.Open();
+                var res = await connection.QueryAsync<UserViewModel>(query, new { @PhoneNumber = "%" + phone + "%" });
+                connection.Close();
+                /*if (!res.Any())
+                {
+                    return null;
+                }*/
+                return res;
             }
         }
     }

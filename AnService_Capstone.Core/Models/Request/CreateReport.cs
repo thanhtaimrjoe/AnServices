@@ -12,7 +12,7 @@ namespace AnService_Capstone.Core.Models.Request
         [Required(ErrorMessage = "Cant be blank")]
         public int RequestDetailID { get; set; }
         [Required(ErrorMessage = "Cant be blank")]
-        public int MasonID { get; set; }
+        public int WorkerID { get; set; }
         [Required]
         public string ReportTitle { get; set; }
         [Required]

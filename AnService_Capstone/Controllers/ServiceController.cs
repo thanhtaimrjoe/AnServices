@@ -96,14 +96,14 @@ namespace AnService_Capstone.Controllers
             }
             if (serviceDetail != false && media != false)
             {
-                var check = await _serviceRepository.CheckRequestServiceByUserIDOfTheDay(model.CustomerId);
+                /*var check = await _serviceRepository.CheckRequestServiceByUserIDOfTheDay(model.CustomerId);
                 if (!check)
                 {
                     var user = await _userRepository.GetCustomerByID(model.CustomerId);
                     var formatPhone = _utilHelper.FormatPhoneNumber(user.PhoneNumber);
                     _twilioService.SendSMS(formatPhone, "Your account has been blocked because you have submitted more than 3 service requests. ");
                     _ = _userRepository.UpdateStatusUserByID(model.CustomerId, 10);
-                }
+                }*/
                 return Ok("Create Successfull");
             }
             return BadRequest(new ErrorResponse("Create Fail"));
@@ -147,7 +147,7 @@ namespace AnService_Capstone.Controllers
 
             if (RequestServiceStatus == 0 && RequestServiceCreateDate == null)
             {
-                service = await _serviceRepository.GetAllRequestService2();
+                service = await _serviceRepository.GetAllRequestService();
             }
             else if (RequestServiceStatus != 0 && RequestServiceCreateDate == null)
             {
@@ -169,13 +169,13 @@ namespace AnService_Capstone.Controllers
             return Ok(service);
         }
 
-        /// <summary>
+        /*/// <summary>
         /// lấy danh sách request service có trong db
         /// </summary>
         /// <returns></returns>
         [HttpGet]
         [Route("[action]")]
-        /*[Authorize(Roles = "Customer")]*/
+        *//*[Authorize(Roles = "Customer")]*//*
         public async Task<IActionResult> GetAllRequestService()
         {
             var service = await _serviceRepository.GetAllRequestService2();
@@ -185,7 +185,7 @@ namespace AnService_Capstone.Controllers
                 return BadRequest();
             }
             return Ok(service);
-        }
+        }*/
 
         /// <summary>
         /// lấy request service của 1 customer thông qua customerid
@@ -252,20 +252,26 @@ namespace AnService_Capstone.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> AssignMasonToRequest(AssignJob job)
+        public async Task<IActionResult> AssignWorkerToRequest(AssignJob job)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
-            /*var result = await _serviceRepository.AssignMasonToRequest(workerIDPri);*/
+            /*var result = await _serviceRepository.AssignWorkerToRequest(workerIDPri);*/
 
-            /*foreach (var worker in job.MasonList)
+            /*foreach (var worker in job.WorkerList)
             {
-                var result = await _serviceRepository.AssignMasonToRequest(worker);
+                var result = await _serviceRepository.AssignWorkerToRequest(worker);
             }*/
 
-            var result = await _serviceRepository.AssignMasonToRequest(job);
+            var result = await _serviceRepository.AssignWorkerToRequest(job.RequestDetailId, job.MainWorker, 1);
+
+            foreach (var worker in job.WorkerList)
+            {
+                var res = await _serviceRepository.AssignWorkerToRequest(job.RequestDetailId, worker, 2);
+            }
+
             var update = await _serviceRepository.UpdateStatusRequestServiceDetail(job.RequestDetailId, 6);
             if (result == true && update == true)
             {
@@ -275,20 +281,20 @@ namespace AnService_Capstone.Controllers
         }
 
         /// <summary>
-        /// lấy danh sách request service mà mason được điều phối bằng masonid
+        /// lấy danh sách request service mà worker được điều phối bằng workerid
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet]
         [Route("[action]")]
-        public async Task<IActionResult> GetAllRequestServiceByMasonID(int id)
+        public async Task<IActionResult> GetAllRequestServiceByWorkerID(int id)
         {
             if (id == 0)
             {
                 return BadRequest(new ErrorResponse("Please enter id"));
             }
 
-            var result = await _serviceRepository.GetAllRequestServiceByMasonID(id);
+            var result = await _serviceRepository.GetAllRequestServiceByWorkerID(id);
 
             if (result == null)
             {
@@ -321,26 +327,26 @@ namespace AnService_Capstone.Controllers
         }
 
         /// <summary>
-        /// lấy detail của request service bằng request service id và mason id
+        /// lấy detail của request service bằng request service id và worker id
         /// </summary>
         /// <param name="requestID"></param>
-        /// <param name="masonID"></param>
+        /// <param name="workerID"></param>
         /// <returns></returns>
         [HttpGet]
         [Route("[action]")]
-        public async Task<IActionResult> GetAllRequestServiceDetailsByRequestServiceIDAndMasonID(int requestID, int masonID)
+        public async Task<IActionResult> GetAllRequestServiceDetailsByRequestServiceIDAndWorkerID(int requestID, int workerID)
         {
             if (requestID == 0)
             {
                 return BadRequest(new ErrorResponse("Please enter request id"));
             }
 
-            if (masonID == 0)
+            if (workerID == 0)
             {
-                return BadRequest(new ErrorResponse("Please enter mason id"));
+                return BadRequest(new ErrorResponse("Please enter worker id"));
             }
 
-            var result = await _serviceRepository.GetAllRequestServiceDetailsByRequestServiceIDAndMasonID(requestID, masonID);
+            var result = await _serviceRepository.GetAllRequestServiceDetailsByRequestServiceIDAndWorkerID(requestID, workerID);
 
             if (result == null)
             {
@@ -378,7 +384,7 @@ namespace AnService_Capstone.Controllers
             return Ok(result);
         }
 
-        /// <summary>
+        /*/// <summary>
         /// filter request service theo status (approve, pending, deny, processing)
         /// </summary>
         /// <param name="status"></param>
@@ -399,9 +405,9 @@ namespace AnService_Capstone.Controllers
                 return NotFound(new ErrorResponse("No Request Service Availabe"));
             }
             return Ok(result);
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// 
         /// </summary>
         /// <param name="date"></param>
@@ -422,7 +428,7 @@ namespace AnService_Capstone.Controllers
                 return NotFound(new ErrorResponse("No Request Service Availabe, format : yyyy-mm-ddT00:00:00"));
             }
             return Ok(result);
-        }
+        }*/
 
         /// <summary>
         /// Từ chối hoặc hủy bỏ request service
@@ -438,7 +444,7 @@ namespace AnService_Capstone.Controllers
                 return BadRequest(new ErrorResponse("Please enter id"));
             }
 
-            var result = await _serviceRepository.CancelRequestServiceByIDForCustomer(id);
+            var result = await _serviceRepository.UpdateStatusRequestService(id, 8);
 
             if (!result)
             {
@@ -461,7 +467,7 @@ namespace AnService_Capstone.Controllers
                 return BadRequest(new ErrorResponse("Please enter id"));
             }
 
-            var result = await _serviceRepository.CancelRequestServiceByIDForStaff(id);
+            var result = await _serviceRepository.UpdateStatusRequestService(id, 1);
 
             if (!result)
             {
@@ -470,7 +476,7 @@ namespace AnService_Capstone.Controllers
             return Ok("Cancel Successful");
         }
 
-        [HttpPut]
+        /*[HttpPut]
         [Route("[action]")]
         public async Task<IActionResult> AcceptRequestService(int requestServiceID, IEnumerable<UpdatePriceRequestDetail> requestDetail)
         {
@@ -498,6 +504,7 @@ namespace AnService_Capstone.Controllers
                 return Ok("Accept Successful");
             }
             return BadRequest("Accept Error");
-        }
+        }*/
+
     }
 }

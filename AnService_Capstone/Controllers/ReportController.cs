@@ -12,15 +12,17 @@ namespace AnService_Capstone.Controllers
     public class ReportController : ControllerBase
     {
         private readonly IReport _report;
-        public ReportController(IReport report)
+        private readonly IServiceRepository _serviceRepository;
+        public ReportController(IReport report, IServiceRepository serviceRepository)
         {
             _report = report;
+            _serviceRepository = serviceRepository;
         }
 
         /// <summary>
-        /// mason tạo report khi sửa xong hoặc có lỗi mới trong quá trình sửa
+        /// worker tạo report khi sửa xong hoặc có lỗi mới trong quá trình sửa
         /// </summary>
-        /// <param name="model">bao gồm request detail id, mason id, description, img hoặc video url</param>
+        /// <param name="model">bao gồm request detail id, worker id, description, img hoặc video url</param>
         /// <returns></returns>
         [HttpPost]
         [Route("[action]")]
@@ -42,13 +44,17 @@ namespace AnService_Capstone.Controllers
 
             if (media)
             {
+                if (model.ReportTitle.Equals("Báo cáo hoàn thành"))
+                {
+                    _ = await _serviceRepository.UpdateStatusRequestServiceDetail(model.RequestDetailID, 9);
+                }
                 return Ok("Create Successfull");
             }
             return BadRequest(new ErrorResponse("Create Fail"));
         }
 
         /// <summary>
-        /// lấy tất cả report theo mason id
+        /// lấy tất cả report theo worker id
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>

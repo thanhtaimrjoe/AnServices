@@ -10,7 +10,7 @@ namespace AnService_Capstone.Core.Models.Request
     public class RequestMaterial
     {
         [Required]
-        public int MasonID { get; set; }
+        public int WorkerID { get; set; }
         [Required]
         public int RequestDetailID { get; set; }
         [Required]

@@ -1,5 +1,6 @@
 ﻿using AnService_Capstone.Core.Entities;
 using AnService_Capstone.Core.Interfaces;
+using AnService_Capstone.Core.Models.Request;
 using AnService_Capstone.DataAccess.Dapper.Context;
 using Dapper;
 using System;
@@ -37,7 +38,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             }
         }
 
-        public async Task<bool> ApproveContract(int id)
+        /*public async Task<bool> ApproveContract(int id)
         {
             var query = "update tblContract set ContractStatus = @ContractStatus, ContractUpdateDate = @ContractUpdateDate  where ContractID = @ContractID";
 
@@ -52,18 +53,22 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
                 }
                 return true;
             }
-        }
+        }*/
 
-        public async Task<bool> CreateContract(int id, string name, string url, int requestID)
+        public async Task<bool> CreateContract(CreateContract contract)
         {
-            var query = "insert into tblContract(CustomerID,RequestServiceID,ContractTitle,ContractUrl,ContractStatus,ContractCreateDate) " +
-                "values (@CustomerID,@RequestServiceID,@ContractTitle,@ContractUrl,@ContractStatus,@ContractCreateDate)";
+            var query = "insert into tblContract(CustomerID,RequestServiceID,ContractTitle,ContractUrl,ContractStartDate,ContractEndDate,ContractDeposit,ContractTotalPrice,ContractStatus,ContractCreateDate) " +
+                "values (@CustomerID,@RequestServiceID,@ContractTitle,@ContractUrl,@ContractStartDate,@ContractEndDate,@ContractDeposit,@ContractTotalPrice,@ContractStatus,@ContractCreateDate)";
 
             var parameters = new DynamicParameters();
-            parameters.Add("CustomerID", id, DbType.Int32);
-            parameters.Add("RequestServiceID", requestID, DbType.Int32);
-            parameters.Add("ContractTitle", "Hợp đồng " + name, DbType.String);
-            parameters.Add("ContractUrl", url, DbType.String);
+            parameters.Add("CustomerID", contract.UserId, DbType.Int32);
+            parameters.Add("RequestServiceID", contract.RequestId, DbType.Int32);
+            parameters.Add("ContractTitle", "Hợp đồng " + contract.Username, DbType.String);
+            parameters.Add("ContractUrl", contract.ContractUrl, DbType.String);
+            parameters.Add("ContractStartDate", contract.ContractStartDate, DbType.DateTime);
+            parameters.Add("ContractEndDate", contract.ContractEndDate, DbType.DateTime);
+            parameters.Add("ContractDeposit", contract.ContractDeposit, DbType.Double);
+            parameters.Add("ContractTotalPrice", contract.ContractTotalPrice, DbType.Double);
             parameters.Add("ContractStatus", 2, DbType.Int32);
             parameters.Add("ContractCreateDate", DateTime.Now, DbType.DateTime);
 
@@ -80,7 +85,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             }
         }
 
-        public async Task<bool> DenyContract(int id)
+        /*public async Task<bool> DenyContract(int id)
         {
             var query = "update tblContract set ContractStatus = @ContractStatus, ContractUpdateDate = @ContractUpdateDate  where ContractID = @ContractID";
 
@@ -95,7 +100,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
                 }
                 return true;
             }
-        }
+        }*/
 
         public async Task<IEnumerable<TblContract>> GetContractListByUserID(int id)
         {
@@ -114,7 +119,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             }
         }
 
-        public async Task<bool> RequestUpdateContract(int id)
+        /*public async Task<bool> RequestUpdateContract(int id)
         {
             var query = "update tblContract set ContractStatus = @ContractStatus, ContractUpdateDate = @ContractUpdateDate  where ContractID = @ContractID";
 
@@ -129,7 +134,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
                 }
                 return true;
             }
-        }
+        }*/
 
         public async Task<bool> UpdateStatusContract(int id, int status)
         {
@@ -148,14 +153,24 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             }
         }
 
-        public async Task<bool> UpdateContractURL(string url, int contractID)
+        public async Task<bool> UpdateContract(CreateContract contract, int contractID)
         {
-            var query = "update tblContract set ContractUrl = @ContractUrl, ContractUpdateDate = @ContractUpdateDate  where ContractID = @ContractID";
+            var query = "update tblContract set ContractUrl = @ContractUrl, ContractStartDate = @ContractStartDate, ContractEndDate = @ContractEndDate, ContractDeposit = @ContractDeposit, ContractTotalPrice = @ContractTotalPrice, ContractUpdateDate = @ContractUpdateDate , ContractUpdateDate = @ContractUpdateDate  where ContractID = @ContractID";
+
+            var parameters = new DynamicParameters();
+            
+            parameters.Add("ContractUrl", contract.ContractUrl, DbType.String);
+            parameters.Add("ContractStartDate", contract.ContractStartDate, DbType.DateTime);
+            parameters.Add("ContractEndDate", contract.ContractEndDate, DbType.DateTime);
+            parameters.Add("ContractDeposit", contract.ContractDeposit, DbType.Double);
+            parameters.Add("ContractTotalPrice", contract.ContractTotalPrice, DbType.Double);
+            parameters.Add("ContractStatus", 2, DbType.Int32);
+            parameters.Add("ContractUpdateDate", DateTime.Now, DbType.DateTime);
 
             using (var connection = _context.CreateConnection())
             {
                 connection.Open();
-                var res = await connection.ExecuteAsync(query, new { ContractUrl = url, @ContractID = contractID, @ContractUpdateDate = DateTime.Now }); ;
+                var res = await connection.ExecuteAsync(query, parameters); ;
                 connection.Close();
                 if (res == 0)
                 {

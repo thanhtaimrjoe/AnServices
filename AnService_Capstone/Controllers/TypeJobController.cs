@@ -18,7 +18,7 @@ namespace AnService_Capstone.Controllers
         }
 
         /// <summary>
-        /// lấy danh sách nghề của mason
+        /// lấy danh sách nghề của worker
         /// </summary>
         /// <returns></returns>
         [HttpGet]

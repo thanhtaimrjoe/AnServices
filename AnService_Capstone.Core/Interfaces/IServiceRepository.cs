@@ -21,7 +21,7 @@ namespace AnService_Capstone.Core.Interfaces
 
         /*public Task<IEnumerable<TblRequestService>> GetAllRequestService();*/
 
-        public Task<IEnumerable<RequestService>> GetAllRequestService2();
+        public Task<IEnumerable<RequestService>> GetAllRequestService();
 
         public Task<RequestService> GetRequestServiceByID(int id);
 
@@ -33,9 +33,9 @@ namespace AnService_Capstone.Core.Interfaces
 
         public Task<IEnumerable<TblService>> GetServiceByName(string name);
 
-        public Task<bool> AssignMasonToRequest(AssignJob job);
+        public Task<bool> AssignWorkerToRequest(int RequestDetailId, int workerID, int status);
 
-        public Task<IEnumerable<RequestService>> GetAllRequestServiceByMasonID(int id);
+        public Task<IEnumerable<RequestService>> GetAllRequestServiceByWorkerID(int id);
 
         /*public Task<IEnumerable<RequestServiceDetailViewModel>> GetRequestServiceDetailsByRequestServiceID(int id);*/
 
@@ -49,13 +49,13 @@ namespace AnService_Capstone.Core.Interfaces
 
         public Task<IEnumerable<RequestService>> GetAllServiceByDateAndStatus(DateTime? date, int status);
 
-        /*public Task<IEnumerable<RequestServiceDetailViewModel>> GetRequestServiceDetailsByRequestServiceIDAndMasonID(int request, int mason);*/
+        /*public Task<IEnumerable<RequestServiceDetailViewModel>> GetRequestServiceDetailsByRequestServiceIDAndWorkerID(int request, int worker);*/
 
-        public Task<IEnumerable<TblRequestDetail>> GetAllRequestServiceDetailsByRequestServiceIDAndMasonID(int request, int mason);
+        public Task<IEnumerable<TblRequestDetail>> GetAllRequestServiceDetailsByRequestServiceIDAndWorkerID(int request, int worker);
 
-        public Task<bool> CancelRequestServiceByIDForCustomer(int id);
+        /*public Task<bool> CancelRequestServiceByIDForCustomer(int id);*/
 
-        public Task<bool> CancelRequestServiceByIDForStaff(int id);
+        /*public Task<bool> CancelRequestServiceByIDForStaff(int id);*/
 
         public Task<bool> UpdateStatusRequestServiceDetail(int id, int status);
 

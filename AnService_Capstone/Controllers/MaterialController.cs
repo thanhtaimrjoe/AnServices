@@ -21,7 +21,7 @@ namespace AnService_Capstone.Controllers
         /// <summary>
         /// tạo request vật liệu
         /// </summary>
-        /// <param name="model">Cần mason id, request detail id, 1 list vật liệu cần nhập</param>
+        /// <param name="model">Cần worker id, request detail id, 1 list vật liệu cần nhập</param>
         /// <returns></returns>
         [HttpPost]
         [Route("[action]")]

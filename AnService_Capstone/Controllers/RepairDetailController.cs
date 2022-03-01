@@ -18,7 +18,7 @@ namespace AnService_Capstone.Controllers
         }
 
         /*/// <summary>
-        /// update lại status của repair detail (customer dùng khi kiểm tra kết quả khi mason sửa xong), 
+        /// update lại status của repair detail (customer dùng khi kiểm tra kết quả khi worker sửa xong), 
         /// status approve có sắn, ngày kết thúc công việc tự gán ngày hiện tại
         /// </summary>
         /// <param name="id">id của repaird detail</param>
@@ -45,7 +45,7 @@ namespace AnService_Capstone.Controllers
         }
 
         /// <summary>
-        /// lấy danh sách việc đã giao cho mason bằng id dịch vụ (request detail) của customer
+        /// lấy danh sách việc đã giao cho worker bằng id dịch vụ (request detail) của customer
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>

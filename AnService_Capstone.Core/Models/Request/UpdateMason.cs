@@ -7,20 +7,20 @@ using System.Threading.Tasks;
 
 namespace AnService_Capstone.Core.Models.Request
 {
-    public class UpdateMason
+    public class UpdateWorker
     {
         [Required(ErrorMessage = "Please enter id")]
-        public int MasonId { get; set; }
+        public int WorkerId { get; set; }
         [Required(ErrorMessage = "Cant be blank")]
-        public string MasonName { get; set;}
+        public string WorkerName { get; set;}
         [RegularExpression("^(?!0+$)(\\+\\d{1,3}[- ]?)?(?!0+$)\\d{10}$", ErrorMessage = "Please enter valid phone no.")]
         [Required]
-        public string MasonPhoneNumber { get; set;}
+        public string WorkerPhoneNumber { get; set;}
         [Required(ErrorMessage = "Cant be blank")]
-        public string MasonAddress { get; set;}
+        public string WorkerAddress { get; set;}
         [Required(ErrorMessage = "Cant be blank")]
         [EmailAddress]
-        public string MasonEmail { get; set;}
+        public string WorkerEmail { get; set;}
         [Required]
         public int TypeJobId { get; set; }
 

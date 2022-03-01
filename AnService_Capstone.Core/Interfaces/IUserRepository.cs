@@ -19,28 +19,36 @@ namespace AnService_Capstone.Core.Interfaces
 
         public Task<bool> CheckInviteCodeExist(string code);
 
-        public Task<IEnumerable<TblUser>> GetMasonByServiceID(int id);
+        public Task<IEnumerable<TblUser>> GetWorkerByServiceID(int id);
 
-        public Task<IEnumerable<UserViewModel>> GetAllMason();
+        public Task<IEnumerable<UserViewModel>> GetAllWorker();
 
-        public Task<IEnumerable<UserViewModel>> GetAllMasonByTypeJob(int id);
+        public Task<IEnumerable<UserViewModel>> GetAllWorkerByTypeJob(int id);
 
-        public Task<IEnumerable<UserViewModel>> GetAllMasonByName(string name);
+        public Task<IEnumerable<UserViewModel>> GetAllWorkerByName(string name);
 
-        public Task<IEnumerable<UserViewModel>> GetAllMasonByPhone(string phone);
+        public Task<IEnumerable<UserViewModel>> GetAllWorkerByPhone(string phone);
 
-        public Task<UserViewModel> GetMasonByID(int id);
+        public Task<UserViewModel> GetWorkerByID(int id);
 
-        public Task<bool> RemoveMason(int id);
+        public Task<bool> RemoveWorker(int id);
 
-        public Task<bool> UpdateMason(UpdateMason mason);
+        public Task<bool> UpdateWorker(UpdateWorker worker);
 
-        /*public Task<bool> ChangeMasonPhoneNumber();*/
+        /*public Task<bool> ChangeWorkerPhoneNumber();*/
 
-        public Task<bool> CreateAccountMason(CreateMason mason);
+        public Task<bool> CreateAccountWorker(CreateWorker worker);
 
         public Task<UserViewModel> GetCustomerByID(int id);
 
         public Task<bool> UpdateStatusUserByID(int id, int status);
+
+        public Task<IEnumerable<UserViewModel>> GetAllCustomers();
+
+        public Task<IEnumerable<UserViewModel>> GetAllCustomersByName(string name);
+
+        public Task<IEnumerable<UserViewModel>> GetAllCustomersByPhone(string phone);
+
+        public Task<IEnumerable<UserViewModel>> GetAllCustomersByPhoneAndName(string phone, string name);
     }
 }

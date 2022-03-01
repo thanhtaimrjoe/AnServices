@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace AnService_Capstone.Core.Models.Request
 {
-    public class CreateMason
+    public class CreateWorker
     {
         [Required]
         public string FullName { get; set; }

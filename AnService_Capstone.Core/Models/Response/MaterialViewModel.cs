@@ -12,7 +12,7 @@ namespace AnService_Capstone.Core.Models.Response
         public int UsedMaterialId { get; set; }
         public TblMaterial Material { get; set; }
         public int? RequestDetailId { get; set; }
-        public UserViewModel Mason { get; set; }
+        public UserViewModel Worker { get; set; }
         public int? Quantity { get; set; }
         public int? QuantityNew { get; set; }
         public TblStatus Status { get; set; }

@@ -31,6 +31,7 @@ namespace AnService_Capstone.Core.Entities
         public virtual DbSet<TblService> TblServices { get; set; }
         public virtual DbSet<TblStatus> TblStatuses { get; set; }
         public virtual DbSet<TblTypeJob> TblTypeJobs { get; set; }
+        public virtual DbSet<TblTypeService> TblTypeServices { get; set; }
         public virtual DbSet<TblUsedMaterial> TblUsedMaterials { get; set; }
         public virtual DbSet<TblUser> TblUsers { get; set; }
 
@@ -56,6 +57,10 @@ namespace AnService_Capstone.Core.Entities
                 entity.Property(e => e.ContractId).HasColumnName("ContractID");
 
                 entity.Property(e => e.ContractCreateDate).HasColumnType("datetime");
+
+                entity.Property(e => e.ContractEndDate).HasColumnType("date");
+
+                entity.Property(e => e.ContractStartDate).HasColumnType("date");
 
                 entity.Property(e => e.ContractTitle).HasMaxLength(50);
 
@@ -200,23 +205,23 @@ namespace AnService_Capstone.Core.Entities
 
                 entity.Property(e => e.RepairDetailId).HasColumnName("RepairDetailID");
 
-                entity.Property(e => e.MasonId).HasColumnName("MasonID");
-
                 entity.Property(e => e.RepairDateBegin).HasColumnType("date");
 
                 entity.Property(e => e.RepairDateEnd).HasColumnType("date");
 
                 entity.Property(e => e.RequestDetailId).HasColumnName("RequestDetailID");
 
-                entity.HasOne(d => d.Mason)
-                    .WithMany(p => p.TblRepairDetails)
-                    .HasForeignKey(d => d.MasonId)
-                    .HasConstraintName("FK_tblRepairDetail_tblUsers");
+                entity.Property(e => e.WorkerId).HasColumnName("WorkerID");
 
                 entity.HasOne(d => d.RequestDetail)
                     .WithMany(p => p.TblRepairDetails)
                     .HasForeignKey(d => d.RequestDetailId)
                     .HasConstraintName("FK_tblRepairDetail_tblRequestDetails");
+
+                entity.HasOne(d => d.Worker)
+                    .WithMany(p => p.TblRepairDetails)
+                    .HasForeignKey(d => d.WorkerId)
+                    .HasConstraintName("FK_tblRepairDetail_tblUsers");
             });
 
             modelBuilder.Entity<TblReport>(entity =>
@@ -227,8 +232,6 @@ namespace AnService_Capstone.Core.Entities
 
                 entity.Property(e => e.ReportId).HasColumnName("ReportID");
 
-                entity.Property(e => e.MasonId).HasColumnName("MasonID");
-
                 entity.Property(e => e.ReportDate).HasColumnType("date");
 
                 entity.Property(e => e.ReportDescription).HasMaxLength(250);
@@ -237,17 +240,19 @@ namespace AnService_Capstone.Core.Entities
 
                 entity.Property(e => e.RequestDetailId).HasColumnName("RequestDetailID");
 
-                entity.HasOne(d => d.Mason)
-                    .WithMany(p => p.TblReports)
-                    .HasForeignKey(d => d.MasonId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_tblReport_tblUsers");
+                entity.Property(e => e.WorkerId).HasColumnName("WorkerID");
 
                 entity.HasOne(d => d.RequestDetail)
                     .WithMany(p => p.TblReports)
                     .HasForeignKey(d => d.RequestDetailId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_tblReport_tblRequestDetails");
+
+                entity.HasOne(d => d.Worker)
+                    .WithMany(p => p.TblReports)
+                    .HasForeignKey(d => d.WorkerId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_tblReport_tblUsers");
             });
 
             modelBuilder.Entity<TblRequestDetail>(entity =>
@@ -341,6 +346,11 @@ namespace AnService_Capstone.Core.Entities
                     .IsUnicode(false);
 
                 entity.Property(e => e.ServiceName).HasMaxLength(50);
+
+                entity.HasOne(d => d.TypeServiceNavigation)
+                    .WithMany(p => p.TblServices)
+                    .HasForeignKey(d => d.TypeService)
+                    .HasConstraintName("FK_tblServices_tblTypeService");
             });
 
             modelBuilder.Entity<TblStatus>(entity =>
@@ -366,6 +376,17 @@ namespace AnService_Capstone.Core.Entities
                 entity.Property(e => e.TypeJobName).HasMaxLength(50);
             });
 
+            modelBuilder.Entity<TblTypeService>(entity =>
+            {
+                entity.HasKey(e => e.TypeServiceId);
+
+                entity.ToTable("tblTypeService");
+
+                entity.Property(e => e.TypeServiceId).HasColumnName("TypeServiceID");
+
+                entity.Property(e => e.TypeServiceDecription).HasMaxLength(100);
+            });
+
             modelBuilder.Entity<TblUsedMaterial>(entity =>
             {
                 entity.HasKey(e => e.UsedMaterialId);
@@ -373,8 +394,6 @@ namespace AnService_Capstone.Core.Entities
                 entity.ToTable("tblUsedMaterial");
 
                 entity.Property(e => e.UsedMaterialId).HasColumnName("UsedMaterialID");
-
-                entity.Property(e => e.MasonId).HasColumnName("MasonID");
 
                 entity.Property(e => e.MaterialId).HasColumnName("MaterialID");
 
@@ -384,10 +403,7 @@ namespace AnService_Capstone.Core.Entities
 
                 entity.Property(e => e.RequestDetailId).HasColumnName("RequestDetailID");
 
-                entity.HasOne(d => d.Mason)
-                    .WithMany(p => p.TblUsedMaterials)
-                    .HasForeignKey(d => d.MasonId)
-                    .HasConstraintName("FK_tblUsedMaterial_tblUsers");
+                entity.Property(e => e.WorkerId).HasColumnName("WorkerID");
 
                 entity.HasOne(d => d.Material)
                     .WithMany(p => p.TblUsedMaterials)
@@ -403,6 +419,11 @@ namespace AnService_Capstone.Core.Entities
                     .WithMany(p => p.TblUsedMaterials)
                     .HasForeignKey(d => d.Status)
                     .HasConstraintName("FK_tblUsedMaterial_tblStatus");
+
+                entity.HasOne(d => d.Worker)
+                    .WithMany(p => p.TblUsedMaterials)
+                    .HasForeignKey(d => d.WorkerId)
+                    .HasConstraintName("FK_tblUsedMaterial_tblUsers");
             });
 
             modelBuilder.Entity<TblUser>(entity =>

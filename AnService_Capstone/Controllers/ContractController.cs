@@ -43,7 +43,7 @@ namespace AnService_Capstone.Controllers
             return Ok(res);
         }
 
-        /// <summary>
+        /*/// <summary>
         /// update status contract
         /// </summary>
         /// <param name="id">của contract</param>
@@ -69,7 +69,7 @@ namespace AnService_Capstone.Controllers
                 return Ok("Update successfull");
             }
             return BadRequest(new ErrorResponse("Update fail"));
-        }
+        }*/
 
         /// <summary>
         /// đồng ý hợp đồng
@@ -85,7 +85,7 @@ namespace AnService_Capstone.Controllers
                 return BadRequest(new ErrorResponse("Please enter id"));
             }
 
-            var res = await _contractRepository.ApproveContract(id);
+            var res = await _contractRepository.UpdateStatusContract(id, 3);
             if (res)
             {
                 return Ok("Update successfull");
@@ -107,7 +107,7 @@ namespace AnService_Capstone.Controllers
                 return BadRequest(new ErrorResponse("Please enter id"));
             }
 
-            var res = await _contractRepository.DenyContract(id);
+            var res = await _contractRepository.UpdateStatusContract(id, 1);
             if (res)
             {
                 return Ok("Update successfull");
@@ -129,7 +129,7 @@ namespace AnService_Capstone.Controllers
                 return BadRequest(new ErrorResponse("Please enter id"));
             }
 
-            var res = await _contractRepository.RequestUpdateContract(id);
+            var res = await _contractRepository.UpdateStatusContract(id, 7);
             if (res)
             {
                 return Ok("Update successfull");
@@ -147,35 +147,20 @@ namespace AnService_Capstone.Controllers
         {
             bool res = false;
 
-            if (contract.UserId == 0)
+            if (!ModelState.IsValid)
             {
-                return BadRequest(new ErrorResponse("Please enter id"));
-            }
-
-            if (contract.RequestId == 0)
-            {
-                return BadRequest(new ErrorResponse("Please enter requestID"));
-            }
-
-            if (contract.Username.Equals(""))
-            {
-                return BadRequest(new ErrorResponse("Please enter name"));
-            }
-
-            if (contract.ContractUrl.Equals(""))
-            {
-                return BadRequest(new ErrorResponse("Please enter url"));
+                return BadRequest();
             }
 
             var check = await _contractRepository.CheckContractExist(contract.RequestId);
 
             if (check != null)
             {
-                res = await _contractRepository.UpdateContractURL(contract.ContractUrl, check.ContractId);
+                res = await _contractRepository.UpdateContract(contract, check.ContractId);
             }
             else
             {
-                res = await _contractRepository.CreateContract(contract.UserId, contract.Username, contract.ContractUrl, contract.RequestId);
+                res = await _contractRepository.CreateContract(contract);
             }
 
             if (res)
@@ -185,7 +170,7 @@ namespace AnService_Capstone.Controllers
             return BadRequest(new ErrorResponse("Create fail"));
         }
 
-        [HttpPost]
+        /*[HttpPost]
         [Route("[action]")]
         public async Task<IActionResult> CreateContract2(int id, string name, int requestID, IFormFile file)
         {
@@ -224,7 +209,7 @@ namespace AnService_Capstone.Controllers
                 return Ok("Create successfull");
             }
             return BadRequest(new ErrorResponse("Create fail"));
-        }
+        }*/
 
         [HttpPost]
         [Route("[action]")]

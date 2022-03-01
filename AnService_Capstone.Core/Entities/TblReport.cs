@@ -14,13 +14,13 @@ namespace AnService_Capstone.Core.Entities
 
         public int ReportId { get; set; }
         public int RequestDetailId { get; set; }
-        public int MasonId { get; set; }
+        public int WorkerId { get; set; }
         public string ReportTitle { get; set; }
         public string ReportDescription { get; set; }
         public DateTime? ReportDate { get; set; }
 
-        public virtual TblUser Mason { get; set; }
         public virtual TblRequestDetail RequestDetail { get; set; }
+        public virtual TblUser Worker { get; set; }
         public virtual ICollection<TblMedium> TblMedia { get; set; }
     }
 }

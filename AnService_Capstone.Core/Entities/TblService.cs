@@ -16,9 +16,11 @@ namespace AnService_Capstone.Core.Entities
         public string ServiceName { get; set; }
         public string ServiceDescription { get; set; }
         public bool? ServiceStatus { get; set; }
-        public int? TypeMasonJob { get; set; }
+        public int? TypeWorkerJob { get; set; }
+        public int? TypeService { get; set; }
         public string ServiceImg { get; set; }
 
+        public virtual TblTypeService TypeServiceNavigation { get; set; }
         public virtual ICollection<TblRequestDetail> TblRequestDetails { get; set; }
     }
 }

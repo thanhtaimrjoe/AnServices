@@ -12,6 +12,8 @@ namespace AnService_Capstone.Core.Models.Request
         [Required]
         public int RequestDetailId { get; set; }
         [Required]
-        public IEnumerable<int> MasonList { get; set; }
+        public int MainWorker { get; set; }
+        [Required]
+        public IEnumerable<int> WorkerList { get; set; }
     }
 }

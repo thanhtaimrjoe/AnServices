@@ -69,13 +69,13 @@ namespace AnService_Capstone.Controllers
         }
 
         /// <summary>
-        /// login bằng số điện thoại cho customer hoặc mason
+        /// login bằng số điện thoại cho customer hoặc worker
         /// </summary>
         /// <param name="phoneNumber"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> LoginCustomerOrMason(string phoneNumber)
+        public async Task<IActionResult> LoginCustomerOrWorker(string phoneNumber)
         {
             if (!ModelState.IsValid)
             {
@@ -169,39 +169,39 @@ namespace AnService_Capstone.Controllers
         }
 
         /// <summary>
-        /// lấy danh sách manson theo service id, mason làm cho service nào
+        /// lấy danh sách manson theo service id, worker làm cho service nào
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("[action]")]
-        //get mason group by job by service id
-        public async Task<IActionResult> GetMasonByServiceID(int id)
+        //get worker group by job by service id
+        public async Task<IActionResult> GetWorkerByServiceID(int id)
         {
-            var mason = await _userRepository.GetMasonByServiceID(id);
+            var worker = await _userRepository.GetWorkerByServiceID(id);
 
-            if (mason == null)
+            if (worker == null)
             {
-                return NotFound(new ErrorResponse("No Mason Is Available"));
+                return NotFound(new ErrorResponse("No Worker Is Available"));
             }
-            return Ok(mason);
+            return Ok(worker);
         }
 
         /// <summary>
-        /// lấy dữ liệu mason theo id của mason
+        /// lấy dữ liệu worker theo id của worker
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet]
         [Route("[action]")]
-        public async Task<IActionResult> GetMasonById(int id)
+        public async Task<IActionResult> GetWorkerById(int id)
         {
             if (id == 0)
             {
                 return BadRequest(new ErrorResponse("Please enter id"));
             }
 
-            var res = await _userRepository.GetMasonByID(id);
+            var res = await _userRepository.GetWorkerByID(id);
             if (res == null)
             {
                 return NotFound(new ErrorResponse("No record"));
@@ -210,14 +210,14 @@ namespace AnService_Capstone.Controllers
         }
 
         /*/// <summary>
-        /// lấy tất cả mason có trong db
+        /// lấy tất cả worker có trong db
         /// </summary>
         /// <returns></returns>
         [HttpGet]
         [Route("[action]")]
-        public async Task<IActionResult> GetAllMason()
+        public async Task<IActionResult> GetAllWorker()
         {
-            var res = await _userRepository.GetAllMason();
+            var res = await _userRepository.GetAllWorker();
             if (res == null)
             {
                 return NotFound(new ErrorResponse("No record"));
@@ -226,33 +226,33 @@ namespace AnService_Capstone.Controllers
         }*/
 
         /// <summary>
-        /// lấy danh sách mason (note: hiện chỉ filter từng param)
+        /// lấy danh sách worker (note: hiện chỉ filter từng param)
         /// </summary>
         /// <param name="typeJobId">của nghề</param>
-        /// <param name="fullName">full name mason</param>
-        /// <param name="phoneNumber">số điện thoại mason</param>
+        /// <param name="fullName">full name worker</param>
+        /// <param name="phoneNumber">số điện thoại worker</param>
         /// <returns></returns>
         [HttpGet]
         [Route("[action]")]
-        public async Task<IActionResult> GetAllMason(int typeJobId, string fullName, string phoneNumber)
+        public async Task<IActionResult> GetAllWorker(int typeJobId, string fullName, string phoneNumber)
         {
             IEnumerable<UserViewModel> res;
 
             if (typeJobId == 0 && fullName == null && phoneNumber == null)
             {
-                res = await _userRepository.GetAllMason();
+                res = await _userRepository.GetAllWorker();
             }
             else if (typeJobId != 0 && fullName == null && phoneNumber == null)
             {
-                res = await _userRepository.GetAllMasonByTypeJob(typeJobId);
+                res = await _userRepository.GetAllWorkerByTypeJob(typeJobId);
             }
             else if (typeJobId == 0 && fullName != null && phoneNumber == null)
             {
-                res = await _userRepository.GetAllMasonByName(fullName);
+                res = await _userRepository.GetAllWorkerByName(fullName);
             }
             else
             {
-                res = await _userRepository.GetAllMasonByPhone(phoneNumber);
+                res = await _userRepository.GetAllWorkerByPhone(phoneNumber);
             }
 
             /*if (res == null)
@@ -263,20 +263,20 @@ namespace AnService_Capstone.Controllers
         }
 
         /// <summary>
-        /// xóa tài khoản của mason
+        /// xóa tài khoản của worker
         /// </summary>
-        /// <param name="id">id của mason cần xóa</param>
+        /// <param name="id">id của worker cần xóa</param>
         /// <returns></returns>
         [HttpPut]
         [Route("[action]")]
-        public async Task<IActionResult> RemoveMason(int id)
+        public async Task<IActionResult> RemoveWorker(int id)
         {
             if (id == 0)
             {
                 return BadRequest(new ErrorResponse("Please enter id"));
             }
 
-            var res = await _userRepository.RemoveMason(id);
+            var res = await _userRepository.RemoveWorker(id);
 
             if (res)
             {
@@ -286,27 +286,27 @@ namespace AnService_Capstone.Controllers
         }
 
         /// <summary>
-        /// update mason
+        /// update worker
         /// </summary>
-        /// <param name="mason"></param>
+        /// <param name="worker"></param>
         /// <returns></returns>
         [HttpPut]
         [Route("[action]")]
-        public async Task<IActionResult> UpdateMason([FromBody]UpdateMason mason)
+        public async Task<IActionResult> UpdateWorker([FromBody]UpdateWorker worker)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
 
-           /* var check = await _userRepository.CheckPhoneNumberExist(mason.MasonPhoneNumber);
+           /* var check = await _userRepository.CheckPhoneNumberExist(worker.WorkerPhoneNumber);
 
             if (check != null)
             {
                 return BadRequest(new ErrorResponse("Phone number is existed"));
             }*/
 
-            var res = await _userRepository.UpdateMason(mason);
+            var res = await _userRepository.UpdateWorker(worker);
 
             if (res)
             {
@@ -316,26 +316,57 @@ namespace AnService_Capstone.Controllers
         }
 
         /// <summary>
-        /// tạo tài khoản mason
+        /// tạo tài khoản worker
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> CreateMasonAccount([FromBody]CreateMason model)
+        public async Task<IActionResult> CreateWorkerAccount([FromBody]CreateWorker model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
             
-            var res = await _userRepository.CreateAccountMason(model);
+            var res = await _userRepository.CreateAccountWorker(model);
 
             if (res)
             {
                 return Ok("Create Successfull");
             }
             return BadRequest(new ErrorResponse("Create Fail"));
+        }
+
+        /// <summary>
+        /// lấy danh sách customer account
+        /// </summary>
+        /// <param name="name">tên khách hàng</param>
+        /// <param name="phoneNumber">số điện thoại</param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<IActionResult> GetAllCustomers(string name, string phoneNumber)
+        {
+            IEnumerable<UserViewModel> res;
+
+            if (name == null && phoneNumber == null)
+            {
+                res = await _userRepository.GetAllCustomers();
+            }
+            else if (name != null && phoneNumber == null)
+            {
+                res = await _userRepository.GetAllCustomersByName(name);
+            }
+            else if (name == null && phoneNumber != null)
+            {
+                res = await _userRepository.GetAllCustomersByPhone(phoneNumber);
+            }
+            else
+            {
+                res = await _userRepository.GetAllCustomersByPhoneAndName(phoneNumber, name);
+            }
+            return Ok(res);
         }
     }
 }
