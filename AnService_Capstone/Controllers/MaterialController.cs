@@ -219,7 +219,7 @@ namespace AnService_Capstone.Controllers
         /// </summary>
         /// <param name="id">usermaterialid</param>
         /// <returns></returns>
-        [HttpDelete]
+        [HttpPut]
         [Route("[action]")]
         public async Task<IActionResult> CancelRequestMaterial(int id)
         {
@@ -228,7 +228,7 @@ namespace AnService_Capstone.Controllers
                 return BadRequest(new ErrorResponse("Please enter id"));
             }
             
-            var res = await _materialReposiory.CacelRequestMaterial(id);
+            var res = await _materialReposiory.UpdateStatusRequestMaterial(id, 8);
             if (res)
             {
                 return Ok("Cancel Successfull");

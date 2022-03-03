@@ -58,11 +58,15 @@ namespace AnService_Capstone.Core.Entities
 
                 entity.Property(e => e.ContractCreateDate).HasColumnType("datetime");
 
+                entity.Property(e => e.ContractDeposit).HasColumnType("decimal(18, 2)");
+
                 entity.Property(e => e.ContractEndDate).HasColumnType("date");
 
                 entity.Property(e => e.ContractStartDate).HasColumnType("date");
 
                 entity.Property(e => e.ContractTitle).HasMaxLength(50);
+
+                entity.Property(e => e.ContractTotalPrice).HasColumnType("decimal(18, 2)");
 
                 entity.Property(e => e.ContractUpdateDate).HasColumnType("datetime");
 
@@ -205,9 +209,9 @@ namespace AnService_Capstone.Core.Entities
 
                 entity.Property(e => e.RepairDetailId).HasColumnName("RepairDetailID");
 
-                entity.Property(e => e.RepairDateBegin).HasColumnType("date");
+                entity.Property(e => e.RepairDateBegin).HasColumnType("datetime");
 
-                entity.Property(e => e.RepairDateEnd).HasColumnType("date");
+                entity.Property(e => e.RepairDateEnd).HasColumnType("datetime");
 
                 entity.Property(e => e.RequestDetailId).HasColumnName("RequestDetailID");
 
@@ -232,7 +236,7 @@ namespace AnService_Capstone.Core.Entities
 
                 entity.Property(e => e.ReportId).HasColumnName("ReportID");
 
-                entity.Property(e => e.ReportDate).HasColumnType("date");
+                entity.Property(e => e.ReportDate).HasColumnType("datetime");
 
                 entity.Property(e => e.ReportDescription).HasMaxLength(250);
 
@@ -304,7 +308,7 @@ namespace AnService_Capstone.Core.Entities
                     .HasMaxLength(10)
                     .IsUnicode(false);
 
-                entity.Property(e => e.RequestServiceCreateDate).HasColumnType("date");
+                entity.Property(e => e.RequestServiceCreateDate).HasColumnType("datetime");
 
                 entity.Property(e => e.RequestServiceDescription).HasMaxLength(150);
 

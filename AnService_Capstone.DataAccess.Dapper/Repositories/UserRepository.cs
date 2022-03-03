@@ -196,7 +196,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
 
         public async Task<bool> UpdateWorker(UpdateWorker worker)
         {
-            var query = "update tblUsers set FullName = @FullName, PhoneNumber = @PhoneNumber, Address = @Address, Email = @Email, Role = 2, TypeJob = @TypeJob, UpdateDate = @UpdateDate, Status = 4 " +
+            var query = "update tblUsers set FullName = @FullName, PhoneNumber = @PhoneNumber, Address = @Address, Email = @Email, TypeJob = @TypeJob, UpdateDate = @UpdateDate " +
                 "where UserID = @UserID";
 
             var parameters = new DynamicParameters();

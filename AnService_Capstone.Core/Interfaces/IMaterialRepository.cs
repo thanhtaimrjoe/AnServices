@@ -24,7 +24,7 @@ namespace AnService_Capstone.Core.Interfaces
 
         public Task<bool> DenyRequestMaterial(int id, string message);
 
-        public Task<bool> CacelRequestMaterial(int id);
+        /*public Task<bool> CacelRequestMaterial(int id);*/
 
         public Task<IEnumerable<TblMaterial>> GetAllMaterial();
 

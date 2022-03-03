@@ -180,5 +180,20 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
                 return true;
             }
         }
+
+        public async Task<TblContract> GetContractByRequestServiceID(int id)
+        {
+            var query = "select ContractID, CustomerID, RequestServiceID, ContractTitle, ContractUrl, ContractStartDate, ContractEndDate, ContractDeposit, ContractTotalPrice, ContractStatus, ContractCreateDate, ContractUpdateDate " +
+                "from tblContract " +
+                "where RequestServiceID = @RequestServiceID";
+
+            using (var connection = _context.CreateConnection())
+            {
+                connection.Open();
+                var res = await connection.QueryFirstOrDefaultAsync<TblContract>(query, new { @RequestServiceID  = id});
+                connection.Close();
+                return res;
+            }
+        }
     }
 }

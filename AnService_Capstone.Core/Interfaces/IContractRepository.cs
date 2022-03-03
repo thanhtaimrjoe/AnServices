@@ -25,5 +25,7 @@ namespace AnService_Capstone.Core.Interfaces
         public Task<TblContract> CheckContractExist(int requestID);
 
         public Task<bool> UpdateContract(CreateContract contract, int contractID);
+
+        public Task<TblContract> GetContractByRequestServiceID(int id);
     }
 }

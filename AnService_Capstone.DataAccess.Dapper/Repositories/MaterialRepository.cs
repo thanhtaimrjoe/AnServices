@@ -38,9 +38,9 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             }
         }
 
-        public async Task<bool> CacelRequestMaterial(int id)
+        /*public async Task<bool> CacelRequestMaterial(int id)
         {
-            var query = "delete from tblUsedMaterial where UsedMaterialID = @UsedMaterialID";
+            var query = "update tblUsedMaterial set  where UsedMaterialID = @UsedMaterialID";
 
             using (var connection = _dapperContext.CreateConnection())
             {
@@ -53,7 +53,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
                 }
                 return true;
             }
-        }
+        }*/
 
         public async Task<bool> DenyRequestMaterial(int id, string message)
         {
@@ -150,8 +150,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
                 "join tblRequestServices rs on detail.RequestServiceID = rs.RequestServiceID) " +
                 "join tblStatus sta on used.Status = sta.StatusID) " +
                 "join tblUsers u on u.UserID = used.WorkerID " +
-                "where rs.RequestServiceID = @RequestServiceID " +
-                "order by used.Status asc";
+                "where rs.RequestServiceID = @RequestServiceID";
 
             using (var connection = _dapperContext.CreateConnection())
             {

@@ -18,11 +18,13 @@ namespace AnService_Capstone.Controllers
     {
         private readonly IContractRepository _contractRepository;
         private readonly FirebaseService _firebaseService;
+        private readonly IServiceRepository _serviceRepository;
 
-        public ContractController(IContractRepository contractRepository, FirebaseService firebaseService)
+        public ContractController(IContractRepository contractRepository, FirebaseService firebaseService, IServiceRepository serviceRepository)
         {
             _contractRepository = contractRepository;
             _firebaseService = firebaseService;
+            _serviceRepository = serviceRepository;
         }
 
         [HttpGet]
@@ -157,17 +159,48 @@ namespace AnService_Capstone.Controllers
             if (check != null)
             {
                 res = await _contractRepository.UpdateContract(contract, check.ContractId);
+                foreach (var updateDetail in contract.updatePriceRequestDetails)
+                {
+                    _ = await _serviceRepository.UpdatePriceRequestServiceDetail(updateDetail.RequestDetailID, updateDetail.RequestDetailPrice);
+                }
             }
             else
             {
                 res = await _contractRepository.CreateContract(contract);
+                foreach (var updateDetail in contract.updatePriceRequestDetails)
+                {
+                    _ = await _serviceRepository.UpdatePriceRequestServiceDetail(updateDetail.RequestDetailID, updateDetail.RequestDetailPrice);
+                }
             }
 
             if (res)
             {
+                _ = await _serviceRepository.UpdateStatusRequestService(contract.RequestId, 3);
                 return Ok("Create successfull");
             }
             return BadRequest(new ErrorResponse("Create fail"));
+        }
+
+        /// <summary>
+        /// lấy thông tin HĐ theo request service ID
+        /// </summary>
+        /// <param name="requestServiceId"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<IActionResult> GetContractByRequestServiceID(int requestServiceId)
+        {
+            if (requestServiceId == 0)
+            {
+                return BadRequest(new ErrorResponse("Please enter requestServiceId"));
+            }
+
+            var res = await _contractRepository.GetContractByRequestServiceID(requestServiceId);
+            if (res == null)
+            {
+                return NotFound(new ErrorResponse("No record"));
+            }
+            return Ok(res);
         }
 
         /*[HttpPost]

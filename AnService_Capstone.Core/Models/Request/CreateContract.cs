@@ -25,5 +25,7 @@ namespace AnService_Capstone.Core.Models.Request
         public float ContractDeposit { get; set; }
         [Required]
         public float ContractTotalPrice { get; set; }
+        [Required]
+        public IEnumerable<UpdatePriceRequestDetail> updatePriceRequestDetails { get; set; }
     }
 }

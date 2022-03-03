@@ -12,8 +12,8 @@ namespace AnService_Capstone.DataAccess.Dapper.Services.Firebase
 {
     public class FirebaseService
     {
-        private static string ApiKey = "AIzaSyBiiPU21hyhkbdNyHIwp2U3TL6xkYkRuJg";
-        private static string Bucket = "anservices.appspot.com";
+        private static string ApiKey = "AIzaSyByEiCiKCbRZL2JAxjULH8j3KSDMFOi5ZI";
+        private static string Bucket = "anservice-f4076.appspot.com";
         private static string AuthEmail = "anservice@gmail.com";
         private static string AuthPassword = "1234321aA";
 
