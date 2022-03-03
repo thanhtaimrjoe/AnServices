@@ -208,7 +208,7 @@ const SelectRequestServiceStatus = (props) => {
         },
         {
           value: '6',
-          label: 'Đang sửa chữa',
+          label: 'Đang xử lý',
         },
       ]}
       {...props}

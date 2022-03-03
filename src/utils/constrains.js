@@ -207,7 +207,7 @@ export const REQUESTSERVICE = [
       //   status: 'Default',
       // },
       6: {
-        text: 'Đang sửa chữa',
+        text: 'Đang xử lý',
         status: 'Processing',
       },
     },

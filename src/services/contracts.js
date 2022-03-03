@@ -33,3 +33,7 @@ export const createContract = (prop) => {
       data: prod.update,
     });
   };
+
+  export const getContractByRequestServiceID = (id) => {
+    return request.get(`/Contract/GetContractByRequestServiceID?requestServiceId=${id}`);
+  };

@@ -44,7 +44,7 @@ import {
   getAllMaterialByRequestServiceID,
 } from '@/services/requestmaterials';
 import { getAllWorkers } from '@/services/workers';
-import { getContractListByUserID } from '@/services/contracts';
+import { getContractByRequestServiceID, getContractListByUserID } from '@/services/contracts';
 import ProForm, { ProFormTextArea, ProFormDatePicker } from '@ant-design/pro-form';
 import ProTable from '@ant-design/pro-table';
 import { CheckOutlined, CloseOutlined, InfoCircleOutlined, LoadingOutlined, PlusOutlined, RollbackOutlined, UploadOutlined } from '@ant-design/icons';
@@ -78,6 +78,11 @@ const DetailRequestService = (props) => {
   const [contractEndDateData, setContractEndDateData] = useState();
   const [contractTotalPriceData, setContractTotalPriceData] = useState();
   const [contractDepositData, setContractDepositData] = useState();
+  //
+  const [contractStartDateData1, setContractStartDateData1] = useState();
+  const [contractEndDateData1, setContractEndDateData1] = useState();
+  const [contractTotalPriceData1, setContractTotalPriceData1] = useState();
+  const [contractDepositData1, setContractDepositData1] = useState();
   const [visible, setVisible] = React.useState(false);
   const [confirmLoading, setConfirmLoading] = React.useState(false);
   const [isLoad, setIsLoad] = useState(false);
@@ -88,6 +93,7 @@ const DetailRequestService = (props) => {
   // const dateFormatList = ['DD-MM-YYYY', 'DD-MM-YY'];
   const dateFormatList = ['DD-MM-YYYY', 'YY-MM-DD'];
 
+  const [totalPrice, setTotalPrice] = useState([]);
 // ======================================
   
 // Upload file to Firebase
@@ -224,6 +230,16 @@ const DetailRequestService = (props) => {
         setReportRequestService(record);
       });
     }
+    // Dữ liệu hợp đồng (trong chi tiết yêu cầu dịch vụ)
+    if (isLoad && requestServiceRecord !== null) {
+      getContractByRequestServiceID(updateRequestServiceState.requestServiceId).then((record) => {
+        setContractStartDateData1(record.contractStartDate);
+        setContractEndDateData1(record.contractEndDate);
+        setContractDepositData1(record.contractDeposit);
+        setContractTotalPriceData1(record.contractTotalPrice);
+        
+      });
+    }
     else console.log('Lỗi');
   }, [isLoad]);
 
@@ -318,11 +334,32 @@ const DetailRequestService = (props) => {
 
   const { Option } = Select;
 
-  function onChange(value) {
+  function onChange(value, requestDetailId ,index) {
     console.log('changed', value);
-  }
+    console.log('changedId', requestDetailId);
+    console.log("changedindex", index);
+    if(totalPrice.length === 0) {
+      console.log("Mảng rỗng")
+      setTotalPrice([...totalPrice, {id: requestDetailId, price: value}]);
+    } else {
+      // console.log("")
+      totalPrice.map((item, i) => {
+        if(item.id === requestDetailId) {
+          console.log("Có tồn tại trong mảng")
+          // totalPrice.price = value
+          // setTotalPrice([...totalPrice]);
+        }
+        else {
+          console.log("Chưa tồn tại trong mảng")
+          setTotalPrice([...totalPrice, {id: requestDetailId, price: value}]);
+          }
+        });
+      }
+    }
+    
 
   function onChangeStartDate(value, date) {
+    console.log("changedproduct", totalPrice);
     console.log('changed', value);
     console.log('changed2' ,date);
     console.log('changed22' ,date[0]);
@@ -341,6 +378,8 @@ const DetailRequestService = (props) => {
     setMainStaffCoordinator(value);
     console.log(`selected ${value}`);
     // console.log('selected1', staffCoordinator);
+    console.log("contractDataTotalPrice", contractTotalPriceData1);
+
   }
 
   function handleChange(value) {
@@ -428,36 +467,53 @@ const DetailRequestService = (props) => {
   };
 
   const onCreateContract = () => {
-    const createContractValues = {
-      userId: userID,
-      username: customerName,
-      contractUrl: Url,
-      requestId: updateRequestServiceState.requestServiceId,
-      contractStartDate: contractStartDateData,
-      contractEndDate: contractEndDateData,
-      contractDeposit: contractDepositData,
-      contractTotalPrice: contractTotalPriceData,
-    };
-    const createContractData = normalizeReportForm(createContractValues);
-    return createContract(createContractData)
-    .then((res) => {
-      console.log('contract1', res);
-      console.log('contract2', createContractData);
-      console.log('contract123', contractStartDateData);
-      console.log('contract1234', contractEndDateData);
-      console.log('contract11', createContractValues);
+    
+    let validate = true;
+    if(Url.length === 0) {
+      validate = false;
+    }
+    if(!contractStartDateData) {
+      validate = false;
+    }
+    if(!contractEndDateData) {
+      validate = false;
+    }
+    if(!validate) {
+      console.log("Không gửi được")
+    }
+    else {
+      console.log("Gửi được")
+      const createContractValues = {
+        userId: userID,
+        username: customerName,
+        contractUrl: Url,
+        requestId: updateRequestServiceState.requestServiceId,
+        contractStartDate: contractStartDateData,
+        contractEndDate: contractEndDateData,
+        contractDeposit: contractDepositData,
+        contractTotalPrice: contractTotalPriceData,
+      };
+      const createContractData = normalizeReportForm(createContractValues);
+      return createContract(createContractData)
+      .then((res) => {
+        console.log('contract1', res);
+        console.log('contract2', createContractData);
+        console.log('contract123', contractStartDateData);
+        console.log('contract1234', contractEndDateData);
+        console.log('contract11', createContractValues);
 
-      setConfirmLoading(true);
-    })
-    .then(() => {
-      // createContractValues.resetFields();
-      setConfirmLoading(false);
-      setVisible(false);
-    })
-    .catch((info) => {
-      console.log('Xác thực không thành công:', info);
-    })
-    .finally();
+        setConfirmLoading(true);
+      })
+      .then(() => {
+        // createContractValues.resetFields();
+        setConfirmLoading(false);
+        setVisible(false);
+      })
+      .catch((info) => {
+        console.log('Xác thực không thành công:', info);
+      })
+      .finally();
+    }
   }
   
   function onOpenNewWindown() {
@@ -471,9 +527,11 @@ const DetailRequestService = (props) => {
       })
   },5000)
  }
- 
+
 // ======================================
   
+  
+
   const REQUESTSERVICEDETAIL = [
     {
       title: 'STT',
@@ -481,6 +539,14 @@ const DetailRequestService = (props) => {
       search: false,
       render: (text, object, index) => {
         return <div>{index + 1}</div>;
+      },
+    },
+    {
+      title: 'requestDetailId',
+      dataIndex: 'requestDetailId',
+      search: false,
+      render: (text, record, index) => {
+        return <div>{record.requestDetailId}</div>;
       },
     },
     {
@@ -504,38 +570,19 @@ const DetailRequestService = (props) => {
       title: 'Giá trị sửa chữa',
       dataIndex: 'requestDetailPrice',
       search: false,
-      render: (text, record) => {
+      render: (text, record, index) => {
         return (
           <InputNumber 
             placeholder='Nhập giá' 
-            defaultValue={record.requestDetailPrice}
+            // defaultValue={record.requestDetailPrice}
             min={0} 
             style={{ width: 150 }} 
             formatter={value => `${value} VND`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
             parser={value => value.replace(/\s\VND?|(,*)/g, '')} 
-            onChange={onChange}
-          >
-            {record.statusName}
-          </InputNumber>
+            onChange={(value) => onChange(value, record.requestDetailId, index)}
+          />
         );
       }
-    },
-    {
-      title: 'Hành động',
-      key: 'action',
-      search: false,
-      render: (text, record) => {
-        const updateWorkerState = { ...record };
-        console.log('abc1', record.requestDetailId);
-        // console.log("abc11", record.usedMaterialId)
-        return (
-          <Space size="middle">
-            <Button>
-              Xác nhận
-            </Button>
-          </Space>
-        );
-      },
     },
   ];
 
@@ -925,7 +972,7 @@ const DetailRequestService = (props) => {
           <Divider style={{ marginBottom: 32, }} />
 
           {/* XEM ẢNH & VIDEO */}
-          <div className={styles.title} style={{marginBottom:'30px'}} >Hình ảnh & video của công trình</div>
+          <div className={styles.title} style={{marginBottom:'0px'}} >Hình ảnh & video của công trình</div>
           {images}
 
           <Divider style={{ marginBottom: 32, }} />
@@ -971,9 +1018,13 @@ const DetailRequestService = (props) => {
             <Col span={10}>
               <ProForm.Item 
                 name="contractStartDate&&contractEndDate"
+                // name={contractStartDateData1&&contractEndDateData1}
                 label="Ngày bắt đầu và kết thúc thi công"
+                // initialValue={contractStartDateData1&&contractEndDateData1}
                 >
-                <RangePicker onChange={onChangeStartDate}  style={{ width:390 }} format="YYYY-MM-DD"/>
+                <RangePicker onChange={onChangeStartDate} 
+                  disabledDate={d => !d || d.isSameOrBefore(moment().startOf('day')) }
+                  style={{ width:390 }} format="YYYY-MM-DD"/>
               </ProForm.Item>
             </Col>
           </Row>
@@ -1007,9 +1058,11 @@ const DetailRequestService = (props) => {
             <Col span={10}>
               <ProForm.Item 
                 name="contractDeposit"
-                label="Đã đặt cọc"
+                // name={contractDepositData1}
+                label="Đặt cọc"
+                // initialValue={contractDepositData1}
               >
-                <Select defaultValue="0" onChange={setContractDepositData}>
+                <Select defaultValue="0" onChange={setContractDepositData} >
                   <Option value="0">0%</Option>
                   <Option value="0.1">10%</Option>
                   <Option value="0.3">30%</Option>
@@ -1023,46 +1076,26 @@ const DetailRequestService = (props) => {
             <Col span={10}>
               <ProForm.Item 
                 // name="contractTotalPrice"
-                name="contractTotalPrice"
-                label="Tổng giá trị hợp đồng"
+                // name="contractTotalPrice"
+                name={contractTotalPriceData1}
+                label="Tổng giá trị hợp đồng (Không bao gồm Thuế Giá Trị Gia Tăng)"
+                initialValue={contractTotalPriceData1}
               >
                 <InputNumber 
                   style={{ width:390 }}
+                  defaultValue={contractTotalPriceData1}
                   min={0} 
                   formatter={value => `${value} VND`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                   parser={value => value.replace(/\s\VND?|(,*)/g, '')} 
                   onChange={setContractTotalPriceData}
+                  readOnly
                   />
               </ProForm.Item>
             </Col>
           </Row>
-          <Row style={{ marginTop:'50px' }}>
-            {/* <Upload maxCount={1}>
-              <Button type="file" onChange={(e)=>{setFile(e.target.files[0])}} icon={<UploadOutlined />} style={{ marginLeft: '8em', width: '145%' }}>
-                Chọn file
-              </Button>
-            </Upload> */}
-            <input type="file" onChange={(e)=>{setFile(e.target.files[0])}} />
-            
-            {/* <input type="file" onChange={(e)=>{setFile(e.target.files[0])}}/> */}
-            <Button type="primary" style={{ width: '30%', marginLeft: '4em', }} onClick={upload}>
-              Tải File lên FireBase
-            </Button>
-            <Button type="primary" style={{ width: '30%', marginLeft: '4em', }} onClick={onCreateContract}>
-            {/* <Button type="primary" style={{ width: '30%', marginLeft: '4em', }} onClick={() => {upload();onCreateContract();}}> */}
-              Gửi hợp đồng
-            </Button>
-            {/* <button onClick={upload}>Upload</button> */}
-          </Row>
-
-          <Row>
-            <p><a href={Url}>{Url}</a></p>
-          </Row>
-
-          <Divider style={{ marginBottom: 32, }} />
 
           {/* XEM DỊCH VỤ */}
-          <div className={styles.title} >Chi tiết dịch vụ</div>
+          <div className={styles.title} style={{marginTop:50}} >Chi tiết dịch vụ</div>
           <ProTable
             style={{
               marginBottom: 50,
@@ -1077,6 +1110,33 @@ const DetailRequestService = (props) => {
             // dataSource={requestServiceRecord.map((e) => e)}
             dataSource={requestServiceRecord}
           />
+
+          <Row style={{ marginTop:'50px' }}>
+            {/* <Upload maxCount={1}>
+              <Button type="file" onChange={(e)=>{setFile(e.target.files[0])}} icon={<UploadOutlined />} style={{ marginLeft: '8em', width: '145%' }}>
+                Chọn file
+              </Button>
+            </Upload> */}
+            <input type="file" onChange={(e)=>{setFile(e.target.files[0])}} />
+            
+            {/* <input type="file" onChange={(e)=>{setFile(e.target.files[0])}}/> */}
+            <Button type="primary" style={{ width: '30%', marginLeft: '4em', }} onClick={upload}>
+              Tải File lên FireBase
+            </Button>
+            <Button type="primary" style={{ width: '30%', marginLeft: '4em', }} onClick={onCreateContract} rules>
+            {/* <Button type="primary" style={{ width: '30%', marginLeft: '4em', }} onClick={() => {upload();onCreateContract();}}> */}
+              Gửi hợp đồng
+            </Button>
+            {/* <button onClick={upload}>Upload</button> */}
+          </Row>
+
+          <Row>
+            <p><a href={Url}>{Url}</a></p>
+          </Row>
+
+          <Divider style={{ marginBottom: 32, }} />
+
+          
           
           <div className={styles.title} >Điều phối thợ</div>
           <ProTable
