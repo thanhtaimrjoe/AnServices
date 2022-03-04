@@ -1,9 +1,15 @@
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React from 'react';
-import HomeContainer from '../containers/home/HomeContainer';
-import RequestServiceContainer from '../containers/home/RequestServiceContainer';
-import {styles} from '../styles/HeaderStyle';
-import Color from '../styles/Color';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import HomeContainer from '../container/home/main/HomeContainer';
+import RequestDetailContainer from '../container/home/request-detail/RequestDetailContainer';
+import {styles} from '../style/HeaderStyle';
+import Color from '../style/Color';
+import MaterialDetailContainer from '../container/home/material-detail/MaterialDetailContainer';
+import RequestMaterialContainer from '../container/home/request-material/RequestMaterialContainer';
+import ReportProblemContainer from '../container/home/report-problem/ReportProblemContainer';
+import CompletedReportContainer from '../container/home/completed-report/CompletedReportContainer';
+import ReportDetailContainer from '../container/home/report-detail/ReportDetailContainer';
+
 const Stack = createNativeStackNavigator();
 export default function HomeStack() {
   return (
@@ -14,10 +20,55 @@ export default function HomeStack() {
         options={{headerShown: false}}
       />
       <Stack.Screen
-        name="RequestServiceContainer"
-        component={RequestServiceContainer}
+        name="RequestDetailContainer"
+        component={RequestDetailContainer}
         options={{
-          headerTitle: 'Yêu cầu dịch vụ',
+          headerTitle: 'Thông tin yêu cầu',
+          headerTitleStyle: styles.headerTitle,
+          headerTintColor: Color.primary,
+        }}
+      />
+      <Stack.Screen
+        name="MaterialDetailContainer"
+        component={MaterialDetailContainer}
+        options={{
+          headerTitle: 'Thông tin chung',
+          headerTitleStyle: styles.headerTitle,
+          headerTintColor: Color.primary,
+        }}
+      />
+      <Stack.Screen
+        name="RequestMaterialContainer"
+        component={RequestMaterialContainer}
+        options={{
+          headerTitle: 'Yêu cầu vật liệu',
+          headerTitleStyle: styles.headerTitle,
+          headerTintColor: Color.primary,
+        }}
+      />
+      <Stack.Screen
+        name="ReportProblemContainer"
+        component={ReportProblemContainer}
+        options={{
+          headerTitle: 'Báo cáo vấn đề',
+          headerTitleStyle: styles.headerTitle,
+          headerTintColor: Color.primary,
+        }}
+      />
+      <Stack.Screen
+        name="CompletedReportContainer"
+        component={CompletedReportContainer}
+        options={{
+          headerTitle: 'Báo cáo hoàn thành',
+          headerTitleStyle: styles.headerTitle,
+          headerTintColor: Color.primary,
+        }}
+      />
+      <Stack.Screen
+        name="ReportDetailContainer"
+        component={ReportDetailContainer}
+        options={{
+          headerTitle: 'Thông tin báo cáo',
           headerTitleStyle: styles.headerTitle,
           headerTintColor: Color.primary,
         }}

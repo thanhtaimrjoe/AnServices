@@ -1,8 +1,9 @@
-import {NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {View, Text} from 'react-native';
 import React from 'react';
-import LoginContainer from '../containers/auth/LoginContainer';
-import VerifyOTPContainer from '../containers/auth/VerifyOTPContainer';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {NavigationContainer} from '@react-navigation/native';
+import LoginContainer from '../container/auth/login/LoginContainer';
+import VerifyOTPContainer from '../container/auth/verify-otp/VerifyOTPContainer';
 import BottomTab from './BottomTab';
 
 const Stack = createNativeStackNavigator();

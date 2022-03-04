@@ -1,17 +1,16 @@
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import React from 'react';
-import Icon from 'react-native-vector-icons/FontAwesome5';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import HomeStack from './HomeStack';
-import ListRequestServiceContainer from '../containers/list/ListRequestServiceContainer';
-import PersonalContainer from '../containers/personal/PersonalContainer';
-import Color from '../styles/Color';
-
-const Stack = createBottomTabNavigator();
+import PersonalContainer from '../container/personal/main/PersonalContainer';
+import Color from '../style/Color';
+import Icon from 'react-native-vector-icons/FontAwesome5';
+import ListStack from './ListStack';
+const Tab = createBottomTabNavigator();
 export default function BottomTab() {
   return (
-    <Stack.Navigator>
-      <Stack.Screen
-        name="Home"
+    <Tab.Navigator>
+      <Tab.Screen
+        name="HomeStack"
         component={HomeStack}
         options={{
           headerShown: false,
@@ -22,20 +21,22 @@ export default function BottomTab() {
           tabBarLabelStyle: {fontSize: 14},
         }}
       />
-      <Stack.Screen
-        name="List"
-        component={ListRequestServiceContainer}
+      <Tab.Screen
+        name="ListStack"
+        component={ListStack}
         options={{
           headerShown: false,
-          tabBarIcon: ({color}) => <Icon name="list" size={26} color={color} />,
+          tabBarIcon: ({color}) => (
+            <Icon name="exclamation-triangle" size={26} color={color} />
+          ),
           tabBarActiveTintColor: Color.second,
           tabBarInactiveTintColor: Color.primary,
-          tabBarLabel: 'Danh sách',
+          tabBarLabel: 'Unknown',
           tabBarLabelStyle: {fontSize: 14},
         }}
       />
-      <Stack.Screen
-        name="Personal"
+      <Tab.Screen
+        name="PersonalContainer"
         component={PersonalContainer}
         options={{
           headerShown: false,
@@ -48,6 +49,6 @@ export default function BottomTab() {
           tabBarLabelStyle: {fontSize: 14},
         }}
       />
-    </Stack.Navigator>
+    </Tab.Navigator>
   );
 }

@@ -1,14 +1,20 @@
 import {combineReducers} from 'redux';
-import services from './services';
-import message from './message';
 import user from './user';
-import listRequestService from './listRequestService';
 import otp from './otp';
+import requestService from './requestService';
+import requestDetail from './requestDetail';
+import usedMaterial from './usedMaterial';
+import material from './material';
+import message from './message';
+import report from './report';
 const myReducer = combineReducers({
-  services, //services: services
-  message, //message: message
-  user, //user:user
-  listRequestService, //listRequestService: listRequestService
-  otp, //otp: otp
+  user,
+  otp,
+  requestService,
+  requestDetail,
+  usedMaterial,
+  material,
+  message,
+  report,
 });
 export default myReducer;
