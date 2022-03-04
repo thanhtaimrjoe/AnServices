@@ -2,9 +2,9 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import React from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import HomeStack from './HomeStack';
-import ListRequestServiceContainer from '../containers/list/ListRequestServiceContainer';
-import PersonalContainer from '../containers/personal/PersonalContainer';
-import Color from '../styles/Color';
+import ListStack from './ListStack';
+import PersonalContainer from '../containers/personal/main/PersonalContainer';
+import Color from '../style/Color';
 
 const Stack = createBottomTabNavigator();
 export default function BottomTab() {
@@ -24,13 +24,15 @@ export default function BottomTab() {
       />
       <Stack.Screen
         name="List"
-        component={ListRequestServiceContainer}
+        component={ListStack}
         options={{
           headerShown: false,
-          tabBarIcon: ({color}) => <Icon name="list" size={26} color={color} />,
+          tabBarIcon: ({color}) => (
+            <Icon name="tools" size={26} color={color} />
+          ),
           tabBarActiveTintColor: Color.second,
           tabBarInactiveTintColor: Color.primary,
-          tabBarLabel: 'Danh sách',
+          tabBarLabel: 'Xem yêu cầu',
           tabBarLabelStyle: {fontSize: 14},
         }}
       />

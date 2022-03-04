@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, Text, ActivityIndicator} from 'react-native';
 import {styles} from './LoadingStyle';
-import Color from '../../styles/Color';
+import Color from '../../style/Color';
 
 export default function Loading() {
   return (
@@ -11,7 +11,7 @@ export default function Loading() {
         size={'large'}
         color={Color.primary}
       />
-      <Text style={styles.loadingText}>Loading</Text>
+      <Text style={styles.loadingText}>Đang tải</Text>
     </View>
   );
 }
