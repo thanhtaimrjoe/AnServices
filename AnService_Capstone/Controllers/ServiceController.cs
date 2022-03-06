@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Threading.Tasks;
 
 namespace AnService_Capstone.Controllers
@@ -84,7 +85,8 @@ namespace AnService_Capstone.Controllers
             List<string> stringFile = new List<string>();
             foreach (var file in model.File)
             {
-                string res = await _firebaseService.Upload(file.OpenReadStream(), file.FileName, "RequestServices");
+                string name = DateTime.Now.ToString("f", CultureInfo.GetCultureInfo("en-US")) + file.FileName;
+                string res = await _firebaseService.Upload(file.OpenReadStream(), name, "RequestServices");
                 stringFile.Add(res);
             }
 
@@ -475,6 +477,51 @@ namespace AnService_Capstone.Controllers
 
             var result = await _serviceRepository.UpdateStatusRequestService(id, 1);
 
+            if (!result)
+            {
+                return NotFound(new ErrorResponse("Cancel Fail"));
+            }
+            return Ok("Cancel Successful");
+        }
+
+        [HttpPut]
+        [Route("[action]")]
+        public async Task<IActionResult> UpdateStatusRequestServiceDetail(int id, int status)
+        {
+            if (id == 0)
+            {
+                return BadRequest(new ErrorResponse("Please enter id"));
+            }
+
+            if (status == 0)
+            {
+                return BadRequest(new ErrorResponse("Please enter status"));
+            }
+
+            var result = await _serviceRepository.UpdateStatusRequestServiceDetail(id, status);
+
+            if (!result)
+            {
+                return NotFound(new ErrorResponse("Cancel Fail"));
+            }
+            return Ok("Cancel Successful");
+        }
+
+        [HttpPut]
+        [Route("[action]")]
+        public async Task<IActionResult> RemoveListRequestService(IEnumerable<int> requestServiceID)
+        {
+            bool result = false;
+            if (requestServiceID == null)
+            {
+                return BadRequest(new ErrorResponse("Please enter requestServiceID"));
+            }
+
+            foreach (var service in requestServiceID)
+            {
+                result = await _serviceRepository.UpdateStatusRequestService(service, 13);
+            }
+            
             if (!result)
             {
                 return NotFound(new ErrorResponse("Cancel Fail"));

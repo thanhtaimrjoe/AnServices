@@ -1,4 +1,5 @@
-﻿using AnService_Capstone.Core.Interfaces;
+﻿using AnService_Capstone.Core.Entities;
+using AnService_Capstone.Core.Interfaces;
 using AnService_Capstone.Core.Models.Request;
 using AnService_Capstone.Core.Models.Response;
 using AnService_Capstone.DataAccess.Dapper.Services.Firebase;
@@ -190,6 +191,7 @@ namespace AnService_Capstone.Controllers
         [Route("[action]")]
         public async Task<IActionResult> GetContractByRequestServiceID(int requestServiceId)
         {
+            IEnumerable<TblContract> contract = new List<TblContract>();
             if (requestServiceId == 0)
             {
                 return BadRequest(new ErrorResponse("Please enter requestServiceId"));
@@ -198,7 +200,7 @@ namespace AnService_Capstone.Controllers
             var res = await _contractRepository.GetContractByRequestServiceID(requestServiceId);
             if (res == null)
             {
-                return NotFound(new ErrorResponse("No record"));
+                return Ok(contract);
             }
             return Ok(res);
         }

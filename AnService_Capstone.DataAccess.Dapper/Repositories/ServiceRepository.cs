@@ -496,16 +496,17 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
 
         public async Task<IEnumerable<TblRequestDetail>> GetAllRequestServiceDetailsByRequestServiceIDAndWorkerID(int request, int worker)
         {
-            var query = "select detail.RequestDetailID, RequestServiceID, detail.ServiceID, ser.ServiceID, ServiceName, ServiceDescription, ServiceImg, RepairDetailID, IsPrimary " +
-                "from (tblRequestDetails detail join tblServices ser on detail.ServiceID = ser.ServiceID) " +
-                "join tblRepairDetail repair on detail.RequestDetailID = repair.RequestDetailID " +
+            var query = "select detail.RequestDetailID, RequestServiceID, RequestDetailStatus, RequestDetailPrice, detail.ServiceID, ser.ServiceID, ServiceName, ServiceDescription, ServiceImg, StatusID, StatusName, RepairDetailID, IsPrimary " +
+                "from ((tblRequestDetails detail join tblServices ser on detail.ServiceID = ser.ServiceID) " +
+                "join tblRepairDetail repair on detail.RequestDetailID = repair.RequestDetailID)" +
+                "join tblStatus sta on detail.RequestDetailStatus = sta.StatusID " +
                 "where RequestServiceID = @RequestServiceID and WorkerID = @WorkerID";
 
             using (var connection = _context.CreateConnection())
             {
                 connection.Open();
                 var requestDict = new Dictionary<int, TblRequestDetail>();
-                var res = await connection.QueryAsync<TblRequestDetail, TblService, TblRepairDetail, TblRequestDetail>(query, (requestDetail, service, repair) =>
+                var res = await connection.QueryAsync<TblRequestDetail, TblService, TblStatus, TblRepairDetail, TblRequestDetail>(query, (requestDetail, service, status, repair) =>
                 {
                     /*requestDetail.Service = service;
                     return requestDetail;*/
@@ -515,13 +516,14 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
                     {
                         currentRequest = requestDetail;
                         currentRequest.Service = service;
+                        requestDetail.RequestDetailStatusNavigation = status;
                         currentRequest.TblRepairDetails = new List<TblRepairDetail>();
                         requestDict.Add(currentRequest.RequestDetailId, currentRequest);
                     }
                     currentRequest.TblRepairDetails.Add(repair);
                     return currentRequest;
 
-                }, param: new { @RequestServiceID = request, @WorkerID = worker }, splitOn: "ServiceID, RepairDetailID");
+                }, param: new { @RequestServiceID = request, @WorkerID = worker }, splitOn: "ServiceID, StatusID, RepairDetailID");
                 connection.Close();
                 if (res.Count() == 0)
                 {

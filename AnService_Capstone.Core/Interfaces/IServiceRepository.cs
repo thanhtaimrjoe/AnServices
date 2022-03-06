@@ -62,5 +62,6 @@ namespace AnService_Capstone.Core.Interfaces
         public Task<bool> UpdatePriceRequestServiceDetail(int id, float price);
 
         public Task<bool> UpdateStatusRequestService(int id, int status);
+
     }
 }
