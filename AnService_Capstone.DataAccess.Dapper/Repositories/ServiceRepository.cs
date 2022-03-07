@@ -22,9 +22,9 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             _context = context;
         }
 
-        public async Task<bool> AssignWorkerToRequest(int RequestDetailId, int workerID, int status)
+        public async Task<bool> AssignWorkerToRequest(int RequestDetailId, int workerID, int status, int priority)
         {
-            var query = "insert into tblRepairDetail(RequestDetailID, WorkerID, RepairDateBegin, IsPrimary) values(@RequestDetailID, @WorkerID, @RepairDateBegin, @IsPrimary)";
+            var query = "insert into tblRepairDetail(RequestDetailID, WorkerID, RepairDateBegin, IsPrimary, RequestDetailPriority) values(@RequestDetailID, @WorkerID, @RepairDateBegin, @IsPrimary, @RequestDetailPriority)";
             int row;
 
             var parameters = new DynamicParameters();
@@ -32,6 +32,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             parameters.Add("WorkerID", workerID, DbType.String);
             parameters.Add("RepairDateBegin", DateTime.Now, DbType.DateTime);
             parameters.Add("IsPrimary", status, DbType.Boolean);
+            parameters.Add("RequestDetailPriority", priority, DbType.Int32);
 
             using (var connection = _context.CreateConnection())
             {

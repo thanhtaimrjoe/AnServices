@@ -270,13 +270,13 @@ namespace AnService_Capstone.Controllers
                 var result = await _serviceRepository.AssignWorkerToRequest(worker);
             }*/
 
-            var result = await _serviceRepository.AssignWorkerToRequest(job.RequestDetailId, job.MainWorker, 1);
+            var result = await _serviceRepository.AssignWorkerToRequest(job.RequestDetailId, job.MainWorker, 1, job.Priority);
 
             if (job.WorkerList != null)
             {
                 foreach (var worker in job.WorkerList)
                 {
-                    var res = await _serviceRepository.AssignWorkerToRequest(job.RequestDetailId, worker, 0);
+                    var res = await _serviceRepository.AssignWorkerToRequest(job.RequestDetailId, worker, 0, job.Priority);
                 }
             }
 

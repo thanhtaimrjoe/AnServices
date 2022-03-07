@@ -33,7 +33,7 @@ namespace AnService_Capstone.Core.Interfaces
 
         public Task<IEnumerable<TblService>> GetServiceByName(string name);
 
-        public Task<bool> AssignWorkerToRequest(int RequestDetailId, int workerID, int status);
+        public Task<bool> AssignWorkerToRequest(int RequestDetailId, int workerID, int status, int priority);
 
         public Task<IEnumerable<RequestService>> GetAllRequestServiceByWorkerID(int id);
 

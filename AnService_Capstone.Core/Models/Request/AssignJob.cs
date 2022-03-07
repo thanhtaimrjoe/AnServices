@@ -12,6 +12,8 @@ namespace AnService_Capstone.Core.Models.Request
         [Required]
         public int RequestDetailId { get; set; }
         [Required]
+        public int Priority { get; set; }
+        [Required]
         public int MainWorker { get; set; }
         public IEnumerable<int> WorkerList { get; set; }
     }

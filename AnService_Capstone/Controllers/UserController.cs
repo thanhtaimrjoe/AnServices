@@ -173,7 +173,7 @@ namespace AnService_Capstone.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpPost]
+        [HttpGet]
         [Route("[action]")]
         //get worker group by job by service id
         public async Task<IActionResult> GetWorkerByServiceID(int id)
