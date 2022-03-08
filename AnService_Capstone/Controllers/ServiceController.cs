@@ -498,13 +498,32 @@ namespace AnService_Capstone.Controllers
                 return BadRequest(new ErrorResponse("Please enter status"));
             }
 
+            bool checkStatus = false;
+
             var result = await _serviceRepository.UpdateStatusRequestServiceDetail(id, status);
+
+            var detail = await _serviceRepository.GetRequestDetailByID(id);
+
+            var services = await _serviceRepository.GetAllRequestServiceDetailsByRequestServiceID(detail.RequestServiceId);
+
+            foreach (var serviceDetail in services)
+            {
+                if (serviceDetail.RequestDetailStatus == 11 || serviceDetail.RequestDetailStatus == 12)
+                {
+                    checkStatus = true;
+                }
+            }
+
+            if (checkStatus)
+            {
+                _ = await _serviceRepository.UpdateStatusRequestService(detail.RequestServiceId, 14);
+            }
 
             if (!result)
             {
-                return NotFound(new ErrorResponse("Cancel Fail"));
+                return NotFound(new ErrorResponse("Update Fail"));
             }
-            return Ok("Cancel Successful");
+            return Ok("Update Successful");
         }
 
         [HttpPut]

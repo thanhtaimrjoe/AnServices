@@ -19,41 +19,33 @@ namespace AnService_Capstone.Controllers
             _serviceRepository = serviceRepository;
         }
 
-        /*/// <summary>
+        /// <summary>
         /// tạo hóa đơn theo request service id
         /// </summary>
         /// <param name="id">request service id</param>
+        /// <param name="totalPrice">tổng giá tiền</param>
         /// <returns></returns>
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> CreateInvoice(int id)
+        public async Task<IActionResult> CreateInvoice(int id, double totalPrice)
         {
             if (id == 0)
             {
                 return BadRequest(new ErrorResponse("Please enter id"));
             }
 
-            float total = 0;
-
-            var check = await _invoice.CheckInvoiceExist(id);
-            if (check != null)
+            if (totalPrice == 0)
             {
-                return BadRequest(new ErrorResponse("Invoice is exist"));
+                return BadRequest(new ErrorResponse("Please enter totalPrice"));
             }
 
-            var serviceList = await _serviceRepository.GetRequestServiceDetailsByRequestServiceID(id);
-
-            foreach (var service in serviceList)
-            {
-                total += (float) service.Service.ServicePrice;
-            }
-
-            var res = await _invoice.CreateInvoice(id, total);
+            var res = await _invoice.CreateInvoice(id, totalPrice);
             if (res)
             {
+                _ = await _serviceRepository.UpdateStatusRequestService(id, 9);
                 return Ok("Create Successful");
             }
-            return BadRequest(new ErrorResponse("Create Fail"));
-        }*/
+            return BadRequest("Create Fail");
+        }
     }
 }

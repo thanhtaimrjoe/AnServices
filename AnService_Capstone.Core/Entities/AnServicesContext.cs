@@ -106,11 +106,11 @@ namespace AnService_Capstone.Core.Entities
 
                 entity.Property(e => e.InvoiceId).HasColumnName("InvoiceID");
 
-                entity.Property(e => e.Date).HasColumnType("date");
-
-                entity.Property(e => e.Note).HasMaxLength(150);
+                entity.Property(e => e.InvoiceDateCreate).HasColumnType("datetime");
 
                 entity.Property(e => e.RequestServiceId).HasColumnName("RequestServiceID");
+
+                entity.Property(e => e.TotalCost).HasColumnType("decimal(18, 2)");
 
                 entity.HasOne(d => d.RequestService)
                     .WithOne(p => p.TblInvoice)
@@ -140,9 +140,7 @@ namespace AnService_Capstone.Core.Entities
 
                 entity.Property(e => e.MediaId).HasColumnName("MediaID");
 
-                entity.Property(e => e.MediaUrl)
-                    .HasMaxLength(250)
-                    .IsUnicode(false);
+                entity.Property(e => e.MediaUrl).IsUnicode(false);
 
                 entity.Property(e => e.ReportId).HasColumnName("ReportID");
 
@@ -266,6 +264,8 @@ namespace AnService_Capstone.Core.Entities
                 entity.ToTable("tblRequestDetails");
 
                 entity.Property(e => e.RequestDetailId).HasColumnName("RequestDetailID");
+
+                entity.Property(e => e.RequestDetailPrice).HasColumnType("decimal(18, 2)");
 
                 entity.Property(e => e.RequestServiceId).HasColumnName("RequestServiceID");
 

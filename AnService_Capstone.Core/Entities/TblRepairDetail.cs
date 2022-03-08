@@ -13,6 +13,7 @@ namespace AnService_Capstone.Core.Entities
         public DateTime? RepairDateBegin { get; set; }
         public DateTime? RepairDateEnd { get; set; }
         public bool? IsPrimary { get; set; }
+        public int? RequestDetailPriority { get; set; }
 
         public virtual TblRequestDetail RequestDetail { get; set; }
         public virtual TblUser Worker { get; set; }

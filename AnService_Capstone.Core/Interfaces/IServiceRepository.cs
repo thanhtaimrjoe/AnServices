@@ -63,5 +63,7 @@ namespace AnService_Capstone.Core.Interfaces
 
         public Task<bool> UpdateStatusRequestService(int id, int status);
 
+        public Task<TblRequestDetail> GetRequestDetailByID(int id);
+
     }
 }

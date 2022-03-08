@@ -9,7 +9,7 @@ namespace AnService_Capstone.Core.Interfaces
 {
     public interface IInvoiceRepository
     {
-        public Task<bool> CreateInvoice(int id, float total);
+        public Task<bool> CreateInvoice(int id, double total);
 
         public Task<TblInvoice> CheckInvoiceExist(int id);
     }

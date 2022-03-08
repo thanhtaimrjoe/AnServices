@@ -38,6 +38,14 @@
             <param name="requestServiceId"></param>
             <returns></returns>
         </member>
+        <member name="M:AnService_Capstone.Controllers.InvoiceController.CreateInvoice(System.Int32,System.Double)">
+            <summary>
+            tạo hóa đơn theo request service id
+            </summary>
+            <param name="id">request service id</param>
+            <param name="totalPrice">tổng giá tiền</param>
+            <returns></returns>
+        </member>
         <member name="M:AnService_Capstone.Controllers.MaterialController.InsertRequestMaterial(AnService_Capstone.Core.Models.Request.RequestMaterial)">
             <summary>
             tạo request vật liệu

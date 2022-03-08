@@ -97,28 +97,31 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
 
         public async Task<IEnumerable<TblReport>> GetAllReportByRequestServiceID(int id)
         {
-            var query = "select report.ReportID, report.RequestDetailID, WorkerID, ReportTitle, ReportDescription, ReportDate, MediaID, MediaUrl " +
-                "from ((tblReport report join tblRequestDetails detail on report.RequestDetailID = detail.RequestDetailID) " +
+            var query = "select report.ReportID, WorkerID, ReportTitle, ReportDescription, ReportDate, report.RequestDetailID, sers.ServiceID, ServiceName, MediaID, MediaUrl " +
+                "from (((tblReport report join tblRequestDetails detail on report.RequestDetailID = detail.RequestDetailID) " +
                 "join tblRequestServices ser on detail.RequestServiceID = ser.RequestServiceID) " +
-                "join tblMedia media on report.ReportID = media.ReportID " +
+                "join tblMedia media on report.ReportID = media.ReportID) " +
+                "join tblServices sers on sers.ServiceID = detail.ServiceID " +
                 "where ser.RequestServiceID = @RequestServiceID";
 
             using (var connection = _context.CreateConnection())
             {
                 connection.Open();
                 var requestDict = new Dictionary<int, TblReport>();
-                var res = await connection.QueryAsync<TblReport, TblMedium, TblReport>(query, (report, media) =>
+                var res = await connection.QueryAsync<TblReport, TblRequestDetail, TblService, TblMedium, TblReport>(query, (report, detail, service, media) =>
                 {
                     TblReport currentReport;
                     if (!requestDict.TryGetValue(report.ReportId, out currentReport))
                     {
                         currentReport = report;
+                        currentReport.RequestDetail = detail;
+                        currentReport.RequestDetail.Service = service;
                         currentReport.TblMedia = new List<TblMedium>();
                         requestDict.Add(currentReport.ReportId, currentReport);
                     }
                     currentReport.TblMedia.Add(media);
                     return currentReport;
-                }, param: new { @RequestServiceID = id }, splitOn: "MediaID");
+                }, param: new { @RequestServiceID = id }, splitOn: "RequestDetailID, ServiceID, MediaID");
                 connection.Close();
                 /*if (!res.Any())
                 {

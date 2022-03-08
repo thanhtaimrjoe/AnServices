@@ -35,14 +35,14 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             }
         }
 
-        public async Task<bool> CreateInvoice(int id, float total)
+        public async Task<bool> CreateInvoice(int id, double total)
         {
-            var query = "insert into tblInvoice(RequestServiceID,TotalCost,Date) values(@RequestServiceID,@TotalCost,@Date)";
+            var query = "insert into tblInvoice(RequestServiceID,TotalCost,InvoiceDateCreate) values(@RequestServiceID,@TotalCost,@InvoiceDateCreate)";
 
             var parameters = new DynamicParameters();
             parameters.Add("RequestServiceID", id, DbType.Int32);
             parameters.Add("TotalCost", total, DbType.Double);
-            parameters.Add("Date", DateTime.Now, DbType.DateTime);
+            parameters.Add("InvoiceDateCreate", DateTime.Now, DbType.DateTime);
 
             using (var connection = _context.CreateConnection())
             {

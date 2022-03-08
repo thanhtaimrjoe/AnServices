@@ -667,5 +667,22 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
                 return false;
             }
         }
+
+        public async Task<TblRequestDetail> GetRequestDetailByID(int id)
+        {
+            var query = "select * from tblRequestDetails where RequestDetailID = @RequestDetailID";
+
+            using (var conn = _context.CreateConnection())
+            {
+                conn.Open();
+                var res = await conn.QueryFirstOrDefaultAsync<TblRequestDetail>(query, new { @RequestDetailID = id });
+                conn.Close();
+                if (res == null)
+                {
+                    return null;
+                }
+                return res;
+            }
+        }
     }
 }
