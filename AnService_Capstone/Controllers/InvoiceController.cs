@@ -47,5 +47,22 @@ namespace AnService_Capstone.Controllers
             }
             return BadRequest("Create Fail");
         }
+
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<IActionResult> GetInfomationInvoiceByRequestServiceID(int requestServiceID)
+        {
+            if (requestServiceID == 0)
+            {
+                return BadRequest(new ErrorResponse("Please enter requestServiceID"));
+            }
+
+            var res = await _invoice.GetInfomationInvoiceByRequestServiceID(requestServiceID);
+            if (res == null)
+            {
+                return NotFound("No record");
+            }
+            return Ok(res);
+        }
     }
 }

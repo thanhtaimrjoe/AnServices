@@ -7978,11 +7978,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\Capstone\\API\\AnService_Capstone\\AnService_Capstone.csproj",
+      "projectUniqueName": "E:\\Capstone\\New_API\\AnService_Capstone\\AnService_Capstone.csproj",
       "projectName": "AnService_Capstone",
-      "projectPath": "E:\\Capstone\\API\\AnService_Capstone\\AnService_Capstone.csproj",
+      "projectPath": "E:\\Capstone\\New_API\\AnService_Capstone\\AnService_Capstone.csproj",
       "packagesPath": "C:\\Users\\ADMIN\\.nuget\\packages\\",
-      "outputPath": "E:\\Capstone\\API\\AnService_Capstone\\obj\\",
+      "outputPath": "E:\\Capstone\\New_API\\AnService_Capstone\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -8002,11 +8002,11 @@
         "net5.0": {
           "targetAlias": "net5.0",
           "projectReferences": {
-            "E:\\Capstone\\API\\AnService_Capstone.Core\\AnService_Capstone.Core.csproj": {
-              "projectPath": "E:\\Capstone\\API\\AnService_Capstone.Core\\AnService_Capstone.Core.csproj"
+            "E:\\Capstone\\New_API\\AnService_Capstone.Core\\AnService_Capstone.Core.csproj": {
+              "projectPath": "E:\\Capstone\\New_API\\AnService_Capstone.Core\\AnService_Capstone.Core.csproj"
             },
-            "E:\\Capstone\\API\\AnService_Capstone.DataAccess.Dapper\\AnService_Capstone.DataAccess.Dapper.csproj": {
-              "projectPath": "E:\\Capstone\\API\\AnService_Capstone.DataAccess.Dapper\\AnService_Capstone.DataAccess.Dapper.csproj"
+            "E:\\Capstone\\New_API\\AnService_Capstone.DataAccess.Dapper\\AnService_Capstone.DataAccess.Dapper.csproj": {
+              "projectPath": "E:\\Capstone\\New_API\\AnService_Capstone.DataAccess.Dapper\\AnService_Capstone.DataAccess.Dapper.csproj"
             }
           }
         }

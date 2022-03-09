@@ -1,4 +1,5 @@
 ﻿using AnService_Capstone.Core.Entities;
+using AnService_Capstone.Core.Models.Response;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,5 +13,7 @@ namespace AnService_Capstone.Core.Interfaces
         public Task<bool> CreateInvoice(int id, double total);
 
         public Task<TblInvoice> CheckInvoiceExist(int id);
+
+        public Task<ContractViewModel> GetInfomationInvoiceByRequestServiceID(int id);
     }
 }

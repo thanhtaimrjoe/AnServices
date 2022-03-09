@@ -5585,11 +5585,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\Capstone\\API\\AnService_Capstone.Core\\AnService_Capstone.Core.csproj",
+      "projectUniqueName": "E:\\Capstone\\New_API\\AnService_Capstone.Core\\AnService_Capstone.Core.csproj",
       "projectName": "AnService_Capstone.Core",
-      "projectPath": "E:\\Capstone\\API\\AnService_Capstone.Core\\AnService_Capstone.Core.csproj",
+      "projectPath": "E:\\Capstone\\New_API\\AnService_Capstone.Core\\AnService_Capstone.Core.csproj",
       "packagesPath": "C:\\Users\\ADMIN\\.nuget\\packages\\",
-      "outputPath": "E:\\Capstone\\API\\AnService_Capstone.Core\\obj\\",
+      "outputPath": "E:\\Capstone\\New_API\\AnService_Capstone.Core\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
