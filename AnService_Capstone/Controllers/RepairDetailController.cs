@@ -42,27 +42,27 @@ namespace AnService_Capstone.Controllers
                 return BadRequest(new ErrorResponse("Something wrong"));
             }
             return Ok("Update Successful");
-        }
+        }*/
 
         /// <summary>
         /// lấy danh sách việc đã giao cho worker bằng id dịch vụ (request detail) của customer
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="requestServiceId"></param>
         /// <returns></returns>
         [HttpGet]
         [Route("[action]")]
-        public async Task<IActionResult> GetRepairDetailByRequestDetailID(int id)
+        public async Task<IActionResult> GetRepairDetailByRequestServiceID(int requestServiceId)
         {
-            if (id == 0)
+            if (requestServiceId == 0)
             {
-                return BadRequest(new ErrorResponse("Please enter id"));
+                return BadRequest(new ErrorResponse("Please enter requestServiceId"));
             }
-            var res = await _repairDetail.GetRepairDetailByRequestDetailID(id);
-            if (res == null)
+            var res = await _repairDetail.GetRepairDetailByRequestServiceID(requestServiceId);
+            /*if (res == null)
             {
                 return NotFound(new ErrorResponse("No Record"));
-            }
+            }*/
             return Ok(res);
-        }*/
+        }
     }
 }

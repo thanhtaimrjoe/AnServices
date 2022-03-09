@@ -125,6 +125,13 @@
             <param name="id"></param>
             <returns></returns>
         </member>
+        <member name="M:AnService_Capstone.Controllers.RepairDetailController.GetRepairDetailByRequestServiceID(System.Int32)">
+            <summary>
+            lấy danh sách việc đã giao cho worker bằng id dịch vụ (request detail) của customer
+            </summary>
+            <param name="requestServiceId"></param>
+            <returns></returns>
+        </member>
         <member name="M:AnService_Capstone.Controllers.ReportController.CreateReport(AnService_Capstone.Core.Models.Request.CreateReport)">
             <summary>
             worker tạo report khi sửa xong hoặc có lỗi mới trong quá trình sửa

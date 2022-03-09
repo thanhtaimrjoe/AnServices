@@ -130,7 +130,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             }
         }
 
-        public async Task<IEnumerable<UserViewModel>> GetAllWorker()
+        /*public async Task<IEnumerable<UserViewModel>> GetAllWorker()
         {
             var query = "select UserID, FullName, PhoneNumber, Address, Email, CreateDate, Status, TypeJobID, TypeJobName " +
                 "from tblUsers u join tblTypeJobs job on u.TypeJob = job.TypeJobID " +
@@ -150,7 +150,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
                 }
                 return res;
             }
-        }
+        }*/
 
         public async Task<UserViewModel> GetWorkerByID(int id)
         {
@@ -249,7 +249,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             }
         }
 
-        public async Task<IEnumerable<UserViewModel>> GetAllWorkerByTypeJob(int id)
+        /*public async Task<IEnumerable<UserViewModel>> GetAllWorkerByTypeJob(int id)
         {
             var query = "select UserID, FullName, PhoneNumber, Address, Email, CreateDate, Status, TypeJobID, TypeJobName " +
                 "from tblUsers u join tblTypeJobs job on u.TypeJob = job.TypeJobID " +
@@ -269,9 +269,9 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
                 }
                 return res;
             }
-        }
+        }*/
 
-        public async Task<IEnumerable<UserViewModel>> GetAllWorkerByName(string name)
+        /*public async Task<IEnumerable<UserViewModel>> GetAllWorkerByName(string name)
         {
             var query = "select UserID, FullName, PhoneNumber, Address, Email, CreateDate, Status, TypeJobID, TypeJobName " +
                 "from tblUsers u join tblTypeJobs job on u.TypeJob = job.TypeJobID " +
@@ -285,15 +285,15 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
                     return user;
                 }, param: new { @FullName = "%" + name + "%" }, splitOn: "TypeJobID");
                 connections.Close();
-                /*if (res.Count() == 0)
+                *//*if (res.Count() == 0)
                 {
                     return null;
-                }*/
+                }*//*
                 return res;
             }
-        }
+        }*/
 
-        public async Task<IEnumerable<UserViewModel>> GetAllWorkerByPhone(string phone)
+        /*public async Task<IEnumerable<UserViewModel>> GetAllWorkerByPhone(string phone)
         {
             var query = "select UserID, FullName, PhoneNumber, Address, Email, CreateDate, Status, TypeJobID, TypeJobName " +
                 "from tblUsers u join tblTypeJobs job on u.TypeJob = job.TypeJobID " +
@@ -307,13 +307,13 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
                     return user;
                 }, param: new { @PhoneNumber = "%" + phone + "%"}, splitOn: "TypeJobID");
                 connections.Close();
-                /*if (res.Count() == 0)
+                *//*if (res.Count() == 0)
                 {
                     return null;
-                }*/
+                }*//*
                 return res;
             }
-        }
+        }*/
 
         public async Task<UserViewModel> GetCustomerByID(int id)
         {
@@ -420,6 +420,29 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
                 {
                     return null;
                 }*/
+                return res;
+            }
+        }
+
+        public async Task<IEnumerable<UserViewModel>> GetAllWorker(string id, string phone, string name)
+        {
+            var query = "select UserID, FullName, PhoneNumber, Address, Email, CreateDate, Status, TypeJobID, TypeJobName " +
+                "from tblUsers u join tblTypeJobs job on u.TypeJob = job.TypeJobID " +
+                "where Role = 2 and Status = 4 and PhoneNumber like @PhoneNumber and FullName like @FullName and TypeJobID = COALESCE(@TypeJobID, TypeJobID) " +
+                "order by TypeJobName asc";
+            using (var connections = _context.CreateConnection())
+            {
+                connections.Open();
+                var res = await connections.QueryAsync<UserViewModel, TblTypeJob, UserViewModel>(query, (user, typeJob) =>
+                {
+                    user.TypeJob = typeJob;
+                    return user;
+                }, param: new { @PhoneNumber = "%" + phone + "%", FullName = "%" + name + "%", @TypeJobID = id }, splitOn: "TypeJobID");
+                connections.Close();
+                if (res.Count() == 0)
+                {
+                    return null;
+                }
                 return res;
             }
         }

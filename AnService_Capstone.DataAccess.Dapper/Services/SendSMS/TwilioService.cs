@@ -33,7 +33,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Services.SendSMS
 
             var validationRequest = ValidationRequestResource.Create(
                 friendlyName: phone,
-                phoneNumber: new Twilio.Types.PhoneNumber(phone)
+                phoneNumber: new PhoneNumber(phone)
             );
 
             return validationRequest.ValidationCode;

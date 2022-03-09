@@ -238,7 +238,23 @@ namespace AnService_Capstone.Controllers
         {
             IEnumerable<UserViewModel> res;
 
-            if (typeJobId == 0 && fullName == null && phoneNumber == null)
+            string typeJobIdString = null;
+
+            if (typeJobId != 0)
+            {
+                typeJobIdString = typeJobId.ToString();
+            }
+
+            if (typeJobId == 0)
+            {
+                res = await _userRepository.GetAllWorker(null, phoneNumber, fullName);
+            }
+            else
+            {
+                res = await _userRepository.GetAllWorker(typeJobIdString, phoneNumber, fullName);
+            }
+
+            /*if (typeJobId == 0 && fullName == null && phoneNumber == null)
             {
                 res = await _userRepository.GetAllWorker();
             }
@@ -253,12 +269,13 @@ namespace AnService_Capstone.Controllers
             else
             {
                 res = await _userRepository.GetAllWorkerByPhone(phoneNumber);
-            }
+            }*/
 
             /*if (res == null)
             {
                 return NotFound(new ErrorResponse("No record"));
             }*/
+
             return Ok(res);
         }
 

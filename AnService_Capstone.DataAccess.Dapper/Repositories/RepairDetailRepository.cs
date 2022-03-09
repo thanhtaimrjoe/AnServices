@@ -21,11 +21,13 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             _dapperContext = dapperContext;
         }
 
-        public async Task<IEnumerable<TblRepairDetail>> GetRepairDetailByRequestDetailID(int id)
+        public async Task<IEnumerable<TblRepairDetail>> GetRepairDetailByRequestServiceID(int id)
         {
-            var query = "select RepairDetailID, RequestDetailID, WorkerID, RepairDateBegin, RepairDateEnd, UserID, FullName, PhoneNumber, Email, Status " +
-                "from tblRepairDetail repair join tblUsers u on repair.WorkerID = u.UserID " +
-                "where RequestDetailID = @RequestDetailID";
+            var query = "select RepairDetailID, repair.RequestDetailID, WorkerID, RepairDateBegin, RepairDateEnd, UserID, FullName, PhoneNumber, Email, Status " +
+                "from ((tblRepairDetail repair join tblUsers u on repair.WorkerID = u.UserID)" +
+                "join tblRequestDetails detail on detail.RequestDetailID = repair.RequestDetailID) " +
+                "join tblRequestServices rs on rs.RequestServiceID = detail.RequestServiceID " +
+                "where rs.RequestServiceID = @RequestServiceID";
             /*using (var connection = _dapperContext.CreateConnection())
             {
                 connection.Open();
@@ -44,12 +46,12 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
                 {
                     repair.Worker = user;
                     return repair;
-                }, param: new { @RequestDetailID = id }, splitOn: "RepairDetailID, UserID");
+                }, param: new { RequestServiceID = id }, splitOn: "RepairDetailID, UserID");
                 connection.Close();
-                if (!res.Any())
+                /*if (!res.Any())
                 {
                     return null;
-                }
+                }*/
                 return res;
             }
         }

@@ -60,7 +60,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
 
         public async Task<ContractViewModel> GetInfomationInvoiceByRequestServiceID(int id)
         {
-            var query = "select CustomerName, CustomerPhone, CustomerAddress, RequestServiceDescription, ContractID, ContractStartDate, ContractEndDate, ContractDeposit, ContractTotalPrice, RequestDetailID, RequestDetailPrice, ser.ServiceID, ServiceName " +
+            var query = "select CustomerName, CustomerPhone, CustomerAddress, RequestServiceDescription, ContractID, ContractStartDate, ContractEndDate, ContractDeposit, ContractTotalPrice, RequestDetailID, RequestDetailPrice, ser.ServiceID, ServiceName, ServiceImg " +
                 "from ((tblRequestServices request join tblContract ct on request.RequestServiceID = ct.RequestServiceID) " +
                 "join tblRequestDetails detail on request.RequestServiceID = detail.RequestServiceID) " +
                 "join tblServices ser on ser.ServiceID = detail.ServiceID " +
