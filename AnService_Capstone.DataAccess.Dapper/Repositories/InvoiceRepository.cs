@@ -60,17 +60,17 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
 
         public async Task<ContractViewModel> GetInfomationInvoiceByRequestServiceID(int id)
         {
-            var query = "select CustomerName, CustomerPhone, CustomerAddress, RequestServiceDescription, ContractID, ContractStartDate, ContractEndDate, ContractDeposit, ContractTotalPrice, RequestDetailID, RequestDetailPrice, ser.ServiceID, ServiceName, ServiceImg " +
+            var query = "select CustomerName, CustomerPhone, CustomerAddress, RequestServiceDescription, ContractID, ContractStartDate, ContractEndDate, ContractDeposit, ContractTotalPrice, RequestDetailID, RequestDetailStatus, RequestDetailPrice, ser.ServiceID, ServiceName, ServiceImg " +
                 "from ((tblRequestServices request join tblContract ct on request.RequestServiceID = ct.RequestServiceID) " +
                 "join tblRequestDetails detail on request.RequestServiceID = detail.RequestServiceID) " +
                 "join tblServices ser on ser.ServiceID = detail.ServiceID " +
-                "where request.RequestServiceID = @RequestServiceID";
+                "where request.RequestServiceID = @RequestServiceID and RequestDetailStatus = 11";
             using (var connection = _context.CreateConnection())
             {
                 connection.Open();
                 /*var res = await connection.QueryFirstOrDefaultAsync<ContractViewModel>(query, new { @RequestServiceID = id });*/
                 var requestDict = new Dictionary<int, ContractViewModel>();
-                var res = await connection.QueryAsync<ContractViewModel, TblRequestDetail, TblService, ContractViewModel>(query, (model, detail, service) =>
+                var res = await connection.QueryAsync<ContractViewModel, TblRequestDetail, TblService, ContractViewModel>(query, (model, details, service) =>
                 {
                     ContractViewModel currentContract;
                     if (!requestDict.TryGetValue(id, out currentContract))
@@ -79,7 +79,9 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
                         currentContract.Details = new List<TblRequestDetail>();
                         requestDict.Add(id, currentContract);
                     }
-                    currentContract.Details.Add(detail);
+
+                    currentContract.Details.Add(details);
+
                     currentContract.Details.ForEach(item =>
                     {
                         item.Service = service;
