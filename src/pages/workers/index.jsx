@@ -7,7 +7,7 @@ import { PageContainer } from '@ant-design/pro-layout';
 import AsyncButton from '@/components/AsyncButton';
 import ResoTable from '@/components/ResoTable/ResoTable';
 import { WORKERS } from '@/utils/constrains';
-import { removeWorker } from '@/services/workers';
+import { removeWorker, rule } from '@/services/workers';
 
 const WorkerList = ({ history }) => {
   const ref = useRef();

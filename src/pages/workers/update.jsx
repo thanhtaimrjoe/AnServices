@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import { FooterToolbar, PageContainer } from '@ant-design/pro-layout';
-import { Card, Form, Typography, Row, Empty } from 'antd';
+import { Card, Form, Typography, Row, Empty, message } from 'antd';
 // import { updateReportAttribute } from '@/services/reportattribute';
 import AsyncButton from '@/components/AsyncButton';
 import { useHistory } from 'umi';
@@ -30,7 +30,13 @@ const UpdateReportAttribute = (props) => {
   const steps = [
     {
       title: 'Thông tin chính của thợ',
-      content: () => <BasicStep createDate={requestMaterialCreateDate} typeJobName={typeJobName} typeJobId={typeJobId1} />,
+      content: () => (
+        <BasicStep
+          createDate={requestMaterialCreateDate}
+          typeJobName={typeJobName}
+          typeJobId={typeJobId1}
+        />
+      ),
     },
   ];
 
@@ -40,7 +46,7 @@ const UpdateReportAttribute = (props) => {
       setFormData(res);
       setTypeJobName(res.typeJob.typeJobName);
       setTypeJobId(res.typeJob.typeJobId);
-      setRequestaterialCreateDate(res.createDate.split('T',1));
+      setRequestaterialCreateDate(res.createDate.split('T', 1));
       setRequestaterialCreateDate(moment(res.requestServiceCreateDate).format('DD/MM/YYYY'));
     });
   }, []);
@@ -55,28 +61,41 @@ const UpdateReportAttribute = (props) => {
 
   const onUpdateWorker = () => {
     const update = normalizeReportForm(formData);
-    const createContractValues = {
-      workerId: formData.userID,
-      workerName: formData.fullName,
-      workerPhoneNumber: formData.phoneNumber,
-      workerAddress: formData.address,
-      workerEmail: formData.email,
-      typeJobId: typeJobId1,
-    };
-    return updateWorker(createContractValues).then((res) => {
-    console.log("test1", formData);
-    console.log("test12", update);
-    console.log("test13", res);
-    console.log("test14", createContractValues);
+    console.log('record01', update.update);
+    console.log('record02', updateWorkerState);
 
-    // setTypeJobId(updateWorkerState.typeJob.typeJobId)
-      history.replace('/workers/list')
-    });
+    let validate = true;
+    // if (!update.update.fullName && update.update.fullName === "" && update.update.fullName === undefined) {
+    if (update.update.fullName.length === 0 || update.update.fullName === undefined) {
+      validate = false;
+    }
+    if (update.update.phoneNumber.length === 0 || update.update.phoneNumber === undefined) {
+      validate = false;
+    }
+    if(!update.update.phoneNumber.match(/(0[3|5|7|8|9])+([0-9]{8})\b/)) {
+      validate = false;
+    }
+    if(validate === true) {
+      const createContractValues = {
+        workerId: update.update.userID,
+        workerName: update.update.fullName,
+        workerPhoneNumber: update.update.phoneNumber,
+        workerAddress: update.update.address,
+        workerEmail: update.update.email,
+        // typeJobId: update.update.typeJobId,
+        typeJobId: update.update.typeJobId,
+      };
+      return updateWorker(createContractValues).then((res) => {
+        // setTypeJobId(updateWorkerState.typeJob.typeJobId)
+        history.replace('/workers/list');
+      });
+    }
+
   };
 
   const onBackList = () => {
-    history.replace('/workers/list')
-};
+    history.replace('/workers/list');
+  };
   return (
     <PageContainer>
       <Form
@@ -96,8 +115,16 @@ const UpdateReportAttribute = (props) => {
           </Row>
           <Row style={{ width: '100%' }}>{steps[currentStep].content()}</Row>
           <FooterToolbar>
-            <AsyncButton title="Trở về" btnProps={{ type: 'default', icon: <RollbackOutlined /> }} onClick={onBackList} />
-            <AsyncButton title="Cập nhật" btnProps={{ type: 'primary', icon: <CheckOutlined /> }} onClick={onUpdateWorker} />
+            <AsyncButton
+              title="Trở về"
+              btnProps={{ type: 'default', icon: <RollbackOutlined /> }}
+              onClick={onBackList}
+            />
+            <AsyncButton
+              title="Cập nhật"
+              btnProps={{ type: 'primary', icon: <CheckOutlined /> }}
+              onClick={onUpdateWorker}
+            />
           </FooterToolbar>
         </Card>
       </Form>

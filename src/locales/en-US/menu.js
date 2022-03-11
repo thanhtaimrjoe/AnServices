@@ -51,9 +51,4 @@ export default {
   'menu.editor.koni': 'Koni Editor',
   // ===================================================================================
 
-  // accounts
-  'menu.accounts': 'ACCOUNT MANAGEMENT',
-  'menu.accounts.list': 'ACCOUNT LIST',
-  'menu.accounts.create': 'CREATE NEW ACCOUNT',
-
 };

@@ -11,74 +11,50 @@ const BasicStep = () => {
       <Row gutter={16}>
         <Col span={12}>
           <ProForm.Item
-            name="username"
-            label="Username"
+            name="fullName"
+            label="Tên khách hàng"
             rules={[
               {
                 required: true,
                 type: 'string',
-                message: 'Please input username',
+                message: 'Vui lòng nhập tên khách hàng',
               },
             ]}
           >
-            <Input placeholder="Input username" />
+            <Input placeholder="Nhập tên khách hàng" />
           </ProForm.Item>
         </Col>
         <Col span={12}>
-          <ProForm.Item
-            name="password"
-            label="Password"
+        <ProForm.Item
+            name="phoneNumber"
+            label="Số điện thoại"
             rules={[
               {
                 required: true,
-                type: 'string',
-                message: 'Please input password',
-              },
+                pattern: /(0[3|5|7|8|9])+([0-9]{8})\b/,
+                message: "Nhập 10 chữ số"
+              }
             ]}
           >
-            <Input.Password placeholder="Input password" />
+            <Input placeholder="Nhập số điện thoại" />
           </ProForm.Item>
         </Col>
       </Row>
       <Row gutter={16}>
-      <Col span={12}>
+        <Col span={12}>
           <ProForm.Item
-            name="phone"
-            label="Phone"
-            rules={[
-              {
-                required: true,
-                type: 'string',
-                message: 'Please input phone',
-              },
-              // {
-              //   pattern: '^[0-9]*$',
-              //   type: 'integer',
-              //   message: "Only number"
-              // }
-              
-            ]}
+            name="address"
+            label="Địa chỉ"
           >
-            <Input placeholder="Input phone" />
-            {/* <CommonSelect.SelectCategoryID
-              buildOptions={buildCategoriesOption}
-              placeholder="Chọn ID danh mục thuộc tính báo cáo"
-            /> */}
+            <Input placeholder="Nhập địa chỉ" />
           </ProForm.Item>
         </Col>
         <Col span={12}>
           <ProForm.Item
             name="email"
             label="Email"
-            rules={[
-              {
-                required: true,
-                type: 'string',
-                message: 'Please input email',
-              },
-            ]}
           >
-            <Input placeholder="Input email" />
+            <Input placeholder="Nhập email" />
           </ProForm.Item>
         </Col>
       </Row>

@@ -94,6 +94,27 @@ const CommonSelect = ({
   );
 };
 // ==============================================================================
+// CUSTOMER
+const SelectStatusOfCustomer = (props) => {
+  return (
+    <CommonSelect
+      placeholder="Trạng thái tài khoản"
+      fetchOnFirst
+      options={[
+        {
+          value: 4,
+          label: 'Đang hoạt động',
+        },
+        {
+          value: 10,
+          label: 'Đã bị chặn',
+        },
+      ]}
+      {...props}
+    />
+  );
+};
+
 // WORKER
 const SelectWorkerByTypeJob = (props) => {
   return (
@@ -103,31 +124,31 @@ const SelectWorkerByTypeJob = (props) => {
       // onSearch={getAllWorkers}
       options={[
         {
-          value: '1',
+          value: 1,
           label: 'Thợ nhôm - kính',
         },
         {
-          value: '2',
+          value: 2,
           label: 'Thợ cơ khí',
         },
         {
-          value: '3',
+          value: 3,
           label: 'Thợ sơn',
         },
         {
-          value: '4',
+          value: 4,
           label: 'Thợ xây',
         },
         {
-          value: '5',
+          value: 5,
           label: 'Thợ điện nước',
         },
         {
-          value: '6',
+          value: 6,
           label: 'Thợ điện lạnh',
         },
         {
-          value: '7',
+          value: 7,
           label: 'Thợ thạch cao',
         },
       ]}
@@ -266,7 +287,35 @@ const SelectRequestServiceDate1 = (props) => {
   );
 };
 
+const SelectRequestServicePriority = (props) => {
+  return (
+    <CommonSelect
+      placeholder="Chọn độ ưu tiên cho công trình"
+      fetchOnFirst
+      options={[
+        {
+          value: '1',
+          label: 'Thấp',
+        },
+        {
+          value: '2',
+          label: 'Trung bình',
+        },
+        {
+          value: '3',
+          label: 'Cao',
+        },
+        {
+          value: '4',
+          label: 'Rất cao',
+        },
+      ]}
+      {...props}
+    />
+  );
+};
 // ==============================================================================
+CommonSelect.SelectStatusOfCustomer = SelectStatusOfCustomer;
 CommonSelect.SelectWorkerPhoneNumber = SelectWorkerPhoneNumber;
 CommonSelect.SelectWorkerName = SelectWorkerName;
 CommonSelect.SelectWorkerTypeJob = SelectWorkerTypeJob;
@@ -274,7 +323,7 @@ CommonSelect.SelectWorkerByTypeJob = SelectWorkerByTypeJob;
 CommonSelect.SelectRequestServiceStatus = SelectRequestServiceStatus;
 CommonSelect.SelectRequestServiceDate = SelectRequestServiceDate;
 CommonSelect.SelectRequestServiceDate1 = SelectRequestServiceDate1;
-
+CommonSelect.SelectRequestServicePriority = SelectRequestServicePriority;
 // ==============================================================================
 
 
@@ -290,6 +339,9 @@ CommonSelect.defaultProps = {
 
 export {
 // ==============================================================================
+  // CUSTOMER
+  SelectStatusOfCustomer,
+
   // WORKER
   SelectWorkerPhoneNumber,
   SelectWorkerName,
@@ -300,6 +352,8 @@ export {
   SelectRequestServiceStatus,
   SelectRequestServiceDate,
   SelectRequestServiceDate1,
+  SelectRequestServicePriority,
+
 // ==============================================================================
 };
 

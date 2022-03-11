@@ -75,5 +75,7 @@ export default {
   'pages.searchTable.batchApproval': 'batch approval',
 
   'pages.searchTable.workers': 'Vui lòng nhập',
+  'pages.searchTable.fullName': 'Vui lòng nhập',
+
 
 };

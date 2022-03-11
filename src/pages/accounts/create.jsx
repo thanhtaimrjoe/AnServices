@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { FooterToolbar, PageContainer } from '@ant-design/pro-layout';
-import { Form, Typography, Space, Result, Button } from 'antd';
+import { Form, Typography, Space, Button, Result } from 'antd';
 import BasicStep from './stepsCreate/BasicStep';
-import { createAccount } from '@/services/accounts';
+import { createCustomerAccount } from '@/services/accounts';
 import { useHistory } from 'umi';
 import { normalizeReportForm } from '@/utils/utils';
 import ProForm from '@ant-design/pro-form';
 import ProCard from '@ant-design/pro-card';
+import AsyncButton from '@/components/AsyncButton';
+import { RollbackOutlined } from '@ant-design/icons';
 
 const CreateAccount = (props) => {
   const {
@@ -19,7 +21,7 @@ const CreateAccount = (props) => {
 
   const [form] = Form.useForm();
   const history = useHistory();
-  const [accountType, setAccountType] = useState(+type);
+  // const [accountType, setAccountType] = useState(+type);
   const [createdAccount, setCreatedAccount] = useState(null);
 
   useEffect(() => {
@@ -28,40 +30,16 @@ const CreateAccount = (props) => {
 
   const onCreateAccount = (values) => {
     const createAccountData = normalizeReportForm(values);
-    return createAccount(createAccountData).then((res) => {
-      setCreatedAccount({ ...values, id: res });
+    return createCustomerAccount(createAccountData).then((res) => {
+      // setCreatedAccount({ ...values, id: res });
+      history.replace('/accounts/list');
     });
   };
 
-  if (createdAccount !== null) {
-    return (
-      <ProCard>
-        <Result
-          status="success"
-          title="Account successfully created"
-          subTitle={
-            <Space direction="vertical">
-              <Typography level={5}>{`Username: ${createdAccount.username}`}</Typography>
-              <Typography level={5}>{`Phone: ${createdAccount.phone}`}</Typography>
-              <Typography level={5}>{`Email: ${createdAccount.email}`}</Typography>
-            </Space>
-          }
-          extra={[
-            // <Button key="buy" onClick={() => setCreatedReportAttribute(null)}>
-            //   Tiếp tục thêm báo cáo
-            // </Button>,
-            <Button
-              type="primary"
-              key="console"
-              onClick={() => history.replace('/accounts/list')}
-            >
-              Back to the list of accounts
-            </Button>,
-          ]}
-        />
-      </ProCard>
-    );
-  }
+  const onBackList = () => {
+    history.replace('/accounts/list');
+  };
+
   return (
     <PageContainer>
       <ProForm
@@ -70,7 +48,16 @@ const CreateAccount = (props) => {
             submitText: 'Tạo',
             resetText: 'Làm mới',
           },
-          render: (_, dom) => <FooterToolbar>{dom}</FooterToolbar>,
+          render: (_, dom) => (
+            <FooterToolbar>
+              <AsyncButton
+                title="Trở về"
+                btnProps={{ type: 'default', icon: <RollbackOutlined /> }}
+                onClick={onBackList}
+              />
+              {dom}
+            </FooterToolbar>
+          ),
         }}
         onFinish={onCreateAccount}
         colon
@@ -79,8 +66,8 @@ const CreateAccount = (props) => {
         layout="vertical"
       >
         <Space style={{ width: '100%' }} direction="vertical">
-          <ProCard bordered title="Account information">
-            <BasicStep accountType={accountType} onChangeProductType={setAccountType} />
+          <ProCard bordered title="Thông tin khách hàng">
+            <BasicStep />
           </ProCard>
         </Space>
       </ProForm>

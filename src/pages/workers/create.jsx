@@ -31,17 +31,14 @@ const CreateWorker = (props) => {
   const onCreateWorker = (values) => {
     const createWorkerData = normalizeReportForm(values);
     return createWorker(createWorkerData).then((res) => {
-      console.log("test1", values);
-      console.log("test111", res);
-      console.log("test12", createWorkerData.update);
       // setCreatedWorker({ ...values, userID : res });
-      history.replace('/workers/list')
+      history.replace('/workers/list');
     });
   };
 
   const onBackList = () => {
-    history.replace('/workers/list')
-};
+    history.replace('/workers/list');
+  };
 
   // if (createdWorker !== null) {
   //   return (
@@ -82,13 +79,18 @@ const CreateWorker = (props) => {
             submitText: 'Tạo',
             resetText: 'Làm mới',
           },
-          render: (_, dom) => 
-          <FooterToolbar>
-            <AsyncButton title="Trở về" btnProps={{ type: 'default', icon: <RollbackOutlined /> }}  onClick={onBackList}  />
-            {dom}
+          render: (_, dom) => (
+            <FooterToolbar>
+              <AsyncButton
+                title="Trở về"
+                btnProps={{ type: 'default', icon: <RollbackOutlined /> }}
+                onClick={onBackList}
+              />
+              {dom}
 
-            {/* <CheckOutlined /> */}
-          </FooterToolbar>, 
+              {/* <CheckOutlined /> */}
+            </FooterToolbar>
+          ),
         }}
         onFinish={onCreateWorker}
         colon
@@ -98,7 +100,7 @@ const CreateWorker = (props) => {
       >
         <Space style={{ width: '100%' }} direction="vertical">
           <ProCard bordered title="Thông tin thợ">
-            <BasicStep workerType={workerType} onChangeProductType={setWorkerType}/>
+            <BasicStep workerType={workerType} onChangeProductType={setWorkerType} />
           </ProCard>
         </Space>
       </ProForm>
@@ -107,4 +109,3 @@ const CreateWorker = (props) => {
 };
 
 export default CreateWorker;
-

@@ -11,6 +11,13 @@ export default {
   'menu.exception.404': '404',
   'menu.exception.500': '500',
 
+  // accounts
+  'menu.accounts': 'QUẢN LÝ KHÁCH',
+  'menu.accounts.list': 'DANH SÁCH KHÁCH HÀNG',
+  'menu.accounts.create': 'THÊM MỚI TÀI KHOẢN KHÁCH',
+  'menu.accounts.update': 'CẬP NHẬT TÀI KHOẢN KHÁCH',
+  'menu.accounts.detail': 'CHI TIẾT',
+
   // workers
   'menu.workers': 'QUẢN LÝ THỢ',
   'menu.workers.list': 'DANH SÁCH THỢ',  
@@ -23,7 +30,6 @@ export default {
   'menu.requestservices.list': 'DANH SÁCH YÊU CẦU',  
   'menu.requestservices.detail': 'CHI TIẾT', 
   'menu.requestservices.update': 'CẬP NHẬT', 
-
 
   // requestmaterials
   'menu.requestmaterials': 'QUẢN LÝ YÊU CẦU NGUYÊN VẬT LIỆU',

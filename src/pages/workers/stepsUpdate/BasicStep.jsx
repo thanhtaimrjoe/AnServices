@@ -1,7 +1,7 @@
 // import React from 'react';
 import React from 'react';
 
-import { Input, Row, Col } from 'antd';
+import { Input, Row, Col, InputNumber } from 'antd';
 import ProForm from '@ant-design/pro-form';
 import CommonSelect from '@/components/CommonSelect/CommonSelect';
 
@@ -33,7 +33,7 @@ const BasicStep = ({ typeJobName, typeJobId }) => {
               {
                 required: true,
                 pattern: /(0[3|5|7|8|9])+([0-9]{8})\b/,
-                message: "Nhập 10 chữ số"
+                message: "Vui lòng nhập sđt với 10 chữ số"
               }
             ]}
           >
@@ -46,13 +46,6 @@ const BasicStep = ({ typeJobName, typeJobId }) => {
           <ProForm.Item
             name="address"
             label="Địa chỉ"
-            rules={[
-              {
-                required: true,
-                type: 'string',
-                message: 'Vui lòng nhập địa chỉ',
-              },
-            ]}
           >
             <Input placeholder='Nhập địa chỉ'/>
           </ProForm.Item>
@@ -71,17 +64,12 @@ const BasicStep = ({ typeJobName, typeJobId }) => {
           <ProForm.Item
             // name="typeJobId"
             name={typeJobId}
-            initialValue={typeJobName}
-            // defaultValue={typeJobName}
+            initialValue={typeJobId}
             label="Nhóm thợ"
             rules={[
-              // {
-              //   required: true,
-              //   message: 'Vui lòng chọn nhóm thợ',
-              // }, 
               {
-                // pattern: /^[0-9]*$/,
-                type: 'string',
+                pattern: /^[0-9]*$/,
+                type: 'integer',
                 message: "Chỉ được chọn trên thanh chọn"
               }
             ]}

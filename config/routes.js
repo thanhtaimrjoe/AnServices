@@ -49,30 +49,35 @@ export default [
           
 
           // ACCOUNTS
-          // {
-          //   name: 'accounts',
-          //   icon: 'UserAddOutlined',
-          //   path: '/accounts',
-          //   routes: [
-          //     {
-          //       path: '/accounts',
-          //       redirect: '/accounts/list',
-          //     },
-          //     {
-          //       name: 'list',
-          //       icon: 'smile',
-          //       path: '/accounts/list',
-          //       component: './accounts/',
-          //     },
-
-          //     {
-          //       name: 'create',
-          //       path: '/accounts/create',
-          //       hideInMenu: true,
-          //       component: './accounts/create',
-          //     },
-          //   ],
-          // },
+          {
+            name: 'accounts',
+            icon: 'UserAddOutlined',
+            path: '/accounts',
+            routes: [
+              {
+                path: '/accounts',
+                redirect: '/accounts/list',
+              },
+              {
+                name: 'list',
+                icon: 'smile',
+                path: '/accounts/list',
+                component: './accounts/',
+              },
+              {
+                name: 'create',
+                path: '/accounts/create',
+                hideInMenu: true,
+                component: './accounts/create',
+              },
+              {
+                name: 'detail',
+                path: '/accounts/detail',
+                hideInMenu: true,
+                component: './accounts/detail',
+              },
+            ],
+          },
 
 //========================================================================================
           // WORKER

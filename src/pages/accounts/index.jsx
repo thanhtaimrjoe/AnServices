@@ -6,7 +6,7 @@ import React, { useRef, useState } from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
 import AsyncButton from '@/components/AsyncButton';
 import ResoTable from '@/components/ResoTable/ResoTable';
-import { deleteAccount } from '@/services/accounts';
+import { banUserByUserID, deleteAccount } from '@/services/accounts';
 import { ACCOUNTS } from '@/utils/constrains';
 
 const AccountList = ({ history }) => {
@@ -22,11 +22,10 @@ const AccountList = ({ history }) => {
   };
 
   const deleteAccountHandler = () => {
-    return deleteAccount(selectedRows[0]).then(() => ref.current?.reload());
+    return banUserByUserID(selectedRows[0]).then(() => ref.current?.reload());
   };
 
   return (
-    // <PageContainer content="Thông tin thuộc tính">
     <PageContainer>
       <Card bordered={false} style={{ width: '100%' }}>
         <ResoTable
@@ -34,26 +33,26 @@ const AccountList = ({ history }) => {
           tableAlertOptionRender={({ _, __, onCleanSelected }) => [
             <AsyncButton
               isNeedConfirm={{
-                title: 'Confirm account deletion',
-                content: 'Do you want to delete this account?',
-                okText: 'Confirm',
-                cancelText: 'Cancel',
+                title: 'Xác nhận chặn khách hàng',
+                content: 'Bạn có muốn chặn khách hàng này không',
+                okText: 'Xác nhận',
+                cancelText: 'Huỷ',
               }}
               btnProps={{ danger: true, type: 'link' }}
               onClick={() => deleteAccountHandler().then(onCleanSelected)}
-              title={`Delete ${selectedRows.length} account`}
+              title={`Chặn khách hàng này`}
             />,
           ]}
           toolBarRender={() => [
             <Button type="primary" onClick={addAccount} icon={<PlusOutlined />}>
-              Add new account
+              Tạo tài khoản mới cho khách
             </Button>,
           ]}
           rowSelection={rowSelection}
           actionRef={ref}
-          rowKey="id"
+          rowKey="userID"
           columns={ACCOUNTS}
-          resource="accounts"
+          resource="User/GetAllCustomers"
         />
       </Card>
     </PageContainer>

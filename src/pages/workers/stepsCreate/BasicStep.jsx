@@ -2,10 +2,8 @@ import React from 'react';
 
 // import CommonSelect from '@/components/CommonSelect/CommonSelect';
 import { Input, Row, Col } from 'antd';
-// import { buildCategoriesOption } from '@/components/CommonSelect/utils';
 import ProForm from '@ant-design/pro-form';
 import CommonSelect from '@/components/CommonSelect/CommonSelect';
-import PhoneInput from 'react-phone-number-input';
 
 const BasicStep = () => {
   return (

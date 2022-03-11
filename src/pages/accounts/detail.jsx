@@ -6,45 +6,45 @@ import { Card, Form, Typography, Row, Empty } from 'antd';
 import AsyncButton from '@/components/AsyncButton';
 import { useHistory } from 'umi';
 import BasicStep from './stepsDetail/BasicStep';
-import { getWorkerById } from '@/services/workers';
+import { banUserByUserID, getCustomerById, unbanUserByUserID } from '@/services/accounts';
 import moment from 'moment';
 
 import { normalizeReportForm } from '@/utils/utils';
-import { RollbackOutlined } from '@ant-design/icons';
+import { LockOutlined, RollbackOutlined, UnlockOutlined } from '@ant-design/icons';
 
 const DetailWorker = (props) => {
   const {
     history: {
-      location: { state: updateWorkerState },
+      location: { state: updateCustomerState },
     },
   } = props;
 
   const [form] = Form.useForm();
   const history = useHistory();
-  const [formData, setFormData] = useState(updateWorkerState);
+  const [formData, setFormData] = useState(updateCustomerState);
   const [currentStep, setCurrentStep] = useState(0);
-
-  const [workerCreateDate, setWorkerCreateDate] = useState();
-  const [typeJob, setTypeJob] = useState();
+  const [customerCreateDate, setCustomerCreateDate] = useState();
+  const [statusRecordData, setStatusRecordData] = useState();
 
 
   const steps = [
     {
       title: 'Thông tin chính của thợ',
-      content: () => <BasicStep createDate={workerCreateDate} typeJobName={typeJob} />,
+      content: () => <BasicStep createDate={customerCreateDate} status={statusRecordData} />,
     },
   ];
 
   useEffect(() => {
     // form.setFieldsValue(updateWorkerState);
-    getWorkerById(updateWorkerState.userID).then((res) => {
-      setTypeJob(res.typeJob.typeJobName);
-      setWorkerCreateDate(res.createDate.split('T',1));
-      setWorkerCreateDate(moment(res.createDate).format('DD/MM/YYYY'));
+    getCustomerById(updateCustomerState.userID).then((res) => {
+      setCustomerCreateDate(res.createDate.split('T',1));
+      setCustomerCreateDate(moment(res.createDate).format('DD/MM/YYYY'));
+      setStatusRecordData(res.status);
+      console.log("record01", res.status)
     });
   }, []);
 
-  if (updateWorkerState == null) {
+  if (updateCustomerState == null) {
     return (
       <PageContainer>
         <Empty />
@@ -53,13 +53,26 @@ const DetailWorker = (props) => {
   }
 
   const onBackList = () => {
-      history.replace('/workers/list')
+      history.replace('/accounts/list')
   };
+
+  const onBanCustomer = () => {
+    return banUserByUserID(updateCustomerState.userID).then(() =>
+      onBackList(),
+    )
+  };
+
+  const onUnbanCustomer = () => {
+    return unbanUserByUserID(updateCustomerState.userID).then(() =>
+      onBackList(),
+    )
+  };
+
   return (
     <PageContainer>
       <Form
         onFinish={onBackList}
-        initialValues={updateWorkerState}
+        initialValues={updateCustomerState}
         colon
         form={form}
         name="reportInfo"
@@ -74,6 +87,8 @@ const DetailWorker = (props) => {
           </Row>
           <Row style={{ width: '100%' }}>{steps[currentStep].content()}</Row>
           <FooterToolbar>
+            <AsyncButton title="Chặn người dùng" btnProps={{ type: 'danger', icon: <LockOutlined /> }} onClick={onBanCustomer}  />
+            <AsyncButton title="Gỡ chặn người dùng" btnProps={{ type: 'primary', icon: <UnlockOutlined /> }} onClick={onUnbanCustomer} />
             <AsyncButton title="Trở về" btnProps={{ type: 'default', icon: <RollbackOutlined /> }} onClick={onBackList}  />
           </FooterToolbar>
         </Card>

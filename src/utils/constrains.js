@@ -1,37 +1,84 @@
 import { SelectRequestServiceStatus } from '@/components/CommonSelect/CommonSelect';
-import { Tag, Button, Space, Input, DatePicker, Select } from 'antd';
+import { Button, Space,  } from 'antd';
 import moment, { updateLocale } from 'moment';
 import { Link } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
-import { update } from '@umijs/deps/compiled/lodash';
-import { approveStatusRequestMaterial, denyStatusRequestMaterial } from '@/services/requestmaterials';
-import { SelectWorkerByTypeJob, SelectWorkerTypeJob, SelectWorkerName, SelectWorkerPhoneNumber } from '@/components/CommonSelect/CommonSelect';
+import { SelectWorkerByTypeJob } from '@/components/CommonSelect/CommonSelect';
 import { SelectRequestServiceDate1 } from '@/components/CommonSelect/CommonSelect';
-import { getAllWorkers } from '@/services/workers';
+
 
 // ACCOUNTS
 export const ACCOUNTS = [
   {
-    title: 'ID',
-    dataIndex: 'id',
+    title: 'STT',
+    dataIndex: 'index',
+    search: false,
+    render: (text, object, index) => {
+      return <div>{index+1}</div>
+    }
+  },
+  {
+    title: 'Mã khách hàng',
+    dataIndex: 'userID',
     show: false,
     search: false,
   },
   {
-    title: 'Username',
-    dataIndex: 'username',
+    title: 'Tên tài khoản',
+    dataIndex: 'userName',
+    show: false,
     search: false,
   },
   {
-    title: 'Phone',
-    dataIndex: 'phone',
+    title: 'Tên khách hàng',
+    dataIndex: 'fullName',
+    key: 'fullName',
+    render: (text, record) => {
+      return <Link to={{ pathname: `/accounts/detail`, state: record }}>{record.fullName}</Link>;
+    },
+  },
+  {
+    title: 'Số điện thoại',
+    dataIndex: 'phoneNumber',
+    key: 'phoneNumber',
+  },
+  {
+    title: 'Địa chỉ',
+    dataIndex: 'address',
     search: false,
   },
-
   {
     title: 'Email',
     dataIndex: 'email',
     search: false,
+  },
+  {
+    title: 'Trạng thái',
+    dataIndex: 'status',
+    valueEnum: {
+      4: {
+        text: 'Đang hoạt động',
+        status: 'Success',
+      },
+      10: {
+        text: 'Đã bị chặn',
+        status: 'Error',
+      },
+    },
+  },
+  {
+    title: 'Hành động',
+    key: 'action',
+    search: false,
+    render: (text, record) => {
+      const updateCustomerState = { ...record };
+      return (
+      <Space size="middle">
+        <a><Link to={{ pathname: `/accounts/detail`, state: updateCustomerState }}>Chi tiết</Link></a>
+        {/* <a><Link to={{ pathname: `/accounts/update`, state: updateCustomerState }}>Cập nhật</Link></a> */}
+      </Space>
+      )
+    },
   },
 ];
 
@@ -42,7 +89,7 @@ export const WORKERS = [
     title: 'STT',
     dataIndex: 'index',
     search: false,
-    render: (text, object, index) => {
+    render: (text, record, index) => {
       return <div>{index+1}</div>
     }
   },
@@ -118,7 +165,7 @@ export const WORKERS = [
       const updateWorkerState = { ...record };
       return (
       <Space size="middle">
-        <a><Link to={{ pathname: `/workers/detail`, state: updateWorkerState }}>Chi tiết</Link></a>
+        {/* <a><Link to={{ pathname: `/workers/detail`, state: updateWorkerState }}>Chi tiết</Link></a> */}
         <a><Link to={{ pathname: `/workers/update`, state: updateWorkerState }}>Cập nhật</Link></a>
       </Space>
       )
@@ -303,8 +350,6 @@ export const REQUESTMATERIAL = [
     search: false,
     render: (text, record) => {
       const updateRequestSMaterialState = { ...record };
-      console.log("abc1", record)
-      console.log("abc11", record.usedMaterialId)
       return (
       <Space size="middle">
         <a><Link to={{ pathname: `/requestmaterials/update`, state: updateRequestSMaterialState }}>Chi tiết</Link></a>

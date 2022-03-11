@@ -1,14 +1,44 @@
 import request from '@/utils/request';
 
-export const createAccount = (account) => {
-  return request.post('/accounts', {
-    data: account.update,
+export const getAllCustomers = (filters) => {
+  return request.get('/User/GetAllCustomers', {
+    params: filters,
   });
 };
 
-export const deleteAccount = (accountId) => {
-  return request.delete(`/accounts/${accountId}`);
+export const createCustomerAccount = (prop) => {
+  return request.post('/User/CreateCustomerAccount', {
+    data: prop.update,
+  });
 };
+
+export const getCustomerById = (id) => {
+  return request.get('/User/GetCustomerById', {
+    params: {
+      id,
+    },
+  });
+};
+
+export const banUserByUserID = (id, prod) => {
+  return request.put(`/User/BanUserByUserID?id=${id}`, {
+    params: {
+      prod,
+    },
+  });
+};
+
+export const unbanUserByUserID = (id, prod) => {
+  return request.put(`/User/UnBanUserByUserID?id=${id}`, {
+    params: {
+      prod,
+    },
+  });
+};
+
+// export const deleteAccount = (accountId) => {
+//   return request.delete(`/accounts/${accountId}`);
+// }; ?page=1&size=100
 
 // export const updateReportAttribute = (reportId, rpatt) => {
 //   return request.put(`/report-attributes/${reportId}`, {
@@ -16,28 +46,6 @@ export const deleteAccount = (accountId) => {
 //   });
 // };
 
-export const getAllAccounts = (filters) => {
-  return request.get('/accounts', {
-    params: filters,
-  });
-};
 
-export const getAccountByID = (id) => {
-  return request.get('/accounts?page=1&size=1000', {
-    params: {
-      id,
-    },
-  });
-};
 
-// export const getReportAttributeByName = (name) => {
-//   return request.get('/accounts?page=1&size=1000', {
-//     params: {
-//       name,
-//     },
-//   });
-// };
 
-// export const getReportAttributeByCode = () => {
-//   return request.get('/accounts?page=1&size=1000', { useCache: true });
-// };

@@ -8,6 +8,14 @@ export const getAllWorkers = (filters) => {
   });
 };
 
+export async function rule(params, options) {
+  return request('/User/GetAllWorker', {
+    method: 'GET',
+    params: { ...params },
+    ...(options || {}),
+  });
+}
+
 export const getWorkerById = (id) => {
   return request.get(`/User/GetWorkerById?id=${id}`);
 };
@@ -26,4 +34,9 @@ export const updateWorker = (prod) => {
 
 export const removeWorker = (accountId) => {
   return request.put(`/User/RemoveWorker?id=${accountId}`);
+};
+
+export const getWorkerByServiceID = (serviceID) => {
+  return request.get(`/User/GetWorkerByServiceID?id=${serviceID}`, {
+  });
 };
