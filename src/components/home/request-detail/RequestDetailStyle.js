@@ -6,6 +6,42 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     flex: 1,
   },
+  //package
+  packageContainer: {
+    marginBottom: 15,
+  },
+  packageTitle: {
+    fontSize: 18,
+    color: Color.primary,
+    marginBottom: 10,
+    marginTop: 16,
+  },
+  //package item
+  packageItemContainer: {
+    width: '100%',
+    flexDirection: 'row',
+    backgroundColor: Color.fourth,
+    borderRadius: 10,
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
+    paddingVertical: 5,
+  },
+  packageItemTextContainer: {
+    width: '60%',
+  },
+  packageItemName: {
+    fontSize: 18,
+    fontWeight: '500',
+    color: Color.primary,
+  },
+  packageItemDescription: {
+    fontSize: 14,
+    color: Color.primary,
+  },
+  packageItemImg: {
+    width: 80,
+    height: 80,
+  },
   //service
   serviceContainer: {
     marginBottom: 10,
@@ -24,8 +60,11 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     justifyContent: 'space-evenly',
     alignItems: 'center',
-    paddingVertical: 5,
+    paddingVertical: 8,
     marginBottom: 20,
+  },
+  serviceItemTextContainer: {
+    width: 161,
   },
   serviceItemName: {
     width: 161,
@@ -34,12 +73,57 @@ const styles = StyleSheet.create({
     color: Color.primary,
   },
   serviceItemIcon: {
-    fontSize: 16,
+    fontSize: 20,
     color: Color.primary,
+  },
+  serviceItemIconDisable: {
+    fontSize: 20,
+    color: Color.fourth,
   },
   serviceItemImg: {
     width: 80,
     height: 80,
+  },
+  //request detail status
+  requestDetailStatusContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  requestDetailStatusTitle: {
+    color: Color.second,
+  },
+  requestDetailStatusID2: {
+    marginLeft: 8,
+    padding: 7,
+    borderRadius: 10,
+    backgroundColor: Color.yellow,
+  },
+  requestDetailStatusID6: {
+    marginLeft: 8,
+    padding: 7,
+    borderRadius: 10,
+    backgroundColor: Color.purple,
+  },
+  requestDetailStatusID9: {
+    marginLeft: 8,
+    padding: 7,
+    borderRadius: 10,
+    backgroundColor: Color.green,
+  },
+  requestDetailStatusID11: {
+    marginLeft: 8,
+    padding: 7,
+    borderRadius: 10,
+    backgroundColor: Color.blue,
+  },
+  requestDetailStatusID12: {
+    marginLeft: 8,
+    padding: 7,
+    borderRadius: 10,
+    backgroundColor: Color.red,
+  },
+  requestDetailStatusText: {
+    color: Color.primary,
   },
   //fullName
   fullNameContainer: {

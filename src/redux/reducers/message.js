@@ -8,6 +8,9 @@ const myReducer = (state = inititalState, action) => {
     case types.RESET_MESSAGE:
       state = inititalState;
       return state;
+    case types.ERROR_CONNECT_API:
+      state = 'ERROR_CONNECT_API';
+      return state;
     case types.INSERT_REQUEST_MATERIAL_SUCCESS:
       state = 'INSERT_REQUEST_MATERIAL_SUCCESS';
       return state;

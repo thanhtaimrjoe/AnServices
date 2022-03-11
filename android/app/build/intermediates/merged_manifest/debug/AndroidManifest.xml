@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.capstoneproject_mason"
+    package="com.anservices_worker"
     android:versionCode="1"
     android:versionName="1.0" >
 
@@ -15,7 +15,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
-        android:name="com.capstoneproject_mason.MainApplication"
+        android:name="com.anservices_worker.MainApplication"
         android:allowBackup="false"
         android:appComponentFactory="androidx.core.app.CoreComponentFactory"
         android:debuggable="true"
@@ -26,7 +26,7 @@
         android:usesCleartextTraffic="true" >
         <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
         <activity
-            android:name="com.capstoneproject_mason.MainActivity"
+            android:name="com.anservices_worker.MainActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode"
             android:label="@string/app_name"
             android:launchMode="singleTask"
@@ -56,12 +56,12 @@
 
         <provider
             android:name="io.invertase.firebase.app.ReactNativeFirebaseAppInitProvider"
-            android:authorities="com.capstoneproject_mason.reactnativefirebaseappinitprovider"
+            android:authorities="com.anservices_worker.reactnativefirebaseappinitprovider"
             android:exported="false"
             android:initOrder="99" />
         <provider
             android:name="com.imagepicker.ImagePickerProvider"
-            android:authorities="com.capstoneproject_mason.imagepickerprovider"
+            android:authorities="com.anservices_worker.imagepickerprovider"
             android:exported="false"
             android:grantUriPermissions="true" >
             <meta-data
@@ -91,7 +91,7 @@
 
         <provider
             android:name="com.google.firebase.provider.FirebaseInitProvider"
-            android:authorities="com.capstoneproject_mason.firebaseinitprovider"
+            android:authorities="com.anservices_worker.firebaseinitprovider"
             android:directBootAware="true"
             android:exported="false"
             android:initOrder="100" />

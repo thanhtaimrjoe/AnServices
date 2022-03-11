@@ -1,10 +1,5 @@
 import * as types from '../../config/ActionTypes';
-import {
-  API_USER_URI,
-  API_SERVICE_URI,
-  API_MATERIAL_URI,
-  API_REPORT_URI,
-} from '../../config/API_URI';
+import {API} from '../../config/API_URI';
 //----------CLEAR DATA---------------
 export const actClearData = () => {
   return {
@@ -17,13 +12,18 @@ export const actResetMessage = () => {
     type: types.RESET_MESSAGE,
   };
 };
+export const actGetErrorConnectAPIMessage = () => {
+  return {
+    type: types.ERROR_CONNECT_API,
+  };
+};
 //------------USER----------------
 //call api
 export const actLoginCustomerOrWorkerRequest = phoneNumber => {
   return async dispatch => {
     try {
       const response = await fetch(
-        API_USER_URI + 'LoginCustomerOrWorker?phoneNumber=' + phoneNumber,
+        API + 'User/LoginCustomerOrWorker?phoneNumber=' + phoneNumber,
         {
           method: 'POST',
           headers: {
@@ -32,13 +32,15 @@ export const actLoginCustomerOrWorkerRequest = phoneNumber => {
           },
         },
       );
-      const json = await response.json();
-      if (json) {
-        dispatch(actGetUserInfo(json));
+      if (response.ok) {
+        const json = await response.json();
+        if (json) {
+          dispatch(actGetUserInfo(json));
+        }
+      } else {
+        dispatch(actGetErrorConnectAPIMessage());
       }
-    } catch (error) {
-      console.log('actLoginCustomerOrWorkerRequest', error);
-    }
+    } catch (error) {}
   };
 };
 //fetch user
@@ -52,7 +54,7 @@ export const actGetUserInfo = user => {
 export const actSendSmsByPhoneNumberRequest = phoneNumber => {
   return async dispatch => {
     try {
-      const response = await fetch(API_USER_URI + 'SendSms', {
+      const response = await fetch(API + 'User/SendSms', {
         method: 'POST',
         headers: {
           Accept: 'application/json',
@@ -84,7 +86,7 @@ export const actGetAllRequestServiceByWorkerIDRequest = id => {
   return async dispatch => {
     try {
       const response = await fetch(
-        API_SERVICE_URI + 'GetAllRequestServiceByWorkerID?id=' + id,
+        API + 'Service/GetAllRequestServiceByWorkerID?id=' + id,
         {
           method: 'GET',
           headers: {
@@ -121,8 +123,8 @@ export const actGetAllRequestServiceDetailsByRequestServiceIDAndWorkerIDRequest 
     return async dispatch => {
       try {
         const response = await fetch(
-          API_SERVICE_URI +
-            'GetAllRequestServiceDetailsByRequestServiceIDAndWorkerID?requestID=' +
+          API +
+            'Service/GetAllRequestServiceDetailsByRequestServiceIDAndWorkerID?requestID=' +
             requestServiceID +
             '&workerID=' +
             workerID,
@@ -159,7 +161,7 @@ export const actGetAllMaterialByRequestDetailIDRequest = id => {
   return async dispatch => {
     try {
       const response = await fetch(
-        API_MATERIAL_URI + 'GetAllMaterialByRequestDetailID?id=' + id,
+        API + 'Material/GetAllMaterialByRequestDetailID?id=' + id,
         {
           method: 'GET',
           headers: {
@@ -194,7 +196,7 @@ export const actResetUsedMaterialState = () => {
 export const actGetAllMaterialRequest = () => {
   return async dispatch => {
     try {
-      const response = await fetch(API_MATERIAL_URI + 'GetAllMaterial', {
+      const response = await fetch(API + 'Material/GetAllMaterial', {
         method: 'GET',
         headers: {
           Accept: 'application/json',
@@ -221,7 +223,7 @@ export const actGetAllMaterial = material => {
 export const actInsertRequestMaterialRequest = requestMaterial => {
   return async dispatch => {
     try {
-      const response = await fetch(API_MATERIAL_URI + 'InsertRequestMaterial', {
+      const response = await fetch(API + 'Material/InsertRequestMaterial', {
         method: 'POST',
         headers: {
           Accept: 'application/json',
@@ -259,7 +261,7 @@ export const actCancelRequestMaterialRequest = usedMaterialId => {
   return async dispatch => {
     try {
       const response = await fetch(
-        API_MATERIAL_URI + 'CancelRequestMaterial?id=' + usedMaterialId,
+        API + 'Material/CancelRequestMaterial?id=' + usedMaterialId,
         {
           method: 'PUT',
           headers: {
@@ -297,7 +299,7 @@ export const actCancelRequestMaterialFailure = () => {
 export const actCreateReportRequest = reportItem => {
   return async dispatch => {
     try {
-      const response = await fetch(API_REPORT_URI + 'CreateReport', {
+      const response = await fetch(API + 'Report/CreateReport', {
         method: 'POST',
         headers: {
           Accept: 'application/json',
@@ -339,7 +341,7 @@ export const actGetAllReportByRequestDetailIDRequest = requestDetailId => {
   return async dispatch => {
     try {
       const response = await fetch(
-        API_REPORT_URI + 'GetAllReportByRequestDetailID?id=' + requestDetailId,
+        API + 'Report/GetAllReportByRequestDetailID?id=' + requestDetailId,
         {
           method: 'GET',
           headers: {

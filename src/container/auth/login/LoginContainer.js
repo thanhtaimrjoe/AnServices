@@ -3,6 +3,7 @@ import React, {useEffect, useState} from 'react';
 import Login from '../../../components/auth/login/Login';
 import {useDispatch, useSelector} from 'react-redux';
 import {
+  actResetMessage,
   actLoginCustomerOrWorkerRequest,
   actSendSmsByPhoneNumberRequest,
 } from '../../../redux/actions/index';
@@ -15,6 +16,8 @@ export default function LoginContainer(props) {
   const [loading, setLoading] = useState(false);
   //reducer --- user
   const user = useSelector(state => state.user);
+  //reducer --- message
+  const message = useSelector(state => state.message);
 
   useEffect(() => {
     //user role = worker
@@ -37,10 +40,18 @@ export default function LoginContainer(props) {
       );
       setLoading(false);
     }
-  }, [user]);
+    //if connect api failed
+    if (message === 'ERROR_CONNECT_API') {
+      Alert.alert('Thông báo', 'Lỗi hệ thống, vui lòng thử lại');
+      setLoading(false);
+      resetMessage();
+    }
+  }, [user, message]);
 
   //get dispatch
   const dispatch = useDispatch();
+  //reset message
+  const resetMessage = () => dispatch(actResetMessage());
   //call api --- check user exist or not
   const loginCustomerOrWorkerRequest = phoneNumber =>
     dispatch(actLoginCustomerOrWorkerRequest(phoneNumber));

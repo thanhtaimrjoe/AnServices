@@ -7,6 +7,35 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:769013213766:android:b7bca197804e5204203847",
+        "android_client_info": {
+          "package_name": "com.anservices_worker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "769013213766-pgejeq58ve8j2293cbjd7sqogr3uqk9i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBp5WimRP5c96vriqLN9prOymX2X-B4TPg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "769013213766-pgejeq58ve8j2293cbjd7sqogr3uqk9i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:769013213766:android:56ea00feba59fcd6203847",
         "android_client_info": {
           "package_name": "com.capstoneproject_customer"

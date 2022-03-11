@@ -23,6 +23,22 @@ export default function RequestDetail(props) {
   //state --- showMediaViewDialog
   const [showMediaViewDialog, setShowMediaViewDialog] = useState(false);
 
+  //package information
+  const packages = [
+    {
+      packageId: 1,
+      packageName: 'Gói 1',
+      packageDescription: 'Chỉ yêu cầu nhân công, vật tư do bản thân cung cấp',
+      packageImg: require('../../../assets/icon/workers.png'),
+    },
+    {
+      packageId: 2,
+      packageName: 'Gói 2',
+      packageDescription: 'Thuê cả nhân công và vật tư do chúng tôi cung cấp',
+      packageImg: require('../../../assets/icon/builder.png'),
+    },
+  ];
+
   useEffect(() => {
     mediaItem;
   }, []);
@@ -40,25 +56,114 @@ export default function RequestDetail(props) {
 
   return (
     <ScrollView style={styles.container}>
+      <View style={styles.packageContainer}>
+        <Text style={styles.packageTitle}>Gói yêu cầu</Text>
+        {packages.map((item, index) => {
+          if (item.packageId === requestService.requestServicePackage) {
+            return (
+              <View key={index} style={styles.packageItemContainer}>
+                <Image source={item.packageImg} style={styles.packageItemImg} />
+                <View style={styles.packageItemTextContainer}>
+                  <Text style={styles.packageItemName}>{item.packageName}</Text>
+                  <Text style={styles.packageItemDescription}>
+                    {item.packageDescription}
+                  </Text>
+                </View>
+              </View>
+            );
+          }
+        })}
+      </View>
       <View style={styles.serviceContainer}>
         <Text style={styles.title}>Loại dịch vụ</Text>
         {requestDetail.length > 0 ? (
           requestDetail.map((item, index) => {
-            return (
-              <TouchableOpacity
-                key={index}
-                style={styles.serviceItemContainer}
-                onPress={() => onShowMaterialDetail(item)}>
-                <Image
-                  source={{uri: item.service.serviceImg}}
-                  style={styles.serviceItemImg}
-                />
-                <Text style={styles.serviceItemName}>
-                  {item.service.serviceName}
-                </Text>
-                <Icon name="chevron-right" style={styles.serviceItemIcon} />
-              </TouchableOpacity>
-            );
+            if (
+              item.requestDetailStatus === 11 ||
+              item.requestDetailStatus === 12
+            ) {
+              return (
+                <View key={index} style={styles.serviceItemContainer}>
+                  <Image
+                    source={{uri: item.service.serviceImg}}
+                    style={styles.serviceItemImg}
+                  />
+                  <View style={styles.serviceItemTextContainer}>
+                    <Text style={styles.serviceItemName}>
+                      {item.service.serviceName}
+                    </Text>
+                    <View style={styles.requestDetailStatusContainer}>
+                      <Text style={styles.requestDetailStatusTitle}>
+                        Tình trạng
+                      </Text>
+                      {item.requestDetailStatus === 11 && (
+                        <View style={styles.requestDetailStatusID11}>
+                          <Text style={styles.requestDetailStatusText}>
+                            Hài lòng
+                          </Text>
+                        </View>
+                      )}
+                      {item.requestDetailStatus === 12 && (
+                        <View style={styles.requestDetailStatusID12}>
+                          <Text style={styles.requestDetailStatusText}>
+                            Không hài lòng
+                          </Text>
+                        </View>
+                      )}
+                    </View>
+                  </View>
+                  <Icon
+                    name="chevron-right"
+                    style={styles.serviceItemIconDisable}
+                  />
+                </View>
+              );
+            } else {
+              return (
+                <TouchableOpacity
+                  key={index}
+                  style={styles.serviceItemContainer}
+                  onPress={() => onShowMaterialDetail(item)}>
+                  <Image
+                    source={{uri: item.service.serviceImg}}
+                    style={styles.serviceItemImg}
+                  />
+                  <View style={styles.serviceItemTextContainer}>
+                    <Text style={styles.serviceItemName}>
+                      {item.service.serviceName}
+                    </Text>
+                    <View style={styles.requestDetailStatusContainer}>
+                      <Text style={styles.requestDetailStatusTitle}>
+                        Tình trạng
+                      </Text>
+
+                      {item.requestDetailStatus === 2 && (
+                        <View style={styles.requestDetailStatusID2}>
+                          <Text style={styles.requestDetailStatusText}>
+                            Chưa xử lý
+                          </Text>
+                        </View>
+                      )}
+                      {item.requestDetailStatus === 6 && (
+                        <View style={styles.requestDetailStatusID6}>
+                          <Text style={styles.requestDetailStatusText}>
+                            Đang xử lý
+                          </Text>
+                        </View>
+                      )}
+                      {item.requestDetailStatus === 9 && (
+                        <View style={styles.requestDetailStatusID9}>
+                          <Text style={styles.requestDetailStatusText}>
+                            Chờ xác nhận
+                          </Text>
+                        </View>
+                      )}
+                    </View>
+                  </View>
+                  <Icon name="chevron-right" style={styles.serviceItemIcon} />
+                </TouchableOpacity>
+              );
+            }
           })
         ) : (
           <View>

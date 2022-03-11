@@ -4,7 +4,7 @@
     "type": "COMPATIBLE_SCREEN_MANIFEST",
     "kind": "Directory"
   },
-  "applicationId": "com.capstoneproject_mason",
+  "applicationId": "com.anservices_worker",
   "variantName": "debug",
   "elements": []
 }
