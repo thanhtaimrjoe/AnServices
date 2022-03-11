@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import ListRequestService from '../../../components/list/list-request-service/ListRequestService';
 import {
-  actGetAllRequestServiceByUserIDRequest,
   actGetRequestServiceByUserIDAndStatusRequest,
   actResetRequestService,
 } from '../../../redux/actions/index';
@@ -11,6 +10,11 @@ export default function ListRequestServiceContainer(props) {
   const {navigation} = props;
   //state --- refreshing
   const [refreshing, setRefreshing] = useState(false);
+  //state --- status
+  const [status, setStatus] = useState({
+    statusID: 2,
+    statusName: 'Đang chờ',
+  });
   //reducer --- user
   const user = useSelector(state => state.user);
   //reducer --- requestService
@@ -18,12 +22,8 @@ export default function ListRequestServiceContainer(props) {
   //list filter status
   const listFilterStatus = [
     {
-      statusID: 0,
-      statusName: 'Tất cả',
-    },
-    {
       statusID: 2,
-      statusName: 'Đang chờ',
+      statusName: 'Chưa xử lý',
     },
     {
       statusID: 3,
@@ -34,6 +34,10 @@ export default function ListRequestServiceContainer(props) {
       statusName: 'Đang sửa',
     },
     {
+      statusID: 14,
+      statusName: 'Chờ thanh toán',
+    },
+    {
       statusID: 1,
       statusName: 'Từ chối',
     },
@@ -41,9 +45,6 @@ export default function ListRequestServiceContainer(props) {
 
   //get dipatch
   const dispatch = useDispatch();
-  //call api --- get all request service by user id
-  const getAllRequestServiceByUserIDRequest = id =>
-    dispatch(actGetAllRequestServiceByUserIDRequest(id));
   //call api --- get request service by user id and status
   const getRequestServiceByUserIDAndStatusRequest = (userID, statusID) =>
     dispatch(actGetRequestServiceByUserIDAndStatusRequest(userID, statusID));
@@ -51,23 +52,13 @@ export default function ListRequestServiceContainer(props) {
   const resetRequestService = () => dispatch(actResetRequestService());
 
   useEffect(() => {
-    getAllRequestServiceByUserIDRequest(user.id);
-    //reload page when focused
-    const willFocusSubscription = navigation.addListener('focus', () => {
-      getAllRequestServiceByUserIDRequest(user.id);
-    });
-    return willFocusSubscription;
+    getRequestServiceByUserIDAndStatusRequest(user.id, status.statusID);
   }, []);
 
   //refresh request service by status
-  const onRefreshRequestServiceByStatus = statusID => {
+  const onRefreshRequestServiceByStatus = () => {
     setRefreshing(true);
-    //if status === 'All' -> refresh request service
-    if (statusID === 0) {
-      getAllRequestServiceByUserIDRequest(user.id);
-    } else {
-      getRequestServiceByUserIDAndStatusRequest(user.id, statusID);
-    }
+    getRequestServiceByUserIDAndStatusRequest(user.id, status.statusID);
     setRefreshing(false);
   };
 
@@ -79,24 +70,31 @@ export default function ListRequestServiceContainer(props) {
   };
 
   //tap on filter -> get request service by status
-  const onGetRequestServiceByStatus = statusID => {
+  const onGetRequestServiceByStatus = status => {
     //reset request service before get new
     resetRequestService();
-    if (statusID === 0) {
-      getAllRequestServiceByUserIDRequest(user.id);
-    } else {
-      getRequestServiceByUserIDAndStatusRequest(user.id, statusID);
-    }
+    //change status state after tap
+    setStatus(status);
+    getRequestServiceByUserIDAndStatusRequest(user.id, status.statusID);
+  };
+
+  //button --- show invoice
+  const onShowInvoice = requestServiceId => {
+    navigation.navigate('InvoiceContainer', {
+      requestServiceId: requestServiceId,
+    });
   };
 
   return (
     <ListRequestService
+      status={status}
       refreshing={refreshing}
       listFilterStatus={listFilterStatus}
       requestService={requestService}
       onRefreshRequestServiceByStatus={onRefreshRequestServiceByStatus}
       onShowRequestDetail={onShowRequestDetail}
       onGetRequestServiceByStatus={onGetRequestServiceByStatus}
+      onShowInvoice={onShowInvoice}
     />
   );
 }

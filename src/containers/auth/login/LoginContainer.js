@@ -1,4 +1,5 @@
-import React from 'react';
+import React, {useEffect} from 'react';
+import {Alert} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import Login from '../../../components/auth/login/Login';
 import {
@@ -9,6 +10,17 @@ export default function LoginContainer(props) {
   const {navigation} = props;
   //reducer --- user
   const user = useSelector(state => state.user);
+
+  useEffect(() => {
+    if (user.userRole === 'Worker') {
+      Alert.alert(
+        'Thông báo',
+        'Rất tiếc, số điện thoại này đã được đăng ký bởi thợ của chúng tôi',
+      );
+    } else {
+      //console.log('qua trang');
+    }
+  }, []);
 
   //get dispatch
   const dispatch = useDispatch();
@@ -28,13 +40,11 @@ export default function LoginContainer(props) {
     const convertedPhoneNumber = convertPhoneNumber(phoneNumber);
     loginCustomerOrWorkerRequest(phoneNumber);
     //sendSmsByPhoneNumber(convertedPhoneNumber);
-    if (user) {
-      //navigate to verify otp page
-      navigation.navigate('VerifyOTPContainer', {
-        phoneNumber: phoneNumber,
-        convertedPhoneNumber: convertedPhoneNumber,
-      });
-    }
+    //navigate to verify otp page
+    navigation.navigate('VerifyOTPContainer', {
+      phoneNumber: phoneNumber,
+      convertedPhoneNumber: convertedPhoneNumber,
+    });
   };
 
   return <Login onSendOTP={sendOTP} />;

@@ -35,6 +35,12 @@ const styles = StyleSheet.create({
     color: Color.primary,
   },
   //Request Service Item
+  requestServiceItemContainer: {
+    width: '100%',
+    backgroundColor: Color.field1,
+    borderRadius: 10,
+    marginBottom: 8,
+  },
   requestServiceItem: {
     width: '100%',
     flexDirection: 'row',
@@ -43,7 +49,7 @@ const styles = StyleSheet.create({
     backgroundColor: Color.forth,
     borderRadius: 10,
     height: 65,
-    marginBottom: 8,
+    //marginBottom: 8,
   },
   requestServiceItemImg: {
     width: 40,
@@ -51,7 +57,7 @@ const styles = StyleSheet.create({
     marginRight: 16,
   },
   requestServiceItemName: {
-    width: '55%',
+    width: '80%',
     fontSize: 18,
     color: Color.primary,
   },
@@ -64,7 +70,27 @@ const styles = StyleSheet.create({
     backgroundColor: Color.primary,
   },
   requestServiceItemStatusText: {
+    textAlign: 'center',
     color: Color.third,
+  },
+  //invoice
+  invoiceContainer: {
+    flexDirection: 'row',
+    padding: 8,
+    justifyContent: 'space-evenly',
+  },
+  invoiceTitle: {
+    width: '65%',
+    color: Color.primary,
+  },
+  invoiceBtn: {
+    justifyContent: 'center',
+    paddingHorizontal: 8,
+    borderRadius: 10,
+    backgroundColor: Color.btn,
+  },
+  invoiceBtnText: {
+    color: Color.primary,
   },
   //error message from api
   errorView: {

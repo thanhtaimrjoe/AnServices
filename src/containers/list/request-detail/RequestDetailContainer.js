@@ -7,6 +7,7 @@ import {
   actResetMessage,
   actCancelRequestServiceRequest,
   actGetAllRequestServiceDetailsByRequestServiceIDRequest,
+  actUpdateStatusRequestServiceDetailRequest,
 } from '../../../redux/actions/index';
 
 export default function RequestDetailContainer(props) {
@@ -35,6 +36,11 @@ export default function RequestDetailContainer(props) {
   //call api --- cancel request service
   const cancelRequestServiceRequest = requestServiceId =>
     dispatch(actCancelRequestServiceRequest(requestServiceId));
+  //call api --- update status request service detail
+  const updateStatusRequestServiceDetail = (requestDetailId, status) =>
+    dispatch(
+      actUpdateStatusRequestServiceDetailRequest(requestDetailId, status),
+    );
 
   useEffect(() => {
     resetRequestDetail();
@@ -54,14 +60,47 @@ export default function RequestDetailContainer(props) {
     }
     if (message === 'CANCEL_REQUEST_SERVICE_FAILURE') {
       Alert.alert('Thông báo', 'Hủy yêu cầu không thành công');
+      resetMessage();
+    }
+    if (message === 'UPDATE_STATUS_REQUEST_SERVICE_DETAIL_SUCCESS') {
+      Alert.alert('Thông báo', 'Cám ơn bạn đã đánh giá dịch vụ');
+      resetMessage();
+    }
+    if (message === 'UPDATE_STATUS_REQUEST_SERVICE_DETAIL_FAILURE') {
+      Alert.alert('Thông báo', 'Đánh giá không thành công');
+      resetMessage();
     }
   }, [message]);
 
   //button --- happy service
-  const onHappyService = () => {};
+  const onHappyService = requestDetailId => {
+    Alert.alert('Thông báo', 'Bạn có chắc với lựa chọn này?', [
+      {
+        text: 'Có',
+        onPress: () => {
+          updateStatusRequestServiceDetail(requestDetailId, 11);
+        },
+      },
+      {
+        text: 'Không',
+      },
+    ]);
+  };
 
   //button --- unhappy service
-  const onUnhappyService = () => {};
+  const onUnhappyService = requestDetailId => {
+    Alert.alert('Thông báo', 'Bạn có chắc với lựa chọn này?', [
+      {
+        text: 'Có',
+        onPress: () => {
+          updateStatusRequestServiceDetail(requestDetailId, 12);
+        },
+      },
+      {
+        text: 'Không',
+      },
+    ]);
+  };
 
   //button --- cancel request service
   const onCancelRequestService = requestServiceId => {

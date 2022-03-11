@@ -1,34 +1,41 @@
 {
   "project_info": {
-    "project_number": "769013213766",
-    "project_id": "anservice-f4076",
-    "storage_bucket": "anservice-f4076.appspot.com"
+    "project_number": "109973189362",
+    "project_id": "anservices",
+    "storage_bucket": "anservices.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:769013213766:android:56ea00feba59fcd6203847",
+        "mobilesdk_app_id": "1:109973189362:android:63c92b98a1bdfc0e7d166b",
         "android_client_info": {
-          "package_name": "com.capstoneproject_customer"
+          "package_name": "com.anservices_customer"
         }
       },
       "oauth_client": [
         {
-          "client_id": "769013213766-pgejeq58ve8j2293cbjd7sqogr3uqk9i.apps.googleusercontent.com",
+          "client_id": "109973189362-3pl1p5264lrhkea7kj60avmcl99nolbh.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBp5WimRP5c96vriqLN9prOymX2X-B4TPg"
+          "current_key": "AIzaSyBiiPU21hyhkbdNyHIwp2U3TL6xkYkRuJg"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "769013213766-pgejeq58ve8j2293cbjd7sqogr3uqk9i.apps.googleusercontent.com",
+              "client_id": "109973189362-3pl1p5264lrhkea7kj60avmcl99nolbh.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "109973189362-poaf4mr8rbtbpaiampuhfkmfnns6m92q.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.reactjs.native.example.AnServices-Customer"
+              }
             }
           ]
         }
@@ -36,28 +43,71 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:769013213766:android:f210e2289e4ccbbb203847",
+        "mobilesdk_app_id": "1:109973189362:android:f5c0115f7fa585897d166b",
         "android_client_info": {
-          "package_name": "com.capstoneproject_mason"
+          "package_name": "com.capstoneproject_customer"
         }
       },
       "oauth_client": [
         {
-          "client_id": "769013213766-pgejeq58ve8j2293cbjd7sqogr3uqk9i.apps.googleusercontent.com",
+          "client_id": "109973189362-3pl1p5264lrhkea7kj60avmcl99nolbh.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBp5WimRP5c96vriqLN9prOymX2X-B4TPg"
+          "current_key": "AIzaSyBiiPU21hyhkbdNyHIwp2U3TL6xkYkRuJg"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "769013213766-pgejeq58ve8j2293cbjd7sqogr3uqk9i.apps.googleusercontent.com",
+              "client_id": "109973189362-3pl1p5264lrhkea7kj60avmcl99nolbh.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "109973189362-poaf4mr8rbtbpaiampuhfkmfnns6m92q.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.reactjs.native.example.AnServices-Customer"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:109973189362:android:6c6f7bf676a02f3c7d166b",
+        "android_client_info": {
+          "package_name": "com.capstoneproject_mason"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "109973189362-3pl1p5264lrhkea7kj60avmcl99nolbh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBiiPU21hyhkbdNyHIwp2U3TL6xkYkRuJg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "109973189362-3pl1p5264lrhkea7kj60avmcl99nolbh.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "109973189362-poaf4mr8rbtbpaiampuhfkmfnns6m92q.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.reactjs.native.example.AnServices-Customer"
+              }
             }
           ]
         }

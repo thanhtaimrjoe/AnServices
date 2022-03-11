@@ -11,28 +11,26 @@ import {styles} from './ListRequestServiceStyle';
 import Loading from '../../general/Loading';
 
 export default function ListRequestService(props) {
-  const {refreshing, listFilterStatus, requestService} = props;
-  //state --- status
-  const [status, setStatus] = useState({
-    statusID: 0,
-    statusName: 'Tất cả',
-  });
+  const {status, refreshing, listFilterStatus, requestService} = props;
 
   //refresh request service by status
   const onRefreshRequestServiceByStatus = () => {
-    props.onRefreshRequestServiceByStatus(status.statusID);
+    props.onRefreshRequestServiceByStatus();
   };
 
   //tap on filter -> get request service by status
   const onGetRequestServiceByStatus = status => {
-    //change status state after tap
-    setStatus(status);
-    props.onGetRequestServiceByStatus(status.statusID);
+    props.onGetRequestServiceByStatus(status);
   };
 
   //button --- navigate to request detail
   const onShowRequestDetail = requestService => {
     props.onShowRequestDetail(requestService);
+  };
+
+  //button --- navigate to invoice
+  const onShowInvoice = requestServiceId => {
+    props.onShowInvoice(requestServiceId);
   };
 
   return (
@@ -45,7 +43,6 @@ export default function ListRequestService(props) {
         />
       }>
       <Text style={styles.title}>Danh sách yêu cầu</Text>
-
       <View style={styles.filter}>
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
           {listFilterStatus.map((item, index) => {
@@ -77,23 +74,36 @@ export default function ListRequestService(props) {
         !requestService.errorsMsg &&
         requestService.map((item, index) => {
           return (
-            <TouchableOpacity
-              key={index}
-              style={styles.requestServiceItem}
-              onPress={() => onShowRequestDetail(item)}>
-              <Image
-                source={require('../../../assets/icon/service.png')}
-                style={styles.requestServiceItemImg}
-              />
-              <Text numberOfLines={1} style={styles.requestServiceItemName}>
-                {item.requestServiceDescription}
-              </Text>
-              <View style={styles.requestServiceItemStatus}>
+            <View key={index} style={styles.requestServiceItemContainer}>
+              <TouchableOpacity
+                style={styles.requestServiceItem}
+                onPress={() => onShowRequestDetail(item)}>
+                <Image
+                  source={require('../../../assets/icon/service.png')}
+                  style={styles.requestServiceItemImg}
+                />
+                <Text numberOfLines={1} style={styles.requestServiceItemName}>
+                  {item.requestServiceDescription}
+                </Text>
+                {/* <View style={styles.requestServiceItemStatus}>
                 <Text style={styles.requestServiceItemStatusText}>
                   {item.requestServiceStatus.statusName}
                 </Text>
-              </View>
-            </TouchableOpacity>
+              </View> */}
+              </TouchableOpacity>
+              {item.requestServiceStatus.statusId === 14 && (
+                <View style={styles.invoiceContainer}>
+                  <Text style={styles.invoiceTitle}>
+                    Chúng tôi đã hoàn thành xong dịch vụ. Mời bạn xem hóa đơn
+                  </Text>
+                  <TouchableOpacity
+                    style={styles.invoiceBtn}
+                    onPress={() => onShowInvoice(item.requestServiceId)}>
+                    <Text style={styles.invoiceBtnText}>Xem hóa đơn</Text>
+                  </TouchableOpacity>
+                </View>
+              )}
+            </View>
           );
         })}
     </ScrollView>

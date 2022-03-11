@@ -38,6 +38,12 @@ const myReducer = (state = inititalState, action) => {
     case types.REQUEST_UPDATE_CONTRACT_FAILURE:
       state = 'REQUEST_UPDATE_CONTRACT_FAILURE';
       return state;
+    case types.UPDATE_STATUS_REQUEST_SERVICE_DETAIL_SUCCESS:
+      state = 'UPDATE_STATUS_REQUEST_SERVICE_DETAIL_SUCCESS';
+      return state;
+    case types.UPDATE_STATUS_REQUEST_SERVICE_DETAIL_FAILURE:
+      state = 'UPDATE_STATUS_REQUEST_SERVICE_DETAIL_FAILURE';
+      return state;
     default:
       return state;
   }

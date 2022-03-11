@@ -88,13 +88,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: Color.forth,
     borderRadius: 10,
-    justifyContent: 'space-evenly',
+    justifyContent: 'space-around',
     alignItems: 'center',
     paddingVertical: 5,
     marginBottom: 20,
   },
   serviceItemTextContainer: {
-    width: 161,
+    width: '55%',
   },
   serviceItemName: {
     fontSize: 18,

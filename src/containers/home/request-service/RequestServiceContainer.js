@@ -92,7 +92,6 @@ export default function RequestServiceContainer(props) {
         {
           method: 'POST',
           headers: {
-            Authorization: token,
             'Content-Type': 'multipart/form-data',
           },
           body: formData,
@@ -101,7 +100,8 @@ export default function RequestServiceContainer(props) {
       console.log('response.status', response.status);
     } catch (error) {
       console.error(error);
-      dispatch(createRequestFailure());
+      console.log('error', error);
+      //dispatch(createRequestFailure());
     }
   };
 
@@ -154,13 +154,20 @@ export default function RequestServiceContainer(props) {
     media.map((item, index) => {
       formData.append('File', {
         uri: item.uri,
-        name: item.fileName,
         type: item.type,
+        name: item.fileName,
       });
     });
-    console.log('test', formData);
-    createRequestServiceAPITest(formData);
-    //createRequestServiceRequest(formData);
+    //console.log('test', formData);
+    // var request = new XMLHttpRequest();
+    // request.open(
+    //   'POST',
+    //   'https://anservice-capstone-yx3.conveyor.cloud/api/Service/CreateRequestService',
+    // );
+    // request.send(formData);
+
+    //createRequestServiceAPITest(formData);
+    createRequestServiceRequest(formData);
   };
 
   return (

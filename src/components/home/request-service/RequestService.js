@@ -9,6 +9,7 @@ import {
   Image,
   ActivityIndicator,
   TouchableWithoutFeedback,
+  Alert,
 } from 'react-native';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -178,20 +179,35 @@ export default function RequestService(props) {
     return result;
   };
 
+  //check size of video and image
+  const checkSizeMedia = () => {
+    var result = 0;
+    media.map(item => {
+      result += item.fileSize;
+    });
+    if (result / 1000000 > 4) {
+      return false;
+    }
+    return true;
+  };
+
   //button --- create request service
   const onCreateRequestService = () => {
-    //check validate
-    var validation = validateValue();
-    if (validation) {
-      props.onCreateRequestService(
-        selectedPackage,
-        fullName,
-        phoneNumber,
-        address,
-        selectedService,
-        description,
-        media,
-      );
+    if (checkSizeMedia()) {
+      var validation = validateValue();
+      if (validation) {
+        props.onCreateRequestService(
+          selectedPackage,
+          fullName,
+          phoneNumber,
+          address,
+          selectedService,
+          description,
+          media,
+        );
+      }
+    } else {
+      Alert.alert('Thông báo', 'Ảnh hoặc video của bạn đã vượt quá 4Mb');
     }
   };
 
@@ -455,26 +471,28 @@ export default function RequestService(props) {
         <Text style={styles.errorMessage}>{mediaError}</Text>
       </View>
       <Modal transparent={true} visible={showMediaDialog}>
-        <View style={styles.dialogBackground}>
-          <View style={styles.dialogContainer}>
-            <Text style={styles.dialogTitle}>Chọn ảnh hoặc video</Text>
-            <TouchableOpacity
-              style={styles.dialogMediaBtn}
-              onPress={onOpenCamera}>
-              <Text style={styles.dialogMediaText}>Mở camera</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.dialogMediaBtn}
-              onPress={onOpenVideo}>
-              <Text style={styles.dialogMediaText}>Mở video</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.dialogMediaBtn}
-              onPress={onOpenGallery}>
-              <Text style={styles.dialogMediaText}>Chọn từ thư viện</Text>
-            </TouchableOpacity>
+        <TouchableWithoutFeedback onPress={() => setShowMediaDialog(false)}>
+          <View style={styles.dialogBackground}>
+            <View style={styles.dialogContainer}>
+              <Text style={styles.dialogTitle}>Chọn ảnh hoặc video</Text>
+              <TouchableOpacity
+                style={styles.dialogMediaBtn}
+                onPress={onOpenCamera}>
+                <Text style={styles.dialogMediaText}>Mở camera</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.dialogMediaBtn}
+                onPress={onOpenVideo}>
+                <Text style={styles.dialogMediaText}>Mở video</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.dialogMediaBtn}
+                onPress={onOpenGallery}>
+                <Text style={styles.dialogMediaText}>Chọn từ thư viện</Text>
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
+        </TouchableWithoutFeedback>
       </Modal>
       {mediaItem && (
         <Modal transparent={true} visible={showMediaViewDialog}>

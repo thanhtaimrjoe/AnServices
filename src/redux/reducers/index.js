@@ -6,6 +6,7 @@ import requestService from './requestService';
 import otp from './otp';
 import requestDetail from './requestDetail';
 import contract from './contract';
+import invoice from './invoice';
 const myReducer = combineReducers({
   services,
   message,
@@ -14,5 +15,6 @@ const myReducer = combineReducers({
   otp,
   requestDetail,
   contract,
+  invoice,
 });
 export default myReducer;

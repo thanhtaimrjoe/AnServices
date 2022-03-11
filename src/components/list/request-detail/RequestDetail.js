@@ -23,15 +23,35 @@ export default function RequestDetail(props) {
   //state --- showMediaViewDialog
   const [showMediaViewDialog, setShowMediaViewDialog] = useState(false);
 
+  //package information
+  const packages = [
+    {
+      packageId: 1,
+      packageName: 'Gói 1',
+      packageDescription: 'Chỉ yêu cầu nhân công, vật tư do bản thân cung cấp',
+      packageImg: require('../../../assets/icon/workers.png'),
+    },
+    {
+      packageId: 2,
+      packageName: 'Gói 2',
+      packageDescription: 'Thuê cả nhân công và vật tư do chúng tôi cung cấp',
+      packageImg: require('../../../assets/icon/builder.png'),
+    },
+  ];
+
   useEffect(() => {
     mediaItem;
   }, []);
 
   //button --- happy service
-  const onHappyService = () => {};
+  const onHappyService = requestDetailId => {
+    props.onHappyService(requestDetailId);
+  };
 
   //button --- unhappy service
-  const onUnhappyService = () => {};
+  const onUnhappyService = requestDetailId => {
+    props.onUnhappyService(requestDetailId);
+  };
 
   //view media
   const onViewMedia = item => {
@@ -58,6 +78,24 @@ export default function RequestDetail(props) {
 
   return (
     <ScrollView style={styles.container}>
+      <View style={styles.packageContainer}>
+        <Text style={styles.packageTitle}>Gói yêu cầu đã chọn</Text>
+        {packages.map((item, index) => {
+          if (item.packageId === requestService.requestServicePackage) {
+            return (
+              <View key={index} style={styles.packageItemContainer}>
+                <Image source={item.packageImg} style={styles.packageItemImg} />
+                <View style={styles.packageItemTextContainer}>
+                  <Text style={styles.packageItemName}>{item.packageName}</Text>
+                  <Text style={styles.packageItemDescription}>
+                    {item.packageDescription}
+                  </Text>
+                </View>
+              </View>
+            );
+          }
+        })}
+      </View>
       <View style={styles.serviceContainer}>
         <Text style={styles.title}>Dịch vụ đã chọn</Text>
         {requestDetail.length > 0 ? (
@@ -99,6 +137,20 @@ export default function RequestDetail(props) {
                           </Text>
                         </View>
                       )}
+                      {item.requestDetailStatus === 11 && (
+                        <View style={styles.requestDetailStatusID11}>
+                          <Text style={styles.requestDetailStatusText}>
+                            Hài lòng
+                          </Text>
+                        </View>
+                      )}
+                      {item.requestDetailStatus === 12 && (
+                        <View style={styles.requestDetailStatusID12}>
+                          <Text style={styles.requestDetailStatusText}>
+                            Không hài lòng
+                          </Text>
+                        </View>
+                      )}
                     </View>
                   </View>
                 </View>
@@ -111,7 +163,7 @@ export default function RequestDetail(props) {
                     <View style={styles.rateBtnContainer}>
                       <TouchableOpacity
                         style={styles.rateBtn}
-                        onPress={onHappyService}>
+                        onPress={() => onHappyService(item.requestDetailId)}>
                         <Image
                           source={require('../../../assets/icon/happy.png')}
                           style={styles.rateImg}
@@ -120,7 +172,7 @@ export default function RequestDetail(props) {
                       </TouchableOpacity>
                       <TouchableOpacity
                         style={styles.rateBtn}
-                        onPress={onUnhappyService}>
+                        onPress={() => onUnhappyService(item.requestDetailId)}>
                         <Image
                           source={require('../../../assets/icon/unhappy.png')}
                           style={styles.rateImg}
