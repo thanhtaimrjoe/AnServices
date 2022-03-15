@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "B5YY+2aQQymzf2Gg5Ms8sfRofqlUooi1Wjc+U14xNthTVOkgiAK35YM1EUXQ8x+4TkQEaDS5PTd14QZ9qID5fw==",
+  "dgSpecHash": "xIKnSmzqzBvyHLY+EhAdV8VZOK5l/Bfw0qlQiC0kL5tR2R9kIgaDVAhq0fT/OrGNJuHBC4OfvbIaW6AvYY1jwg==",
   "success": true,
   "projectFilePath": "E:\\Capstone\\New_API\\AnService_Capstone\\AnService_Capstone.csproj",
   "expectedPackageFiles": [
@@ -157,8 +157,7 @@
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\system.xml.xdocument\\4.3.0\\system.xml.xdocument.4.3.0.nupkg.sha512",
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\system.xml.xmldocument\\4.3.0\\system.xml.xmldocument.4.3.0.nupkg.sha512",
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\system.xml.xmlserializer\\4.3.0\\system.xml.xmlserializer.4.3.0.nupkg.sha512",
-    "C:\\Users\\ADMIN\\.nuget\\packages\\twilio\\5.70.0\\twilio.5.70.0.nupkg.sha512",
-    "C:\\Users\\ADMIN\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\5.0.12\\microsoft.netcore.app.host.win-x64.5.0.12.nupkg.sha512"
+    "C:\\Users\\ADMIN\\.nuget\\packages\\twilio\\5.70.0\\twilio.5.70.0.nupkg.sha512"
   ],
   "logs": []
 }

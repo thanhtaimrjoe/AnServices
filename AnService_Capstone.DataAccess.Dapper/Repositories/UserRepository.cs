@@ -428,8 +428,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
         {
             var query = "select UserID, FullName, PhoneNumber, Address, Email, CreateDate, Status, TypeJobID, TypeJobName " +
                 "from tblUsers u join tblTypeJobs job on u.TypeJob = job.TypeJobID " +
-                "where Role = 2 and Status = 4 and PhoneNumber like @PhoneNumber and FullName like @FullName and TypeJobID = COALESCE(@TypeJobID, TypeJobID) " +
-                "order by TypeJobName asc";
+                "where Role = 2 and Status = 4 and PhoneNumber like @PhoneNumber and FullName like @FullName and TypeJobID = COALESCE(@TypeJobID, TypeJobID) ";
             using (var connections = _context.CreateConnection())
             {
                 connections.Open();

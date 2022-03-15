@@ -316,20 +316,23 @@ namespace AnService_Capstone.Controllers
                 return BadRequest();
             }
 
-           /* var check = await _userRepository.CheckPhoneNumberExist(worker.WorkerPhoneNumber);
+            var user = await _userRepository.GetWorkerByID(worker.WorkerId);
 
-            if (check != null)
+            var check = await _userRepository.CheckPhoneNumberExist(worker.WorkerPhoneNumber);
+
+            if (check.PhoneNumber.Equals(user.PhoneNumber))
             {
-                return BadRequest(new ErrorResponse("Phone number is existed"));
-            }*/
+                /*return BadRequest(new ErrorResponse("Phone number is existed"));*/
+                var res = await _userRepository.UpdateWorker(worker);
 
-            var res = await _userRepository.UpdateWorker(worker);
-
-            if (res)
-            {
-                return Ok("Update Successful");
+                if (res)
+                {
+                    return Ok("Update Successful");
+                }
+                return BadRequest(new ErrorResponse("Update Fail"));
             }
-            return BadRequest(new ErrorResponse("Update Fail"));
+
+            return BadRequest(new ErrorResponse("Phone number is existed"));
         }
 
         /// <summary>
