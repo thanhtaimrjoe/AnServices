@@ -11,8 +11,8 @@ export default defineConfig({
     hmr: true,
   },
   define: {
-    API_URL: 'https://anservice-capstone.conveyor.cloud/api',
-    // API_URL: 'https://anservice-capstone-ux2.conveyor.cloud/api',
+    // API_URL: 'https://anservice-capstone.conveyor.cloud/api',
+    API_URL: 'https://anservice-capstone-ux2.conveyor.cloud/api',
     // API_URL: 'https://anservice-capstone-yx3.conveyor.cloud/api',
   },
   history: {

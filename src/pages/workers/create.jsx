@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { FooterToolbar, PageContainer } from '@ant-design/pro-layout';
-import { Form, Typography, Space, Result, Button } from 'antd';
+import { Form, Typography, Space, Result, Button, message } from 'antd';
 import BasicStep from './stepsCreate/BasicStep';
 import { useHistory } from 'umi';
 import { normalizeReportForm } from '@/utils/utils';
@@ -30,15 +30,22 @@ const CreateWorker = (props) => {
 
   const onCreateWorker = (values) => {
     const createWorkerData = normalizeReportForm(values);
+    
     return createWorker(createWorkerData).then((res) => {
+      if(res.status === 500) {
+        message.error("Số điện thoại đã tồn tại");
+      }
       // setCreatedWorker({ ...values, userID : res });
       history.replace('/workers/list');
     });
+    
   };
 
   const onBackList = () => {
     history.replace('/workers/list');
   };
+
+  
 
   // if (createdWorker !== null) {
   //   return (
@@ -56,9 +63,9 @@ const CreateWorker = (props) => {
   //           </Space>
   //         }
   //         extra={[
-  //           // <Button key="buy" onClick={() => setCreatedWorker(null)}>
-  //           //   Tiếp tục thêm thợ mới
-  //           // </Button>,
+  //           <Button key="buy" onClick={() => setCreatedWorker(null)}>
+  //             Tiếp tục thêm thợ mới
+  //           </Button>,
   //           <Button
   //             type="primary"
   //             key="console"

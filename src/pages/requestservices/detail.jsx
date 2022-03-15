@@ -108,10 +108,6 @@ const DetailRequestService = (props) => {
   const [totalPrice, setTotalPrice] = useState([]);
   const [invoiceTotalPrice, setInvoiceTotalPrice] = useState([]);
 
-  // Scroll
-  const scrollToRef = (ref) => window.scrollTo({behavior: "smooth", top: ref.current.offsetTop});
-  const myRef = useRef()
-  const executeScroll = () => scrollToRef(myRef)
   // Invoice
   
   const [selectedRows, setSelectedRows] = useState([]);
@@ -1082,7 +1078,7 @@ const DetailRequestService = (props) => {
           <Divider style={{ marginBottom: 32 }} />
 
           {/* XEM DANH SÁCH HỢP ĐỒNG */}
-          <div className={styles.title} ref={myRef}>Danh sách hợp đồng</div>
+          <div className={styles.title}>Danh sách hợp đồng</div>
           <ProTable
             style={{
               marginBottom: 24,
@@ -1325,9 +1321,9 @@ const DetailRequestService = (props) => {
               disabled={disableInvoice}
               type="primary"
               style={{ width: '25%' }}
-              // onClick={() => {
-              //   onCreateInvoice();
-              // }}
+              onClick={() => {
+                onCreateInvoice();
+              }}
             >
               Gửi hoá đơn
             </Button>
@@ -1394,7 +1390,6 @@ const DetailRequestService = (props) => {
           <BackTop type='primary'>
             <div className={styles.style}>UP</div>
           </BackTop>
-          <button onClick={() => executeScroll(myRef)}> Click to scroll </button> 
           {/* XEM ẢNH & VIDEO */}
           <Modal
               title="Hình ảnh & video"
@@ -1437,7 +1432,7 @@ const DetailRequestService = (props) => {
               btnProps={{ type: 'danger', icon: <CloseOutlined /> }}
               onClick={onRejectorCancelRequestService}
             />
-            <AsyncButton title="Xác nhận" btnProps={{ type: 'primary', icon: <CheckOutlined /> }} />
+            {/* <AsyncButton title="Xác nhận" btnProps={{ type: 'primary', icon: <CheckOutlined /> }} /> */}
           </FooterToolbar>
         </Card>
       </Form>

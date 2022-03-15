@@ -199,7 +199,6 @@ export const REQUESTSERVICE = [
     // key: 'requestServiceId',
     show: false,
     search: false,
-    
   },
   {
     title: 'Yêu cầu',
@@ -211,7 +210,7 @@ export const REQUESTSERVICE = [
     },
   },
   {
-    title: 'Ngày nhận yêu cầu',
+    title: 'Ngày nhận',
     dataIndex: 'requestServiceCreateDate',
     // key: 'date',
     // search: false,
@@ -226,7 +225,21 @@ export const REQUESTSERVICE = [
     renderFormItem: (item, props) => {
       return <SelectRequestServiceDate1 {...props} />;
     }
-    
+  },
+  {
+    title: 'Gói',
+    dataIndex: 'requestServicePackage',
+    // show: false,
+    search: false,
+    tip:'Gói 1: Chỉ thuê nhân công, vật tư có sẵn - Gói 2: Thuê cả nhân công và vật tư',
+    valueEnum: {
+      1: {
+        text: 'Gói 1',
+      },
+      2: {
+        text: 'Gói 2',
+      },
+    },
   },
   {
     title: 'Trạng thái',

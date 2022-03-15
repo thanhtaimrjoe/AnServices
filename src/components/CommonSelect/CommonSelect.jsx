@@ -314,6 +314,26 @@ const SelectRequestServicePriority = (props) => {
     />
   );
 };
+
+const SelectRequestServicePackage = (props) => {
+  return (
+    <CommonSelect
+      placeholder="Vui lòng chọn gói của yêu cầu"
+      fetchOnFirst
+      options={[
+        {
+          value: 1,
+          label: 'Gói 1: Chỉ thuê nhân công, vật tư có sẵn',
+        },
+        {
+          value: 2,
+          label: 'Gói 2: Thuê cả nhân công và vật tư',
+        },
+      ]}
+      {...props}
+    />
+  );
+};
 // ==============================================================================
 CommonSelect.SelectStatusOfCustomer = SelectStatusOfCustomer;
 CommonSelect.SelectWorkerPhoneNumber = SelectWorkerPhoneNumber;
@@ -324,6 +344,9 @@ CommonSelect.SelectRequestServiceStatus = SelectRequestServiceStatus;
 CommonSelect.SelectRequestServiceDate = SelectRequestServiceDate;
 CommonSelect.SelectRequestServiceDate1 = SelectRequestServiceDate1;
 CommonSelect.SelectRequestServicePriority = SelectRequestServicePriority;
+CommonSelect.SelectRequestServicePackage = SelectRequestServicePackage;
+
+
 // ==============================================================================
 
 
@@ -353,6 +376,7 @@ export {
   SelectRequestServiceDate,
   SelectRequestServiceDate1,
   SelectRequestServicePriority,
+  SelectRequestServicePackage,
 
 // ==============================================================================
 };

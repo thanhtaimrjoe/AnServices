@@ -6,6 +6,7 @@ import ProForm from '@ant-design/pro-form';
 import { getRequestServiceByID } from '@/services/requestservices';
 import { Content } from 'antd/lib/layout/layout';
 import ProCard from '@ant-design/pro-card';
+import CommonSelect from '@/components/CommonSelect/CommonSelect';
 
 const BasicStep = ({ customerName, userID, fullName, phoneNumber, address, 
   serviceName, serviceDescription, servicePrice, 
@@ -110,6 +111,17 @@ const BasicStep = ({ customerName, userID, fullName, phoneNumber, address,
             >
               <Input readOnly placeholder='Không có' />
             </ProForm.Item>
+          </Col>
+        </Row>
+        <Row gutter={16}>
+          <Col span={12}>
+            <ProForm.Item 
+              name="requestServicePackage" 
+              label="Gói"
+            >
+              <CommonSelect.SelectRequestServicePackage disabled />
+            </ProForm.Item>
+          
           </Col>
         </Row>
       </div>

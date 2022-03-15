@@ -29,7 +29,7 @@ const DetailWorker = (props) => {
 
   const steps = [
     {
-      title: 'Thông tin chính của thợ',
+      title: 'Thông tin chính của khách hàng',
       content: () => <BasicStep createDate={customerCreateDate} status={statusRecordData} />,
     },
   ];

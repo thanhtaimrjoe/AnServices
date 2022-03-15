@@ -66,7 +66,7 @@ const BasicStep = () => {
             rules={[
               {
                 required: true,
-                type: 'string',
+                type: 'integer',
                 message: 'Vui lòng chọn nghề của thợ',
               },
             ]}

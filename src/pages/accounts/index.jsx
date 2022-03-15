@@ -21,7 +21,7 @@ const AccountList = ({ history }) => {
     history.push(`/accounts/create`);
   };
 
-  const deleteAccountHandler = () => {
+  const banAccountHandler = () => {
     return banUserByUserID(selectedRows[0]).then(() => ref.current?.reload());
   };
 
@@ -39,7 +39,7 @@ const AccountList = ({ history }) => {
                 cancelText: 'Huỷ',
               }}
               btnProps={{ danger: true, type: 'link' }}
-              onClick={() => deleteAccountHandler().then(onCleanSelected)}
+              onClick={() => banAccountHandler().then(onCleanSelected)}
               title={`Chặn khách hàng này`}
             />,
           ]}

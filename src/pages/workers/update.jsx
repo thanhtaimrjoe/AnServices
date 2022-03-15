@@ -86,6 +86,9 @@ const UpdateReportAttribute = (props) => {
         typeJobId: update.update.typeJobId,
       };
       return updateWorker(createContractValues).then((res) => {
+        if(res.status === 400) {
+          message.error("Số điện thoại đã tồn tại")
+        }
         // setTypeJobId(updateWorkerState.typeJob.typeJobId)
         history.replace('/workers/list');
       });
