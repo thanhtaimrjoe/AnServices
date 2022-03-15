@@ -34,10 +34,10 @@ namespace AnService_Capstone.Controllers
                 return BadRequest(new ErrorResponse("Please enter id"));
             }
 
-            if (totalPrice == 0)
+            /*if (totalPrice == 0)
             {
                 return BadRequest(new ErrorResponse("Please enter totalPrice"));
-            }
+            }*/
 
             var res = await _invoice.CreateInvoice(id, totalPrice);
             if (res)

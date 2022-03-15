@@ -363,9 +363,18 @@ namespace AnService_Capstone.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("[action]")]
-        public async Task<IActionResult> GetAllCustomers(string name, string phoneNumber)
+        public async Task<IActionResult> GetAllCustomers(int status, string fullname, string phoneNumber)
         {
             IEnumerable<UserViewModel> res;
+
+            string statusIdString = null;
+
+            if (status != 0)
+            {
+                statusIdString = status.ToString();
+            }
+
+            /*IEnumerable<UserViewModel> res;
 
             if (name == null && phoneNumber == null)
             {
@@ -382,8 +391,84 @@ namespace AnService_Capstone.Controllers
             else
             {
                 res = await _userRepository.GetAllCustomersByPhoneAndName(phoneNumber, name);
+            }*/
+            if (status != 0)
+            {
+                res = await _userRepository.GetAllCustomers(statusIdString, fullname, phoneNumber);
+            }
+            else
+            {
+                res = await _userRepository.GetAllCustomers(null, fullname, phoneNumber);
+            }
+
+            return Ok(res);
+        }
+
+        /// <summary>
+        /// lấy thông tin customer qua id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<IActionResult> GetCustomerById(int id)
+        {
+            if (id == 0)
+            {
+                return BadRequest(new ErrorResponse("Please enter id"));
+            }
+
+            var res = await _userRepository.GetCustomerByID(id);
+            if (res == null)
+            {
+                return NotFound(new ErrorResponse("No record"));
             }
             return Ok(res);
+        }
+
+
+        /// <summary>
+        /// ban customer qua id (status = 10)
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpPut]
+        [Route("[action]")]
+        public async Task<IActionResult> BanUserByUserID(int id)
+        {
+            if (id == 0)
+            {
+                return BadRequest(new ErrorResponse("Please enter id"));
+            }
+
+            var res = await _userRepository.UpdateStatusUserByID(id, 10);
+            if (!res)
+            {
+                return BadRequest(new ErrorResponse("Update Fail"));
+            }
+            return Ok("Update Successful");
+        }
+
+        /// <summary>
+        /// ban customer qua id (status = 4)
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpPut]
+        [Route("[action]")]
+        public async Task<IActionResult> UnBanUserByUserID(int id)
+        {
+            if (id == 0)
+            {
+                return BadRequest(new ErrorResponse("Please enter id"));
+            }
+
+            var res = await _userRepository.UpdateStatusUserByID(id, 4);
+            if (!res)
+            {
+                return BadRequest(new ErrorResponse("Update Fail"));
+            }
+            return Ok("Update Successful");
         }
     }
 }

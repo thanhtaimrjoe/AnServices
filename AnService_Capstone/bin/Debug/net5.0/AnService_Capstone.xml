@@ -324,12 +324,33 @@
             <param name="model"></param>
             <returns></returns>
         </member>
-        <member name="M:AnService_Capstone.Controllers.UserController.GetAllCustomers(System.String,System.String)">
+        <member name="M:AnService_Capstone.Controllers.UserController.GetAllCustomers(System.Int32,System.String,System.String)">
             <summary>
             lấy danh sách customer account
             </summary>
             <param name="name">tên khách hàng</param>
             <param name="phoneNumber">số điện thoại</param>
+            <returns></returns>
+        </member>
+        <member name="M:AnService_Capstone.Controllers.UserController.GetCustomerById(System.Int32)">
+            <summary>
+            lấy thông tin customer qua id
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AnService_Capstone.Controllers.UserController.BanUserByUserID(System.Int32)">
+            <summary>
+            ban customer qua id (status = 10)
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AnService_Capstone.Controllers.UserController.UnBanUserByUserID(System.Int32)">
+            <summary>
+            ban customer qua id (status = 4)
+            </summary>
+            <param name="id"></param>
             <returns></returns>
         </member>
     </members>

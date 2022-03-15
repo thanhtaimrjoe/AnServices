@@ -45,12 +45,12 @@ namespace AnService_Capstone.Core.Interfaces
 
         public Task<bool> UpdateStatusUserByID(int id, int status);
 
-        public Task<IEnumerable<UserViewModel>> GetAllCustomers();
+        public Task<IEnumerable<UserViewModel>> GetAllCustomers(string id, string name, string phone);
 
-        public Task<IEnumerable<UserViewModel>> GetAllCustomersByName(string name);
+        /*public Task<IEnumerable<UserViewModel>> GetAllCustomersByName(string name);
 
         public Task<IEnumerable<UserViewModel>> GetAllCustomersByPhone(string phone);
-
-        public Task<IEnumerable<UserViewModel>> GetAllCustomersByPhoneAndName(string phone, string name);
+*/
+        /*public Task<IEnumerable<UserViewModel>> GetAllCustomersByPhoneAndName(string phone, string name);*/
     }
 }

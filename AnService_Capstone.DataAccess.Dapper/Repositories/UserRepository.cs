@@ -348,16 +348,16 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             }
         }
 
-        public async Task<IEnumerable<UserViewModel>> GetAllCustomers()
+        public async Task<IEnumerable<UserViewModel>> GetAllCustomers(string id, string name, string phone)
         {
             var query = "select UserID, FullName, PhoneNumber, Address, Email, CreateDate, Status " +
                 "from tblUsers " +
-                "where Role = 3 and Status = 4";
+                "where Role = 3 and FullName like @FullName and PhoneNumber like @PhoneNumber and Status = COALESCE(@Status, Status)";
 
             using (var connection = _context.CreateConnection())
             {
                 connection.Open();
-                var res = await connection.QueryAsync<UserViewModel>(query);
+                var res = await connection.QueryAsync<UserViewModel>(query, new { @FullName = "%" + name + "%", @PhoneNumber = "%" + phone + "%", @Status = id });
                 connection.Close();
                 /*if (!res.Any())
                 {
@@ -367,7 +367,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             }
         }
 
-        public async Task<IEnumerable<UserViewModel>> GetAllCustomersByName(string name)
+        /*public async Task<IEnumerable<UserViewModel>> GetAllCustomersByName(string name)
         {
             var query = "select UserID, FullName, PhoneNumber, Address, Email, CreateDate, Status " +
                 "from tblUsers " +
@@ -378,10 +378,10 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
                 connection.Open();
                 var res = await connection.QueryAsync<UserViewModel>(query, new { @FullName = "%" + name + "%"});
                 connection.Close();
-                /*if (!res.Any())
+                *//*if (!res.Any())
                 {
                     return null;
-                }*/
+                }*//*
                 return res;
             }
         }
@@ -397,15 +397,15 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
                 connection.Open();
                 var res = await connection.QueryAsync<UserViewModel>(query, new { @PhoneNumber = "%" + phone + "%" });
                 connection.Close();
-                /*if (!res.Any())
+                *//*if (!res.Any())
                 {
                     return null;
-                }*/
+                }*//*
                 return res;
             }
-        }
+        }*/
 
-        public async Task<IEnumerable<UserViewModel>> GetAllCustomersByPhoneAndName(string phone, string name)
+        /*public async Task<IEnumerable<UserViewModel>> GetAllCustomersByPhoneAndName(string phone, string name)
         {
             var query = "select UserID, FullName, PhoneNumber, Address, Email, CreateDate, Status " +
                 "from tblUsers " +
@@ -416,13 +416,13 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
                 connection.Open();
                 var res = await connection.QueryAsync<UserViewModel>(query, new { @PhoneNumber = "%" + phone + "%" });
                 connection.Close();
-                /*if (!res.Any())
+                *//*if (!res.Any())
                 {
                     return null;
-                }*/
+                }*//*
                 return res;
             }
-        }
+        }*/
 
         public async Task<IEnumerable<UserViewModel>> GetAllWorker(string id, string phone, string name)
         {
