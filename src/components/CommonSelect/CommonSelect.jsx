@@ -231,6 +231,14 @@ const SelectRequestServiceStatus = (props) => {
           value: '6',
           label: 'Đang xử lý',
         },
+        {
+          value: '9',
+          label: 'Chờ xác nhận',
+        },
+        {
+          value: '14',
+          label: 'Chờ thanh toán',
+        },
       ]}
       {...props}
     />

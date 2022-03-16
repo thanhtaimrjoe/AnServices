@@ -34,6 +34,7 @@ import {
   assignWorkerToRequest,
   cancelRequestService,
   getAllRequestServiceDetailsByRequestServiceID,
+  getRepairDetailByRequestServiceID,
   getRequestServiceByID,
 } from '@/services/requestservices';
 import {
@@ -94,6 +95,12 @@ const DetailRequestService = (props) => {
   const [contractDepositData1, setContractDepositData1] = useState();
   const [visible, setVisible] = React.useState(false);
   const [confirmLoading, setConfirmLoading] = React.useState(false);
+  const [sendContractConfirmLoading, setSendContractConfirmLoading] = React.useState(false);
+  const [sendInvoiceConfirmLoading, setSendInvoiceConfirmLoading] = React.useState(false);
+  const [staffCoordinatorConfirmLoading, setStaffCoordinatorConfirmLoading] = React.useState(false);
+  const [okConfirmLoading, setOkConfirmLoading] = React.useState(false);
+
+
   const [isLoad, setIsLoad] = useState(false);
   const [staffCoordinator, setStaffCoordinator] = useState([]);
   const [mainStaffCoordinator, setMainStaffCoordinator] = useState();
@@ -107,6 +114,8 @@ const DetailRequestService = (props) => {
   const { RangePicker } = DatePicker;
   const [totalPrice, setTotalPrice] = useState([]);
   const [invoiceTotalPrice, setInvoiceTotalPrice] = useState([]);
+
+  //
 
   // Invoice
   
@@ -126,28 +135,15 @@ const DetailRequestService = (props) => {
       const fileName = Date.now() + file.name;
       await storage.ref(`/files/${fileName}`).put(file);
 
-      const url = await storage.ref('files').child(file.name).getDownloadURL();
+      const url = await storage.ref('files').child(fileName).getDownloadURL();
       if (url) {
         message.success(`Tải ${file.name} lên thành công`);
         setUrl(url);
+        return url
       }
     } catch (error) {
       console.log(error);
     }
-
-    // storage
-    //   .ref(`/files/${fileName}`)
-    //   .put(file)
-    //   .on('state_changed', () => {
-    //     // Getting Download Link
-    //     storage
-    //       .ref('files')
-    //       .child(file.name)
-    //       .getDownloadURL()
-    //       .then((url) => {
-    //         setUrl(url);
-    //       });
-    //   });
   };
   // ======================================
 
@@ -186,10 +182,11 @@ const DetailRequestService = (props) => {
 
   // Data cho chi tiết dịch vụ table
   const [requestServiceRecord, setRequestServiceDetail] = useState([]);
+  const [staffCoordinatorRecord, setStaffCoordinatorRecord] = useState([]);
   useEffect(() => {
     getAllRequestServiceDetailsByRequestServiceID(updateRequestServiceState.requestServiceId)
       .then((record) => {
-        console.log('record01', updateRequestServiceState);
+        console.log('record03', record);
         setRequestServiceDetail(record);
         setIsLoad(true);
         let result = 0;
@@ -198,19 +195,19 @@ const DetailRequestService = (props) => {
             result += e.requestDetailPrice
             setDisableInvoice(false);
           }
-          // if(e.requestDetailStatus === 12) {
-          //   setDisableInvoice(false);
-          // }
           if(e.requestDetailStatus === 2) {
             setDisableStaffCoordinator(false);
           }
-          // if(e.requestDetailStatus === 6 || e.requestDetailStatus === 12) {
-          //   setDisableStaffCoordinator(true);
-          // }
         })
         setInvoiceTotalPrice(result)
       })
       .catch(setIsLoad(false));
+
+    getRepairDetailByRequestServiceID(updateRequestServiceState.requestServiceId)
+      .then((record) => {
+        console.log("recorde01", record)
+        setStaffCoordinatorRecord(record);
+    })
   }, []);
 
   const [requestMaterialRecord, setRequestMaterialRecord] = useState([]);
@@ -228,7 +225,7 @@ const DetailRequestService = (props) => {
   const [contractUrl, setContractUrl] = useState();
   // const createContractFile = "https://docs.google.com/document/d/16UhbIyXXBFTlPRNnDiU9rnv4__HEiqsX/edit?usp=sharing&ouid=106209939784621025179&rtpof=true&sd=true"
   const createContractFile =
-    'https://firebasestorage.googleapis.com/v0/b/anservice-986ae.appspot.com/o/files%2Fmau-hop-dong-thi-cong-xay-dung.docx?alt=media&token=9aa28548-8563-4f9a-8984-9f142d3ad256';
+    'https://firebasestorage.googleapis.com/v0/b/anservice-986ae.appspot.com/o/files%2Fmau-hop-dong-thi-cong-xay-dung.docx?alt=media&token=5d03bb8a-c53e-4405-84de-f2a557d05e1f';
   // ====================
 
   const [workerByServiceId, setWorkerByServiceId] = useState([]);
@@ -264,17 +261,19 @@ const DetailRequestService = (props) => {
     if (isLoad && updateRequestServiceState) {
       getContractByRequestServiceID(updateRequestServiceState.requestServiceId).then((record) => {
         if (record.length === 0) {
-          console.log('recordContract404', record);
           setContractStartDateData1(null);
           setContractEndDateData1(null);
           setContractDepositData1(null);
           setContractTotalPriceData1(null);
         } else {
-          console.log('recordContract', record);
           setContractStartDateData1(record.contractStartDate);
           setContractEndDateData1(record.contractEndDate);
           setContractDepositData1(record.contractDeposit);
           setContractTotalPriceData1(record.contractTotalPrice);
+          console.log('totalprice', record.contractTotalPrice)
+          
+          setContractStartDateData(record.contractStartDate)
+          setContractEndDateData(record.contractEndDate)
         }
       });
     } else console.log('Lỗi');
@@ -328,6 +327,7 @@ const DetailRequestService = (props) => {
   };
 
   const onStaffCoordinator = (values) => {
+
     let validate = true;
     if (!mainStaffCoordinator || mainStaffCoordinator === 'undefined') {
       validate = false;
@@ -341,6 +341,11 @@ const DetailRequestService = (props) => {
       validate = false;
       message.warning('Chưa chọn thợ phụ');
     } else {
+      setStaffCoordinatorConfirmLoading(true);
+      setTimeout(() => {
+        setStaffCoordinatorConfirmLoading(false);
+      }, 2000);
+
       const assignWorker = {
         requestDetailID: values,
         priority: priorityData,
@@ -401,9 +406,16 @@ const DetailRequestService = (props) => {
     setContractEndDateData(date[1]);
   }
 
-
+  
   function onChangeStartDate(value, date) {
-    setContractStartDateData(date);
+    if(value === null) {
+      console.log('value null')
+      // setContractStartDateData(moment(contractStartDateData1, 'YYYY-MM-DD'))
+
+      // setContractStartDateData(date);
+    } else {
+      console.log("không null")
+    }
   }
 
   function onChangeEndDate(value, date) {
@@ -434,9 +446,14 @@ const DetailRequestService = (props) => {
   }
 
   const onAcceptRequestMaterial = (values) => {
+    setOkConfirmLoading(true);
+      setTimeout(() => {
+        setOkConfirmLoading(false);
+      }, 2000);
+
     const update = normalizeReportForm(formData);
-    return approveStatusRequestMaterial(values, update).then(
-      () => console.log('abcformAccept', formData),
+    return approveStatusRequestMaterial(values, update)
+    .then(() => console.log('abcformAccept', formData),
       console.log('abcvaluesAccept', values),
     );
   };
@@ -500,7 +517,11 @@ const DetailRequestService = (props) => {
 
   };
 
-  const onCreateContract = () => {
+  const onCreateContract = async () => {
+    setSendContractConfirmLoading(true);
+    setTimeout(() => {
+      setSendContractConfirmLoading(false);
+    }, 2000);
     let validate = true;
     // if (!Url) {
     //   validate = false;
@@ -518,7 +539,6 @@ const DetailRequestService = (props) => {
     if (!isLt2M) {
       message.error('File phải nhỏ hơn 2MB!');
     }
-
     if (!contractStartDateData) {
       validate = false;
       message.warning('Chưa chọn ngày bắt đầu thi công');
@@ -529,13 +549,14 @@ const DetailRequestService = (props) => {
     }
     if (!validate) {
       console.log('Không gửi được');
-    } else {
-      upload();
+    } 
+    const returnUrl = await upload(); 
+    if(returnUrl) {
       console.log('Gửi được');
       const createContractValues = {
         userId: userID,
         username: customerName,
-        contractUrl: Url,
+        contractUrl: returnUrl,
         requestId: updateRequestServiceState.requestServiceId,
         contractStartDate: contractStartDateData,
         contractEndDate: contractEndDateData,
@@ -546,18 +567,8 @@ const DetailRequestService = (props) => {
       const createContractData = normalizeReportForm(createContractValues);
       return createContract(createContractData)
         .then((res) => {
-          console.log('contract1', res);
-          console.log('contract2', createContractData);
-          console.log('contract123', contractStartDateData);
-          console.log('contract1234', contractEndDateData);
-          console.log('contract11', createContractValues);
-
+          console.log('contract12', createContractData);
           setConfirmLoading(true);
-        })
-        .then(() => {
-          // createContractValues.resetFields();
-          setConfirmLoading(false);
-          setVisible(false);
         })
         .catch((info) => {
           console.log('Xác thực không thành công:', info);
@@ -567,8 +578,16 @@ const DetailRequestService = (props) => {
   };
 
   const onCreateInvoice = () =>  {
+    setSendInvoiceConfirmLoading(true);
+    setTimeout(() => {
+      setSendInvoiceConfirmLoading(false);
+    }, 2000);
     return createInvoice(updateRequestServiceState.requestServiceId, invoiceTotalPrice)
     .then((res) => {
+      if(res.status === 500) {
+        message.error("Hoá đơn này đã được gửi");
+      }
+      setDisableInvoice(true);
     })
   }
 
@@ -598,6 +617,8 @@ const DetailRequestService = (props) => {
 
   // ======================================
 
+
+  // =====================================
   const REQUESTSERVICEDETAIL = [
     {
       title: 'STT',
@@ -621,7 +642,6 @@ const DetailRequestService = (props) => {
       dataIndex: 'serviceName',
       search: false,
       render: (text, record) => {
-        console.log('record1', record);
         return <div>{record?.service?.serviceName}</div>;
       },
     },
@@ -666,7 +686,21 @@ const DetailRequestService = (props) => {
       search: false,
       render: (text, record, index) => {
         return (
-          <InputNumber
+          {record} ? (
+            // Có giá trị
+            <InputNumber
+            disabled={disable}
+            placeholder="Nhập giá"
+            defaultValue={record.requestDetailPrice}
+            min={0}
+            style={{ width: 150 }}
+            formatter={(value) => `${value} VND`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+            parser={(value) => value.replace(/\s\VND?|(,*)/g, '')}
+            onChange={(value) => onChange(value, record.requestDetailId, index)}
+          />
+          ) : (
+            // Không giá trị
+            <InputNumber
             disabled={disable}
             placeholder="Nhập giá"
             // defaultValue={record.requestDetailPrice}
@@ -676,6 +710,8 @@ const DetailRequestService = (props) => {
             parser={(value) => value.replace(/\s\VND?|(,*)/g, '')}
             onChange={(value) => onChange(value, record.requestDetailId, index)}
           />
+          )
+          
         );
       },
     },
@@ -703,7 +739,8 @@ const DetailRequestService = (props) => {
       dataIndex: 'serviceDescription',
       search: false,
       show: false,
-      render: () => {
+      render: (text, record) => {
+        console.log("record02", record)
         return (
           <CommonSelect.SelectRequestServicePriority style={{width:160}} onChange={onChangePriority} />
         );
@@ -717,7 +754,6 @@ const DetailRequestService = (props) => {
       search: false,
       render: (text, record) => {
         const updateWorkerState = { ...record };
-        console.log('abc11', updateWorkerState);
         // getWorkerByServiceId(record.serviceId);
 
         return (
@@ -750,6 +786,7 @@ const DetailRequestService = (props) => {
               ))}
             </Select>
             <Button
+              loading={staffCoordinatorConfirmLoading}
               disabled={disableStaffCoordinator}
               onClick={() => onStaffCoordinator(updateWorkerState.requestDetailId)}
               onChange={handleChange && handleChangeMainWorker}
@@ -912,14 +949,13 @@ const DetailRequestService = (props) => {
       search: false,
       render: (text, record) => {
         const updateRequestMaterialState = { ...record };
-        console.log('abcMate12', updateRequestMaterialState);
-        
         return (
           <Space size="middle">
             {record?.status?.statusId !== 3 && record?.status?.statusId !== 1 && (
               <Space>
                 <Button
                   type="primary"
+                  loading={okConfirmLoading}
                   onClick={() => onAcceptRequestMaterial(updateRequestMaterialState.usedMaterialId)}
                 >
                   Đồng ý
@@ -1146,6 +1182,7 @@ const DetailRequestService = (props) => {
                   <DatePicker
                     disabled={disable}
                     defaultValue={moment(contractStartDateData1, 'YYYY-MM-DD')}
+                    value={moment(contractStartDateData1, 'YYYY-MM-DD')}
                     onChange={onChangeStartDate}
                     disabledDate={(d) => !d || d.isBefore(moment().startOf('day'))}
                     style={{ width: 390 }}
@@ -1234,6 +1271,7 @@ const DetailRequestService = (props) => {
           <Row gutter={16}>
             <Col span={10}>
               {contractTotalPriceData1 ? (
+                // Có giá trị
                 <ProForm.Item
                   name={contractTotalPriceData1}
                   label="Tổng giá trị hợp đồng (Không bao gồm Thuế Giá Trị Gia Tăng)"
@@ -1250,6 +1288,7 @@ const DetailRequestService = (props) => {
                   />
                 </ProForm.Item>
               ) : (
+                // Không giá trị
                 <ProForm.Item
                   name={result}
                   label="Tổng giá trị hợp đồng (Không bao gồm Thuế Giá Trị Gia Tăng)"
@@ -1295,14 +1334,12 @@ const DetailRequestService = (props) => {
               onChange={(e) => {
                 setFile(e.fileList[0]);
               }}
+
             >
               <Button
                 disabled={disable}
-                // onChange={(e)=>{setFile(e.target.files[0])}}
-                // onChange={(e)=>{console.log("file", e)}}
                 icon={<UploadOutlined />}
                 style={{ width: 250 }}
-                
               >
                 Chọn file
               </Button>
@@ -1311,6 +1348,7 @@ const DetailRequestService = (props) => {
               disabled={disable}
               type="primary"
               style={{ width: '25%' }}
+              loading={sendContractConfirmLoading}
               onClick={() => {
                 onCreateContract();
               }}
@@ -1319,6 +1357,7 @@ const DetailRequestService = (props) => {
             </Button>
             <Button
               disabled={disableInvoice}
+              loading={sendInvoiceConfirmLoading}
               type="primary"
               style={{ width: '25%' }}
               onClick={() => {
@@ -1399,7 +1438,6 @@ const DetailRequestService = (props) => {
               onCancel={handleCancel}
             >
               {imgReportRecord.length > 0 && imgReportRecord.map((data) => {
-                console.log('test32', data);
                 if (!data?.mediaUrl.includes('.mp4')) {
                   return (
                     <Image

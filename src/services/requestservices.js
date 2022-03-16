@@ -79,3 +79,7 @@ export const getRequestServiceStatus = (status) => {
 export const cancelRequestService = (id) => {
   return request.put(`/Service/CancelRequestServiceForStaff?id=${id}`);
 };
+
+export const getRepairDetailByRequestServiceID = (RequestServiceID) => {
+  return request.get(`/RepairDetail/GetRepairDetailByRequestServiceID?requestServiceId=${RequestServiceID}`);
+};

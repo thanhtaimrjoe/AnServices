@@ -157,6 +157,58 @@ const RequestServiceList = ({ history }) => {
               resource="Service/GetAllRequestServiceStatusOrDate?RequestServiceStatus=1"
             />
           </TabPane>
+          <TabPane tab="Yêu cầu chờ xác nhận" key="6">
+            <ResoTable
+              toolBarRender={false}
+              search={false}
+              scroll={{ x: 600 }}
+              tableAlertOptionRender={({ _, __, onCleanSelected }) => [
+                <AsyncButton
+                  isNeedConfirm={{
+                    title: 'Xác nhận xoá',
+                    content: 'Bạn có muốn xoá yêu cầu này không?',
+                    okText: 'Xác nhận',
+                    cancelText: 'Huỷ',
+                  }}
+                  btnProps={{ danger: true, type: 'link' }}
+                  onClick={() => deleteRequestServiceHandler().then(onCleanSelected)}
+                  title={`Xoá ${selectedRows.length} yêu cầu`}
+                />,
+              ]}
+              rowSelection={rowSelection}
+              actionRef={ref}
+              rowKey="requestServiceId"
+              columns={REQUESTSERVICE}
+              // dataSource="Service/GetAllRequestServiceStatusOrDate?RequestServiceStatus=1"
+              resource="Service/GetAllRequestServiceStatusOrDate?RequestServiceStatus=9"
+            />
+          </TabPane>
+          <TabPane tab="Yêu cầu chờ KH thanh toán" key="7">
+            <ResoTable
+              toolBarRender={false}
+              search={false}
+              scroll={{ x: 600 }}
+              tableAlertOptionRender={({ _, __, onCleanSelected }) => [
+                <AsyncButton
+                  isNeedConfirm={{
+                    title: 'Xác nhận xoá',
+                    content: 'Bạn có muốn xoá yêu cầu này không?',
+                    okText: 'Xác nhận',
+                    cancelText: 'Huỷ',
+                  }}
+                  btnProps={{ danger: true, type: 'link' }}
+                  onClick={() => deleteRequestServiceHandler().then(onCleanSelected)}
+                  title={`Xoá ${selectedRows.length} yêu cầu`}
+                />,
+              ]}
+              rowSelection={rowSelection}
+              actionRef={ref}
+              rowKey="requestServiceId"
+              columns={REQUESTSERVICE}
+              // dataSource="Service/GetAllRequestServiceStatusOrDate?RequestServiceStatus=1"
+              resource="Service/GetAllRequestServiceStatusOrDate?RequestServiceStatus=14"
+            />
+          </TabPane>
         </Tabs>
          {/* <ResoTable 
           // search={false}

@@ -270,6 +270,12 @@ export const REQUESTSERVICE = [
         text: 'Đang xử lý',
         status: 'Processing',
       },
+      9: {
+        text: 'Chờ xác nhận',
+      },
+      14: {
+        text: 'Chờ thanh toán',
+      }
     },
     // valueType: 'select',
     // render: (_, { status }) => (
