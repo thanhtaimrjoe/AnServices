@@ -12,7 +12,7 @@ namespace AnService_Capstone.Core.Models.Response
         public string CustomerName { get; set; }
         public string CustomerAddress { get; set; }
         public string CustomerPhone { get; set; }
-        public string RequestServiceDescription { get; set; }
+        public string ServiceRequestDescription { get; set; }
         public string ContractStartDate { get; set; }
         public string ContractEndDate { get; set; }
         public double? ContractDeposit { get; set; }

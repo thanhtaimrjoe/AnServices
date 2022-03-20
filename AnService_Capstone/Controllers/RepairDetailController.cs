@@ -51,13 +51,13 @@ namespace AnService_Capstone.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("[action]")]
-        public async Task<IActionResult> GetRepairDetailByRequestServiceID(int requestServiceId)
+        public async Task<IActionResult> GetRepairDetailByServiceRequestID(int requestServiceId)
         {
             if (requestServiceId == 0)
             {
                 return BadRequest(new ErrorResponse("Please enter requestServiceId"));
             }
-            var res = await _repairDetail.GetRepairDetailByRequestServiceID(requestServiceId);
+            var res = await _repairDetail.GetRepairDetailByServiceRequestID(requestServiceId);
             /*if (res == null)
             {
                 return NotFound(new ErrorResponse("No Record"));

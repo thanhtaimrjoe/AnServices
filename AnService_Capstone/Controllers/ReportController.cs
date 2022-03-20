@@ -46,7 +46,7 @@ namespace AnService_Capstone.Controllers
             {
                 if (model.ReportTitle.Equals("Báo cáo hoàn thành"))
                 {
-                    _ = await _serviceRepository.UpdateStatusRequestServiceDetail(model.RequestDetailID, 9);
+                    _ = await _serviceRepository.UpdateStatusServiceRequestDetail(model.RequestDetailID, 9);
                 }
                 return Ok("Create Successfull");
             }
@@ -79,18 +79,18 @@ namespace AnService_Capstone.Controllers
         /// <summary>
         /// lấy tất cả report theo request service id
         /// </summary>
-        /// <param name="RequestServiceId"></param>
+        /// <param name="ServiceRequestId"></param>
         /// <returns></returns>
         [HttpGet]
         [Route("[action]")]
-        public async Task<IActionResult> GetAllReportByRequestServiceID(int RequestServiceId)
+        public async Task<IActionResult> GetAllReportByServiceRequestID(int ServiceRequestId)
         {
-            if (RequestServiceId == 0)
+            if (ServiceRequestId == 0)
             {
-                return BadRequest(new ErrorResponse("Please enter RequestServiceId"));
+                return BadRequest(new ErrorResponse("Please enter ServiceRequestId"));
             }
 
-            var res = await _report.GetAllReportByRequestServiceID(RequestServiceId);
+            var res = await _report.GetAllReportByServiceRequestID(ServiceRequestId);
             return Ok(res);
         }
     }

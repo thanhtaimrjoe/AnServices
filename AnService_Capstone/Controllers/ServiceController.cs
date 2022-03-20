@@ -24,24 +24,26 @@ namespace AnService_Capstone.Controllers
         private readonly IUserRepository _userRepository;
         private readonly FirebaseService _firebaseService;
         private readonly UtilHelper _utilHelper;
+        private readonly IRepairDetail _repariRepository;
         public ServiceController(IServiceRepository serviceRepository, TwilioService twilioService, IUserRepository userRepository,
-            FirebaseService firebaseService, UtilHelper utilHelper)
+            FirebaseService firebaseService, UtilHelper utilHelper, IRepairDetail repariRepository)
         {
             _serviceRepository = serviceRepository;
             _twilioService = twilioService;
             _userRepository = userRepository;
             _firebaseService = firebaseService;
             _utilHelper = utilHelper;
+            _repariRepository = repariRepository;
         }
 
-        /*/// <summary>
+        /// <summary>
         /// customer tạo request service
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> CreateRequestService([FromForm] CreateService model)
+        public async Task<IActionResult> CreateServiceRequest(CreateService model)
         {
             if (!ModelState.IsValid)
             {
@@ -51,7 +53,7 @@ namespace AnService_Capstone.Controllers
             bool serviceDetail = false;
             bool media = false;
 
-            var reqService = await _serviceRepository.CreateRequestService(model);
+            var reqService = await _serviceRepository.CreateServiceRequest(model);
             foreach (var serviceItem in model.ServiceList)
             {
                 serviceDetail = await _serviceRepository.CreateRequestDetai(reqService, serviceItem);
@@ -65,9 +67,64 @@ namespace AnService_Capstone.Controllers
                 return Ok("Create Successfull");
             }
             return BadRequest(new ErrorResponse("Create Fail"));
-        }*/
+        }
 
+        /// <summary>
+        /// điều phối nhân viên vào service của khách hàng đã đặt
+        /// </summary>
+        /// <param name="job"></param>
+        /// <returns></returns>
         [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> AssignWorkerToRequest(AssignJob job)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+            /*var result = await _serviceRepository.AssignWorkerToRequest(workerIDPri);*/
+
+            /*foreach (var worker in job.WorkerList)
+            {
+                var result = await _serviceRepository.AssignWorkerToRequest(worker);
+            }*/
+
+            bool chechExist = false;
+            bool res = false;
+            /*bool result = false;*/
+
+            chechExist = await _repariRepository.CheckRepairDetailExist(job.RequestDetailId, job.MainWorker);
+            var detail = await _serviceRepository.GetRequestDetailByID(job.RequestDetailId);
+
+            if (chechExist)
+            {
+                res = await _serviceRepository.AssignWorkerToRequest(job.RequestDetailId, job.MainWorker, 1, job.Priority);
+            }
+
+
+            if (job.WorkerList != null)
+            {
+                foreach (var worker in job.WorkerList)
+                {
+                    chechExist = await _repariRepository.CheckRepairDetailExist(job.RequestDetailId, worker);
+                    if (chechExist)
+                    {
+                        res = await _serviceRepository.AssignWorkerToRequest(job.RequestDetailId, worker, 0, job.Priority);
+                    }
+                }
+            }
+
+            if (res)
+            {
+                _ = await _serviceRepository.UpdateStatusServiceRequestDetail(job.RequestDetailId, 6);
+                _ = await _serviceRepository.UpdateStatusServiceRequest(detail.ServiceRequestId, 6);
+                return Ok("Create Successfull");
+                
+            }
+            return BadRequest(new ErrorResponse("Create Fail"));
+        }
+
+        /*[HttpPost]
         [Route("[action]")]
         public async Task<IActionResult> CreateRequestService([FromForm] CreateService model)
         {
@@ -79,8 +136,8 @@ namespace AnService_Capstone.Controllers
             bool serviceDetail = false;
             bool media = false;
 
-            /*bool serviceDetail = true;
-            bool media = true;*/
+            *//*bool serviceDetail = true;
+            bool media = true;*//*
 
             List<string> stringFile = new List<string>();
             foreach (var file in model.File)
@@ -101,18 +158,18 @@ namespace AnService_Capstone.Controllers
             }
             if (serviceDetail != false && media != false)
             {
-                /*var check = await _serviceRepository.CheckRequestServiceByUserIDOfTheDay(model.CustomerId);
+                *//*var check = await _serviceRepository.CheckRequestServiceByUserIDOfTheDay(model.CustomerId);
                 if (!check)
                 {
                     var user = await _userRepository.GetCustomerByID(model.CustomerId);
                     var formatPhone = _utilHelper.FormatPhoneNumber(user.PhoneNumber);
                     _twilioService.SendSMS(formatPhone, "Your account has been blocked because you have submitted more than 3 service requests. ");
                     _ = _userRepository.UpdateStatusUserByID(model.CustomerId, 10);
-                }*/
+                }*//*
                 return Ok("Create Successfull");
             }
             return BadRequest(new ErrorResponse("Create Fail"));
-        }
+        }*/
 
         /// <summary>
         /// lấy thông tin request service bằng request service id
@@ -122,14 +179,14 @@ namespace AnService_Capstone.Controllers
         [HttpGet]
         [Route("[action]")]
         /*[Authorize(Roles = "Customer")]*/
-        public async Task<IActionResult> GetRequestServiceByID(int id)
+        public async Task<IActionResult> GetServiceRequestByID(int id)
         {
             if (id == 0)
             {
                 return BadRequest(new ErrorResponse("Please enter id"));
             }
 
-            var service = await _serviceRepository.GetRequestServiceByID(id);
+            var service = await _serviceRepository.GetServiceRequestByID(id);
             /*if (service == null)
             {
                 return NotFound(new ErrorResponse("No Record"));
@@ -140,31 +197,31 @@ namespace AnService_Capstone.Controllers
         /// <summary>
         /// lấy danh sách request service (note: hiện chỉ filter từng param)
         /// </summary>
-        /// <param name="RequestServiceStatus"></param>
-        /// <param name="RequestServiceCreateDate">yyyy-mm-ddT00:00:00</param>
+        /// <param name="ServiceRequestStatus"></param>
+        /// <param name="ServiceRequestCreateDate">yyyy-mm-dd</param>
         /// <returns></returns>
         [HttpGet]
         [Route("[action]")]
         /*[Authorize(Roles = "Customer")]*/
-        public async Task<IActionResult> GetAllRequestServiceStatusOrDate(int RequestServiceStatus, DateTime? RequestServiceCreateDate)
+        public async Task<IActionResult> GetAllServiceRequestStatusOrDate(int ServiceRequestStatus, string ServiceRequestCreateDate)
         {
-            IEnumerable<RequestService> service;
+            IEnumerable<TblServiceRequest> service;
 
-            if (RequestServiceStatus == 0 && RequestServiceCreateDate == null)
+            if (ServiceRequestStatus == 0 && ServiceRequestCreateDate == null)
             {
-                service = await _serviceRepository.GetAllRequestService();
+                service = await _serviceRepository.GetAllServiceRequest();
             }
-            else if (RequestServiceStatus != 0 && RequestServiceCreateDate == null)
+            else if (ServiceRequestStatus != 0 && ServiceRequestCreateDate == null)
             {
-                service = await _serviceRepository.GetAllServiceByStatus(RequestServiceStatus);
+                service = await _serviceRepository.GetAllServiceRequestByStatus(ServiceRequestStatus);
             }
-            else if (RequestServiceStatus == 0 && RequestServiceCreateDate != null)
+            else if (ServiceRequestStatus == 0 && ServiceRequestCreateDate != null)
             {
-                service = await _serviceRepository.GetAllServiceByDate(RequestServiceCreateDate);
+                service = await _serviceRepository.GetAllServiceRequestByDate(ServiceRequestCreateDate);
             }
             else
             {
-                service = await _serviceRepository.GetAllServiceByDateAndStatus(RequestServiceCreateDate, RequestServiceStatus);
+                service = await _serviceRepository.GetAllServiceRequestByDateAndStatus(ServiceRequestCreateDate, ServiceRequestStatus);
             }
 
             /*if (service == null)
@@ -200,14 +257,14 @@ namespace AnService_Capstone.Controllers
         [HttpGet]
         [Route("[action]")]
         /*[Authorize(Roles = "Customer")]*/
-        public async Task<IActionResult> GetAllRequestServiceByUserID(int id)
+        public async Task<IActionResult> GetAllServiceRequestByUserID(int id)
         {
             if (id == 0)
             {
                 return BadRequest(new ErrorResponse("Please enter id"));
             }
 
-            var service = await _serviceRepository.GetAllRequestServiceByUserID(id);
+            var service = await _serviceRepository.GetAllServiceRequestByUserID(id);
             if (service == null)
             {
                 return NotFound(new ErrorResponse("No Request Service"));
@@ -251,58 +308,20 @@ namespace AnService_Capstone.Controllers
         }
 
         /// <summary>
-        /// điều phối nhân viên vào service của khách hàng đã đặt
-        /// </summary>
-        /// <param name="job"></param>
-        /// <returns></returns>
-        [HttpPost]
-        [Route("[action]")]
-        public async Task<IActionResult> AssignWorkerToRequest(AssignJob job)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest();
-            }
-            /*var result = await _serviceRepository.AssignWorkerToRequest(workerIDPri);*/
-
-            /*foreach (var worker in job.WorkerList)
-            {
-                var result = await _serviceRepository.AssignWorkerToRequest(worker);
-            }*/
-
-            var result = await _serviceRepository.AssignWorkerToRequest(job.RequestDetailId, job.MainWorker, 1, job.Priority);
-
-            if (job.WorkerList != null)
-            {
-                foreach (var worker in job.WorkerList)
-                {
-                    var res = await _serviceRepository.AssignWorkerToRequest(job.RequestDetailId, worker, 0, job.Priority);
-                }
-            }
-
-            var update = await _serviceRepository.UpdateStatusRequestServiceDetail(job.RequestDetailId, 6);
-            if (result == true && update == true)
-            {
-                return Ok("Create Successfull");
-            }
-            return BadRequest(new ErrorResponse("Create Fail"));
-        }
-
-        /// <summary>
         /// lấy danh sách request service mà worker được điều phối bằng workerid
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet]
         [Route("[action]")]
-        public async Task<IActionResult> GetAllRequestServiceByWorkerID(int id)
+        public async Task<IActionResult> GetAllServiceRequestByWorkerID(int id)
         {
             if (id == 0)
             {
                 return BadRequest(new ErrorResponse("Please enter id"));
             }
 
-            var result = await _serviceRepository.GetAllRequestServiceByWorkerID(id);
+            var result = await _serviceRepository.GetAllServiceRequestByWorkerID(id);
 
             if (result == null)
             {
@@ -318,14 +337,14 @@ namespace AnService_Capstone.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("[action]")]
-        public async Task<IActionResult> GetAllRequestServiceDetailsByRequestServiceID(int id)
+        public async Task<IActionResult> GetAllServiceRequestDetailsByServiceRequestID(int id)
         {
             if (id == 0)
             {
                 return BadRequest(new ErrorResponse("Please enter id"));
             }
 
-            var result = await _serviceRepository.GetAllRequestServiceDetailsByRequestServiceID(id);
+            var result = await _serviceRepository.GetAllServiceRequestDetailsByServiceRequestID(id);
 
             /*if (result == null)
             {
@@ -342,7 +361,7 @@ namespace AnService_Capstone.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("[action]")]
-        public async Task<IActionResult> GetAllRequestServiceDetailsByRequestServiceIDAndWorkerID(int requestID, int workerID)
+        public async Task<IActionResult> GetAllServiceRequestDetailsByServiceRequestIDAndWorkerID(int requestID, int workerID)
         {
             if (requestID == 0)
             {
@@ -354,7 +373,7 @@ namespace AnService_Capstone.Controllers
                 return BadRequest(new ErrorResponse("Please enter worker id"));
             }
 
-            var result = await _serviceRepository.GetAllRequestServiceDetailsByRequestServiceIDAndWorkerID(requestID, workerID);
+            var result = await _serviceRepository.GetAllServiceRequestDetailsByServiceRequestIDAndWorkerID(requestID, workerID);
 
             if (result == null)
             {
@@ -371,7 +390,7 @@ namespace AnService_Capstone.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("[action]")]
-        public async Task<IActionResult> GetRequestServiceByUserIDAndStatus(int id, int status)
+        public async Task<IActionResult> GetServiceRequestByUserIDAndStatus(int id, int status)
         {
             if (id == 0)
             {
@@ -383,7 +402,7 @@ namespace AnService_Capstone.Controllers
                 return BadRequest(new ErrorResponse("Please enter status"));
             }
 
-            var result = await _serviceRepository.GetAllServiceByStatusAndUserID(id, status);
+            var result = await _serviceRepository.GetServiceRequestByUserIDAndStatus(id, status);
 
             if (result == null)
             {
@@ -445,14 +464,14 @@ namespace AnService_Capstone.Controllers
         /// <returns></returns>
         [HttpPut]
         [Route("[action]")]
-        public async Task<IActionResult> CancelRequestServiceForCustomer(int id)
+        public async Task<IActionResult> CancelServiceRequestForCustomer(int id)
         {
             if (id == 0)
             {
                 return BadRequest(new ErrorResponse("Please enter id"));
             }
 
-            var result = await _serviceRepository.UpdateStatusRequestService(id, 8);
+            var result = await _serviceRepository.UpdateStatusServiceRequest(id, 8);
 
             if (!result)
             {
@@ -468,14 +487,14 @@ namespace AnService_Capstone.Controllers
         /// <returns></returns>
         [HttpPut]
         [Route("[action]")]
-        public async Task<IActionResult> CancelRequestServiceForStaff(int id)
+        public async Task<IActionResult> CancelServiceRequestForStaff(int id)
         {
             if (id == 0)
             {
                 return BadRequest(new ErrorResponse("Please enter id"));
             }
 
-            var result = await _serviceRepository.UpdateStatusRequestService(id, 1);
+            var result = await _serviceRepository.UpdateStatusServiceRequest(id, 1);
 
             if (!result)
             {
@@ -486,7 +505,7 @@ namespace AnService_Capstone.Controllers
 
         [HttpPut]
         [Route("[action]")]
-        public async Task<IActionResult> UpdateStatusRequestServiceDetail(int id, int status)
+        public async Task<IActionResult> UpdateStatusServiceRequestDetail(int id, int status)
         {
             if (id == 0)
             {
@@ -498,26 +517,26 @@ namespace AnService_Capstone.Controllers
                 return BadRequest(new ErrorResponse("Please enter status"));
             }
 
-            bool checkStatus = false;
+            /*bool checkStatus = false;*/
 
-            var result = await _serviceRepository.UpdateStatusRequestServiceDetail(id, status);
+            var result = await _serviceRepository.UpdateStatusServiceRequestDetail(id, status);
 
             var detail = await _serviceRepository.GetRequestDetailByID(id);
 
-            var services = await _serviceRepository.GetAllRequestServiceDetailsByRequestServiceID(detail.RequestServiceId);
+            /*var services = await _serviceRepository.GetAllServiceRequestDetailsByServiceRequestID(detail.ServiceRequestId);*/
 
-            foreach (var serviceDetail in services)
+            /*foreach (var serviceDetail in services)
             {
                 if (serviceDetail.RequestDetailStatus == 11 || serviceDetail.RequestDetailStatus == 12)
                 {
                     checkStatus = true;
                 }
-            }
+            }*/
 
-            if (checkStatus)
-            {
-                _ = await _serviceRepository.UpdateStatusRequestService(detail.RequestServiceId, 14);
-            }
+            /*if (checkStatus)
+            {*/
+            _ = await _serviceRepository.UpdateStatusServiceRequest(detail.ServiceRequestId, 14);
+            /*}*/
 
             if (!result)
             {
@@ -528,7 +547,7 @@ namespace AnService_Capstone.Controllers
 
         [HttpPut]
         [Route("[action]")]
-        public async Task<IActionResult> RemoveListRequestService(IEnumerable<int> requestServiceID)
+        public async Task<IActionResult> RemoveListServiceRequest(IEnumerable<int> requestServiceID)
         {
             bool result = false;
             if (requestServiceID == null)
@@ -538,7 +557,7 @@ namespace AnService_Capstone.Controllers
 
             foreach (var service in requestServiceID)
             {
-                result = await _serviceRepository.UpdateStatusRequestService(service, 13);
+                result = await _serviceRepository.UpdateStatusServiceRequest(service, 13);
             }
             
             if (!result)
@@ -577,6 +596,30 @@ namespace AnService_Capstone.Controllers
             }
             return BadRequest("Accept Error");
         }*/
+
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<IActionResult> Test(int id)
+        {
+            if (id == 0)
+            {
+                return BadRequest(new ErrorResponse("Please enter id"));
+            }
+
+            IEnumerable<TblRequestDetail> result;
+
+            result = await _serviceRepository.GetAllInformationServiceRequestDetailsByServiceRequestID(id);
+
+            if (result == null)
+            {
+                result = await _serviceRepository.GetAllServiceRequestDetailsByServiceRequestID(id);
+            }
+            /*if (result == null)
+            {
+                return NotFound(new ErrorResponse("No Request Service Availabe"));
+            }*/
+            return Ok(result);
+        }
 
     }
 }

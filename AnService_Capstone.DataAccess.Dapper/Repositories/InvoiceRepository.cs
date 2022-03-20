@@ -23,14 +23,14 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
 
         public async Task<TblInvoice> CheckInvoiceExist(int id)
         {
-            var query = "select InvoiceID, RequestServiceID, TotalCost, Date, Note " +
+            var query = "select InvoiceID, ServiceRequestID, TotalCost, Date, Note " +
                 "from tblInvoice where " +
-                "RequestServiceID = @RequestServiceID";
+                "ServiceRequestID = @ServiceRequestID";
 
             using (var connection = _context.CreateConnection())
             {
                 connection.Open();
-                var res = await connection.QuerySingleOrDefaultAsync<TblInvoice>(query, new { @RequestServiceID = id});
+                var res = await connection.QuerySingleOrDefaultAsync<TblInvoice>(query, new { @ServiceRequestID = id});
                 connection.Close();
                 return res;
             }
@@ -38,10 +38,10 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
 
         public async Task<bool> CreateInvoice(int id, double total)
         {
-            var query = "insert into tblInvoice(RequestServiceID,TotalCost,InvoiceDateCreate) values(@RequestServiceID,@TotalCost,@InvoiceDateCreate)";
+            var query = "insert into tblInvoice(ServiceRequestID,TotalCost,InvoiceDateCreate) values(@ServiceRequestID,@TotalCost,@InvoiceDateCreate)";
 
             var parameters = new DynamicParameters();
-            parameters.Add("RequestServiceID", id, DbType.Int32);
+            parameters.Add("ServiceRequestID", id, DbType.Int32);
             parameters.Add("TotalCost", total, DbType.Double);
             parameters.Add("InvoiceDateCreate", DateTime.Now, DbType.DateTime);
 
@@ -58,13 +58,13 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             }
         }
 
-        public async Task<ContractViewModel> GetInfomationInvoiceByRequestServiceID(int id)
+        public async Task<ContractViewModel> GetInfomationInvoiceByServiceRequestID(int id)
         {
-            var query = "select CustomerName, CustomerPhone, CustomerAddress, RequestServiceDescription, ContractID, ContractStartDate, ContractEndDate, ContractDeposit, ContractTotalPrice, RequestDetailID, RequestDetailStatus, RequestDetailPrice, ser.ServiceID, ServiceName, ServiceImg " +
-                "from ((tblRequestServices request join tblContract ct on request.RequestServiceID = ct.RequestServiceID) " +
-                "join tblRequestDetails detail on request.RequestServiceID = detail.RequestServiceID) " +
+            var query = "select CustomerName, CustomerPhone, CustomerAddress, ServiceRequestDescription, ContractID, ContractStartDate, ContractEndDate, ContractDeposit, ContractTotalPrice, RequestDetailID, RequestDetailStatus, RequestDetailPrice, ser.ServiceID, ServiceName, ServiceImg " +
+                "from ((tblServiceRequest request join tblContract ct on request.ServiceRequestID = ct.ServiceRequestID) " +
+                "join tblRequestDetails detail on request.ServiceRequestID = detail.ServiceRequestID) " +
                 "join tblServices ser on ser.ServiceID = detail.ServiceID " +
-                "where request.RequestServiceID = @RequestServiceID and RequestDetailStatus = 11";
+                "where request.ServiceRequestID = @ServiceRequestID and RequestDetailStatus = 11";
             using (var connection = _context.CreateConnection())
             {
                 connection.Open();
@@ -80,15 +80,16 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
                         requestDict.Add(id, currentContract);
                     }
 
+                    details.Service = service;
                     currentContract.Details.Add(details);
 
-                    currentContract.Details.ForEach(item =>
+                    /*currentContract.Details.ForEach(item =>
                     {
                         item.Service = service;
-                    });
+                    });*/
                     /*currentContract.Details.GetEnumerator().Current.Service = service;*/
                     return currentContract;
-                }, param: new { @RequestServiceID = id }, splitOn: "ContractID, RequestDetailID, ServiceID");
+                }, param: new { @ServiceRequestID = id }, splitOn: "ContractID, RequestDetailID, ServiceID");
                 connection.Close();
                 if (!res.Any())
                 {

@@ -86,20 +86,71 @@ namespace AnService_Capstone.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("[action]")]
-        public async Task<IActionResult> GetAllMaterialByRequestServiceID(int id)
+        public async Task<IActionResult> GetAllMaterialByServiceRequestID(int id)
         {
             if (id == 0)
             {
                 return BadRequest(new ErrorResponse("Please enter id"));
             }
 
-            var result = await _materialReposiory.GetAllMaterialByRequestServiceID(id);
+            var result = await _materialReposiory.GetAllMaterialByServiceRequestID(id);
             /*if (result != null)
             {
                 return Ok(result);
             }
             return NotFound(new ErrorResponse("No Record"));*/
             return Ok(result);
+        }
+
+        /// <summary>
+        /// lấy danh sách vật liệu có trong db
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<IActionResult> GetAllMaterial()
+        {
+            var rs = await _materialReposiory.GetAllMaterial();
+            if (rs == null)
+            {
+                return NotFound();
+            }
+            return Ok(rs);
+        }
+
+        /// <summary>
+        /// lấy request vật liệu theo id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<IActionResult> GetRequestMaterialByID(int id)
+        {
+            if (id == 0)
+            {
+                return BadRequest(new ErrorResponse("Please enter id"));
+            }
+
+            var res = await _materialReposiory.GetRequestMaterialByID(id);
+            if (res == null)
+            {
+                return NotFound(new ErrorResponse("No record"));
+            }
+            return Ok(res);
+        }
+
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<IActionResult> GetUnitList()
+        {
+            var res = await _materialReposiory.GetListUnit();
+
+            if (res == null)
+            {
+                return NotFound(new ErrorResponse("No record"));
+            }
+            return Ok(res);
         }
 
         /// <summary>
@@ -236,55 +287,5 @@ namespace AnService_Capstone.Controllers
             return BadRequest(new ErrorResponse("Cancel Fail"));
         }
 
-        /// <summary>
-        /// lấy danh sách vật liệu có trong db
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet]
-        [Route("[action]")]
-        public async Task<IActionResult> GetAllMaterial()
-        {
-            var rs = await _materialReposiory.GetAllMaterial();
-            if (rs == null)
-            {
-                return NotFound();
-            }
-            return Ok(rs);
-        }
-
-        /// <summary>
-        /// lấy request vật liệu theo id
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        [HttpGet]
-        [Route("[action]")]
-        public async Task<IActionResult> GetRequestMaterialByID(int id)
-        {
-            if (id == 0)
-            {
-                return BadRequest(new ErrorResponse("Please enter id"));
-            }
-
-            var res = await _materialReposiory.GetRequestMaterialByID(id);
-            if (res == null)
-            {
-                return NotFound(new ErrorResponse("No record"));
-            }
-            return Ok(res);
-        }
-
-        [HttpGet]
-        [Route("[action]")]
-        public async Task<IActionResult> GetUnitList()
-        {
-            var res = await _materialReposiory.GetListUnit();
-            
-            if (res == null)
-            {
-                return NotFound(new ErrorResponse("No record"));
-            }
-            return Ok(res);
-        }
     }
 }

@@ -46,6 +46,29 @@ namespace AnService_Capstone.Controllers
             return Ok(res);
         }
 
+        /// <summary>
+        /// lấy thông tin HĐ theo request service ID
+        /// </summary>
+        /// <param name="requestServiceId"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<IActionResult> GetContractByServiceRequestID(int requestServiceId)
+        {
+            IEnumerable<TblContract> contract = new List<TblContract>();
+            if (requestServiceId == 0)
+            {
+                return BadRequest(new ErrorResponse("Please enter requestServiceId"));
+            }
+
+            var res = await _contractRepository.GetContractByServiceRequestID(requestServiceId);
+            if (res == null)
+            {
+                return Ok(contract);
+            }
+            return Ok(res);
+        }
+
         /*/// <summary>
         /// update status contract
         /// </summary>
@@ -162,7 +185,7 @@ namespace AnService_Capstone.Controllers
                 res = await _contractRepository.UpdateContract(contract, check.ContractId);
                 foreach (var updateDetail in contract.updatePriceRequestDetails)
                 {
-                    _ = await _serviceRepository.UpdatePriceRequestServiceDetail(updateDetail.RequestDetailID, updateDetail.RequestDetailPrice);
+                    _ = await _serviceRepository.UpdatePriceServiceRequestDetail(updateDetail.RequestDetailID, updateDetail.RequestDetailPrice, updateDetail.RequestDetailDescription);
                 }
             }
             else
@@ -170,39 +193,16 @@ namespace AnService_Capstone.Controllers
                 res = await _contractRepository.CreateContract(contract);
                 foreach (var updateDetail in contract.updatePriceRequestDetails)
                 {
-                    _ = await _serviceRepository.UpdatePriceRequestServiceDetail(updateDetail.RequestDetailID, updateDetail.RequestDetailPrice);
+                    _ = await _serviceRepository.UpdatePriceServiceRequestDetail(updateDetail.RequestDetailID, updateDetail.RequestDetailPrice, updateDetail.RequestDetailDescription);
                 }
             }
 
             if (res)
             {
-                _ = await _serviceRepository.UpdateStatusRequestService(contract.RequestId, 3);
+                _ = await _serviceRepository.UpdateStatusServiceRequest(contract.RequestId, 3);
                 return Ok("Create successfull");
             }
             return BadRequest(new ErrorResponse("Create fail"));
-        }
-
-        /// <summary>
-        /// lấy thông tin HĐ theo request service ID
-        /// </summary>
-        /// <param name="requestServiceId"></param>
-        /// <returns></returns>
-        [HttpGet]
-        [Route("[action]")]
-        public async Task<IActionResult> GetContractByRequestServiceID(int requestServiceId)
-        {
-            IEnumerable<TblContract> contract = new List<TblContract>();
-            if (requestServiceId == 0)
-            {
-                return BadRequest(new ErrorResponse("Please enter requestServiceId"));
-            }
-
-            var res = await _contractRepository.GetContractByRequestServiceID(requestServiceId);
-            if (res == null)
-            {
-                return Ok(contract);
-            }
-            return Ok(res);
         }
 
         /*[HttpPost]

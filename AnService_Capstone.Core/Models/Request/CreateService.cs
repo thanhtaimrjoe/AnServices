@@ -21,11 +21,12 @@ namespace AnService_Capstone.Core.Models.Request
         public string CustomerAddress { get; set; }
         /*[Required]*/
         /*[Range(1, 2, ErrorMessage = "Please enter Request Service Package (1 or 2)")]*/
-        public int RequestServicePackage { get; set; }
+        public int ServiceRequestPackage { get; set; }
         /*[Required]*/
         public IEnumerable<int> ServiceList { get; set; }
         /*[Required]*/
-        public string RequestServiceDescription { get; set; }
-        public List<IFormFile> File { get; set; }
+        public string ServiceRequestDescription { get; set; }
+        /*public List<IFormFile> File { get; set; }*/
+        public List<string> MediaList { get; set; }
     }
 }

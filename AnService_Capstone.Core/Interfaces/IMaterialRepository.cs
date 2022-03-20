@@ -30,7 +30,7 @@ namespace AnService_Capstone.Core.Interfaces
 
         public Task<IEnumerable<MaterialViewModel>> GetAllMaterialByRequestDetailID(int id);
 
-        public Task<IEnumerable<MaterialViewModel>> GetAllMaterialByRequestServiceID(int id);
+        public Task<IEnumerable<MaterialViewModel>> GetAllMaterialByServiceRequestID(int id);
 
         public Task<MaterialViewModel> GetRequestMaterialByID(int id);
 

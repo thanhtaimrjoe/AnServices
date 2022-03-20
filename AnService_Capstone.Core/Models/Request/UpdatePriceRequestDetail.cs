@@ -9,6 +9,7 @@ namespace AnService_Capstone.Core.Models.Request
     public class UpdatePriceRequestDetail
     {
         public int RequestDetailID { get; set; }
+        public string RequestDetailDescription { get; set; }
         public float RequestDetailPrice { get; set; }
     }
 }

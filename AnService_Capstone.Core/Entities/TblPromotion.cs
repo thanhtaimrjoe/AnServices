@@ -9,6 +9,7 @@ namespace AnService_Capstone.Core.Entities
     {
         public TblPromotion()
         {
+            TblInvoices = new HashSet<TblInvoice>();
             TblPromotionDetails = new HashSet<TblPromotionDetail>();
         }
 
@@ -16,8 +17,8 @@ namespace AnService_Capstone.Core.Entities
         public string PromotionCode { get; set; }
         public string PromotionDescription { get; set; }
         public DateTime? PromotionDateExpired { get; set; }
-        public int? PromotionStatus { get; set; }
 
+        public virtual ICollection<TblInvoice> TblInvoices { get; set; }
         public virtual ICollection<TblPromotionDetail> TblPromotionDetails { get; set; }
     }
 }

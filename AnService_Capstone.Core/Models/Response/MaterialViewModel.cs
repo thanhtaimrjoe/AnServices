@@ -19,7 +19,7 @@ namespace AnService_Capstone.Core.Models.Response
         public string ServiceName { get; set; }
         public string Note { get; set; }
         public string Message { get; set; }
-        public string RequestServiceDescription { get; set; }
+        public string ServiceRequestDescription { get; set; }
         public string CustomerName { get; set; }
     }
 }

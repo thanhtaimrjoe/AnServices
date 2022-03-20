@@ -42,7 +42,7 @@ namespace AnService_Capstone.Controllers
             var res = await _invoice.CreateInvoice(id, totalPrice);
             if (res)
             {
-                _ = await _serviceRepository.UpdateStatusRequestService(id, 9);
+                _ = await _serviceRepository.UpdateStatusServiceRequest(id, 14);
                 return Ok("Create Successful");
             }
             return BadRequest("Create Fail");
@@ -50,14 +50,14 @@ namespace AnService_Capstone.Controllers
 
         [HttpGet]
         [Route("[action]")]
-        public async Task<IActionResult> GetInfomationInvoiceByRequestServiceID(int requestServiceID)
+        public async Task<IActionResult> GetInfomationInvoiceByServiceRequestID(int requestServiceID)
         {
             if (requestServiceID == 0)
             {
                 return BadRequest(new ErrorResponse("Please enter requestServiceID"));
             }
 
-            var res = await _invoice.GetInfomationInvoiceByRequestServiceID(requestServiceID);
+            var res = await _invoice.GetInfomationInvoiceByServiceRequestID(requestServiceID);
             if (res == null)
             {
                 return NotFound("No record");

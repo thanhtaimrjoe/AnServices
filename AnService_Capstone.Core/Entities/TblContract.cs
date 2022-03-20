@@ -7,9 +7,14 @@ namespace AnService_Capstone.Core.Entities
 {
     public partial class TblContract
     {
+        public TblContract()
+        {
+            TblInvoices = new HashSet<TblInvoice>();
+        }
+
         public int ContractId { get; set; }
         public int CustomerId { get; set; }
-        public int RequestServiceId { get; set; }
+        public int ServiceRequestId { get; set; }
         public string ContractTitle { get; set; }
         public string ContractUrl { get; set; }
         public DateTime? ContractStartDate { get; set; }
@@ -22,6 +27,7 @@ namespace AnService_Capstone.Core.Entities
 
         public virtual TblStatus ContractStatusNavigation { get; set; }
         public virtual TblUser Customer { get; set; }
-        public virtual TblRequestService RequestService { get; set; }
+        public virtual TblServiceRequest ServiceRequest { get; set; }
+        public virtual ICollection<TblInvoice> TblInvoices { get; set; }
     }
 }

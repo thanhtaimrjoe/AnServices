@@ -95,14 +95,14 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             }
         }
 
-        public async Task<IEnumerable<TblReport>> GetAllReportByRequestServiceID(int id)
+        public async Task<IEnumerable<TblReport>> GetAllReportByServiceRequestID(int id)
         {
-            var query = "select report.ReportID, WorkerID, ReportTitle, ReportDescription, ReportDate, report.RequestDetailID, sers.ServiceID, ServiceName, MediaID, MediaUrl " +
+            var query = "select report.ReportID, report.RequestDetailID, WorkerID, ReportTitle, ReportDescription, ReportDate, detail.RequestDetailID, sers.ServiceID, ServiceName, MediaID, MediaUrl " +
                 "from (((tblReport report join tblRequestDetails detail on report.RequestDetailID = detail.RequestDetailID) " +
-                "join tblRequestServices ser on detail.RequestServiceID = ser.RequestServiceID) " +
+                "join tblServiceRequest ser on detail.ServiceRequestID = ser.ServiceRequestID) " +
                 "join tblMedia media on report.ReportID = media.ReportID) " +
                 "join tblServices sers on sers.ServiceID = detail.ServiceID " +
-                "where ser.RequestServiceID = @RequestServiceID";
+                "where ser.ServiceRequestID = @ServiceRequestID";
 
             using (var connection = _context.CreateConnection())
             {
@@ -121,7 +121,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
                     }
                     currentReport.TblMedia.Add(media);
                     return currentReport;
-                }, param: new { @RequestServiceID = id }, splitOn: "RequestDetailID, ServiceID, MediaID");
+                }, param: new { @ServiceRequestID = id }, splitOn: "RequestDetailID, ServiceID, MediaID");
                 connection.Close();
                 /*if (!res.Any())
                 {

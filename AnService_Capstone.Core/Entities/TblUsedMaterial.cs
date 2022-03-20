@@ -20,6 +20,5 @@ namespace AnService_Capstone.Core.Entities
         public virtual TblMaterial Material { get; set; }
         public virtual TblRequestDetail RequestDetail { get; set; }
         public virtual TblStatus StatusNavigation { get; set; }
-        public virtual TblUser Worker { get; set; }
     }
 }

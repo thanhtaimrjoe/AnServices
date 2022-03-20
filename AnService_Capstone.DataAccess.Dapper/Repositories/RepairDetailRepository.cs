@@ -21,13 +21,30 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             _dapperContext = dapperContext;
         }
 
-        public async Task<IEnumerable<TblRepairDetail>> GetRepairDetailByRequestServiceID(int id)
+        public async Task<bool> CheckRepairDetailExist(int requestDetailID, int workerID)
         {
-            var query = "select RepairDetailID, repair.RequestDetailID, WorkerID, RepairDateBegin, RepairDateEnd, UserID, FullName, PhoneNumber, Email, Status " +
-                "from ((tblRepairDetail repair join tblUsers u on repair.WorkerID = u.UserID)" +
+            var query = "select * from tblRepairDetail where RequestDetailID = @RequestDetailID and WorkerID = @WorkerID";
+
+            using (var connection = _dapperContext.CreateConnection())
+            {
+                connection.Open();
+                var res = await connection.QueryAsync(query, new { @RequestDetailID  = requestDetailID, @WorkerID = workerID});
+                connection.Close();
+                if (!res.Any())
+                {
+                    return true;
+                }
+                return false;
+            }
+        }
+
+        public async Task<IEnumerable<TblRepairDetail>> GetRepairDetailByServiceRequestID(int id)
+        {
+            var query = "select RepairDetailID, repair.RequestDetailID, WorkerID, RepairDateBegin, RepairDateEnd, IsPrimary, RequestDetailPriority, UserID, FullName, PhoneNumber, Email, Status " +
+                "from ((tblRepairDetail repair join tblUsers u on repair.WorkerID = u.UserID) " +
                 "join tblRequestDetails detail on detail.RequestDetailID = repair.RequestDetailID) " +
-                "join tblRequestServices rs on rs.RequestServiceID = detail.RequestServiceID " +
-                "where rs.RequestServiceID = @RequestServiceID";
+                "join tblServiceRequest rs on rs.ServiceRequestID = detail.ServiceRequestID " +
+                "where rs.ServiceRequestID = @ServiceRequestID";
             /*using (var connection = _dapperContext.CreateConnection())
             {
                 connection.Open();
@@ -42,11 +59,13 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             using (var connection = _dapperContext.CreateConnection())
             {
                 connection.Open();
-                var res = await connection.QueryAsync<TblRepairDetail, TblUser, TblRepairDetail>(query, (repair,user) =>
+                var res = await connection.QueryAsync<TblRepairDetail, TblUser, TblRepairDetail>(query, (repair, user) =>
                 {
                     repair.Worker = user;
+                    /*repair.RequestDetail = detail;
+                    repair.RequestDetail.Service = service;*/
                     return repair;
-                }, param: new { RequestServiceID = id }, splitOn: "RepairDetailID, UserID");
+                }, param: new { ServiceRequestID = id }, splitOn: "RequestDetailID, ServiceID, UserID");
                 connection.Close();
                 /*if (!res.Any())
                 {

@@ -23,12 +23,12 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
 
         public async Task<TblContract> CheckContractExist(int requestID)
         {
-            var query = "select * from tblContract where RequestServiceID = @RequestServiceID";
+            var query = "select * from tblContract where ServiceRequestID = @ServiceRequestID";
 
             using (var connection = _context.CreateConnection())
             {
                 connection.Open();
-                var res = await connection.QueryAsync<TblContract>(query, new { @RequestServiceID = requestID});
+                var res = await connection.QueryAsync<TblContract>(query, new { @ServiceRequestID = requestID});
                 connection.Close();
                 if (!res.Any())
                 {
@@ -57,12 +57,12 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
 
         public async Task<bool> CreateContract(CreateContract contract)
         {
-            var query = "insert into tblContract(CustomerID,RequestServiceID,ContractTitle,ContractUrl,ContractStartDate,ContractEndDate,ContractDeposit,ContractTotalPrice,ContractStatus,ContractCreateDate) " +
-                "values (@CustomerID,@RequestServiceID,@ContractTitle,@ContractUrl,@ContractStartDate,@ContractEndDate,@ContractDeposit,@ContractTotalPrice,@ContractStatus,@ContractCreateDate)";
+            var query = "insert into tblContract(CustomerID,ServiceRequestID,ContractTitle,ContractUrl,ContractStartDate,ContractEndDate,ContractDeposit,ContractTotalPrice,ContractStatus,ContractCreateDate) " +
+                "values (@CustomerID,@ServiceRequestID,@ContractTitle,@ContractUrl,@ContractStartDate,@ContractEndDate,@ContractDeposit,@ContractTotalPrice,@ContractStatus,@ContractCreateDate)";
 
             var parameters = new DynamicParameters();
             parameters.Add("CustomerID", contract.UserId, DbType.Int32);
-            parameters.Add("RequestServiceID", contract.RequestId, DbType.Int32);
+            parameters.Add("ServiceRequestID", contract.RequestId, DbType.Int32);
             parameters.Add("ContractTitle", "Hợp đồng " + contract.Username, DbType.String);
             parameters.Add("ContractUrl", contract.ContractUrl, DbType.String);
             parameters.Add("ContractStartDate", contract.ContractStartDate, DbType.DateTime);
@@ -181,16 +181,16 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             }
         }
 
-        public async Task<TblContract> GetContractByRequestServiceID(int id)
+        public async Task<TblContract> GetContractByServiceRequestID(int id)
         {
-            var query = "select ContractID, CustomerID, RequestServiceID, ContractTitle, ContractUrl, ContractStartDate, ContractEndDate, ContractDeposit, ContractTotalPrice, ContractStatus, ContractCreateDate, ContractUpdateDate " +
+            var query = "select ContractID, CustomerID, ServiceRequestID, ContractTitle, ContractUrl, ContractStartDate, ContractEndDate, ContractDeposit, ContractTotalPrice, ContractStatus, ContractCreateDate, ContractUpdateDate " +
                 "from tblContract " +
-                "where RequestServiceID = @RequestServiceID";
+                "where ServiceRequestID = @ServiceRequestID";
 
             using (var connection = _context.CreateConnection())
             {
                 connection.Open();
-                var res = await connection.QueryFirstOrDefaultAsync<TblContract>(query, new { @RequestServiceID  = id});
+                var res = await connection.QueryFirstOrDefaultAsync<TblContract>(query, new { @ServiceRequestID = id});
                 connection.Close();
                 return res;
             }

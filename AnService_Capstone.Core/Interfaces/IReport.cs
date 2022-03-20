@@ -16,6 +16,6 @@ namespace AnService_Capstone.Core.Interfaces
 
         public Task<IEnumerable<TblReport>> GetAllReportByRequestDetailID(int id);
 
-        public Task<IEnumerable<TblReport>> GetAllReportByRequestServiceID(int id);
+        public Task<IEnumerable<TblReport>> GetAllReportByServiceRequestID(int id);
     }
 }

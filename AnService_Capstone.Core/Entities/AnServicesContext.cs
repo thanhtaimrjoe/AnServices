@@ -26,9 +26,9 @@ namespace AnService_Capstone.Core.Entities
         public virtual DbSet<TblRepairDetail> TblRepairDetails { get; set; }
         public virtual DbSet<TblReport> TblReports { get; set; }
         public virtual DbSet<TblRequestDetail> TblRequestDetails { get; set; }
-        public virtual DbSet<TblRequestService> TblRequestServices { get; set; }
         public virtual DbSet<TblRole> TblRoles { get; set; }
         public virtual DbSet<TblService> TblServices { get; set; }
+        public virtual DbSet<TblServiceRequest> TblServiceRequests { get; set; }
         public virtual DbSet<TblStatus> TblStatuses { get; set; }
         public virtual DbSet<TblTypeJob> TblTypeJobs { get; set; }
         public virtual DbSet<TblTypeService> TblTypeServices { get; set; }
@@ -74,7 +74,7 @@ namespace AnService_Capstone.Core.Entities
 
                 entity.Property(e => e.CustomerId).HasColumnName("CustomerID");
 
-                entity.Property(e => e.RequestServiceId).HasColumnName("RequestServiceID");
+                entity.Property(e => e.ServiceRequestId).HasColumnName("ServiceRequestID");
 
                 entity.HasOne(d => d.ContractStatusNavigation)
                     .WithMany(p => p.TblContracts)
@@ -88,9 +88,9 @@ namespace AnService_Capstone.Core.Entities
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_tblContact_tblUsers");
 
-                entity.HasOne(d => d.RequestService)
+                entity.HasOne(d => d.ServiceRequest)
                     .WithMany(p => p.TblContracts)
-                    .HasForeignKey(d => d.RequestServiceId)
+                    .HasForeignKey(d => d.ServiceRequestId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_tblContract_tblRequestServices");
             });
@@ -101,22 +101,28 @@ namespace AnService_Capstone.Core.Entities
 
                 entity.ToTable("tblInvoice");
 
-                entity.HasIndex(e => e.RequestServiceId, "IX_tblInvoice")
-                    .IsUnique();
-
                 entity.Property(e => e.InvoiceId).HasColumnName("InvoiceID");
+
+                entity.Property(e => e.ContractId).HasColumnName("ContractID");
 
                 entity.Property(e => e.InvoiceDateCreate).HasColumnType("datetime");
 
-                entity.Property(e => e.RequestServiceId).HasColumnName("RequestServiceID");
+                entity.Property(e => e.PromotionId).HasColumnName("PromotionID");
+
+                entity.Property(e => e.ServiceRequestId).HasColumnName("ServiceRequestID");
 
                 entity.Property(e => e.TotalCost).HasColumnType("decimal(18, 2)");
 
-                entity.HasOne(d => d.RequestService)
-                    .WithOne(p => p.TblInvoice)
-                    .HasForeignKey<TblInvoice>(d => d.RequestServiceId)
+                entity.HasOne(d => d.Contract)
+                    .WithMany(p => p.TblInvoices)
+                    .HasForeignKey(d => d.ContractId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_tblInvoice_tblRequestServices");
+                    .HasConstraintName("FK_tblInvoice_tblContract");
+
+                entity.HasOne(d => d.Promotion)
+                    .WithMany(p => p.TblInvoices)
+                    .HasForeignKey(d => d.PromotionId)
+                    .HasConstraintName("FK_tblInvoice_tblPromotion");
             });
 
             modelBuilder.Entity<TblMaterial>(entity =>
@@ -144,16 +150,16 @@ namespace AnService_Capstone.Core.Entities
 
                 entity.Property(e => e.ReportId).HasColumnName("ReportID");
 
-                entity.Property(e => e.RequestServiceId).HasColumnName("RequestServiceID");
+                entity.Property(e => e.ServiceRequestId).HasColumnName("ServiceRequestID");
 
                 entity.HasOne(d => d.Report)
                     .WithMany(p => p.TblMedia)
                     .HasForeignKey(d => d.ReportId)
                     .HasConstraintName("FK_tblMedia_tblReport");
 
-                entity.HasOne(d => d.RequestService)
+                entity.HasOne(d => d.ServiceRequest)
                     .WithMany(p => p.TblMedia)
-                    .HasForeignKey(d => d.RequestServiceId)
+                    .HasForeignKey(d => d.ServiceRequestId)
                     .HasConstraintName("FK_tblMedia_tblRequestServices");
             });
 
@@ -265,63 +271,30 @@ namespace AnService_Capstone.Core.Entities
 
                 entity.Property(e => e.RequestDetailId).HasColumnName("RequestDetailID");
 
+                entity.Property(e => e.RequestDetailDescription).HasMaxLength(250);
+
                 entity.Property(e => e.RequestDetailPrice).HasColumnType("decimal(18, 2)");
 
-                entity.Property(e => e.RequestServiceId).HasColumnName("RequestServiceID");
-
                 entity.Property(e => e.ServiceId).HasColumnName("ServiceID");
+
+                entity.Property(e => e.ServiceRequestId).HasColumnName("ServiceRequestID");
 
                 entity.HasOne(d => d.RequestDetailStatusNavigation)
                     .WithMany(p => p.TblRequestDetails)
                     .HasForeignKey(d => d.RequestDetailStatus)
                     .HasConstraintName("FK_tblRequestDetails_tblStatus");
 
-                entity.HasOne(d => d.RequestService)
-                    .WithMany(p => p.TblRequestDetails)
-                    .HasForeignKey(d => d.RequestServiceId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_tblRequestDetails_tblRequestServices");
-
                 entity.HasOne(d => d.Service)
                     .WithMany(p => p.TblRequestDetails)
                     .HasForeignKey(d => d.ServiceId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_tblRequestDetails_tblServices");
-            });
 
-            modelBuilder.Entity<TblRequestService>(entity =>
-            {
-                entity.HasKey(e => e.RequestServiceId)
-                    .HasName("PK_tblRequestService");
-
-                entity.ToTable("tblRequestServices");
-
-                entity.Property(e => e.RequestServiceId).HasColumnName("RequestServiceID");
-
-                entity.Property(e => e.CustomerAddress).HasMaxLength(150);
-
-                entity.Property(e => e.CustomerId).HasColumnName("CustomerID");
-
-                entity.Property(e => e.CustomerName).HasMaxLength(50);
-
-                entity.Property(e => e.CustomerPhone)
-                    .HasMaxLength(10)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.RequestServiceCreateDate).HasColumnType("datetime");
-
-                entity.Property(e => e.RequestServiceDescription).HasMaxLength(150);
-
-                entity.HasOne(d => d.Customer)
-                    .WithMany(p => p.TblRequestServices)
-                    .HasForeignKey(d => d.CustomerId)
+                entity.HasOne(d => d.ServiceRequest)
+                    .WithMany(p => p.TblRequestDetails)
+                    .HasForeignKey(d => d.ServiceRequestId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_tblRequestServices_tblUsers");
-
-                entity.HasOne(d => d.RequestServiceStatusNavigation)
-                    .WithMany(p => p.TblRequestServices)
-                    .HasForeignKey(d => d.RequestServiceStatus)
-                    .HasConstraintName("FK_tblRequestServices_tblStatus");
+                    .HasConstraintName("FK_tblRequestDetails_tblRequestServices");
             });
 
             modelBuilder.Entity<TblRole>(entity =>
@@ -355,6 +328,41 @@ namespace AnService_Capstone.Core.Entities
                     .WithMany(p => p.TblServices)
                     .HasForeignKey(d => d.TypeService)
                     .HasConstraintName("FK_tblServices_tblTypeService");
+            });
+
+            modelBuilder.Entity<TblServiceRequest>(entity =>
+            {
+                entity.HasKey(e => e.ServiceRequestId)
+                    .HasName("PK_tblRequestService");
+
+                entity.ToTable("tblServiceRequest");
+
+                entity.Property(e => e.ServiceRequestId).HasColumnName("ServiceRequestID");
+
+                entity.Property(e => e.CustomerAddress).HasMaxLength(150);
+
+                entity.Property(e => e.CustomerId).HasColumnName("CustomerID");
+
+                entity.Property(e => e.CustomerName).HasMaxLength(50);
+
+                entity.Property(e => e.CustomerPhone)
+                    .HasMaxLength(10)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.ServiceRequestCreateDate).HasColumnType("datetime");
+
+                entity.Property(e => e.ServiceRequestDescription).HasMaxLength(150);
+
+                entity.HasOne(d => d.Customer)
+                    .WithMany(p => p.TblServiceRequests)
+                    .HasForeignKey(d => d.CustomerId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_tblRequestServices_tblUsers");
+
+                entity.HasOne(d => d.ServiceRequestStatusNavigation)
+                    .WithMany(p => p.TblServiceRequests)
+                    .HasForeignKey(d => d.ServiceRequestStatus)
+                    .HasConstraintName("FK_tblRequestServices_tblStatus");
             });
 
             modelBuilder.Entity<TblStatus>(entity =>
@@ -423,11 +431,6 @@ namespace AnService_Capstone.Core.Entities
                     .WithMany(p => p.TblUsedMaterials)
                     .HasForeignKey(d => d.Status)
                     .HasConstraintName("FK_tblUsedMaterial_tblStatus");
-
-                entity.HasOne(d => d.Worker)
-                    .WithMany(p => p.TblUsedMaterials)
-                    .HasForeignKey(d => d.WorkerId)
-                    .HasConstraintName("FK_tblUsedMaterial_tblUsers");
             });
 
             modelBuilder.Entity<TblUser>(entity =>

@@ -153,7 +153,7 @@ namespace AnService_Capstone.Controllers
             bool checkCode = false;
             do
             {
-                code = _otpGenerator.GeneratorOTP();
+                code = _otpGenerator.GeneratorOTP(); // cre
                 checkCode = await _userRepository.CheckInviteCodeExist(code);
             } while (checkCode);
 
@@ -361,7 +361,8 @@ namespace AnService_Capstone.Controllers
         /// <summary>
         /// lấy danh sách customer account
         /// </summary>
-        /// <param name="name">tên khách hàng</param>
+        /// <param name="status">tên khách hàng</param>
+        /// <param name="fullname">tên khách hàng</param>
         /// <param name="phoneNumber">số điện thoại</param>
         /// <returns></returns>
         [HttpGet]

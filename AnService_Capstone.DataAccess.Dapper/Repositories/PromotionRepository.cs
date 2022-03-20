@@ -21,13 +21,12 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
 
         public async Task<int> InsertPromotion(string inviteCode)
         {
-            var query = "insert into tblPromotion(PromotionCode, PromotionDescription, PromotionStatus) values(@PromotionName, @PromotionDescription, @PromotionStatus) " +
+            var query = "insert into tblPromotion(PromotionCode, PromotionDescription) values(@PromotionName, @PromotionDescription) " +
                 "SELECT CAST(SCOPE_IDENTITY() as int)";
 
             var parameters = new DynamicParameters();
             parameters.Add("PromotionName", inviteCode, DbType.String);
             parameters.Add("PromotionDescription", "CODE CA NHAN", DbType.String);
-            parameters.Add("PromotionStatus", 4, DbType.Int32);
 
             using (var connection = _dapperContext.CreateConnection())
             {

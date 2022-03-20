@@ -11,7 +11,7 @@ namespace AnService_Capstone.Core.Entities
         {
             TblContracts = new HashSet<TblContract>();
             TblRequestDetails = new HashSet<TblRequestDetail>();
-            TblRequestServices = new HashSet<TblRequestService>();
+            TblServiceRequests = new HashSet<TblServiceRequest>();
             TblUsedMaterials = new HashSet<TblUsedMaterial>();
             TblUsers = new HashSet<TblUser>();
         }
@@ -21,7 +21,7 @@ namespace AnService_Capstone.Core.Entities
 
         public virtual ICollection<TblContract> TblContracts { get; set; }
         public virtual ICollection<TblRequestDetail> TblRequestDetails { get; set; }
-        public virtual ICollection<TblRequestService> TblRequestServices { get; set; }
+        public virtual ICollection<TblServiceRequest> TblServiceRequests { get; set; }
         public virtual ICollection<TblUsedMaterial> TblUsedMaterials { get; set; }
         public virtual ICollection<TblUser> TblUsers { get; set; }
     }

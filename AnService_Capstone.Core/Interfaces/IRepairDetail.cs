@@ -9,7 +9,8 @@ namespace AnService_Capstone.Core.Interfaces
 {
     public interface IRepairDetail
     {
-        public Task<IEnumerable<TblRepairDetail>> GetRepairDetailByRequestServiceID(int id);
+        public Task<IEnumerable<TblRepairDetail>> GetRepairDetailByServiceRequestID(int id);
         public Task<bool> UpdateStatusRepairApproveByID(IEnumerable<TblRepairDetail> listRepair);
+        public Task<bool> CheckRepairDetailExist(int requestDetailID, int workerID);
     }
 }
