@@ -22,7 +22,6 @@ namespace AnService_Capstone.Core.Entities
         public virtual DbSet<TblMaterial> TblMaterials { get; set; }
         public virtual DbSet<TblMedium> TblMedia { get; set; }
         public virtual DbSet<TblPromotion> TblPromotions { get; set; }
-        public virtual DbSet<TblPromotionDetail> TblPromotionDetails { get; set; }
         public virtual DbSet<TblRepairDetail> TblRepairDetails { get; set; }
         public virtual DbSet<TblReport> TblReports { get; set; }
         public virtual DbSet<TblRequestDetail> TblRequestDetails { get; set; }
@@ -171,38 +170,25 @@ namespace AnService_Capstone.Core.Entities
 
                 entity.Property(e => e.PromotionId).HasColumnName("PromotionID");
 
+                entity.Property(e => e.CustomerId).HasColumnName("CustomerID");
+
                 entity.Property(e => e.PromotionCode)
                     .HasMaxLength(20)
                     .IsUnicode(false);
 
-                entity.Property(e => e.PromotionDateExpired).HasColumnType("date");
+                entity.Property(e => e.PromotionDateExpired).HasColumnType("datetime");
 
                 entity.Property(e => e.PromotionDescription)
                     .HasMaxLength(50)
                     .IsUnicode(false);
-            });
 
-            modelBuilder.Entity<TblPromotionDetail>(entity =>
-            {
-                entity.HasKey(e => e.PromotionDetailId);
-
-                entity.ToTable("tblPromotionDetail");
-
-                entity.Property(e => e.PromotionDetailId).HasColumnName("PromotionDetailID");
-
-                entity.Property(e => e.CustomerId).HasColumnName("CustomerID");
-
-                entity.Property(e => e.PromotionId).HasColumnName("PromotionID");
+                entity.Property(e => e.PromotionValue).HasColumnType("decimal(18, 1)");
 
                 entity.HasOne(d => d.Customer)
-                    .WithMany(p => p.TblPromotionDetails)
+                    .WithMany(p => p.TblPromotions)
                     .HasForeignKey(d => d.CustomerId)
-                    .HasConstraintName("FK_tblPromotionDetail_tblUsers");
-
-                entity.HasOne(d => d.Promotion)
-                    .WithMany(p => p.TblPromotionDetails)
-                    .HasForeignKey(d => d.PromotionId)
-                    .HasConstraintName("FK_tblPromotionDetail_tblPromotion");
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_tblPromotion_tblUsers");
             });
 
             modelBuilder.Entity<TblRepairDetail>(entity =>

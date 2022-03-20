@@ -445,5 +445,22 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
                 return res;
             }
         }
+
+        public async Task<UserViewModel> GetCustomerByInviteCode(string inviteCode)
+        {
+            var query = "select UserID, FullName, PhoneNumber, Address, Email, InviteCode, CreateDate, Status " +
+                "from tblUsers " +
+                "where InviteCode = @InviteCode";
+            using (var connections = _context.CreateConnection())
+            {
+                connections.Open();
+                var res = await connections.QueryAsync<UserViewModel>(query, new { InviteCode = inviteCode });
+                if (!res.Any())
+                {
+                    return null;
+                }
+                return res.FirstOrDefault();
+            }
+        }
     }
 }

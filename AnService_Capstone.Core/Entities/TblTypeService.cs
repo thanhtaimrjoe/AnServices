@@ -14,6 +14,7 @@ namespace AnService_Capstone.Core.Entities
 
         public int TypeServiceId { get; set; }
         public string TypeServiceDecription { get; set; }
+        public int? Value { get; set; }
 
         public virtual ICollection<TblService> TblServices { get; set; }
     }

@@ -381,3 +381,10 @@ E:\Capstone\New_API\AnService_Capstone\obj\Debug\net5.0\ref\AnService_Capstone.d
 E:\Capstone\New_API\AnService_Capstone\obj\Debug\net5.0\AnService_Capstone.xml
 E:\Capstone\New_API\AnService_Capstone\obj\Debug\net5.0\AnService_Capstone.pdb
 E:\Capstone\New_API\AnService_Capstone\obj\Debug\net5.0\AnService_Capstone.genruntimeconfig.cache
+E:\Capstone\New_API\AnService_Capstone\bin\Debug\net5.0\Microsoft.Extensions.Configuration.Abstractions.dll
+E:\Capstone\New_API\AnService_Capstone\bin\Debug\net5.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+E:\Capstone\New_API\AnService_Capstone\bin\Debug\net5.0\Microsoft.Extensions.FileProviders.Abstractions.dll
+E:\Capstone\New_API\AnService_Capstone\bin\Debug\net5.0\Microsoft.Extensions.Hosting.Abstractions.dll
+E:\Capstone\New_API\AnService_Capstone\bin\Debug\net5.0\Microsoft.Extensions.Primitives.dll
+E:\Capstone\New_API\AnService_Capstone\bin\Debug\net5.0\NCrontab.dll
+E:\Capstone\New_API\AnService_Capstone\bin\Debug\net5.0\System.Runtime.CompilerServices.Unsafe.dll

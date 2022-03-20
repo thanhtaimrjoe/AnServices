@@ -158,14 +158,10 @@ namespace AnService_Capstone.Controllers
             } while (checkCode);
 
             var user = await _userRepository.CreateAccountCustomer(model, code);
-            var promotion = await _promotionRepository.InsertPromotion(code);
-            var promotionDetail = await _promotionRepository.InsertPromotionDetail(user, promotion);
-
-            if (promotionDetail)
-            {
-                return Ok("Create Successfull");
-            }
-            return BadRequest(new ErrorResponse("Create Fail"));
+            /*var promotion = await _promotionRepository.InsertPromotion(code);
+            var promotionDetail = await _promotionRepository.InsertPromotionDetail(user, promotion);*/
+            
+            return Ok("Create Successfull");
         }
 
         /// <summary>

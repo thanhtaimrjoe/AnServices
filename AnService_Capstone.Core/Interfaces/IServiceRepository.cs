@@ -67,5 +67,8 @@ namespace AnService_Capstone.Core.Interfaces
 
         public Task<TblRequestDetail> GetRequestDetailByID(int id);
 
+        public void BackgroundServiceTask();
+
+        /*public Task<IEnumerable<TblRequestDetail>> GetAllRequestDetail();*/
     }
 }

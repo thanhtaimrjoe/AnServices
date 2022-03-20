@@ -52,5 +52,7 @@ namespace AnService_Capstone.Core.Interfaces
         public Task<IEnumerable<UserViewModel>> GetAllCustomersByPhone(string phone);
 */
         /*public Task<IEnumerable<UserViewModel>> GetAllCustomersByPhoneAndName(string phone, string name);*/
+
+        public Task<UserViewModel> GetCustomerByInviteCode(string inviteCode);
     }
 }

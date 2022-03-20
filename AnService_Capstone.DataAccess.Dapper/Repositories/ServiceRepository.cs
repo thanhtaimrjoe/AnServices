@@ -727,5 +727,42 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
                 return res.Distinct().ToList();
             }
         }
+
+        public async void BackgroundServiceTask()
+        {
+            IEnumerable<TblRequestDetail> res = await GetAllRequestDetail();
+            foreach (var detail in res)
+            {
+                int time = DateTime.Now.Subtract((DateTime)detail.TblReports.FirstOrDefault().ReportDate).Days;
+                if (detail.Service.TypeService.Value == time)
+                {
+                    _ = await UpdateStatusServiceRequestDetail(detail.RequestDetailId, 11);
+                }
+            }
+        }
+
+        private async Task<IEnumerable<TblRequestDetail>> GetAllRequestDetail()
+        {
+            IEnumerable<TblRequestDetail> res;
+            var query = "select * " +
+                "from ((tblRequestDetails detail join tblReport report on detail.RequestDetailID = report.RequestDetailID) " +
+                "join tblServices ser on ser.ServiceID = detail.ServiceID) " +
+                "join tblTypeService tser on tser.TypeServiceID = ser.TypeService " +
+                "where RequestDetailStatus = 9 and ReportTitle = 'Báo cáo hoàn thành'";
+
+            using (var connection = _context.CreateConnection())
+            {
+                connection.Open();
+                res = await connection.QueryAsync<TblRequestDetail, TblReport, TblService, TblTypeService, TblRequestDetail>(query, (detail, report, service, type) =>
+                {
+                    detail.Service = service;
+                    detail.Service.TypeServiceNavigation = type;
+                    detail.TblReports.Add(report);
+                    return detail;
+                }, splitOn: "ReportID, ServiceID, TypeServiceID");
+                connection.Close();
+                return res;
+            }
+        }
     }
 }

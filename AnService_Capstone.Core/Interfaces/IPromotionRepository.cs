@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AnService_Capstone.Core.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +11,11 @@ namespace AnService_Capstone.Core.Interfaces
     {
         public Task<int> InsertPromotion(string inviteCode);
 
-        public Task<bool> InsertPromotionDetail(int userID, int promotionID);
+        public Task<bool> GeneratorPromotionCode(int userID, string promotion, string description, double value);
+
+        public Task<IEnumerable<TblPromotion>> GetAllPromotionByUserID(int userID);
+
+        public Task<bool> CheckEnteredCode(int userID);
+        /*public Task<bool> InsertPromotionDetail(int userID, int promotionID);*/
     }
 }

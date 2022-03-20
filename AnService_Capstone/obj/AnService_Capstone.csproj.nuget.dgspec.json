@@ -136,6 +136,10 @@
               "target": "Package",
               "version": "[1.0.3, )"
             },
+            "Microsoft.Extensions.Hosting.Abstractions": {
+              "target": "Package",
+              "version": "[6.0.0, )"
+            },
             "System.Data.SqlClient": {
               "target": "Package",
               "version": "[4.8.3, )"
@@ -143,6 +147,10 @@
             "Twilio": {
               "target": "Package",
               "version": "[5.70.0, )"
+            },
+            "ncrontab": {
+              "target": "Package",
+              "version": "[3.3.1, )"
             }
           },
           "imports": [

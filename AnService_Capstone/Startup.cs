@@ -2,6 +2,7 @@ using AnService_Capstone.Core.Interfaces;
 using AnService_Capstone.DataAccess.Dapper.Context;
 using AnService_Capstone.DataAccess.Dapper.Customize;
 using AnService_Capstone.DataAccess.Dapper.Repositories;
+using AnService_Capstone.DataAccess.Dapper.Services.BackgroundService;
 using AnService_Capstone.DataAccess.Dapper.Services.Firebase;
 using AnService_Capstone.DataAccess.Dapper.Services.SendSMS;
 using AnService_Capstone.DataAccess.Dapper.TokenGenerator;
@@ -126,6 +127,8 @@ namespace AnService_Capstone
             services.AddScoped<IInvoiceRepository, InvoiceRepository>();
             services.AddScoped<ITypeJobRepository, TypeJobRepository>();
             services.AddScoped<IContractRepository, ContractRepository>();
+
+            services.AddSingleton<IHostedService, ScheduledTask>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

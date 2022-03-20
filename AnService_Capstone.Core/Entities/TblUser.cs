@@ -10,7 +10,7 @@ namespace AnService_Capstone.Core.Entities
         public TblUser()
         {
             TblContracts = new HashSet<TblContract>();
-            TblPromotionDetails = new HashSet<TblPromotionDetail>();
+            TblPromotions = new HashSet<TblPromotion>();
             TblRepairDetails = new HashSet<TblRepairDetail>();
             TblReports = new HashSet<TblReport>();
             TblServiceRequests = new HashSet<TblServiceRequest>();
@@ -34,7 +34,7 @@ namespace AnService_Capstone.Core.Entities
         public virtual TblStatus StatusNavigation { get; set; }
         public virtual TblTypeJob TypeJobNavigation { get; set; }
         public virtual ICollection<TblContract> TblContracts { get; set; }
-        public virtual ICollection<TblPromotionDetail> TblPromotionDetails { get; set; }
+        public virtual ICollection<TblPromotion> TblPromotions { get; set; }
         public virtual ICollection<TblRepairDetail> TblRepairDetails { get; set; }
         public virtual ICollection<TblReport> TblReports { get; set; }
         public virtual ICollection<TblServiceRequest> TblServiceRequests { get; set; }

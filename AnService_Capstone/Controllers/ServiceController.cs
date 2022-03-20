@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace AnService_Capstone.Controllers
@@ -621,5 +622,12 @@ namespace AnService_Capstone.Controllers
             return Ok(result);
         }
 
+        /*[HttpGet]
+        [Route("[action]")]
+        public async Task<IActionResult> Test2()
+        {
+            var result = await _serviceRepository.GetAllRequestDetail();
+            return Ok(result);
+        }*/
     }
 }
