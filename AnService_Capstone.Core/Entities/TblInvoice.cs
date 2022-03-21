@@ -11,7 +11,9 @@ namespace AnService_Capstone.Core.Entities
         public int ServiceRequestId { get; set; }
         public int ContractId { get; set; }
         public decimal? TotalCost { get; set; }
+        public decimal? TotalCostUpdate { get; set; }
         public DateTime? InvoiceDateCreate { get; set; }
+        public DateTime? InvoiceDateUpdate { get; set; }
         public int? PromotionId { get; set; }
 
         public virtual TblContract Contract { get; set; }

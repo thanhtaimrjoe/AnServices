@@ -312,6 +312,26 @@ namespace AnService_Capstone.Controllers
                 return BadRequest();
             }
 
+            if (worker.WorkerEmail == null)
+            {
+                worker.WorkerEmail = "";
+            }
+
+            if (worker.WorkerAddress == null)
+            {
+                worker.WorkerAddress = "";
+            }
+
+            if (!worker.WorkerEmail.Equals(""))
+            {
+                var validEmail = _otpGenerator.IsValidEmail(worker.WorkerEmail);
+
+                if (!validEmail)
+                {
+                    return BadRequest(new ErrorResponse("Email is not valid"));
+                }
+            }
+
             var user = await _userRepository.GetWorkerByID(worker.WorkerId);
 
             var check = await _userRepository.CheckPhoneNumberExist(worker.WorkerPhoneNumber);

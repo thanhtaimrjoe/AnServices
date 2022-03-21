@@ -55,10 +55,11 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             }
         }*/
 
-        public async Task<bool> CreateContract(CreateContract contract)
+        public async Task<int> CreateContract(CreateContract contract)
         {
             var query = "insert into tblContract(CustomerID,ServiceRequestID,ContractTitle,ContractUrl,ContractStartDate,ContractEndDate,ContractDeposit,ContractTotalPrice,ContractStatus,ContractCreateDate) " +
-                "values (@CustomerID,@ServiceRequestID,@ContractTitle,@ContractUrl,@ContractStartDate,@ContractEndDate,@ContractDeposit,@ContractTotalPrice,@ContractStatus,@ContractCreateDate)";
+                "values (@CustomerID,@ServiceRequestID,@ContractTitle,@ContractUrl,@ContractStartDate,@ContractEndDate,@ContractDeposit,@ContractTotalPrice,@ContractStatus,@ContractCreateDate) " +
+                "SELECT CAST(SCOPE_IDENTITY() as int)";
 
             var parameters = new DynamicParameters();
             parameters.Add("CustomerID", contract.UserId, DbType.Int32);
@@ -75,13 +76,13 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             using(var connection = _context.CreateConnection())
             {
                 connection.Open();
-                var res = await connection.ExecuteAsync(query, parameters);
+                var res = await connection.QuerySingleAsync(query, parameters);
                 connection.Close();
-                if (res == 0)
+                /*if (res == 0)
                 {
                     return false;
-                }
-                return true;
+                }*/
+                return res;
             }
         }
 

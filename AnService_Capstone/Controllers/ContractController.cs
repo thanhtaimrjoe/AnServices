@@ -171,7 +171,7 @@ namespace AnService_Capstone.Controllers
         [Route("[action]")]
         public async Task<IActionResult> CreateContract(CreateContract contract)
         {
-            bool res = false;
+            int res;
 
             if (!ModelState.IsValid)
             {
@@ -182,27 +182,36 @@ namespace AnService_Capstone.Controllers
 
             if (check != null)
             {
-                res = await _contractRepository.UpdateContract(contract, check.ContractId);
+                _ = await _contractRepository.UpdateContract(contract, check.ContractId);
                 foreach (var updateDetail in contract.updatePriceRequestDetails)
                 {
                     _ = await _serviceRepository.UpdatePriceServiceRequestDetail(updateDetail.RequestDetailID, updateDetail.RequestDetailPrice, updateDetail.RequestDetailDescription);
                 }
+                return Ok(check.ContractId);
             }
-            else
+
+            res = await _contractRepository.CreateContract(contract);
+            foreach (var updateDetail in contract.updatePriceRequestDetails)
+            {
+                _ = await _serviceRepository.UpdatePriceServiceRequestDetail(updateDetail.RequestDetailID, updateDetail.RequestDetailPrice, updateDetail.RequestDetailDescription);
+            }
+
+            return Ok(res);
+            /*else
             {
                 res = await _contractRepository.CreateContract(contract);
                 foreach (var updateDetail in contract.updatePriceRequestDetails)
                 {
                     _ = await _serviceRepository.UpdatePriceServiceRequestDetail(updateDetail.RequestDetailID, updateDetail.RequestDetailPrice, updateDetail.RequestDetailDescription);
                 }
-            }
+            }*/
 
-            if (res)
+            /*if (res)
             {
                 _ = await _serviceRepository.UpdateStatusServiceRequest(contract.RequestId, 3);
                 return Ok("Create successfull");
-            }
-            return BadRequest(new ErrorResponse("Create fail"));
+            }*/
+            /*return BadRequest(new ErrorResponse("Create fail"));*/
         }
 
         /*[HttpPost]

@@ -204,7 +204,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             parameters.Add("PhoneNumber", worker.WorkerPhoneNumber, DbType.String);
             parameters.Add("Address", worker.WorkerAddress, DbType.String);
             parameters.Add("Email", worker.WorkerEmail, DbType.String);
-            parameters.Add("TypeJob", worker.TypeJobId, DbType.Int32);
+            parameters.Add("TypeJob", worker.TypeJob.TypeJobId, DbType.Int32);
             parameters.Add("UpdateDate", DateTime.Now, DbType.DateTime);
             parameters.Add("UserID", worker.WorkerId, DbType.Int32);
 

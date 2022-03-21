@@ -22,16 +22,22 @@ namespace AnService_Capstone.Controllers
         /// <summary>
         /// tạo hóa đơn theo request service id
         /// </summary>
-        /// <param name="id">request service id</param>
+        /// <param name="serviceRequestID">request service id</param>
+        /// <param name="contractID"></param>
         /// <param name="totalPrice">tổng giá tiền</param>
         /// <returns></returns>
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> CreateInvoice(int id, double totalPrice)
+        public async Task<IActionResult> CreateInvoice(int serviceRequestID, int contractID, double totalPrice)
         {
-            if (id == 0)
+            if (serviceRequestID == 0)
             {
-                return BadRequest(new ErrorResponse("Please enter id"));
+                return BadRequest(new ErrorResponse("Please enter serviceRequestID"));
+            }
+
+            if (contractID == 0)
+            {
+                return BadRequest(new ErrorResponse("Please enter contractID"));
             }
 
             /*if (totalPrice == 0)
@@ -39,10 +45,10 @@ namespace AnService_Capstone.Controllers
                 return BadRequest(new ErrorResponse("Please enter totalPrice"));
             }*/
 
-            var res = await _invoice.CreateInvoice(id, totalPrice);
+            var res = await _invoice.CreateInvoice(serviceRequestID, contractID, totalPrice);
             if (res)
             {
-                _ = await _serviceRepository.UpdateStatusServiceRequest(id, 14);
+                _ = await _serviceRepository.UpdateStatusServiceRequest(serviceRequestID, 14);
                 return Ok("Create Successful");
             }
             return BadRequest("Create Fail");
@@ -50,14 +56,14 @@ namespace AnService_Capstone.Controllers
 
         [HttpGet]
         [Route("[action]")]
-        public async Task<IActionResult> GetInfomationInvoiceByServiceRequestID(int requestServiceID)
+        public async Task<IActionResult> GetInfomationInvoiceByServiceRequestID(int serviceRequestID)
         {
-            if (requestServiceID == 0)
+            if (serviceRequestID == 0)
             {
-                return BadRequest(new ErrorResponse("Please enter requestServiceID"));
+                return BadRequest(new ErrorResponse("Please enter serviceRequestID"));
             }
 
-            var res = await _invoice.GetInfomationInvoiceByServiceRequestID(requestServiceID);
+            var res = await _invoice.GetInfomationInvoiceByServiceRequestID(serviceRequestID);
             if (res == null)
             {
                 return NotFound("No record");

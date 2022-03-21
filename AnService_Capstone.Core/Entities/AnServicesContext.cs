@@ -106,11 +106,15 @@ namespace AnService_Capstone.Core.Entities
 
                 entity.Property(e => e.InvoiceDateCreate).HasColumnType("datetime");
 
+                entity.Property(e => e.InvoiceDateUpdate).HasColumnType("datetime");
+
                 entity.Property(e => e.PromotionId).HasColumnName("PromotionID");
 
                 entity.Property(e => e.ServiceRequestId).HasColumnName("ServiceRequestID");
 
                 entity.Property(e => e.TotalCost).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.TotalCostUpdate).HasColumnType("decimal(18, 2)");
 
                 entity.HasOne(d => d.Contract)
                     .WithMany(p => p.TblInvoices)
@@ -178,11 +182,9 @@ namespace AnService_Capstone.Core.Entities
 
                 entity.Property(e => e.PromotionDateExpired).HasColumnType("datetime");
 
-                entity.Property(e => e.PromotionDescription)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                entity.Property(e => e.PromotionDescription).HasMaxLength(50);
 
-                entity.Property(e => e.PromotionValue).HasColumnType("decimal(18, 1)");
+                entity.Property(e => e.PromotionValue).HasColumnType("decimal(18, 2)");
 
                 entity.HasOne(d => d.Customer)
                     .WithMany(p => p.TblPromotions)

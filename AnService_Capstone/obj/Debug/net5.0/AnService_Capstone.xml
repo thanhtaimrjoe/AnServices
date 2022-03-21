@@ -38,11 +38,12 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:AnService_Capstone.Controllers.InvoiceController.CreateInvoice(System.Int32,System.Double)">
+        <member name="M:AnService_Capstone.Controllers.InvoiceController.CreateInvoice(System.Int32,System.Int32,System.Double)">
             <summary>
             tạo hóa đơn theo request service id
             </summary>
-            <param name="id">request service id</param>
+            <param name="serviceRequestID">request service id</param>
+            <param name="contractID"></param>
             <param name="totalPrice">tổng giá tiền</param>
             <returns></returns>
         </member>

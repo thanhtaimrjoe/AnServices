@@ -9,6 +9,11 @@ namespace AnService_Capstone.Core.Models.Request
 {
     public class UpdateWorker
     {
+        public class TypeJobWorker
+        {
+            public int TypeJobId { get; set; }
+        }
+
         [Required(ErrorMessage = "Please enter id")]
         public int WorkerId { get; set; }
         [Required(ErrorMessage = "Cant be blank")]
@@ -17,10 +22,10 @@ namespace AnService_Capstone.Core.Models.Request
         [Required]
         public string WorkerPhoneNumber { get; set;}
         public string WorkerAddress { get; set;}
-        [EmailAddress]
+        /*[EmailAddress]*/
         public string WorkerEmail { get; set;}
         [Required]
-        public int TypeJobId { get; set; }
+        public TypeJobWorker TypeJob { get; set; }
 
     }
 }
