@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import { FooterToolbar, PageContainer } from '@ant-design/pro-layout';
-import { Card, Form, Typography, Row, Empty } from 'antd';
+import { Card, Form, Typography, Row, Empty, message } from 'antd';
 // import { updateReportAttribute } from '@/services/reportattribute';
 import AsyncButton from '@/components/AsyncButton';
 import { useHistory } from 'umi';
@@ -25,6 +25,10 @@ const DetailWorker = (props) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [customerCreateDate, setCustomerCreateDate] = useState();
   const [statusRecordData, setStatusRecordData] = useState();
+  const [disableBan, setDisableBan] = React.useState(true);
+  const [disableUnban, setDisableUnban] = React.useState(true);
+
+
 
 
   const steps = [
@@ -41,6 +45,12 @@ const DetailWorker = (props) => {
       setCustomerCreateDate(moment(res.createDate).format('DD/MM/YYYY'));
       setStatusRecordData(res.status);
       console.log("record01", res.status)
+        if(res.status === 4) {
+          setDisableBan(false)
+        }
+        if(res.status === 10) {
+          setDisableUnban(false)
+        }
     });
   }, []);
 
@@ -59,12 +69,15 @@ const DetailWorker = (props) => {
   const onBanCustomer = () => {
     return banUserByUserID(updateCustomerState.userID).then(() =>
       onBackList(),
+      message.success("Chặn người dùng thành công"),
+
     )
   };
 
   const onUnbanCustomer = () => {
     return unbanUserByUserID(updateCustomerState.userID).then(() =>
       onBackList(),
+      message.success("Gỡ chặn người dùng thành công"),
     )
   };
 
@@ -87,8 +100,8 @@ const DetailWorker = (props) => {
           </Row>
           <Row style={{ width: '100%' }}>{steps[currentStep].content()}</Row>
           <FooterToolbar>
-            <AsyncButton title="Chặn người dùng" btnProps={{ type: 'danger', icon: <LockOutlined /> }} onClick={onBanCustomer}  />
-            <AsyncButton title="Gỡ chặn người dùng" btnProps={{ type: 'primary', icon: <UnlockOutlined /> }} onClick={onUnbanCustomer} />
+            <AsyncButton title="Chặn người dùng" btnProps={{ type: 'danger', icon: <LockOutlined />, disabled:disableBan }} onClick={onBanCustomer} />
+            <AsyncButton title="Gỡ chặn người dùng" btnProps={{ type: 'primary', icon: <UnlockOutlined />, disabled:disableUnban }} onClick={onUnbanCustomer} />
             <AsyncButton title="Trở về" btnProps={{ type: 'default', icon: <RollbackOutlined /> }} onClick={onBackList}  />
           </FooterToolbar>
         </Card>

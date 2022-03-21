@@ -6,11 +6,11 @@ import React, { useRef, useState } from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
 import AsyncButton from '@/components/AsyncButton';
 import ResoTable from '@/components/ResoTable/ResoTable';
-import { REQUESTSERVICE } from '@/utils/constrains';
-import { cancelRequestService } from '@/services/requestservices';
+import { SERVICEREQUEST } from '@/utils/constrains';
+import { cancelServiceRequest } from '@/services/requestservices';
 import TabPane from '@ant-design/pro-card/lib/components/TabPane';
 
-const RequestServiceList = ({ history }) => {
+const ServiceRequestList = ({ history }) => {
   const ref = useRef();
   const [selectedRows, setSelectedRows] = useState([]);
   const rowSelection = {
@@ -19,13 +19,13 @@ const RequestServiceList = ({ history }) => {
     type: 'select',
   };
 
-  const addRequestService = () => {
+  const addServiceRequest = () => {
     // history.push(`/requeservices/create`);
     history.push(`/requestservices/list`);
   };
 
-  const deleteRequestServiceHandler = () => {
-    return cancelRequestService(selectedRows[0]).then(() => ref.current?.reload());
+  const deleteServiceRequestHandler = () => {
+    return cancelServiceRequest(selectedRows[0]).then(() => ref.current?.reload());
   };
 
   return (
@@ -45,15 +45,15 @@ const RequestServiceList = ({ history }) => {
                     cancelText: 'Huỷ',
                   }}
                   btnProps={{ danger: true, type: 'link' }}
-                  onClick={() => deleteRequestServiceHandler().then(onCleanSelected)}
+                  onClick={() => deleteServiceRequestHandler().then(onCleanSelected)}
                   title={`Xoá ${selectedRows.length} yêu cầu`}
                 />,
               ]}
               rowSelection={rowSelection}
               actionRef={ref}
-              rowKey="requestServiceId"
-              columns={REQUESTSERVICE}
-              resource="Service/GetAllRequestServiceStatusOrDate"
+              rowKey="serviceRequestId"
+              columns={SERVICEREQUEST}
+              resource="Service/GetAllServiceRequestStatusOrDate"
             />
           </TabPane>
           <TabPane tab="Yêu cầu chưa xử lý" key="2">
@@ -70,15 +70,15 @@ const RequestServiceList = ({ history }) => {
                     cancelText: 'Huỷ',
                   }}
                   btnProps={{ danger: true, type: 'link' }}
-                  onClick={() => deleteRequestServiceHandler().then(onCleanSelected)}
+                  onClick={() => deleteServiceRequestHandler().then(onCleanSelected)}
                   title={`Xoá ${selectedRows.length} yêu cầu`}
                 />,
               ]}
               rowSelection={rowSelection}
               actionRef={ref}
-              rowKey="requestServiceId"
-              columns={REQUESTSERVICE}
-              resource="Service/GetAllRequestServiceStatusOrDate?RequestServiceStatus=2"
+              rowKey="serviceRequestId"
+              columns={SERVICEREQUEST}
+              resource="Service/GetAllServiceRequestStatusOrDate?serviceRequestStatus=2"
             />
           </TabPane>
           <TabPane tab="Yêu cầu đang xử lý" key="3">
@@ -95,15 +95,15 @@ const RequestServiceList = ({ history }) => {
                     cancelText: 'Huỷ',
                   }}
                   btnProps={{ danger: true, type: 'link' }}
-                  onClick={() => deleteRequestServiceHandler().then(onCleanSelected)}
+                  onClick={() => deleteServiceRequestHandler().then(onCleanSelected)}
                   title={`Xoá ${selectedRows.length} yêu cầu`}
                 />,
               ]}
               rowSelection={rowSelection}
               actionRef={ref}
-              rowKey="requestServiceId"
-              columns={REQUESTSERVICE}
-              resource="Service/GetAllRequestServiceStatusOrDate?RequestServiceStatus=6"
+              rowKey="serviceRequestId"
+              columns={SERVICEREQUEST}
+              resource="Service/GetAllServiceRequestStatusOrDate?serviceRequestStatus=6"
             />
           </TabPane>
           <TabPane tab="Yêu cầu đã đồng ý" key="4">
@@ -120,15 +120,15 @@ const RequestServiceList = ({ history }) => {
                     cancelText: 'Huỷ',
                   }}
                   btnProps={{ danger: true, type: 'link' }}
-                  onClick={() => deleteRequestServiceHandler().then(onCleanSelected)}
+                  onClick={() => deleteServiceRequestHandler().then(onCleanSelected)}
                   title={`Xoá ${selectedRows.length} yêu cầu`}
                 />,
               ]}
               rowSelection={rowSelection}
               actionRef={ref}
-              rowKey="requestServiceId"
-              columns={REQUESTSERVICE}
-              resource="Service/GetAllRequestServiceStatusOrDate?RequestServiceStatus=3"
+              rowKey="serviceRequestId"
+              columns={SERVICEREQUEST}
+              resource="Service/GetAllServiceRequestStatusOrDate?serviceRequestStatus=3"
             />
           </TabPane>
           <TabPane tab="Yêu cầu đã từ chối" key="5">
@@ -145,16 +145,15 @@ const RequestServiceList = ({ history }) => {
                     cancelText: 'Huỷ',
                   }}
                   btnProps={{ danger: true, type: 'link' }}
-                  onClick={() => deleteRequestServiceHandler().then(onCleanSelected)}
+                  onClick={() => deleteServiceRequestHandler().then(onCleanSelected)}
                   title={`Xoá ${selectedRows.length} yêu cầu`}
                 />,
               ]}
               rowSelection={rowSelection}
               actionRef={ref}
-              rowKey="requestServiceId"
-              columns={REQUESTSERVICE}
-              // dataSource="Service/GetAllRequestServiceStatusOrDate?RequestServiceStatus=1"
-              resource="Service/GetAllRequestServiceStatusOrDate?RequestServiceStatus=1"
+              rowKey="serviceRequestId"
+              columns={SERVICEREQUEST}
+              resource="Service/GetAllServiceRequestStatusOrDate?serviceRequestStatus=1"
             />
           </TabPane>
           <TabPane tab="Yêu cầu chờ xác nhận" key="6">
@@ -171,16 +170,15 @@ const RequestServiceList = ({ history }) => {
                     cancelText: 'Huỷ',
                   }}
                   btnProps={{ danger: true, type: 'link' }}
-                  onClick={() => deleteRequestServiceHandler().then(onCleanSelected)}
+                  onClick={() => deleteServiceRequestHandler().then(onCleanSelected)}
                   title={`Xoá ${selectedRows.length} yêu cầu`}
                 />,
               ]}
               rowSelection={rowSelection}
               actionRef={ref}
-              rowKey="requestServiceId"
-              columns={REQUESTSERVICE}
-              // dataSource="Service/GetAllRequestServiceStatusOrDate?RequestServiceStatus=1"
-              resource="Service/GetAllRequestServiceStatusOrDate?RequestServiceStatus=9"
+              rowKey="serviceRequestId"
+              columns={SERVICEREQUEST}
+              resource="Service/GetAllServiceRequestStatusOrDate?serviceRequestStatus=9"
             />
           </TabPane>
           <TabPane tab="Yêu cầu chờ KH thanh toán" key="7">
@@ -197,16 +195,15 @@ const RequestServiceList = ({ history }) => {
                     cancelText: 'Huỷ',
                   }}
                   btnProps={{ danger: true, type: 'link' }}
-                  onClick={() => deleteRequestServiceHandler().then(onCleanSelected)}
+                  onClick={() => deleteServiceRequestHandler().then(onCleanSelected)}
                   title={`Xoá ${selectedRows.length} yêu cầu`}
                 />,
               ]}
               rowSelection={rowSelection}
               actionRef={ref}
-              rowKey="requestServiceId"
-              columns={REQUESTSERVICE}
-              // dataSource="Service/GetAllRequestServiceStatusOrDate?RequestServiceStatus=1"
-              resource="Service/GetAllRequestServiceStatusOrDate?RequestServiceStatus=14"
+              rowKey="serviceRequestId"
+              columns={SERVICEREQUEST}
+              resource="Service/GetAllServiceRequestStatusOrDate?serviceRequestStatus=14"
             />
           </TabPane>
         </Tabs>
@@ -222,25 +219,25 @@ const RequestServiceList = ({ history }) => {
                 cancelText: 'Huỷ',
               }}
               btnProps={{ danger: true, type: 'link' }}
-              onClick={() => deleteRequestServiceHandler().then(onCleanSelected)}
+              onClick={() => deleteServiceRequestHandler().then(onCleanSelected)}
               title={`Xoá ${selectedRows.length} yêu cầu`}
             />,
           ]}
                     // toolBarRender={() => [
-                    //   <Button type="primary" onClick={addRequestService} icon={<PlusOutlined />}>
+                    //   <Button type="primary" onClick={addServiceRequest} icon={<PlusOutlined />}>
                     //   <Button type="primary" icon={<PlusOutlined />}>
                     //     Tạo mới yêu cầu cho khách
                     //   </Button>,
                     // ]}
           rowSelection={rowSelection}
           actionRef={ref}
-          rowKey="requestServiceId"
-          columns={REQUESTSERVICE}
-          resource="Service/GetAllRequestServiceStatusOrDate"
+          rowKey="serviceRequestId"
+          columns={SERVICEREQUEST}
+          resource="Service/GetAllServiceRequestStatusOrDate"
         /> */}
       </Card>
     </PageContainer>
   );
 };
 
-export default RequestServiceList;
+export default ServiceRequestList;

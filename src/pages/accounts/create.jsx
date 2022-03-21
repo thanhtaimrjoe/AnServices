@@ -22,7 +22,6 @@ const CreateAccount = (props) => {
   const [form] = Form.useForm();
   const history = useHistory();
   // const [accountType, setAccountType] = useState(+type);
-  const [createdAccount, setCreatedAccount] = useState(null);
 
   useEffect(() => {
     form.setFieldsValue({ product_type_id: +type });

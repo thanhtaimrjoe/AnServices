@@ -1,27 +1,14 @@
 // import React from 'react';
-import React, { useEffect, useState } from 'react';
-
-import { Input, Row, Col, Image } from 'antd';
-import ProForm from '@ant-design/pro-form';
-import { getRequestServiceByID } from '@/services/requestservices';
-import { Content } from 'antd/lib/layout/layout';
-import ProCard from '@ant-design/pro-card';
 import CommonSelect from '@/components/CommonSelect/CommonSelect';
+import ProForm from '@ant-design/pro-form';
+import { Col, Input, Row } from 'antd';
+import React from 'react';
+
 
 const BasicStep = ({ customerName, userID, fullName, phoneNumber, address, 
   serviceName, serviceDescription, servicePrice, 
   requestServiceCreateDate
 }) => {
-
-  // Hàm test
-  // const [Record, setRecord] = useState([]);
-  // useEffect(() => {
-  //   getRequestServiceByID(17).then((record) => {
-  //     console.log('test1', record);
-  //     setRecord(record);
-  //     console.log('test12', record.customerName);
-  //   });
-  // }, []);
   return (
     <div bordered={false} style={{ width: '200%', marginBottom: '4em' }}>
       <div bordered={false} style={{ width: '100%', marginBottom: '2em' }}>

@@ -1,11 +1,10 @@
 // import React from 'react';
+import CommonSelect from '@/components/CommonSelect/CommonSelect';
+import ProForm from '@ant-design/pro-form';
+import { Col, Input, Row } from 'antd';
 import React from 'react';
 
-import { Input, Row, Col, InputNumber } from 'antd';
-import ProForm from '@ant-design/pro-form';
-import CommonSelect from '@/components/CommonSelect/CommonSelect';
-
-const BasicStep = ({ typeJobName, typeJobId }) => {
+const BasicStep = ({ typeJobId }) => {
   return (
     <div bordered={false} style={{ width: '200%', marginBottom: '4em' }}>
       <div bordered={false} style={{ width: '100%', marginBottom: '2em' }}>
@@ -62,7 +61,6 @@ const BasicStep = ({ typeJobName, typeJobId }) => {
       <Row gutter={16}>
         <Col span={12}>
           <ProForm.Item
-            // name="typeJobId"
             name={typeJobId}
             initialValue={typeJobId}
             label="Nhóm thợ"
@@ -77,6 +75,21 @@ const BasicStep = ({ typeJobName, typeJobId }) => {
             <CommonSelect.SelectWorkerByTypeJob />
           </ProForm.Item>
         </Col>
+        {/* <Col span={12}>
+          <ProForm.Item
+            name="typeJobId"
+            label="Nhóm thợ"
+            rules={[
+              {
+                pattern: /^[0-9]*$/,
+                type: 'integer',
+                message: "Chỉ được chọn trên thanh chọn"
+              }
+            ]}
+          >
+            <CommonSelect.SelectWorkerByTypeJob />
+          </ProForm.Item>
+        </Col> */}
       </Row>
       </div>
     </div>

@@ -6,9 +6,9 @@ import { useHistory } from 'umi';
 import { normalizeReportForm } from '@/utils/utils';
 import ProForm from '@ant-design/pro-form';
 import ProCard from '@ant-design/pro-card';
-import { createRequestService } from '@/services/requestservices';
+import { createServiceRequest } from '@/services/requestservices';
 
-const CreateRequestService = (props) => {
+const CreateServiceRequest = (props) => {
   const {
     history: {
       location: {
@@ -19,21 +19,21 @@ const CreateRequestService = (props) => {
 
   const [form] = Form.useForm();
   const history = useHistory();
-  const [requestServiceType, setCreateRequestServiceType] = useState(+type);
-  const [createdRequestService, setCreatedRequestService] = useState(null);
+  const [serviceRequestType, setCreateServiceRequestType] = useState(+type);
+  const [createdServiceRequest, setCreatedServiceRequest] = useState(null);
 
   useEffect(() => {
     form.setFieldsValue({ product_type_id: +type });
   }, []);
 
-  const onCreateRequestService = (values) => {
-    const createRequestServiceData = normalizeReportForm(values);
-    return createRequestService(createRequestServiceData).then((res) => {
-      setCreatedRequestService({ ...values, id: res });
+  const onCreateServiceRequest = (values) => {
+    const createServiceRequestData = normalizeReportForm(values);
+    return createServiceRequest(createServiceRequestData).then((res) => {
+      setCreatedServiceRequest({ ...values, id: res });
     });
   };
 
-  if (createdRequestService !== null) {
+  if (createdServiceRequest !== null) {
     return (
       <ProCard>
         <Result
@@ -41,9 +41,9 @@ const CreateRequestService = (props) => {
           title="Tạo yêu cầu cho khách hàng"
           subTitle={
             <Space direction="vertical">
-              <Typography level={5}>{`Tên khách hàng: ${createdRequestService.customerName}`}</Typography>
-              <Typography level={5}>{`Số điện thoại: ${createdRequestService.customerPhone}`}</Typography>
-              <Typography level={5}>{`Địa chỉ: ${createdRequestService.customerAddress}`}</Typography>
+              <Typography level={5}>{`Tên khách hàng: ${createdServiceRequest.customerName}`}</Typography>
+              <Typography level={5}>{`Số điện thoại: ${createdServiceRequest.customerPhone}`}</Typography>
+              <Typography level={5}>{`Địa chỉ: ${createdServiceRequest.customerAddress}`}</Typography>
             </Space>
           }
           extra={[
@@ -72,7 +72,7 @@ const CreateRequestService = (props) => {
           },
           render: (_, dom) => <FooterToolbar>{dom}</FooterToolbar>,
         }}
-        onFinish={onCreateRequestService}
+        onFinish={onCreateServiceRequest}
         colon
         form={form}
         name="createReportInfo"
@@ -80,7 +80,7 @@ const CreateRequestService = (props) => {
       >
         <Space style={{ width: '100%' }} direction="vertical">
           <ProCard bordered title="Thông tin yêu cầu">
-            <BasicStep requestServiceType={requestServiceType} onChangerequestServiceType={setCreateRequestServiceType} />
+            <BasicStep serviceRequestType={serviceRequestType} onChangeServiceRequestType={setCreateServiceRequestType} />
           </ProCard>
         </Space>
       </ProForm>
@@ -88,4 +88,4 @@ const CreateRequestService = (props) => {
   );
 };
 
-export default CreateRequestService;
+export default CreateServiceRequest;

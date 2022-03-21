@@ -1,5 +1,5 @@
 import request from '@/utils/request';
 
-export const getAllReportByRequestServiceID = (requestServiceId) => {
-    return request.get(`/Report/GetAllReportByRequestServiceID?RequestServiceId=${requestServiceId}`);
+export const getAllReportByServiceRequestID = (ServiceRequestId) => {
+    return request.get(`/Report/GetAllReportByServiceRequestID?ServiceRequestId=${ServiceRequestId}`);
   };

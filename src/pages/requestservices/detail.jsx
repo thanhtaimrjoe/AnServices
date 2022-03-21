@@ -32,10 +32,10 @@ import moment from 'moment';
 import { normalizeReportForm } from '@/utils/utils';
 import {
   assignWorkerToRequest,
-  cancelRequestService,
-  getAllRequestServiceDetailsByRequestServiceID,
-  getRepairDetailByRequestServiceID,
-  getRequestServiceByID,
+  cancelServiceRequest,
+  getAllServiceRequestDetailsByServiceRequestID,
+  getRepairDetailByServiceRequestID,
+  getServiceRequestByID,
 } from '@/services/requestservices';
 import {
   denyStatusRequestMaterial,
@@ -43,10 +43,10 @@ import {
   updateRequestMaterial,
   approveStatusRequestMaterial,
   getRequestMaterialByID,
-  getAllMaterialByRequestServiceID,
+  getAllMaterialByServiceRequestID,
 } from '@/services/requestmaterials';
 import { getAllWorkers, getWorkerByServiceID } from '@/services/workers';
-import { getContractByRequestServiceID, getContractListByUserID } from '@/services/contracts';
+import { getContractByServiceRequestID, getContractListByUserID } from '@/services/contracts';
 import ProForm, { ProFormTextArea, ProFormDatePicker } from '@ant-design/pro-form';
 import ProTable from '@ant-design/pro-table';
 import {
@@ -59,13 +59,13 @@ import {
   UploadOutlined,
 } from '@ant-design/icons';
 import Modal from 'antd/lib/modal/Modal';
-import { getAllReportByRequestServiceID } from '@/services/reports';
+import { getAllReportByServiceRequestID } from '@/services/reports';
 import storage from '../firebase/firebase';
 import { createContract } from '@/services/contracts';
 import CommonSelect from '@/components/CommonSelect/CommonSelect';
 import { createInvoice } from '@/services/invoice';
 
-const DetailRequestService = (props) => {
+const DetailServiceRequest = (props) => {
   const {
     history: {
       location: { state: updateRequestServiceState },
@@ -84,7 +84,7 @@ const DetailRequestService = (props) => {
   const [serviceName, setServiceName] = useState();
   const [serviceDescription, setServiceDescription] = useState();
   const [servicePrice, setServicePrice] = useState();
-  const [requestServiceCreateDate, setRequestServiceCreateDate] = useState();
+  const [serviceRequestCreateDate, setServiceRequestCreateDate] = useState();
   const [contractStartDateData, setContractStartDateData] = useState();
   const [contractEndDateData, setContractEndDateData] = useState();
   const [contractTotalPriceData, setContractTotalPriceData] = useState();
@@ -132,7 +132,11 @@ const DetailRequestService = (props) => {
   const [Url, setUrl] = useState('');
   const upload = async () => {
     try {
+
+      console.log('recordfile1', file);
       const fileName = Date.now() + file.name;
+      // const fileName = file.name;
+
       await storage.ref(`/files/${fileName}`).put(file);
 
       const url = await storage.ref('files').child(fileName).getDownloadURL();
@@ -144,6 +148,18 @@ const DetailRequestService = (props) => {
     } catch (error) {
       console.log(error);
     }
+
+  
+    // Sending File to Firebase Storage
+    // storage.ref(`/files/${file.name}`).put(file)
+    //   .on("state_changed", alert("success"), alert, () => {
+  
+    //     // Getting Download Link
+    //     storage.ref("files").child(file.name).getDownloadURL()
+    //       .then((url) => {
+    //         setUrl(url);
+    //       })
+    //   });
   };
   // ======================================
 
@@ -160,7 +176,7 @@ const DetailRequestService = (props) => {
           serviceName={serviceName}
           serviceDescription={serviceDescription}
           servicePrice={servicePrice}
-          requestServiceCreateDate={requestServiceCreateDate}
+          requestServiceCreateDate={serviceRequestCreateDate}
         />
       ),
     },
@@ -168,15 +184,15 @@ const DetailRequestService = (props) => {
 
   useEffect(() => {
     // form.setFieldsValue(updateRequestServiceState);
-    getRequestServiceByID(updateRequestServiceState.requestServiceId).then((res) => {
-      console.log('test', updateRequestServiceState);
+    getServiceRequestByID(updateRequestServiceState.serviceRequestId).then((res) => {
+      console.log('record001', updateRequestServiceState);
       setCustomerName(res.customerName);
-      setUserID(res.user.userID);
-      setFullName(res.user.fullName);
-      setPhoneNumber(res.user.phoneNumber);
-      setAddress(res.user.address);
-      setRequestServiceCreateDate(res.requestServiceCreateDate.split('T', 1));
-      setRequestServiceCreateDate(moment(res.requestServiceCreateDate).format('DD/MM/YYYY'));
+      setUserID(res.customer.userId);
+      setFullName(res.customer.fullName);
+      setPhoneNumber(res.customer.phoneNumber);
+      setAddress(res.customer.address);
+      setServiceRequestCreateDate(res.serviceRequestCreateDate.split('T', 1));
+      setServiceRequestCreateDate(moment(res.serviceRequestCreateDate).format('DD/MM/YYYY'));
     });
   }, [updateRequestServiceState]);
 
@@ -184,9 +200,8 @@ const DetailRequestService = (props) => {
   const [requestServiceRecord, setRequestServiceDetail] = useState([]);
   const [staffCoordinatorRecord, setStaffCoordinatorRecord] = useState([]);
   useEffect(() => {
-    getAllRequestServiceDetailsByRequestServiceID(updateRequestServiceState.requestServiceId)
+    getAllServiceRequestDetailsByServiceRequestID(updateRequestServiceState.serviceRequestId)
       .then((record) => {
-        console.log('record03', record);
         setRequestServiceDetail(record);
         setIsLoad(true);
         let result = 0;
@@ -195,17 +210,16 @@ const DetailRequestService = (props) => {
             result += e.requestDetailPrice
             setDisableInvoice(false);
           }
-          if(e.requestDetailStatus === 2) {
-            setDisableStaffCoordinator(false);
-          }
+          // if(e.requestDetailStatus === 2) {
+          //   setDisableStaffCoordinator(false);
+          // }
         })
         setInvoiceTotalPrice(result)
       })
       .catch(setIsLoad(false));
 
-    getRepairDetailByRequestServiceID(updateRequestServiceState.requestServiceId)
+      getRepairDetailByServiceRequestID(updateRequestServiceState.serviceRequestId)
       .then((record) => {
-        console.log("recorde01", record)
         setStaffCoordinatorRecord(record);
     })
   }, []);
@@ -231,35 +245,32 @@ const DetailRequestService = (props) => {
   const [workerByServiceId, setWorkerByServiceId] = useState([]);
 
   useEffect(() => {
-    if (isLoad && updateRequestServiceState) {
-      console.log('kt222', updateRequestServiceState);
-    }
     // Data cho danh sách thợ và hợp đồng
     if (isLoad && updateRequestServiceState) {
       getAllWorkers().then((record) => {
         setWorkerRecord(record);
       });
-      getContractListByUserID(updateRequestServiceState.user.userID).then((record) => {
+      getContractListByUserID(updateRequestServiceState.customer.userId).then((record) => {
         setContractRecord(record);
       });
     }
     // Data cho chi tiết vật tư yêu cầu
     if (isLoad && updateRequestServiceState) {
-      getAllMaterialByRequestServiceID(updateRequestServiceState.requestServiceId).then(
+      getAllMaterialByServiceRequestID(updateRequestServiceState.serviceRequestId).then(
         (record) => {
           setRequestMaterialRecord(record);
         },
       );
     }
     if (isLoad && updateRequestServiceState) {
-      getAllReportByRequestServiceID(updateRequestServiceState.requestServiceId).then((record) => {
+      getAllReportByServiceRequestID(updateRequestServiceState.serviceRequestId).then((record) => {
         setReportRequestService(record);
       });
     }
 
     // Dữ liệu hợp đồng (trong chi tiết yêu cầu dịch vụ)
     if (isLoad && updateRequestServiceState) {
-      getContractByRequestServiceID(updateRequestServiceState.requestServiceId).then((record) => {
+      getContractByServiceRequestID(updateRequestServiceState.serviceRequestId).then((record) => {
         if (record.length === 0) {
           setContractStartDateData1(null);
           setContractEndDateData1(null);
@@ -283,9 +294,7 @@ const DetailRequestService = (props) => {
 
   const [images2, setImage2] = useState([]);
 
-  const images = updateRequestServiceState.media.map((img, index) => {
-    console.log('test31', index);
-
+  const images = updateRequestServiceState.tblMedia.map((img, index) => {
     if (!img.mediaUrl.includes('.mp4')) {
       return (
         <Image
@@ -315,15 +324,16 @@ const DetailRequestService = (props) => {
 
   // ===========================================
 
-  const onRejectorCancelRequestService = () => {
+  const onRejectorCancelServiceRequest = () => {
     // const update = normalizeReportForm(formData);
-    return cancelRequestService(updateRequestServiceState.requestServiceId).then(() =>
+    return cancelServiceRequest(updateRequestServiceState.serviceRequestId).then(() =>
       history.replace('/requestservices/list'),
     );
   };
 
   const onBackList = () => {
     history.replace('/requestservices/list');
+    // history.current?.reload();
   };
 
   const onStaffCoordinator = (values) => {
@@ -352,19 +362,10 @@ const DetailRequestService = (props) => {
         mainWorker: mainStaffCoordinator,
         workerList: staffCoordinator,
       };
-      // const createRequestServiceData = normalizeReportForm(formData);
+      // const createServiceRequestData = normalizeReportForm(formData);
       return assignWorkerToRequest(assignWorker)
-        .then((res) => {
-          console.log('kt5', res);
-          console.log('kt55', mainStaffCoordinator);
-          console.log('kt56', assignWorker);
-          console.log('kt7', requestServiceRecord);
-          setConfirmLoading(true);
-        })
         .then(() => {
           // requestServiceRecord.resetFields();
-          setConfirmLoading(false);
-          setVisible(false);
         })
         .catch((info) => {
           console.log('Xác thực không thành công:', info);
@@ -376,11 +377,7 @@ const DetailRequestService = (props) => {
   const { Option } = Select;
 
   function onChange(value, requestDetailId, index) {
-    console.log('changed', value);
-    console.log('changedId', requestDetailId);
-    console.log('changedindex', index);
     if (updatePriceRequestDetailsData[index]) {
-      console.log('Mảng rỗng');
       updatePriceRequestDetailsData[index].requestDetailPrice = value;
       setUpdatePriceRequestDetailsData([...updatePriceRequestDetailsData]);
 
@@ -393,7 +390,6 @@ const DetailRequestService = (props) => {
   }
 
   const result = updatePriceRequestDetailsData.reduce((item, index) => (item = item + index.requestDetailPrice), 0);
-  // console.log('totalPrice', result);
 
   function onChangeStartDateToEndDate(value, date) {
     console.log('changed', value);
@@ -405,17 +401,9 @@ const DetailRequestService = (props) => {
     setContractStartDateData(date[0]);
     setContractEndDateData(date[1]);
   }
-
   
   function onChangeStartDate(value, date) {
-    if(value === null) {
-      console.log('value null')
-      // setContractStartDateData(moment(contractStartDateData1, 'YYYY-MM-DD'))
-
-      // setContractStartDateData(date);
-    } else {
-      console.log("không null")
-    }
+    setContractStartDateData(date);
   }
 
   function onChangeEndDate(value, date) {
@@ -451,11 +439,8 @@ const DetailRequestService = (props) => {
         setOkConfirmLoading(false);
       }, 2000);
 
-    const update = normalizeReportForm(formData);
+  const update = normalizeReportForm(formData);
     return approveStatusRequestMaterial(values, update)
-    .then(() => console.log('abcformAccept', formData),
-      console.log('abcvaluesAccept', values),
-    );
   };
 
   const showModalAdjusted = (record) => {
@@ -510,7 +495,6 @@ const DetailRequestService = (props) => {
   };
 
   const handleCancel = () => {
-    // console.log('Clicked cancel button');
     setVisible(false);
     setVisible1(false);
     setVisible2(false);
@@ -518,10 +502,10 @@ const DetailRequestService = (props) => {
   };
 
   const onCreateContract = async () => {
-    setSendContractConfirmLoading(true);
-    setTimeout(() => {
-      setSendContractConfirmLoading(false);
-    }, 2000);
+    // setSendContractConfirmLoading(true);
+    // setTimeout(() => {
+    //   setSendContractConfirmLoading(false);
+    // }, 10000);
     let validate = true;
     // if (!Url) {
     //   validate = false;
@@ -557,7 +541,7 @@ const DetailRequestService = (props) => {
         userId: userID,
         username: customerName,
         contractUrl: returnUrl,
-        requestId: updateRequestServiceState.requestServiceId,
+        requestId: updateRequestServiceState.serviceRequestId,
         contractStartDate: contractStartDateData,
         contractEndDate: contractEndDateData,
         contractDeposit: contractDepositData,
@@ -582,7 +566,7 @@ const DetailRequestService = (props) => {
     setTimeout(() => {
       setSendInvoiceConfirmLoading(false);
     }, 2000);
-    return createInvoice(updateRequestServiceState.requestServiceId, invoiceTotalPrice)
+    return createInvoice(updateRequestServiceState.serviceRequestId, invoiceTotalPrice)
     .then((res) => {
       if(res.status === 500) {
         message.error("Hoá đơn này đã được gửi");
@@ -595,10 +579,7 @@ const DetailRequestService = (props) => {
     window.open(contractUrl);
   }
 
-  const changeValueDeposit = contractDepositData1 * 100;
-
   const enableContractForm = () => {
-    // console.log('worker1', workerByServiceId);
     setDisable(false);
     setContractTotalPriceData1(null);
   };
@@ -612,11 +593,6 @@ const DetailRequestService = (props) => {
       setWorkerByServiceId(record);
     });
   };
-
-  
-
-  // ======================================
-
 
   // =====================================
   const REQUESTSERVICEDETAIL = [
@@ -650,7 +626,8 @@ const DetailRequestService = (props) => {
       dataIndex: 'serviceDescription',
       search: false,
       render: (text, record) => {
-        return <div>{record?.service?.serviceDescription}</div>;
+        // return <div>{record?.service?.serviceDescription}</div>;
+        return <div>Xem Chi Tiết Trong File Hợp Đồng</div>
       },
     },
     {
@@ -740,7 +717,6 @@ const DetailRequestService = (props) => {
       search: false,
       show: false,
       render: (text, record) => {
-        console.log("record02", record)
         return (
           <CommonSelect.SelectRequestServicePriority style={{width:160}} onChange={onChangePriority} />
         );
@@ -755,7 +731,7 @@ const DetailRequestService = (props) => {
       render: (text, record) => {
         const updateWorkerState = { ...record };
         // getWorkerByServiceId(record.serviceId);
-
+        console.log('record01', record);
         return (
           <Space size="middle">
             <Select
@@ -785,9 +761,22 @@ const DetailRequestService = (props) => {
                 <Option key={option.userID}>{option.fullName}</Option>
               ))}
             </Select>
-            <Button
+            {/* {record.serviceRequestId === updateRequestServiceState.serviceRequestId && (
+              <Button
               loading={staffCoordinatorConfirmLoading}
               disabled={disableStaffCoordinator}
+              onClick={() => onStaffCoordinator(updateWorkerState.requestDetailId)}
+              onChange={handleChange && handleChangeMainWorker}
+              state={updateWorkerState}
+              type="primary"
+              >
+                Điều phối thợ
+              </Button>
+            )} */}
+            {record?.requestDetailStatus !== 11  && (
+            <Button
+              // loading={staffCoordinatorConfirmLoading}
+              // disabled={disableStaffCoordinator}
               onClick={() => onStaffCoordinator(updateWorkerState.requestDetailId)}
               onChange={handleChange && handleChangeMainWorker}
               state={updateWorkerState}
@@ -795,6 +784,7 @@ const DetailRequestService = (props) => {
             >
               Điều phối thợ
             </Button>
+            )}
           </Space>
         );
       },
@@ -857,7 +847,7 @@ const DetailRequestService = (props) => {
           <Space size="middle">
             <a onClick={onOpenNewWindown}>Xem hợp đồng</a>
             <a onClick={onOpenNewWindown}>Tải xuống & in</a>
-            {record.requestServiceId === updateRequestServiceState.requestServiceId && (
+            {record.serviceRequestId === updateRequestServiceState.serviceRequestId && (
               <a onClick={enableContractForm}>Sửa hợp đồng</a>
             )}
           </Space>
@@ -1182,7 +1172,7 @@ const DetailRequestService = (props) => {
                   <DatePicker
                     disabled={disable}
                     defaultValue={moment(contractStartDateData1, 'YYYY-MM-DD')}
-                    value={moment(contractStartDateData1, 'YYYY-MM-DD')}
+                    // value={moment(contractStartDateData1, 'YYYY-MM-DD')}
                     onChange={onChangeStartDate}
                     disabledDate={(d) => !d || d.isBefore(moment().startOf('day'))}
                     style={{ width: 390 }}
@@ -1333,6 +1323,7 @@ const DetailRequestService = (props) => {
               maxCount={1}
               onChange={(e) => {
                 setFile(e.fileList[0]);
+                console.log('recordfile', e);
               }}
 
             >
@@ -1468,7 +1459,7 @@ const DetailRequestService = (props) => {
             <AsyncButton
               title="Từ chối"
               btnProps={{ type: 'danger', icon: <CloseOutlined /> }}
-              onClick={onRejectorCancelRequestService}
+              onClick={onRejectorCancelServiceRequest}
             />
             {/* <AsyncButton title="Xác nhận" btnProps={{ type: 'primary', icon: <CheckOutlined /> }} /> */}
           </FooterToolbar>
@@ -1478,4 +1469,4 @@ const DetailRequestService = (props) => {
   );
 };
 
-export default DetailRequestService;
+export default DetailServiceRequest;

@@ -24,7 +24,8 @@ const UpdateReportAttribute = (props) => {
   const [formData, setFormData] = useState(updateWorkerState);
   const [requestMaterialCreateDate, setRequestaterialCreateDate] = useState();
   const [typeJobName, setTypeJobName] = useState();
-  const [typeJobId1, setTypeJobId] = useState();
+  const [typeJobIdRecord, setTypeJobIdRecord] = useState();
+  const [typeJobId, setTypeJobId] = useState();
   const [currentStep, setCurrentStep] = useState(0);
 
   const steps = [
@@ -34,7 +35,7 @@ const UpdateReportAttribute = (props) => {
         <BasicStep
           createDate={requestMaterialCreateDate}
           typeJobName={typeJobName}
-          typeJobId={typeJobId1}
+          typeJobId={typeJobIdRecord}
         />
       ),
     },
@@ -45,7 +46,7 @@ const UpdateReportAttribute = (props) => {
     getWorkerById(updateWorkerState.userID).then((res) => {
       setFormData(res);
       setTypeJobName(res.typeJob.typeJobName);
-      setTypeJobId(res.typeJob.typeJobId);
+      setTypeJobIdRecord(res.typeJob.typeJobId);
       setRequestaterialCreateDate(res.createDate.split('T', 1));
       setRequestaterialCreateDate(moment(res.requestServiceCreateDate).format('DD/MM/YYYY'));
     });
@@ -62,8 +63,8 @@ const UpdateReportAttribute = (props) => {
   const onUpdateWorker = () => {
     const update = normalizeReportForm(formData);
     console.log('record01', update.update);
-    console.log('record02', updateWorkerState);
 
+    // setTypeJobId(update.update.typeJobId);
     let validate = true;
     // if (!update.update.fullName && update.update.fullName === "" && update.update.fullName === undefined) {
     if (update.update.fullName.length === 0 || update.update.fullName === undefined) {
@@ -82,15 +83,19 @@ const UpdateReportAttribute = (props) => {
         workerPhoneNumber: update.update.phoneNumber,
         workerAddress: update.update.address,
         workerEmail: update.update.email,
-        // typeJobId: update.update.typeJobId,
-        typeJobId: update.update.typeJobId,
+        // typeJob: update.update.typeJobId,
+        typeJob: {typeJobIdRecord},
+
       };
       return updateWorker(createContractValues).then((res) => {
         if(res.status === 400) {
-          message.error("Số điện thoại đã tồn tại")
+          message.error("Số điện thoại đã tồn tại vui lòng kiểm tra lại")
         }
-        // setTypeJobId(updateWorkerState.typeJob.typeJobId)
-        history.replace('/workers/list');
+        else {
+          // setTypeJobId(updateWorkerState.typeJob.typeJobId)
+          console.log('record03', createContractValues)
+          history.replace('/workers/list');
+        }
       });
     }
 

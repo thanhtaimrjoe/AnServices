@@ -14,7 +14,7 @@ import {
   
 } from './utils';
 
-import { getAllRequestService, GetAllRequestServiceStatusOrDate, getAllService, getRequestServiceDate, getRequestServiceStatus } from '@/services/requestservices';
+import { getAllRequestService, getAllService, getAllServiceRequestStatusOrDate } from '@/services/requestservices';
 import { getAllWorkers } from '@/services/workers';
 import { getAllTypeJob } from '@/services/typejobs';
 
@@ -213,7 +213,6 @@ const SelectRequestServiceStatus = (props) => {
     <CommonSelect
       placeholder="Vui lòng chọn trạng thái của yêu cầu"
       fetchOnFirst
-      // onSearch={getAllRequestService}
       options={[
         {
           value: '1',
@@ -245,18 +244,6 @@ const SelectRequestServiceStatus = (props) => {
   );
 };
 
-const SelectRequestServiceDate = (props) => {
-  return (
-    <CommonSelect
-      placeholder="Vui lòng chọn ngày"
-      fetchOnFirst
-      buildOptions={buildRequestServiceDateOption}
-      onSearch={getRequestServiceDate}
-      {...props}
-    />
-  );
-};
-
 const months = ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12']
 const days = ['Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7', 'Chủ Nhật']
 const dateFormatList = ['DD-MM-YYYY', 'YY-MM-DD'];
@@ -269,7 +256,7 @@ const locale = {
   formatLong: {}
 }
 
-const SelectRequestServiceDate1 = (props) => {
+const SelectRequestServiceDate = (props) => {
   return (
     <Input.Group compact>
       {/* <Input 
@@ -277,7 +264,7 @@ const SelectRequestServiceDate1 = (props) => {
         placeholder="Vui lòng nhập ngày gửi yêu cầu"
         fetchOnFirst
         // buildOptions={buildRequestServiceDateOption}
-        onSearch={GetAllRequestServiceStatusOrDate}
+        onSearch={getAllServiceRequestStatusOrDate}
         {...props}
        /> */}
       <DatePicker 
@@ -286,8 +273,7 @@ const SelectRequestServiceDate1 = (props) => {
         locale={locale}
         fetchOnFirst
         // buildOptions={buildRequestServiceDateOption}
-        onSearch={GetAllRequestServiceStatusOrDate}
-        // format="YYYY-MM-DD"
+        onSearch={getAllServiceRequestStatusOrDate}
         format="D/M/YYYY"
         {...props}
       />
@@ -350,7 +336,6 @@ CommonSelect.SelectWorkerTypeJob = SelectWorkerTypeJob;
 CommonSelect.SelectWorkerByTypeJob = SelectWorkerByTypeJob;
 CommonSelect.SelectRequestServiceStatus = SelectRequestServiceStatus;
 CommonSelect.SelectRequestServiceDate = SelectRequestServiceDate;
-CommonSelect.SelectRequestServiceDate1 = SelectRequestServiceDate1;
 CommonSelect.SelectRequestServicePriority = SelectRequestServicePriority;
 CommonSelect.SelectRequestServicePackage = SelectRequestServicePackage;
 
@@ -382,7 +367,6 @@ export {
   // REQUEST SERVICE
   SelectRequestServiceStatus,
   SelectRequestServiceDate,
-  SelectRequestServiceDate1,
   SelectRequestServicePriority,
   SelectRequestServicePackage,
 

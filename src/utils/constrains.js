@@ -4,7 +4,7 @@ import moment, { updateLocale } from 'moment';
 import { Link } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 import { SelectWorkerByTypeJob } from '@/components/CommonSelect/CommonSelect';
-import { SelectRequestServiceDate1 } from '@/components/CommonSelect/CommonSelect';
+import { SelectRequestServiceDate } from '@/components/CommonSelect/CommonSelect';
 
 
 // ACCOUNTS
@@ -173,18 +173,8 @@ export const WORKERS = [
   },
 ];
 
-// REQUEST SERVICE
-export const REQUESTSERVICE = [
-  // {
-  //   title: 'Image',
-  //   dataIndex: 'mediaUrl',
-  //   search: false,
-  //   show: false,
-  //   render: (text, record) => {
-  //     <img width={100} alt={record} src={record} />
-  //     console.log("record123", record.media)
-  //   }
-  // },
+// SERVICE REQUEST
+export const SERVICEREQUEST = [
   {
     title: 'STT',
     dataIndex: 'index',
@@ -195,40 +185,38 @@ export const REQUESTSERVICE = [
   },
   {
     title: 'Mã dịch vụ',
-    dataIndex: 'requestServiceId',
-    // key: 'requestServiceId',
+    dataIndex: 'serviceRequestId',
+    // key: 'serviceRequestId',
     show: false,
     search: false,
   },
   {
     title: 'Yêu cầu',
-    dataIndex: 'requestServiceDescription',
-    // key: 'request',
+    dataIndex: 'serviceRequestDescription',
+    key: 'serviceRequestDescription',
     search: false,
     render: (text, record) => {
-      return <Link to={{ pathname: `/requestservices/detail`, state: record }}>{record.requestServiceDescription}</Link>;
+      return <Link to={{ pathname: `/requestservices/detail`, state: record }}>{record.serviceRequestDescription}</Link>;
     },
   },
   {
     title: 'Ngày nhận',
-    dataIndex: 'requestServiceCreateDate',
-    // key: 'date',
+    dataIndex: 'serviceRequestCreateDate',
+    key: 'serviceRequestCreateDate',
     // search: false,
     // render: (_, { requestServiceCreateDate }) => <p>{requestServiceCreateDate ?? '-'}</p>,
     render: (text, record) => {
-      return <div>{moment(record.requestServiceCreateDate).format('D/M/Y')}</div>;
+      return <div>{moment(record.serviceRequestCreateDate).format('D/M/Y')}</div>;
     },
-    // renderFormItem: (item, props) => {
-    //   return <SelectRequestServiceDate {...props} />;
-    // },
 
     renderFormItem: (item, props) => {
-      return <SelectRequestServiceDate1 {...props} />;
+      return <SelectRequestServiceDate {...props} />;
     }
   },
   {
     title: 'Gói',
-    dataIndex: 'requestServicePackage',
+    dataIndex: 'serviceRequestPackage',
+    key: 'serviceRequestPackage',
     // show: false,
     search: false,
     tip:'Gói 1: Chỉ thuê nhân công, vật tư có sẵn - Gói 2: Thuê cả nhân công và vật tư',
@@ -243,8 +231,8 @@ export const REQUESTSERVICE = [
   },
   {
     title: 'Trạng thái',
-    dataIndex: 'RequestServiceStatus',
-    // key: 'statusId',
+    dataIndex: 'serviceRequestStatus',
+    key: 'serviceRequestStatus',
     valueEnum: {
       1: {
         text: 'Đã từ chối',
@@ -282,7 +270,8 @@ export const REQUESTSERVICE = [
     //   <Tag color={status ? 'green'  : 'blue' }>{status ? 'InChange' : 'Applying' }</Tag>
     // ),
     render: (text, record) => {
-      return <div>{record.requestServiceStatus.statusName}</div>;
+      console.log('record', record);
+      return <div>{record.serviceRequestStatusNavigation.statusName}</div>;
     },
     renderFormItem: (item, props) => {
       return <SelectRequestServiceStatus {...props} />;

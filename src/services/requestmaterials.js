@@ -16,8 +16,8 @@ export const updatePost = (PostId, prod) => {
   });
 };
 
-  export const getAllMaterialByRequestServiceID = (requestServiceID) => {
-    return request.get(`/Material/GetAllMaterialByRequestServiceID?id=${requestServiceID}`);
+  export const getAllMaterialByServiceRequestID = (serviceRequestId) => {
+    return request.get(`/Material/GetAllMaterialByServiceRequestID?id=${serviceRequestId}`);
   };
 
 export const getRequestMaterialByID = (id) => {
@@ -30,8 +30,8 @@ export const getAllRequestMaterial = (filters) => {
   });
 };
 
-export const getAllMaterialByRequestDetailID = (requestDetailId) => {
-  return request.get(`/Material/GetAllMaterialByRequestDetailID?id=${requestDetailId}`);
+export const getAllMaterialByRequestDetailID = (serviceRequestId) => {
+  return request.get(`/Material/GetAllMaterialByRequestDetailID?id=${serviceRequestId}`);
 };
 export const updateRequestMaterial = (id, quantityNew, message, prod) => {
   return request.put(
