@@ -60,8 +60,8 @@ namespace AnService_Capstone.Controllers
             string promotionCode2 = _helper.RandomString(10);
 
 
-            var res = await _promotionRepository.GeneratorPromotionCode(userID, promotionCode, "Người nhập mã", 0.05);
-            var res2 = await _promotionRepository.GeneratorPromotionCode(user2.UserID, promotionCode2, "Người gửi mã", 0.1);
+            var res = await _promotionRepository.GeneratorPromotionCode(userID, promotionCode, "MAGIAMGIANGUOIDUNGMOI", 0.05);
+            var res2 = await _promotionRepository.GeneratorPromotionCode(user2.UserID, promotionCode2, "MAGIAMGIANGUOIGIOITHIEU", 0.1);
 
             if (res == true && res2 == true)
             {

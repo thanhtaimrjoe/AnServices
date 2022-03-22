@@ -171,7 +171,7 @@ namespace AnService_Capstone.Controllers
         [Route("[action]")]
         public async Task<IActionResult> CreateContract(CreateContract contract)
         {
-            int res;
+            int res = 0;
 
             if (!ModelState.IsValid)
             {
@@ -185,7 +185,7 @@ namespace AnService_Capstone.Controllers
                 _ = await _contractRepository.UpdateContract(contract, check.ContractId);
                 foreach (var updateDetail in contract.updatePriceRequestDetails)
                 {
-                    _ = await _serviceRepository.UpdatePriceServiceRequestDetail(updateDetail.RequestDetailID, updateDetail.RequestDetailPrice, updateDetail.RequestDetailDescription);
+                    _ = await _serviceRepository.UpdatePriceServiceRequestDetail(updateDetail.RequestDetailID, updateDetail.RequestDetailPrice);
                 }
                 return Ok(check.ContractId);
             }
@@ -193,10 +193,14 @@ namespace AnService_Capstone.Controllers
             res = await _contractRepository.CreateContract(contract);
             foreach (var updateDetail in contract.updatePriceRequestDetails)
             {
-                _ = await _serviceRepository.UpdatePriceServiceRequestDetail(updateDetail.RequestDetailID, updateDetail.RequestDetailPrice, updateDetail.RequestDetailDescription);
+                _ = await _serviceRepository.UpdatePriceServiceRequestDetail(updateDetail.RequestDetailID, updateDetail.RequestDetailPrice);
             }
 
-            return Ok(res);
+            if (res > 0)
+            {
+                return Ok("Create successfull");
+            }
+            return BadRequest(new ErrorResponse("Create fail")); ;
             /*else
             {
                 res = await _contractRepository.CreateContract(contract);

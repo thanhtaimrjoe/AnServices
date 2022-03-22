@@ -44,7 +44,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
                 "where PhoneNumber = @PhoneNumber and Status = 4";*/
             var query = "select UserID, Username, Password, FullName, PhoneNumber, Address, Email, InviteCode, RoleName, CreateDate, Status " +
                 "from (tblUsers u join tblRoles r on u.Role = r.RoleID) " +
-                "where PhoneNumber = @PhoneNumber and Status = 4";
+                "where PhoneNumber = @PhoneNumber";
             using (var connection = _context.CreateConnection())
             {
                 connection.Open();

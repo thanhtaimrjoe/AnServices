@@ -65,6 +65,16 @@ namespace AnService_Capstone.Controllers
             }
             if (serviceDetail != false && media != false)
             {
+                var check = await _serviceRepository.CheckServiceRequestByUserIDOfTheDay(model.CustomerId);
+                if (!check)
+                {
+                    var user = await _userRepository.GetCustomerByID(model.CustomerId);
+                    var formatPhone = _utilHelper.FormatPhoneNumber(user.PhoneNumber);
+                    _twilioService.SendSMS(formatPhone, "Your account has been blocked because you have submitted more than 3 service requests. ");
+                    _ = _userRepository.UpdateStatusUserByID(model.CustomerId, 10);
+                    return BadRequest(new ErrorResponse("Your account has been banned"));
+                    /*return Ok("Your account has been banned");*/
+                }
                 return Ok("Create Successfull");
             }
             return BadRequest(new ErrorResponse("Create Fail"));
@@ -208,6 +218,11 @@ namespace AnService_Capstone.Controllers
         {
             IEnumerable<TblServiceRequest> service;
 
+            if (ServiceRequestCreateDate != null)
+            {
+                ServiceRequestCreateDate = DateTime.ParseExact(ServiceRequestCreateDate, "yyyy-MM-dd HH:mm:ss",
+                                           System.Globalization.CultureInfo.InvariantCulture).ToString("d");
+            }
             if (ServiceRequestStatus == 0 && ServiceRequestCreateDate == null)
             {
                 service = await _serviceRepository.GetAllServiceRequest();
@@ -566,6 +581,44 @@ namespace AnService_Capstone.Controllers
                 return NotFound(new ErrorResponse("Cancel Fail"));
             }
             return Ok("Cancel Successful");
+        }
+
+        [HttpPut]
+        [Route("[action]")]
+        public async Task<IActionResult> CompleteServiceRequest(int serviceRequestID)
+        {
+            if (serviceRequestID == 0)
+            {
+                return BadRequest(new ErrorResponse("Please enter serviceRequestID"));
+            }
+
+            var res = await _serviceRepository.UpdateStatusServiceRequest(serviceRequestID, 13);
+
+            if (res)
+            {
+                return Ok("Update Successful");
+            }
+
+            return BadRequest(new ErrorResponse("Update Fail"));
+        }
+
+        [HttpPut]
+        [Route("[action]")]
+        public async Task<IActionResult> SurveyingServiceRequest(int serviceRequestID)
+        {
+            if (serviceRequestID == 0)
+            {
+                return BadRequest(new ErrorResponse("Please enter serviceRequestID"));
+            }
+
+            var res = await _serviceRepository.UpdateStatusServiceRequest(serviceRequestID, 15);
+
+            if (res)
+            {
+                return Ok("Update Successful");
+            }
+
+            return BadRequest(new ErrorResponse("Update Fail"));
         }
 
         /*[HttpPut]

@@ -22,12 +22,12 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
 
         public async Task<bool> CheckEnteredCode(int userID)
         {
-            var query = "select * from tblPromotion where PromotionDescription = 'Người nhập mã'";
+            var query = "select * from tblPromotion where PromotionDescription = 'MAGIAMGIANGUOIDUNGMOI' and CustomerID = @CustomerID";
 
             using (var connection = _dapperContext.CreateConnection())
             {
                 connection.Open();
-                var res = await connection.QueryAsync(query);
+                var res = await connection.QueryAsync(query, new { @CustomerID = userID});
                 connection.Close();
                 if (res.Any())
                 {

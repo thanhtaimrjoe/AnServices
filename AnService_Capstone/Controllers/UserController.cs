@@ -28,10 +28,11 @@ namespace AnService_Capstone.Controllers
         private readonly UtilHelper _otpGenerator;
         private readonly IPromotionRepository _promotionRepository;
         private readonly TwilioService _twilioService;
+        private readonly UtilHelper _utilHelper;
 
         public UserController(IUserRepository userRepository, AccessTokenGenerator accessTokenGenerator, 
             RefreshTokenGenerator refreshTokenGenerator, UtilHelper otpGenerator,
-            IPromotionRepository promotionRepository, TwilioService twilioService)
+            IPromotionRepository promotionRepository, TwilioService twilioService, UtilHelper   utilHelper)
         {
             _userRepository = userRepository;
             _accessTokenGenerator = accessTokenGenerator;
@@ -39,6 +40,7 @@ namespace AnService_Capstone.Controllers
             _otpGenerator = otpGenerator;
             _promotionRepository = promotionRepository;
             _twilioService = twilioService;
+            _utilHelper = utilHelper;
         }
 
 
@@ -93,6 +95,11 @@ namespace AnService_Capstone.Controllers
             {
                 return NotFound(new ErrorResponse("Phone number is not exists"));
             }
+
+            /*if (user.Status == 10)
+            {
+                return BadRequest(new ErrorResponse("Your account have been banned"));
+            }*/
 
             var refreshToken = _refreshTokenGenerator.GenerateToken();
             var token = _accessTokenGenerator.GenerateToken(user, refreshToken);
@@ -462,11 +469,15 @@ namespace AnService_Capstone.Controllers
             }
 
             var res = await _userRepository.UpdateStatusUserByID(id, 10);
-            if (!res)
+            if (res)
             {
-                return BadRequest(new ErrorResponse("Update Fail"));
+                var user = await _userRepository.GetCustomerByID(id);
+                var formatPhone = _utilHelper.FormatPhoneNumber(user.PhoneNumber);
+                _twilioService.SendSMS(formatPhone, "Your account has been blocked because you have submitted more than 3 service requests. ");
+                return Ok("Update Successful");
             }
-            return Ok("Update Successful");
+
+            return BadRequest(new ErrorResponse("Update Fail"));
         }
 
         /// <summary>

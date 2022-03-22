@@ -168,11 +168,11 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
                 "from ((tblServiceRequest rs join tblUsers u on rs.CustomerID = u.UserID) join tblStatus sta on rs.ServiceRequestStatus = sta.StatusID) join tblMedia media on rs.ServiceRequestID = media.ServiceRequestID " +
                 "order by case " +
                 "when ServiceRequestStatus = 2 then 0 " +
-                "when ServiceRequestStatus = 9 then 1 " +
-                "when ServiceRequestStatus = 14 then 2 " +
+                "when ServiceRequestStatus = 15 then 1 " +
+                "when ServiceRequestStatus = 3 then 2 " +
                 "when ServiceRequestStatus = 6 then 3 " +
-                "when ServiceRequestStatus = 3 then 4 " +
-                "when ServiceRequestStatus = 8 then 5 " +
+                "when ServiceRequestStatus = 14 then 4 " +
+                "when ServiceRequestStatus = 13 then 5 " +
                 "when ServiceRequestStatus = 1 then 6 " +
                 " end, ServiceRequestCreateDate DESC";
 
@@ -618,14 +618,14 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             }
         }
 
-        public async Task<bool> UpdatePriceServiceRequestDetail(int id, float price, string des)
+        public async Task<bool> UpdatePriceServiceRequestDetail(int id, float price)
         {
-            var query = "update tblRequestDetails set RequestDetailPrice = @RequestDetailPrice, RequestDetailDescription = @RequestDetailDescription where RequestDetailID = @RequestDetailID";
+            var query = "update tblRequestDetails set RequestDetailPrice = @RequestDetailPrice where RequestDetailID = @RequestDetailID";
 
             using (var connection = _context.CreateConnection())
             {
                 connection.Open();
-                var res = await connection.ExecuteAsync(query, new { @RequestDetailPrice = price, @RequestDetailDescription = des, @RequestDetailID = id });
+                var res = await connection.ExecuteAsync(query, new { @RequestDetailPrice = price, @RequestDetailID = id });
                 connection.Close();
                 if (res == 0)
                 {
@@ -655,15 +655,18 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
         public async Task<bool> CheckServiceRequestByUserIDOfTheDay(int id)
         {
             var query = "select ServiceRequestID, CustomerID, CustomerName, CustomerPhone, CustomerAddress, ServiceRequestDescription, ServiceRequestCreateDate, ServiceRequestPackage " +
-                "from tblRequestServices " +
-                "where CustomerID = @CustomerID and ServiceRequestCreateDate = @ServiceRequestCreateDate";
+                "from tblServiceRequest " +
+                "where CustomerID = @CustomerID and ServiceRequestCreateDate between @ServiceRequestCreateDateStart and @ServiceRequestCreateDateEnd";
+
+            string dayStart = DateTime.Today.ToString("d") + " 00:00:00";
+            string dayEnd = DateTime.Today.ToString("d") + " 23:59:59";
 
             using (var connection = _context.CreateConnection())
             {
                 connection.Open();
-                var res = await connection.QueryAsync(query, new { @CustomerID = id, @ServiceRequestCreateDate = DateTime.Today.ToString("d") });
+                var res = await connection.QueryAsync(query, new { @CustomerID = id, @ServiceRequestCreateDateStart = dayStart, @ServiceRequestCreateDateEnd = dayEnd });
                 connection.Close();
-                if (res.Count() < 3)
+                if (res.Count() < 4)
                 {
                     return true;
                 }
