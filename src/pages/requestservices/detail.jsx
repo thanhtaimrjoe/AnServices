@@ -33,9 +33,12 @@ import { normalizeReportForm } from '@/utils/utils';
 import {
   assignWorkerToRequest,
   cancelServiceRequest,
+  completeServiceRequest,
   getAllServiceRequestDetailsByServiceRequestID,
   getRepairDetailByServiceRequestID,
   getServiceRequestByID,
+  getTest,
+  surveyingServiceRequest,
 } from '@/services/requestservices';
 import {
   denyStatusRequestMaterial,
@@ -52,6 +55,7 @@ import ProTable from '@ant-design/pro-table';
 import {
   CheckOutlined,
   CloseOutlined,
+  FieldTimeOutlined,
   InfoCircleOutlined,
   LoadingOutlined,
   PlusOutlined,
@@ -109,6 +113,12 @@ const DetailServiceRequest = (props) => {
   const [disable, setDisable] = React.useState(true);
   const [disableInvoice, setDisableInvoice] = React.useState(true);
   const [disableStaffCoordinator, setDisableStaffCoordinator] = React.useState(true);
+  const [disableRejectServicerRequest, setDisableRejectServicerRequest] = React.useState(true);
+  const [disableCompleteServicerRequest, setDisableCompleteServicerRequest] = React.useState(true);
+  const [disableSurveyingServicerRequest, setDisableSurveyingServicerRequest] = React.useState(true);
+
+
+
 
   const [updatePriceRequestDetailsData, setUpdatePriceRequestDetailsData] = useState([]);
   const { RangePicker } = DatePicker;
@@ -132,8 +142,6 @@ const DetailServiceRequest = (props) => {
   const [Url, setUrl] = useState('');
   const upload = async () => {
     try {
-
-      console.log('recordfile1', file);
       const fileName = Date.now() + file.name;
       // const fileName = file.name;
 
@@ -148,18 +156,6 @@ const DetailServiceRequest = (props) => {
     } catch (error) {
       console.log(error);
     }
-
-  
-    // Sending File to Firebase Storage
-    // storage.ref(`/files/${file.name}`).put(file)
-    //   .on("state_changed", alert("success"), alert, () => {
-  
-    //     // Getting Download Link
-    //     storage.ref("files").child(file.name).getDownloadURL()
-    //       .then((url) => {
-    //         setUrl(url);
-    //       })
-    //   });
   };
   // ======================================
 
@@ -185,7 +181,7 @@ const DetailServiceRequest = (props) => {
   useEffect(() => {
     // form.setFieldsValue(updateRequestServiceState);
     getServiceRequestByID(updateRequestServiceState.serviceRequestId).then((res) => {
-      console.log('record001', updateRequestServiceState);
+      console.log('record01', updateRequestServiceState);
       setCustomerName(res.customerName);
       setUserID(res.customer.userId);
       setFullName(res.customer.fullName);
@@ -194,26 +190,40 @@ const DetailServiceRequest = (props) => {
       setServiceRequestCreateDate(res.serviceRequestCreateDate.split('T', 1));
       setServiceRequestCreateDate(moment(res.serviceRequestCreateDate).format('DD/MM/YYYY'));
     });
+    if(updateRequestServiceState.serviceRequestStatus === 15) {
+      setDisableRejectServicerRequest(false);
+    }
+    if(updateRequestServiceState.serviceRequestStatus === 2) {
+      setDisableSurveyingServicerRequest(false); 
+      setDisableRejectServicerRequest(false);
+    }
+    if(updateRequestServiceState.serviceRequestStatus === 14) {
+      setDisableCompleteServicerRequest(false);
+    }
   }, [updateRequestServiceState]);
 
   // Data cho chi tiết dịch vụ table
   const [requestServiceRecord, setRequestServiceDetail] = useState([]);
   const [staffCoordinatorRecord, setStaffCoordinatorRecord] = useState([]);
   useEffect(() => {
-    getAllServiceRequestDetailsByServiceRequestID(updateRequestServiceState.serviceRequestId)
+    // getAllServiceRequestDetailsByServiceRequestID(updateRequestServiceState.serviceRequestId)
+    getTest(updateRequestServiceState.serviceRequestId)
       .then((record) => {
         setRequestServiceDetail(record);
         setIsLoad(true);
         let result = 0;
+        let tmp = true;
         record.map((e) => {
-          if(e.requestDetailStatus === 11) {
+          if(e.requestDetailStatus === 11) { 
             result += e.requestDetailPrice
-            setDisableInvoice(false);
           }
-          // if(e.requestDetailStatus === 2) {
-          //   setDisableStaffCoordinator(false);
-          // }
+          if(e.requestDetailStatus === 9 || e.requestDetailStatus === 2 || e.requestDetailStatus === 6) {
+            tmp = false;
+          }
         })
+        if(tmp) {
+          setDisableInvoice(false);
+        }
         setInvoiceTotalPrice(result)
       })
       .catch(setIsLoad(false));
@@ -233,13 +243,14 @@ const DetailServiceRequest = (props) => {
   const [messageDataRecord, setMessageDataRecord] = useState();
   const [quantityNewDataRecord, setQuantityNewDataRecord] = useState();
   const [materialIdDataRecord, setMaterialIdDataRecord] = useState();
+  const [contractIDRecord, setContractIDRecord] = useState();
+
 
   // ====================
   // tạo hợp đồng
   const [contractUrl, setContractUrl] = useState();
-  // const createContractFile = "https://docs.google.com/document/d/16UhbIyXXBFTlPRNnDiU9rnv4__HEiqsX/edit?usp=sharing&ouid=106209939784621025179&rtpof=true&sd=true"
   const createContractFile =
-    'https://firebasestorage.googleapis.com/v0/b/anservice-986ae.appspot.com/o/files%2Fmau-hop-dong-thi-cong-xay-dung.docx?alt=media&token=5d03bb8a-c53e-4405-84de-f2a557d05e1f';
+  'https://firebasestorage.googleapis.com/v0/b/anservices.appspot.com/o/files%2Fmau-hop-dong-thi-cong-xay-dung.docx?alt=media&token=070b2352-1ae8-42a4-9850-182a8910a5a6'
   // ====================
 
   const [workerByServiceId, setWorkerByServiceId] = useState([]);
@@ -252,6 +263,11 @@ const DetailServiceRequest = (props) => {
       });
       getContractListByUserID(updateRequestServiceState.customer.userId).then((record) => {
         setContractRecord(record);
+        record.map((item) => {
+          if(item.serviceRequestId === updateRequestServiceState.serviceRequestId) {
+            setContractIDRecord(item.contractId);
+          }
+        })
       });
     }
     // Data cho chi tiết vật tư yêu cầu
@@ -328,6 +344,24 @@ const DetailServiceRequest = (props) => {
     // const update = normalizeReportForm(formData);
     return cancelServiceRequest(updateRequestServiceState.serviceRequestId).then(() =>
       history.replace('/requestservices/list'),
+      message.success(`Yêu cầu ${updateRequestServiceState.serviceRequestDescription} đã được từ chối thành công`),
+    );
+  };
+
+  const onSurveyingServiceRequest = () => {
+    // const update = normalizeReportForm(formData);
+    return surveyingServiceRequest(updateRequestServiceState.serviceRequestId).then(() =>
+      history.replace('/requestservices/list'),
+      message.success(`Yêu cầu ${updateRequestServiceState.serviceRequestDescription} đã được goi khảo sát thành công`),
+  );
+  };
+
+  const onCompleteServiceRequest = () => {
+    // const update = normalizeReportForm(formData);
+    return completeServiceRequest(updateRequestServiceState.serviceRequestId).then(() =>
+      history.replace('/requestservices/list'),
+      message.success(`Yêu cầu ${updateRequestServiceState.serviceRequestDescription} hoàn thành`),
+
     );
   };
 
@@ -440,7 +474,9 @@ const DetailServiceRequest = (props) => {
       }, 2000);
 
   const update = normalizeReportForm(formData);
-    return approveStatusRequestMaterial(values, update)
+    return approveStatusRequestMaterial(values, update).then(() => {
+      window.location.reload(true);
+    })
   };
 
   const showModalAdjusted = (record) => {
@@ -469,6 +505,7 @@ const DetailServiceRequest = (props) => {
         form.resetFields();
         setConfirmLoading(false);
         setVisible1(false);
+        window.location.reload(true);
       })
       .catch((info) => {
         console.log('Xác thực không thành công:', info);
@@ -487,6 +524,7 @@ const DetailServiceRequest = (props) => {
         form.resetFields();
         setConfirmLoading(false);
         setVisible(false);
+        window.location.reload(true);
       })
       .catch((info) => {
         console.log('Xác thực không thành công:', info);
@@ -502,10 +540,10 @@ const DetailServiceRequest = (props) => {
   };
 
   const onCreateContract = async () => {
-    // setSendContractConfirmLoading(true);
-    // setTimeout(() => {
-    //   setSendContractConfirmLoading(false);
-    // }, 10000);
+    setSendContractConfirmLoading(true);
+    setTimeout(() => {
+      setSendContractConfirmLoading(false);
+    }, 2000);
     let validate = true;
     // if (!Url) {
     //   validate = false;
@@ -553,6 +591,7 @@ const DetailServiceRequest = (props) => {
         .then((res) => {
           console.log('contract12', createContractData);
           setConfirmLoading(true);
+          // window.location.reload(true);
         })
         .catch((info) => {
           console.log('Xác thực không thành công:', info);
@@ -561,16 +600,26 @@ const DetailServiceRequest = (props) => {
     }
   };
 
+  
+  
+
+
   const onCreateInvoice = () =>  {
     setSendInvoiceConfirmLoading(true);
     setTimeout(() => {
       setSendInvoiceConfirmLoading(false);
     }, 2000);
-    return createInvoice(updateRequestServiceState.serviceRequestId, invoiceTotalPrice)
+
+    const createInvoiceData = {
+      serviceRequestID: updateRequestServiceState.serviceRequestId,
+      contractID: contractIDRecord,
+    };
+    return createInvoice(createInvoiceData)
     .then((res) => {
-      if(res.status === 500) {
-        message.error("Hoá đơn này đã được gửi");
-      }
+      // if(res.status === 500) {
+      //   message.error("Hoá đơn này đã được gửi");
+      // }
+      message.success(`Hoá đơn cho yêu cầu ${updateRequestServiceState.serviceRequestDescription} đã được gửi`);
       setDisableInvoice(true);
     })
   }
@@ -717,6 +766,8 @@ const DetailServiceRequest = (props) => {
       search: false,
       show: false,
       render: (text, record) => {
+        // console.log('record03', record);
+        // record.tblRepairDetails.map((e) => console.log('record04', e));
         return (
           <CommonSelect.SelectRequestServicePriority style={{width:160}} onChange={onChangePriority} />
         );
@@ -731,7 +782,7 @@ const DetailServiceRequest = (props) => {
       render: (text, record) => {
         const updateWorkerState = { ...record };
         // getWorkerByServiceId(record.serviceId);
-        console.log('record01', record);
+        console.log('record02', record);
         return (
           <Space size="middle">
             <Select
@@ -850,6 +901,9 @@ const DetailServiceRequest = (props) => {
             {record.serviceRequestId === updateRequestServiceState.serviceRequestId && (
               <a onClick={enableContractForm}>Sửa hợp đồng</a>
             )}
+            {record.serviceRequestId !== updateRequestServiceState.serviceRequestId && (
+              <a>Hợp đồng của yêu cầu khác</a>
+            )}
           </Space>
         );
       },
@@ -929,7 +983,6 @@ const DetailServiceRequest = (props) => {
       //   },
       // },
       render: (text, record) => {
-        // console.log("record01", record);
         return <div>{record?.status?.statusName}</div>;
       },
     },
@@ -945,7 +998,7 @@ const DetailServiceRequest = (props) => {
               <Space>
                 <Button
                   type="primary"
-                  loading={okConfirmLoading}
+                  // loading={okConfirmLoading}
                   onClick={() => onAcceptRequestMaterial(updateRequestMaterialState.usedMaterialId)}
                 >
                   Đồng ý
@@ -1204,7 +1257,7 @@ const DetailServiceRequest = (props) => {
                     disabled={disable}
                     defaultValue={moment(contractEndDateData1, 'YYYY-MM-DD')}
                     onChange={onChangeEndDate}
-                    disabledDate={(d) => !d || d.isBefore(moment().startOf('day'))}
+                    disabledDate={(d) => !d || d.isBefore(moment(contractStartDateData, 'YYYY-MM-DD').startOf('day'))}
                     style={{ width: 390 }}
                     format="YYYY-MM-DD"
                     placeholder={['Chọn ngày kết thúc']}
@@ -1215,7 +1268,7 @@ const DetailServiceRequest = (props) => {
                   <DatePicker
                     disabled={disable}
                     onChange={onChangeEndDate}
-                    disabledDate={(d) => !d || d.isBefore(moment().startOf('day'))}
+                    disabledDate={(d) => !d || d.isBefore(moment(contractStartDateData, 'YYYY-MM-DD').startOf('day'))}
                     style={{ width: 390 }}
                     format="YYYY-MM-DD"
                     placeholder={['Chọn ngày kết thúc']}
@@ -1240,8 +1293,11 @@ const DetailServiceRequest = (props) => {
                   >
                     <Option value={0}>0%</Option>
                     <Option value={0.1}>10%</Option>
+                    <Option value={0.2}>20%</Option>
                     <Option value={0.3}>30%</Option>
+                    <Option value={0.4}>40%</Option>
                     <Option value={0.5}>50%</Option>
+                    <Option value={0.6}>60%</Option>
                     <Option value={0.7}>70%</Option>
                   </Select>
                 </ProForm.Item>
@@ -1250,8 +1306,11 @@ const DetailServiceRequest = (props) => {
                   <Select disabled={disable} defaultValue={0} onChange={setContractDepositData}>
                     <Option value={0}>0%</Option>
                     <Option value={0.1}>10%</Option>
+                    <Option value={0.2}>20%</Option>
                     <Option value={0.3}>30%</Option>
+                    <Option value={0.4}>40%</Option>
                     <Option value={0.5}>50%</Option>
+                    <Option value={0.6}>60%</Option>
                     <Option value={0.7}>70%</Option>
                   </Select>
                 </ProForm.Item>
@@ -1322,8 +1381,7 @@ const DetailServiceRequest = (props) => {
             <Upload
               maxCount={1}
               onChange={(e) => {
-                setFile(e.fileList[0]);
-                console.log('recordfile', e);
+                setFile(e.file.originFileObj);
               }}
 
             >
@@ -1456,12 +1514,23 @@ const DetailServiceRequest = (props) => {
               btnProps={{ type: 'default', icon: <RollbackOutlined /> }}
               onClick={onBackList}
             />
+            <AsyncButton 
+              title="Đã gọi khảo sát" 
+              btnProps={{ type: 'dashed', icon: <FieldTimeOutlined />, disabled:disableSurveyingServicerRequest }} 
+              onClick={onSurveyingServiceRequest}
+              />
+
             <AsyncButton
               title="Từ chối"
-              btnProps={{ type: 'danger', icon: <CloseOutlined /> }}
+              btnProps={{ type: 'danger', icon: <CloseOutlined />, disabled:disableRejectServicerRequest }}
               onClick={onRejectorCancelServiceRequest}
             />
-            {/* <AsyncButton title="Xác nhận" btnProps={{ type: 'primary', icon: <CheckOutlined /> }} /> */}
+            
+            <AsyncButton 
+              title="Hoàn Thành" 
+              btnProps={{ type: 'primary', icon: <CheckOutlined />, disabled:disableCompleteServicerRequest }} 
+              onClick={onCompleteServiceRequest}
+            />
           </FooterToolbar>
         </Card>
       </Form>

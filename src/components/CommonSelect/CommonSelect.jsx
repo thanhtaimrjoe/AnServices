@@ -215,12 +215,12 @@ const SelectRequestServiceStatus = (props) => {
       fetchOnFirst
       options={[
         {
-          value: '1',
-          label: 'Đã từ chối',
-        },
-        {
           value: '2',
           label: 'Chưa xử lý',
+        },
+        {
+          value: '15',
+          label: 'Đang khảo sát',
         },
         {
           value: '3',
@@ -230,14 +230,26 @@ const SelectRequestServiceStatus = (props) => {
           value: '6',
           label: 'Đang xử lý',
         },
-        {
-          value: '9',
-          label: 'Chờ xác nhận',
-        },
+        // {
+        //   value: '9',
+        //   label: 'Chờ xác nhận',
+        // },
         {
           value: '14',
           label: 'Chờ thanh toán',
         },
+        {
+          value: '13',
+          label: 'Đã hoàn thành',
+        },
+        {
+          value: '1',
+          label: 'Đã từ chối',
+        },
+        
+        
+        
+        
       ]}
       {...props}
     />
@@ -272,7 +284,7 @@ const SelectRequestServiceDate = (props) => {
         placeholder="Vui lòng chọn ngày gửi yêu cầu" 
         locale={locale}
         fetchOnFirst
-        // buildOptions={buildRequestServiceDateOption}
+        buildOptions={buildRequestServiceDateOption}
         onSearch={getAllServiceRequestStatusOrDate}
         format="D/M/YYYY"
         {...props}

@@ -82,7 +82,7 @@ const BasicStep = ({ customerName, userID, fullName, phoneNumber, address,
         <Row gutter={16}>
           <Col span={12}>
             <ProForm.Item
-              name="requestServiceDescription"
+              name="serviceRequestDescription"
               label="Mô tả yêu cầu"
             >
               <Input.TextArea rows={1} readOnly placeholder='Không có'/>
@@ -103,7 +103,7 @@ const BasicStep = ({ customerName, userID, fullName, phoneNumber, address,
         <Row gutter={16}>
           <Col span={12}>
             <ProForm.Item 
-              name="requestServicePackage" 
+              name="serviceRequestPackage" 
               label="Gói"
             >
               <CommonSelect.SelectRequestServicePackage disabled />

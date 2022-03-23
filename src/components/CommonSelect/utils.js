@@ -28,9 +28,9 @@ export const buildNumberOption = (storeData = []) =>
 // REQUEST SERVICE
 
 export const buildRequestServiceDateOption = (data) =>
-data?.map(({ requestServiceId, requestServiceCreateDate }) => (
-  <Select.Option value={requestServiceCreateDate} key={requestServiceId}>
-    {requestServiceCreateDate.split('T',1)[0]}
+data?.map(({ serviceRequestId, serviceRequestCreateDate }) => (
+  <Select.Option value={serviceRequestCreateDate} key={serviceRequestId}>
+    {serviceRequestCreateDate.split('T',1)[0]}
   </Select.Option>
 ));
 

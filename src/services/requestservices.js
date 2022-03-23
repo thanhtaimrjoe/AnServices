@@ -65,6 +65,19 @@ export const cancelServiceRequest = (id) => {
   return request.put(`/Service/CancelServiceRequestForStaff?id=${id}`);
 };
 
+export const completeServiceRequest = (id) => {
+  return request.put(`/Service/CompleteServiceRequest?serviceRequestID=${id}`);
+};
+
+export const surveyingServiceRequest = (id) => {
+  return request.put(`/Service/SurveyingServiceRequest?serviceRequestID=${id}`);
+};
+
 export const getRepairDetailByServiceRequestID = (serviceRequestId) => {
   return request.get(`/RepairDetail/GetRepairDetailByServiceRequestID?requestServiceId=${serviceRequestId}`);
+};
+
+
+export const getTest = (serviceRequestId) => {
+  return request.get(`/Service/Test?id=${serviceRequestId}`);
 };

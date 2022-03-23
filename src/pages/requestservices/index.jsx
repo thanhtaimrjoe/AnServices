@@ -81,8 +81,8 @@ const ServiceRequestList = ({ history }) => {
               resource="Service/GetAllServiceRequestStatusOrDate?serviceRequestStatus=2"
             />
           </TabPane>
-          <TabPane tab="Yêu cầu đang xử lý" key="3">
-          <ResoTable
+          <TabPane tab="Yêu cầu đang kháo sát" key="3">
+            <ResoTable
               toolBarRender={false}
               search={false}
               scroll={{ x: 600 }}
@@ -103,7 +103,7 @@ const ServiceRequestList = ({ history }) => {
               actionRef={ref}
               rowKey="serviceRequestId"
               columns={SERVICEREQUEST}
-              resource="Service/GetAllServiceRequestStatusOrDate?serviceRequestStatus=6"
+              resource="Service/GetAllServiceRequestStatusOrDate?serviceRequestStatus=15"
             />
           </TabPane>
           <TabPane tab="Yêu cầu đã đồng ý" key="4">
@@ -131,8 +131,8 @@ const ServiceRequestList = ({ history }) => {
               resource="Service/GetAllServiceRequestStatusOrDate?serviceRequestStatus=3"
             />
           </TabPane>
-          <TabPane tab="Yêu cầu đã từ chối" key="5">
-            <ResoTable
+          <TabPane tab="Yêu cầu đang xử lý" key="5">
+          <ResoTable
               toolBarRender={false}
               search={false}
               scroll={{ x: 600 }}
@@ -153,35 +153,10 @@ const ServiceRequestList = ({ history }) => {
               actionRef={ref}
               rowKey="serviceRequestId"
               columns={SERVICEREQUEST}
-              resource="Service/GetAllServiceRequestStatusOrDate?serviceRequestStatus=1"
+              resource="Service/GetAllServiceRequestStatusOrDate?serviceRequestStatus=6"
             />
           </TabPane>
-          <TabPane tab="Yêu cầu chờ xác nhận" key="6">
-            <ResoTable
-              toolBarRender={false}
-              search={false}
-              scroll={{ x: 600 }}
-              tableAlertOptionRender={({ _, __, onCleanSelected }) => [
-                <AsyncButton
-                  isNeedConfirm={{
-                    title: 'Xác nhận xoá',
-                    content: 'Bạn có muốn xoá yêu cầu này không?',
-                    okText: 'Xác nhận',
-                    cancelText: 'Huỷ',
-                  }}
-                  btnProps={{ danger: true, type: 'link' }}
-                  onClick={() => deleteServiceRequestHandler().then(onCleanSelected)}
-                  title={`Xoá ${selectedRows.length} yêu cầu`}
-                />,
-              ]}
-              rowSelection={rowSelection}
-              actionRef={ref}
-              rowKey="serviceRequestId"
-              columns={SERVICEREQUEST}
-              resource="Service/GetAllServiceRequestStatusOrDate?serviceRequestStatus=9"
-            />
-          </TabPane>
-          <TabPane tab="Yêu cầu chờ KH thanh toán" key="7">
+          <TabPane tab="Yêu cầu chờ KH thanh toán" key="6">
             <ResoTable
               toolBarRender={false}
               search={false}
@@ -204,6 +179,56 @@ const ServiceRequestList = ({ history }) => {
               rowKey="serviceRequestId"
               columns={SERVICEREQUEST}
               resource="Service/GetAllServiceRequestStatusOrDate?serviceRequestStatus=14"
+            />
+          </TabPane>
+          <TabPane tab="Yêu cầu đã hoàn thành" key="7">
+            <ResoTable
+              toolBarRender={false}
+              search={false}
+              scroll={{ x: 600 }}
+              tableAlertOptionRender={({ _, __, onCleanSelected }) => [
+                <AsyncButton
+                  isNeedConfirm={{
+                    title: 'Xác nhận xoá',
+                    content: 'Bạn có muốn xoá yêu cầu này không?',
+                    okText: 'Xác nhận',
+                    cancelText: 'Huỷ',
+                  }}
+                  btnProps={{ danger: true, type: 'link' }}
+                  onClick={() => deleteServiceRequestHandler().then(onCleanSelected)}
+                  title={`Xoá ${selectedRows.length} yêu cầu`}
+                />,
+              ]}
+              rowSelection={rowSelection}
+              actionRef={ref}
+              rowKey="serviceRequestId"
+              columns={SERVICEREQUEST}
+              resource="Service/GetAllServiceRequestStatusOrDate?serviceRequestStatus=13"
+            />
+          </TabPane>
+          <TabPane tab="Yêu cầu đã từ chối" key="8">
+            <ResoTable
+              toolBarRender={false}
+              search={false}
+              scroll={{ x: 600 }}
+              tableAlertOptionRender={({ _, __, onCleanSelected }) => [
+                <AsyncButton
+                  isNeedConfirm={{
+                    title: 'Xác nhận xoá',
+                    content: 'Bạn có muốn xoá yêu cầu này không?',
+                    okText: 'Xác nhận',
+                    cancelText: 'Huỷ',
+                  }}
+                  btnProps={{ danger: true, type: 'link' }}
+                  onClick={() => deleteServiceRequestHandler().then(onCleanSelected)}
+                  title={`Xoá ${selectedRows.length} yêu cầu`}
+                />,
+              ]}
+              rowSelection={rowSelection}
+              actionRef={ref}
+              rowKey="serviceRequestId"
+              columns={SERVICEREQUEST}
+              resource="Service/GetAllServiceRequestStatusOrDate?serviceRequestStatus=1"
             />
           </TabPane>
         </Tabs>

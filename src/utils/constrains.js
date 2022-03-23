@@ -233,38 +233,6 @@ export const SERVICEREQUEST = [
     title: 'Trạng thái',
     dataIndex: 'serviceRequestStatus',
     key: 'serviceRequestStatus',
-    valueEnum: {
-      1: {
-        text: 'Đã từ chối',
-        status: 'Error',
-      },
-      2: {
-        text: 'Chưa xử lý',
-        status: 'Warning',
-      },
-      3: {
-        text: 'Đã đồng ý',
-        status: 'Success',
-      },
-      // 4: {
-      //   text: 'Kích hoạt',
-      //   status: 'Success',
-      // },
-      // 5: {
-      //   text: 'Không kích hoạt',
-      //   status: 'Default',
-      // },
-      6: {
-        text: 'Đang xử lý',
-        status: 'Processing',
-      },
-      9: {
-        text: 'Chờ xác nhận',
-      },
-      14: {
-        text: 'Chờ thanh toán',
-      }
-    },
     // valueType: 'select',
     // render: (_, { status }) => (
     //   <Tag color={status ? 'green'  : 'blue' }>{status ? 'InChange' : 'Applying' }</Tag>
