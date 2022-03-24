@@ -77,6 +77,9 @@ export const getRepairDetailByServiceRequestID = (serviceRequestId) => {
   return request.get(`/RepairDetail/GetRepairDetailByServiceRequestID?requestServiceId=${serviceRequestId}`);
 };
 
+export const reworkRequestDetail = (requestDetailId) => {
+  return request.put(`/Service/ReworkRequestDetail?requestDetailID=${requestDetailId}`);
+};
 
 export const getTest = (serviceRequestId) => {
   return request.get(`/Service/Test?id=${serviceRequestId}`);

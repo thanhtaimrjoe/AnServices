@@ -38,6 +38,7 @@ import {
   getRepairDetailByServiceRequestID,
   getServiceRequestByID,
   getTest,
+  reworkRequestDetail,
   surveyingServiceRequest,
 } from '@/services/requestservices';
 import {
@@ -104,7 +105,6 @@ const DetailServiceRequest = (props) => {
   const [staffCoordinatorConfirmLoading, setStaffCoordinatorConfirmLoading] = React.useState(false);
   const [okConfirmLoading, setOkConfirmLoading] = React.useState(false);
 
-
   const [isLoad, setIsLoad] = useState(false);
   const [staffCoordinator, setStaffCoordinator] = useState([]);
   const [mainStaffCoordinator, setMainStaffCoordinator] = useState();
@@ -115,10 +115,9 @@ const DetailServiceRequest = (props) => {
   const [disableStaffCoordinator, setDisableStaffCoordinator] = React.useState(true);
   const [disableRejectServicerRequest, setDisableRejectServicerRequest] = React.useState(true);
   const [disableCompleteServicerRequest, setDisableCompleteServicerRequest] = React.useState(true);
-  const [disableSurveyingServicerRequest, setDisableSurveyingServicerRequest] = React.useState(true);
-
-
-
+  const [disableSurveyingServicerRequest, setDisableSurveyingServicerRequest] = React.useState(
+    true,
+  );
 
   const [updatePriceRequestDetailsData, setUpdatePriceRequestDetailsData] = useState([]);
   const { RangePicker } = DatePicker;
@@ -128,7 +127,7 @@ const DetailServiceRequest = (props) => {
   //
 
   // Invoice
-  
+
   const [selectedRows, setSelectedRows] = useState([]);
   const rowSelection = {
     selectedRowKeys: selectedRows,
@@ -151,7 +150,7 @@ const DetailServiceRequest = (props) => {
       if (url) {
         message.success(`Tải ${file.name} lên thành công`);
         setUrl(url);
-        return url
+        return url;
       }
     } catch (error) {
       console.log(error);
@@ -190,14 +189,14 @@ const DetailServiceRequest = (props) => {
       setServiceRequestCreateDate(res.serviceRequestCreateDate.split('T', 1));
       setServiceRequestCreateDate(moment(res.serviceRequestCreateDate).format('DD/MM/YYYY'));
     });
-    if(updateRequestServiceState.serviceRequestStatus === 15) {
+    if (updateRequestServiceState.serviceRequestStatus === 15) {
       setDisableRejectServicerRequest(false);
     }
-    if(updateRequestServiceState.serviceRequestStatus === 2) {
-      setDisableSurveyingServicerRequest(false); 
+    if (updateRequestServiceState.serviceRequestStatus === 2) {
+      setDisableSurveyingServicerRequest(false);
       setDisableRejectServicerRequest(false);
     }
-    if(updateRequestServiceState.serviceRequestStatus === 14) {
+    if (updateRequestServiceState.serviceRequestStatus === 14) {
       setDisableCompleteServicerRequest(false);
     }
   }, [updateRequestServiceState]);
@@ -214,24 +213,37 @@ const DetailServiceRequest = (props) => {
         let result = 0;
         let tmp = true;
         record.map((e) => {
-          if(e.requestDetailStatus === 11) { 
-            result += e.requestDetailPrice
-          }
-          if(e.requestDetailStatus === 9 || e.requestDetailStatus === 2 || e.requestDetailStatus === 6) {
+          if (
+            e.requestDetailStatus === 9 ||
+            e.requestDetailStatus === 2 ||
+            e.requestDetailStatus === 6 ||
+            e.requestDetailStatus === 12
+          ) {
             tmp = false;
           }
-        })
-        if(tmp) {
+          if (e.requestDetailStatus === 11) {
+            result += e.requestDetailPrice;
+          }
+          // if (e.requestDetailStatus === 11 || e.requestDetailStatus === 16) {
+          //   if (e.requestDetailStatus === 11) {
+          //     result += e.requestDetailPrice;
+          //   }
+          //   tmp = true;
+          // }
+          // else {
+          //   tmp = false;
+          // }
+        });
+        if (tmp) {
           setDisableInvoice(false);
         }
-        setInvoiceTotalPrice(result)
+        setInvoiceTotalPrice(result);
       })
       .catch(setIsLoad(false));
 
-      getRepairDetailByServiceRequestID(updateRequestServiceState.serviceRequestId)
-      .then((record) => {
-        setStaffCoordinatorRecord(record);
-    })
+    getRepairDetailByServiceRequestID(updateRequestServiceState.serviceRequestId).then((record) => {
+      setStaffCoordinatorRecord(record);
+    });
   }, []);
 
   const [requestMaterialRecord, setRequestMaterialRecord] = useState([]);
@@ -245,12 +257,11 @@ const DetailServiceRequest = (props) => {
   const [materialIdDataRecord, setMaterialIdDataRecord] = useState();
   const [contractIDRecord, setContractIDRecord] = useState();
 
-
   // ====================
   // tạo hợp đồng
   const [contractUrl, setContractUrl] = useState();
   const createContractFile =
-  'https://firebasestorage.googleapis.com/v0/b/anservices.appspot.com/o/files%2Fmau-hop-dong-thi-cong-xay-dung.docx?alt=media&token=070b2352-1ae8-42a4-9850-182a8910a5a6'
+    'https://firebasestorage.googleapis.com/v0/b/anservices.appspot.com/o/files%2Fmau-hop-dong-thi-cong-xay-dung.docx?alt=media&token=070b2352-1ae8-42a4-9850-182a8910a5a6';
   // ====================
 
   const [workerByServiceId, setWorkerByServiceId] = useState([]);
@@ -264,10 +275,10 @@ const DetailServiceRequest = (props) => {
       getContractListByUserID(updateRequestServiceState.customer.userId).then((record) => {
         setContractRecord(record);
         record.map((item) => {
-          if(item.serviceRequestId === updateRequestServiceState.serviceRequestId) {
+          if (item.serviceRequestId === updateRequestServiceState.serviceRequestId) {
             setContractIDRecord(item.contractId);
           }
-        })
+        });
       });
     }
     // Data cho chi tiết vật tư yêu cầu
@@ -297,10 +308,10 @@ const DetailServiceRequest = (props) => {
           setContractEndDateData1(record.contractEndDate);
           setContractDepositData1(record.contractDeposit);
           setContractTotalPriceData1(record.contractTotalPrice);
-          console.log('totalprice', record.contractTotalPrice)
-          
-          setContractStartDateData(record.contractStartDate)
-          setContractEndDateData(record.contractEndDate)
+          console.log('totalprice', record.contractTotalPrice);
+
+          setContractStartDateData(record.contractStartDate);
+          setContractEndDateData(record.contractEndDate);
         }
       });
     } else console.log('Lỗi');
@@ -342,26 +353,40 @@ const DetailServiceRequest = (props) => {
 
   const onRejectorCancelServiceRequest = () => {
     // const update = normalizeReportForm(formData);
-    return cancelServiceRequest(updateRequestServiceState.serviceRequestId).then(() =>
-      history.replace('/requestservices/list'),
-      message.success(`Yêu cầu ${updateRequestServiceState.serviceRequestDescription} đã được từ chối thành công`),
+    return cancelServiceRequest(updateRequestServiceState.serviceRequestId).then(
+      () => history.replace('/requestservices/list'),
+      message.success(
+        `Yêu cầu ${updateRequestServiceState.serviceRequestDescription} đã được từ chối thành công`,
+      ),
+    );
+  };
+
+  const onReworkServiceRequest = (value) => {
+    // const update = normalizeReportForm(formData);
+    return reworkRequestDetail(value.requestDetailId).then(
+      (res) =>
+      window.location.reload(),
+      message.success(
+        `Dịch vụ ${value?.service?.serviceName} đã được yêu cầu làm lại`,
+      ),
     );
   };
 
   const onSurveyingServiceRequest = () => {
     // const update = normalizeReportForm(formData);
-    return surveyingServiceRequest(updateRequestServiceState.serviceRequestId).then(() =>
-      history.replace('/requestservices/list'),
-      message.success(`Yêu cầu ${updateRequestServiceState.serviceRequestDescription} đã được goi khảo sát thành công`),
-  );
+    return surveyingServiceRequest(updateRequestServiceState.serviceRequestId).then(
+      () => history.replace('/requestservices/list'),
+      message.success(
+        `Yêu cầu ${updateRequestServiceState.serviceRequestDescription} đã được goi khảo sát thành công`,
+      ),
+    );
   };
 
   const onCompleteServiceRequest = () => {
     // const update = normalizeReportForm(formData);
-    return completeServiceRequest(updateRequestServiceState.serviceRequestId).then(() =>
-      history.replace('/requestservices/list'),
+    return completeServiceRequest(updateRequestServiceState.serviceRequestId).then(
+      () => history.replace('/requestservices/list'),
       message.success(`Yêu cầu ${updateRequestServiceState.serviceRequestDescription} hoàn thành`),
-
     );
   };
 
@@ -371,13 +396,12 @@ const DetailServiceRequest = (props) => {
   };
 
   const onStaffCoordinator = (values) => {
-
     let validate = true;
     if (!mainStaffCoordinator || mainStaffCoordinator === 'undefined') {
       validate = false;
       message.warning('Chưa chọn thợ chính');
     }
-    if(!priorityData) {
+    if (!priorityData) {
       validate = false;
       message.warning('Chưa chọn độ ưu tiên');
     }
@@ -414,7 +438,6 @@ const DetailServiceRequest = (props) => {
     if (updatePriceRequestDetailsData[index]) {
       updatePriceRequestDetailsData[index].requestDetailPrice = value;
       setUpdatePriceRequestDetailsData([...updatePriceRequestDetailsData]);
-
     } else {
       setUpdatePriceRequestDetailsData([
         ...updatePriceRequestDetailsData,
@@ -423,7 +446,10 @@ const DetailServiceRequest = (props) => {
     }
   }
 
-  const result = updatePriceRequestDetailsData.reduce((item, index) => (item = item + index.requestDetailPrice), 0);
+  const result = updatePriceRequestDetailsData.reduce(
+    (item, index) => (item = item + index.requestDetailPrice),
+    0,
+  );
 
   function onChangeStartDateToEndDate(value, date) {
     console.log('changed', value);
@@ -435,7 +461,7 @@ const DetailServiceRequest = (props) => {
     setContractStartDateData(date[0]);
     setContractEndDateData(date[1]);
   }
-  
+
   function onChangeStartDate(value, date) {
     setContractStartDateData(date);
   }
@@ -455,7 +481,7 @@ const DetailServiceRequest = (props) => {
   function onChangeAdjustedQuantityNew(value) {
     setQuantityNewDataRecord(value);
   }
-  
+
   function handleChangeMainWorker(value) {
     setMainStaffCoordinator(value);
     console.log(`selected ${value}`);
@@ -469,14 +495,14 @@ const DetailServiceRequest = (props) => {
 
   const onAcceptRequestMaterial = (values) => {
     setOkConfirmLoading(true);
-      setTimeout(() => {
-        setOkConfirmLoading(false);
-      }, 2000);
+    setTimeout(() => {
+      setOkConfirmLoading(false);
+    }, 2000);
 
-  const update = normalizeReportForm(formData);
+    const update = normalizeReportForm(formData);
     return approveStatusRequestMaterial(values, update).then(() => {
       window.location.reload(true);
-    })
+    });
   };
 
   const showModalAdjusted = (record) => {
@@ -495,48 +521,93 @@ const DetailServiceRequest = (props) => {
   };
 
   const onDenyModal = () => {
-    form
-      .validateFields()
-      .then((res) => {
-        setConfirmLoading(true);
-        return denyStatusRequestMaterial(materialIdDataRecord, messageDataRecord);
-      })
-      .then(() => {
-        form.resetFields();
-        setConfirmLoading(false);
-        setVisible1(false);
-        window.location.reload(true);
-      })
-      .catch((info) => {
-        console.log('Xác thực không thành công:', info);
-      })
-      .finally();
+    if (messageDataRecord === undefined) {
+      form
+        .validateFields()
+        .then((res) => {
+          setConfirmLoading(true);
+          return denyStatusRequestMaterial(materialIdDataRecord, 'Không có ghi chú');
+        })
+        .then(() => {
+          form.resetFields();
+          setConfirmLoading(false);
+          setVisible1(false);
+          window.location.reload(true);
+        })
+        .catch((info) => {
+          console.log('Xác thực không thành công:', info);
+        })
+        .finally();
+    } else {
+      form
+        .validateFields()
+        .then((res) => {
+          setConfirmLoading(true);
+          return denyStatusRequestMaterial(materialIdDataRecord, messageDataRecord);
+        })
+        .then(() => {
+          form.resetFields();
+          setConfirmLoading(false);
+          setVisible1(false);
+          window.location.reload(true);
+        })
+        .catch((info) => {
+          console.log('Xác thực không thành công:', info);
+        })
+        .finally();
+    }
   };
 
   const onAdjustedModal = () => {
-    form
-      .validateFields()
-      .then((res) => {
-        setConfirmLoading(true);
-        return updateRequestMaterial(materialIdDataRecord, quantityNewDataRecord, messageDataRecord);
-      })
-      .then(() => {
-        form.resetFields();
-        setConfirmLoading(false);
-        setVisible(false);
-        window.location.reload(true);
-      })
-      .catch((info) => {
-        console.log('Xác thực không thành công:', info);
-      })
-      .finally();
+    if (messageDataRecord === undefined) {
+      form
+        .validateFields()
+        .then((res) => {
+          setConfirmLoading(true);
+          return updateRequestMaterial(
+            materialIdDataRecord,
+            quantityNewDataRecord,
+            'Không có ghi chú',
+          );
+        })
+        .then(() => {
+          form.resetFields();
+          setConfirmLoading(false);
+          setVisible(false);
+          window.location.reload(true);
+        })
+        .catch((info) => {
+          console.log('Xác thực không thành công:', info);
+        })
+        .finally();
+    } else {
+      form
+        .validateFields()
+        .then((res) => {
+          setConfirmLoading(true);
+          return updateRequestMaterial(
+            materialIdDataRecord,
+            quantityNewDataRecord,
+            messageDataRecord,
+          );
+        })
+        .then(() => {
+          form.resetFields();
+          setConfirmLoading(false);
+          setVisible(false);
+          window.location.reload(true);
+        })
+        .catch((info) => {
+          console.log('Xác thực không thành công:', info);
+        })
+        .finally();
+    }
   };
 
   const handleCancel = () => {
     setVisible(false);
     setVisible1(false);
     setVisible2(false);
-
   };
 
   const onCreateContract = async () => {
@@ -571,9 +642,9 @@ const DetailServiceRequest = (props) => {
     }
     if (!validate) {
       console.log('Không gửi được');
-    } 
-    const returnUrl = await upload(); 
-    if(returnUrl) {
+    }
+    const returnUrl = await upload();
+    if (returnUrl) {
       console.log('Gửi được');
       const createContractValues = {
         userId: userID,
@@ -600,11 +671,7 @@ const DetailServiceRequest = (props) => {
     }
   };
 
-  
-  
-
-
-  const onCreateInvoice = () =>  {
+  const onCreateInvoice = () => {
     setSendInvoiceConfirmLoading(true);
     setTimeout(() => {
       setSendInvoiceConfirmLoading(false);
@@ -614,15 +681,16 @@ const DetailServiceRequest = (props) => {
       serviceRequestID: updateRequestServiceState.serviceRequestId,
       contractID: contractIDRecord,
     };
-    return createInvoice(createInvoiceData)
-    .then((res) => {
+    return createInvoice(createInvoiceData).then((res) => {
       // if(res.status === 500) {
       //   message.error("Hoá đơn này đã được gửi");
       // }
-      message.success(`Hoá đơn cho yêu cầu ${updateRequestServiceState.serviceRequestDescription} đã được gửi`);
+      message.success(
+        `Hoá đơn cho yêu cầu ${updateRequestServiceState.serviceRequestDescription} đã được gửi`,
+      );
       setDisableInvoice(true);
-    })
-  }
+    });
+  };
 
   function onOpenNewWindown() {
     window.open(contractUrl);
@@ -676,7 +744,7 @@ const DetailServiceRequest = (props) => {
       search: false,
       render: (text, record) => {
         // return <div>{record?.service?.serviceDescription}</div>;
-        return <div>Xem Chi Tiết Trong File Hợp Đồng</div>
+        return <div>Xem Chi Tiết Trong File Hợp Đồng</div>;
       },
     },
     {
@@ -704,6 +772,10 @@ const DetailServiceRequest = (props) => {
           text: 'Không hài lòng',
           status: 'Error',
         },
+        16: {
+          text: 'Làm lại yêu cầu',
+          status: 'Success',
+        },
       },
     },
     {
@@ -711,10 +783,9 @@ const DetailServiceRequest = (props) => {
       dataIndex: 'requestDetailPrice',
       search: false,
       render: (text, record, index) => {
-        return (
-          {record} ? (
-            // Có giá trị
-            <InputNumber
+        return { record } ? (
+          // Có giá trị
+          <InputNumber
             disabled={disable}
             placeholder="Nhập giá"
             defaultValue={record.requestDetailPrice}
@@ -724,9 +795,9 @@ const DetailServiceRequest = (props) => {
             parser={(value) => value.replace(/\s\VND?|(,*)/g, '')}
             onChange={(value) => onChange(value, record.requestDetailId, index)}
           />
-          ) : (
-            // Không giá trị
-            <InputNumber
+        ) : (
+          // Không giá trị
+          <InputNumber
             disabled={disable}
             placeholder="Nhập giá"
             // defaultValue={record.requestDetailPrice}
@@ -736,10 +807,23 @@ const DetailServiceRequest = (props) => {
             parser={(value) => value.replace(/\s\VND?|(,*)/g, '')}
             onChange={(value) => onChange(value, record.requestDetailId, index)}
           />
-          )
-          
         );
       },
+    },
+    {
+      title: '',
+      key: 'action',
+      render: (text, record) => {
+        const updateStatus = {...record};
+        console.log('updateStatus', updateStatus)
+        return (
+          <Space>
+            {updateStatus.requestDetailStatus === 12 && (
+              <a onClick={() => onReworkServiceRequest(record)}>Làm lại yêu cầu này</a>
+            )}
+          </Space>
+        );
+      }
     },
   ];
 
@@ -769,7 +853,10 @@ const DetailServiceRequest = (props) => {
         // console.log('record03', record);
         // record.tblRepairDetails.map((e) => console.log('record04', e));
         return (
-          <CommonSelect.SelectRequestServicePriority style={{width:160}} onChange={onChangePriority} />
+          <CommonSelect.SelectRequestServicePriority
+            style={{ width: 160 }}
+            onChange={onChangePriority}
+          />
         );
       },
     },
@@ -782,7 +869,6 @@ const DetailServiceRequest = (props) => {
       render: (text, record) => {
         const updateWorkerState = { ...record };
         // getWorkerByServiceId(record.serviceId);
-        console.log('record02', record);
         return (
           <Space size="middle">
             <Select
@@ -824,17 +910,17 @@ const DetailServiceRequest = (props) => {
                 Điều phối thợ
               </Button>
             )} */}
-            {record?.requestDetailStatus !== 11  && (
-            <Button
-              // loading={staffCoordinatorConfirmLoading}
-              // disabled={disableStaffCoordinator}
-              onClick={() => onStaffCoordinator(updateWorkerState.requestDetailId)}
-              onChange={handleChange && handleChangeMainWorker}
-              state={updateWorkerState}
-              type="primary"
-            >
-              Điều phối thợ
-            </Button>
+            {(record?.requestDetailStatus !== 11 && record?.requestDetailStatus !== 16) && (
+              <Button
+                // loading={staffCoordinatorConfirmLoading}
+                // disabled={disableStaffCoordinator}
+                onClick={() => onStaffCoordinator(updateWorkerState.requestDetailId)}
+                onChange={handleChange && handleChangeMainWorker}
+                state={updateWorkerState}
+                type="primary"
+              >
+                Điều phối thợ
+              </Button>
             )}
           </Space>
         );
@@ -869,11 +955,11 @@ const DetailServiceRequest = (props) => {
           status: 'processing',
         },
         3: {
-          text: 'Đã chấp thuận',
+          text: 'Đã chấp thuận hợp đồng',
           status: 'Success',
         },
         7: {
-          text: 'Yêu cầu sửa lại',
+          text: 'Yêu cầu sửa lại hợp đồng',
           status: 'Warning',
         },
       },
@@ -1018,18 +1104,14 @@ const DetailServiceRequest = (props) => {
               confirmLoading={confirmLoading}
               onCancel={handleCancel}
             >
-              <ProForm.Item
-                  name="message"
-                  label="Ghi chú"
+              <ProForm.Item name="message" label="Ghi chú" row={6}>
+                <Input.TextArea
+                  placeholder="Nhập lý do từ chối"
                   row={6}
-                >
-                  <Input.TextArea
-                    placeholder="Nhập lý do từ chối"
-                    row={6}
-                    style={{ width: '450px' }}
-                    onChange={onChangeMessages}
-                  />
-                </ProForm.Item>
+                  style={{ width: '450px' }}
+                  onChange={onChangeMessages}
+                />
+              </ProForm.Item>
             </Modal>
             <Modal
               title="Điều chỉnh"
@@ -1057,11 +1139,7 @@ const DetailServiceRequest = (props) => {
                     onChange={onChangeAdjustedQuantityNew}
                   />
                 </ProForm.Item>
-                <ProForm.Item
-                  name="message"
-                  label="Ghi chú"
-                  row={6}
-                >
+                <ProForm.Item name="message" label="Ghi chú" row={6}>
                   <Input.TextArea
                     placeholder="Nhập ghi chú cho thợ"
                     row={6}
@@ -1185,7 +1263,7 @@ const DetailServiceRequest = (props) => {
           {/* UPLOAD HỢP ĐỒNG */}
           <div className={styles.title}>Thông tin tạo hợp đồng</div>
           <Row gutter={16}>
-            <Col span={10}>
+            <Col span={12}>
               <ProForm.Item
                 name={customerName}
                 label="Tên chủ hợp đồng"
@@ -1215,7 +1293,7 @@ const DetailServiceRequest = (props) => {
             </Col>
           </Row> */}
           <Row gutter={16}>
-            <Col span={10}>
+            <Col span={12}>
               {contractStartDateData1 ? (
                 <ProForm.Item
                   name={contractStartDateData1}
@@ -1228,7 +1306,7 @@ const DetailServiceRequest = (props) => {
                     // value={moment(contractStartDateData1, 'YYYY-MM-DD')}
                     onChange={onChangeStartDate}
                     disabledDate={(d) => !d || d.isBefore(moment().startOf('day'))}
-                    style={{ width: 390 }}
+                    style={{ width: 470 }}
                     format="YYYY-MM-DD"
                     placeholder={['Chọn ngày kết thúc']}
                   />
@@ -1239,7 +1317,7 @@ const DetailServiceRequest = (props) => {
                     disabled={disable}
                     onChange={onChangeStartDate}
                     disabledDate={(d) => !d || d.isBefore(moment().startOf('day'))}
-                    style={{ width: 390 }}
+                    style={{ width: 470 }}
                     format="YYYY-MM-DD"
                     placeholder={['Chọn ngày bắt đầu']}
                   />
@@ -1257,8 +1335,10 @@ const DetailServiceRequest = (props) => {
                     disabled={disable}
                     defaultValue={moment(contractEndDateData1, 'YYYY-MM-DD')}
                     onChange={onChangeEndDate}
-                    disabledDate={(d) => !d || d.isBefore(moment(contractStartDateData, 'YYYY-MM-DD').startOf('day'))}
-                    style={{ width: 390 }}
+                    disabledDate={(d) =>
+                      !d || d.isBefore(moment(contractStartDateData, 'YYYY-MM-DD').startOf('day'))
+                    }
+                    style={{ width: 470 }}
                     format="YYYY-MM-DD"
                     placeholder={['Chọn ngày kết thúc']}
                   />
@@ -1268,8 +1348,10 @@ const DetailServiceRequest = (props) => {
                   <DatePicker
                     disabled={disable}
                     onChange={onChangeEndDate}
-                    disabledDate={(d) => !d || d.isBefore(moment(contractStartDateData, 'YYYY-MM-DD').startOf('day'))}
-                    style={{ width: 390 }}
+                    disabledDate={(d) =>
+                      !d || d.isBefore(moment(contractStartDateData, 'YYYY-MM-DD').startOf('day'))
+                    }
+                    style={{ width: 470 }}
                     format="YYYY-MM-DD"
                     placeholder={['Chọn ngày kết thúc']}
                   />
@@ -1278,7 +1360,7 @@ const DetailServiceRequest = (props) => {
             </Col>
           </Row>
           <Row gutter={16}>
-            <Col span={10}>
+            <Col span={12}>
               {contractDepositData1 ? (
                 <ProForm.Item
                   // name="contractDeposit"
@@ -1316,9 +1398,18 @@ const DetailServiceRequest = (props) => {
                 </ProForm.Item>
               )}
             </Col>
+            <Col span={12}>
+              <ProForm.Item name="contractDeposit" label="Voucher">
+                <Input
+                  placeholder="Không có voucher được áp dụng"
+                  disabled={disable}
+                  readOnly
+                ></Input>
+              </ProForm.Item>
+            </Col>
           </Row>
           <Row gutter={16}>
-            <Col span={10}>
+            <Col span={12}>
               {contractTotalPriceData1 ? (
                 // Có giá trị
                 <ProForm.Item
@@ -1328,7 +1419,7 @@ const DetailServiceRequest = (props) => {
                 >
                   <InputNumber
                     disabled={disable}
-                    style={{ width: 390 }}
+                    style={{ width: 470 }}
                     min={0}
                     formatter={(value) => `${value} VND`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                     parser={(value) => value.replace(/\s\VND?|(,*)/g, '')}
@@ -1345,7 +1436,7 @@ const DetailServiceRequest = (props) => {
                 >
                   <InputNumber
                     disabled={disable}
-                    style={{ width: 390 }}
+                    style={{ width: 470 }}
                     // value={result}
                     min={0}
                     formatter={(value) => `${value} VND`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
@@ -1383,13 +1474,8 @@ const DetailServiceRequest = (props) => {
               onChange={(e) => {
                 setFile(e.file.originFileObj);
               }}
-
             >
-              <Button
-                disabled={disable}
-                icon={<UploadOutlined />}
-                style={{ width: 250 }}
-              >
+              <Button disabled={disable} icon={<UploadOutlined />} style={{ width: 250 }}>
                 Chọn file
               </Button>
             </Upload>
@@ -1475,18 +1561,19 @@ const DetailServiceRequest = (props) => {
 
           {/* <Divider style={{ marginBottom: 32 }} /> */}
 
-          <BackTop type='primary'>
+          <BackTop type="primary">
             <div className={styles.style}>UP</div>
           </BackTop>
           {/* XEM ẢNH & VIDEO */}
           <Modal
-              title="Hình ảnh & video"
-              visible={visible2}
-              onOk={() => handleCancel()}
-              confirmLoading={confirmLoading}
-              onCancel={handleCancel}
-            >
-              {imgReportRecord.length > 0 && imgReportRecord.map((data) => {
+            title="Hình ảnh & video"
+            visible={visible2}
+            onOk={() => handleCancel()}
+            confirmLoading={confirmLoading}
+            onCancel={handleCancel}
+          >
+            {imgReportRecord.length > 0 &&
+              imgReportRecord.map((data) => {
                 if (!data?.mediaUrl.includes('.mp4')) {
                   return (
                     <Image
@@ -1505,8 +1592,7 @@ const DetailServiceRequest = (props) => {
                   />
                 );
               })}
-            </Modal>
-
+          </Modal>
 
           <FooterToolbar>
             <AsyncButton
@@ -1514,21 +1600,33 @@ const DetailServiceRequest = (props) => {
               btnProps={{ type: 'default', icon: <RollbackOutlined /> }}
               onClick={onBackList}
             />
-            <AsyncButton 
-              title="Đã gọi khảo sát" 
-              btnProps={{ type: 'dashed', icon: <FieldTimeOutlined />, disabled:disableSurveyingServicerRequest }} 
+            <AsyncButton
+              title="Đã gọi khảo sát"
+              btnProps={{
+                type: 'dashed',
+                icon: <FieldTimeOutlined />,
+                disabled: disableSurveyingServicerRequest,
+              }}
               onClick={onSurveyingServiceRequest}
-              />
+            />
 
             <AsyncButton
               title="Từ chối"
-              btnProps={{ type: 'danger', icon: <CloseOutlined />, disabled:disableRejectServicerRequest }}
+              btnProps={{
+                type: 'danger',
+                icon: <CloseOutlined />,
+                disabled: disableRejectServicerRequest,
+              }}
               onClick={onRejectorCancelServiceRequest}
             />
-            
-            <AsyncButton 
-              title="Hoàn Thành" 
-              btnProps={{ type: 'primary', icon: <CheckOutlined />, disabled:disableCompleteServicerRequest }} 
+
+            <AsyncButton
+              title="Hoàn Thành"
+              btnProps={{
+                type: 'primary',
+                icon: <CheckOutlined />,
+                disabled: disableCompleteServicerRequest,
+              }}
               onClick={onCompleteServiceRequest}
             />
           </FooterToolbar>
