@@ -19,7 +19,6 @@ namespace AnService_Capstone.Core.Entities
         public int ServiceId { get; set; }
         public int? RequestDetailStatus { get; set; }
         public decimal? RequestDetailPrice { get; set; }
-        public string RequestDetailDescription { get; set; }
 
         public virtual TblStatus RequestDetailStatusNavigation { get; set; }
         public virtual TblService Service { get; set; }

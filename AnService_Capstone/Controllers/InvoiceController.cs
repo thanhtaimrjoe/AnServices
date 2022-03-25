@@ -52,6 +52,13 @@ namespace AnService_Capstone.Controllers
 
             double totalPrice = 0;
 
+            var check = await _invoice.CheckInvoiceExist(invoice.ContractID);
+
+            if(check != null)
+            {
+                return BadRequest("Duplicate Invoice");
+            }
+
             var detail = await _serviceRepository.GetAllServiceRequestDetailsByServiceRequestID(invoice.ServiceRequestID);
 
             foreach (var item in detail)

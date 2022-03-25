@@ -22,53 +22,17 @@ namespace AnService_Capstone.Controllers
             _helper = helper;
         }
 
-        [HttpPost]
+        /*[HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> GetPromotionCode(int userID, string inviteCode)
+        public async Task<IActionResult> GetPromotionCode(string inviteCode)
         {
-            if (userID == 0)
+            *//*if (inviteCode == null)
             {
-                return BadRequest(new ErrorResponse("Please enter userID"));
-            }
+                return BadRequest(new ErrorResponse("Please enter InviteCode")); 
+            }*//*
 
-            if (inviteCode.Equals(""))
-            {
-                return BadRequest(new ErrorResponse("Please enter userID"));
-            }
-
-            var check = await _promotionRepository.CheckEnteredCode(userID);
-
-            if (!check)
-            {
-                return BadRequest(new ErrorResponse("You have been already enter invite code"));
-            }
-
-            var user = await _userRepository.GetCustomerByID(userID);
-            var user2 = await _userRepository.GetCustomerByInviteCode(inviteCode);
-
-            if (user2 == null)
-            {
-                return BadRequest(new ErrorResponse("Invite code invalid"));
-            }
-
-            if (user.InviteCode.Equals(inviteCode))
-            {
-                return BadRequest(new ErrorResponse("You cant input your invite code"));
-            }
-
-            string promotionCode = _helper.RandomString(10);
-            string promotionCode2 = _helper.RandomString(10);
-
-
-            var res = await _promotionRepository.GeneratorPromotionCode(userID, promotionCode, "MAGIAMGIANGUOIDUNGMOI", 0.05);
-            var res2 = await _promotionRepository.GeneratorPromotionCode(user2.UserID, promotionCode2, "MAGIAMGIANGUOIGIOITHIEU", 0.1);
-
-            if (res == true && res2 == true)
-            {
-                return Ok(promotionCode);
-            }
-            return BadRequest(new ErrorResponse("Error"));
-        }
+            return Ok();
+        }*/
 
         [HttpGet]
         [Route("[action]")]
@@ -80,6 +44,40 @@ namespace AnService_Capstone.Controllers
             }
 
             var res = await _promotionRepository.GetAllPromotionByUserID(userID);
+            if (res == null)
+            {
+                return NotFound(new ErrorResponse("No record"));
+            }
+            return Ok(res);
+        }
+
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<IActionResult> GetAllPromotionValidByUserID(int userID)
+        {
+            if (userID == 0)
+            {
+                return BadRequest(new ErrorResponse("Please enter userID"));
+            }
+
+            var res = await _promotionRepository.GetAllPromotionValidByUserID(userID);
+            if (res == null)
+            {
+                return NotFound(new ErrorResponse("No record"));
+            }
+            return Ok(res);
+        }
+
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<IActionResult> GetInformationPromotionByID(int promotionID)
+        {
+            if (promotionID == 0)
+            {
+                return BadRequest(new ErrorResponse("Please enter promotionID"));
+            }
+
+            var res = await _promotionRepository.GetInformationPromotionByID(promotionID);
             if (res == null)
             {
                 return NotFound(new ErrorResponse("No record"));

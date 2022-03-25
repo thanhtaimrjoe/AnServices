@@ -10,6 +10,12 @@ namespace AnService_Capstone.Core.Models.Request
 {
     public class CreateService
     {
+        public class Promotion
+        {
+            public int PromotionID { get; set; }
+            public double PromotionValue { get; set; }
+        }
+
         /*[Required(ErrorMessage = "Cant be blank")]*/
         public int CustomerId { get; set; }
         /*[Required(ErrorMessage = "Cant be blank")]*/
@@ -28,5 +34,6 @@ namespace AnService_Capstone.Core.Models.Request
         public string ServiceRequestDescription { get; set; }
         /*public List<IFormFile> File { get; set; }*/
         public List<string> MediaList { get; set; }
+        public Promotion PromotionCode { get; set; }
     }
 }

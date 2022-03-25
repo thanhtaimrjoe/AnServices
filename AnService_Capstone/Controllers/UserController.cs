@@ -7,6 +7,7 @@ using AnService_Capstone.DataAccess.Dapper.TokenGenerator;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -29,10 +30,11 @@ namespace AnService_Capstone.Controllers
         private readonly IPromotionRepository _promotionRepository;
         private readonly TwilioService _twilioService;
         private readonly UtilHelper _utilHelper;
+        private readonly IInviteCodeRepository _inviteCodeRepository;
 
         public UserController(IUserRepository userRepository, AccessTokenGenerator accessTokenGenerator, 
             RefreshTokenGenerator refreshTokenGenerator, UtilHelper otpGenerator,
-            IPromotionRepository promotionRepository, TwilioService twilioService, UtilHelper   utilHelper)
+            IPromotionRepository promotionRepository, TwilioService twilioService, UtilHelper   utilHelper, IInviteCodeRepository inviteCodeRepository)
         {
             _userRepository = userRepository;
             _accessTokenGenerator = accessTokenGenerator;
@@ -41,6 +43,7 @@ namespace AnService_Capstone.Controllers
             _promotionRepository = promotionRepository;
             _twilioService = twilioService;
             _utilHelper = utilHelper;
+            _inviteCodeRepository = inviteCodeRepository;
         }
 
 
@@ -96,10 +99,10 @@ namespace AnService_Capstone.Controllers
                 return NotFound(new ErrorResponse("Phone number is not exists"));
             }
 
-            /*if (user.Status == 10)
+            if (user.Status == 10)
             {
                 return BadRequest(new ErrorResponse("Your account have been banned"));
-            }*/
+            }
 
             var refreshToken = _refreshTokenGenerator.GenerateToken();
             var token = _accessTokenGenerator.GenerateToken(user, refreshToken);
@@ -156,15 +159,65 @@ namespace AnService_Capstone.Controllers
             {
                 code = _otpGenerator.GeneratorOTP();
             }*/
-            string code;
+            /*string code;
             bool checkCode = false;
             do
             {
                 code = _otpGenerator.GeneratorOTP(); // cre
                 checkCode = await _userRepository.CheckInviteCodeExist(code);
-            } while (checkCode);
+            } while (checkCode);*/
 
-            var user = await _userRepository.CreateAccountCustomer(model, code);
+            if (model.Email == null)
+            {
+                model.Email = "";
+            }
+
+            if (model.Address == null)
+            {
+                model.Address = "";
+            }
+
+            if (model.InviteCode == null)
+            {
+                model.InviteCode = "";
+            }
+
+            if (!model.Email.Equals(""))
+            {
+                var validEmail = _otpGenerator.IsValidEmail(model.Email);
+
+                if (!validEmail)
+                {
+                    return BadRequest(new ErrorResponse("Email is not valid"));
+                }
+            }
+
+            if (!model.InviteCode.Equals(""))
+            {
+                var check = await _inviteCodeRepository.CheckInviteCode(model.InviteCode);
+
+                if (check != null)
+                {
+                    if (DateTime.Now.Subtract((DateTime)check.ExpireDate).Days < 0)
+                    {
+                        var code = _utilHelper.RandomString(10);
+                        var res = await _promotionRepository.GeneratorPromotionCode(check.CustomerId, code, "Mã Giảm Giá Giới Thiệu - 5%", 0.05);
+
+                        if (res)
+                        {
+                            _ = await _inviteCodeRepository.UpdateIsUsedInviteCode(check.InviteCodeId);
+                            _ = await _userRepository.CreateAccountCustomer(model);
+                            return Ok("Create Successfull");
+                        }
+                    }
+                    return BadRequest(new ErrorResponse("Your invite code is expired"));
+                }
+
+                return BadRequest(new ErrorResponse("Your invite code is valid"));
+            }
+
+            _ = await _userRepository.CreateAccountCustomer(model);
+
             /*var promotion = await _promotionRepository.InsertPromotion(code);
             var promotionDetail = await _promotionRepository.InsertPromotionDetail(user, promotion);*/
             
@@ -380,6 +433,26 @@ namespace AnService_Capstone.Controllers
             }
             return BadRequest(new ErrorResponse("Create Fail"));
         }
+
+        /*[HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> CreateInviteCode(int userID)
+        {
+            if (userID == 0)
+            {
+                return BadRequest(new ErrorResponse("Please enter userID"));
+            }
+
+            var inviteCode = _utilHelper.RandomString(10);
+
+            var res = await _userRepository.CreateInviteCode(userID, inviteCode);
+
+            if (res)
+            {
+                return Ok("Create Successful");
+            }
+            return BadRequest("Create Fail");
+        }*/
 
         /// <summary>
         /// lấy danh sách customer account

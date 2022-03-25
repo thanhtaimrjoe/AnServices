@@ -10,6 +10,7 @@ namespace AnService_Capstone.Core.Entities
         public TblUser()
         {
             TblContracts = new HashSet<TblContract>();
+            TblInviteCodes = new HashSet<TblInviteCode>();
             TblPromotions = new HashSet<TblPromotion>();
             TblRepairDetails = new HashSet<TblRepairDetail>();
             TblReports = new HashSet<TblReport>();
@@ -23,7 +24,6 @@ namespace AnService_Capstone.Core.Entities
         public string PhoneNumber { get; set; }
         public string Address { get; set; }
         public string Email { get; set; }
-        public string InviteCode { get; set; }
         public int Role { get; set; }
         public int? TypeJob { get; set; }
         public DateTime? CreateDate { get; set; }
@@ -34,6 +34,7 @@ namespace AnService_Capstone.Core.Entities
         public virtual TblStatus StatusNavigation { get; set; }
         public virtual TblTypeJob TypeJobNavigation { get; set; }
         public virtual ICollection<TblContract> TblContracts { get; set; }
+        public virtual ICollection<TblInviteCode> TblInviteCodes { get; set; }
         public virtual ICollection<TblPromotion> TblPromotions { get; set; }
         public virtual ICollection<TblRepairDetail> TblRepairDetails { get; set; }
         public virtual ICollection<TblReport> TblReports { get; set; }

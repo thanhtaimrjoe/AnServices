@@ -23,16 +23,20 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
 
         public async Task<TblInvoice> CheckInvoiceExist(int id)
         {
-            var query = "select InvoiceID, ServiceRequestID, TotalCost, Date, Note " +
+            var query = "select * " +
                 "from tblInvoice where " +
-                "ServiceRequestID = @ServiceRequestID";
+                "ContractID = @ContractID";
 
             using (var connection = _context.CreateConnection())
             {
                 connection.Open();
-                var res = await connection.QuerySingleOrDefaultAsync<TblInvoice>(query, new { @ServiceRequestID = id});
+                var res = await connection.QueryAsync<TblInvoice>(query, new { ContractID = id});
                 connection.Close();
-                return res;
+                if (!res.Any())
+                {
+                    return null;
+                }
+                return res.FirstOrDefault();
             }
         }
 

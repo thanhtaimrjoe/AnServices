@@ -79,6 +79,39 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             }
         }
 
+        public async Task<IEnumerable<TblPromotion>> GetAllPromotionValidByUserID(int userID)
+        {
+            var query = "select * from tblPromotion where CustomerID = @CustomerID and PromotionActive = 1 and PromotionDateExpired >= @PromotionDateExpired ";
+            using (var connection = _dapperContext.CreateConnection())
+            {
+                connection.Open();
+                var res = await connection.QueryAsync<TblPromotion>(query, new { @CustomerID = userID, @PromotionDateExpired = DateTime.Now});
+                connection.Close();
+                if (!res.Any())
+                {
+                    return null;
+                }
+                return res;
+            }
+        }
+
+        public async Task<TblPromotion> GetInformationPromotionByID(int id)
+        {
+            var query = "select * from tblPromotion where PromotionID = @PromotionID";
+
+            using (var conn = _dapperContext.CreateConnection())
+            {
+                conn.Open();
+                var res = await conn.QueryAsync<TblPromotion>(query, new { @PromotionID = id });
+                conn.Close();
+                if (!res.Any())
+                {
+                    return null;
+                }
+                return res.FirstOrDefault();
+            }
+        }
+
         public async Task<int> InsertPromotion(string inviteCode)
         {
             var query = "insert into tblPromotion(PromotionCode, PromotionDescription) values(@PromotionName, @PromotionDescription) " +
@@ -94,6 +127,23 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
                 var result = await connection.QuerySingleAsync<int>(query, parameters);
                 connection.Close();
                 return result;
+            }
+        }
+
+        public async Task<bool> UpdateStatusPromotion(int code)
+        {
+            var query = "update tblPromotion set PromotionActive = 0 where PromotionID = @PromotionID";
+
+            using (var con = _dapperContext.CreateConnection())
+            {
+                con.Open();
+                var res = await con.ExecuteAsync(query, new { PromotionID = code });
+                con.Close();
+                if (res > 0)
+                {
+                    return true;
+                }
+                return false;
             }
         }
 

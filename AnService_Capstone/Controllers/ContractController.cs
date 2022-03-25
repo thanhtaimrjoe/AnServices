@@ -114,6 +114,8 @@ namespace AnService_Capstone.Controllers
             var res = await _contractRepository.UpdateStatusContract(id, 3);
             if (res)
             {
+                var contract = await _contractRepository.GetContractByID(id);
+                _ = await _serviceRepository.UpdateStatusServiceRequest(contract.ServiceRequestId, 3);
                 return Ok("Update successfull");
             }
             return BadRequest(new ErrorResponse("Update fail"));
@@ -171,36 +173,43 @@ namespace AnService_Capstone.Controllers
         [Route("[action]")]
         public async Task<IActionResult> CreateContract(CreateContract contract)
         {
-            int res = 0;
-
             if (!ModelState.IsValid)
             {
                 return BadRequest();
+            }
+
+            foreach (var updateDetail in contract.updatePriceRequestDetails)
+            {
+                _ = await _serviceRepository.UpdatePriceServiceRequestDetail(updateDetail.RequestDetailID, updateDetail.RequestDetailPrice);
             }
 
             var check = await _contractRepository.CheckContractExist(contract.RequestId);
 
             if (check != null)
             {
-                _ = await _contractRepository.UpdateContract(contract, check.ContractId);
-                foreach (var updateDetail in contract.updatePriceRequestDetails)
+                var res2 = await _contractRepository.UpdateContract(contract, check.ContractId);
+                /*foreach (var updateDetail in contract.updatePriceRequestDetails)
                 {
                     _ = await _serviceRepository.UpdatePriceServiceRequestDetail(updateDetail.RequestDetailID, updateDetail.RequestDetailPrice);
+                }*/
+                if (res2)
+                {
+                    return Ok("Create successfull");
                 }
-                return Ok(check.ContractId);
+                return BadRequest(new ErrorResponse("Create fail"));
             }
 
-            res = await _contractRepository.CreateContract(contract);
-            foreach (var updateDetail in contract.updatePriceRequestDetails)
+            var res = await _contractRepository.CreateContract(contract);
+            /*foreach (var updateDetail in contract.updatePriceRequestDetails)
             {
                 _ = await _serviceRepository.UpdatePriceServiceRequestDetail(updateDetail.RequestDetailID, updateDetail.RequestDetailPrice);
-            }
+            }*/
 
-            if (res > 0)
+            if (res)
             {
                 return Ok("Create successfull");
             }
-            return BadRequest(new ErrorResponse("Create fail")); ;
+            return BadRequest(new ErrorResponse("Create fail"));
             /*else
             {
                 res = await _contractRepository.CreateContract(contract);

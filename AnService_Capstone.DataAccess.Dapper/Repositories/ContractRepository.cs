@@ -55,7 +55,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             }
         }*/
 
-        public async Task<int> CreateContract(CreateContract contract)
+        public async Task<bool> CreateContract(CreateContract contract)
         {
             var query = "insert into tblContract(CustomerID,ServiceRequestID,ContractTitle,ContractUrl,ContractStartDate,ContractEndDate,ContractDeposit,ContractTotalPrice,ContractStatus,ContractCreateDate) " +
                 "values (@CustomerID,@ServiceRequestID,@ContractTitle,@ContractUrl,@ContractStartDate,@ContractEndDate,@ContractDeposit,@ContractTotalPrice,@ContractStatus,@ContractCreateDate) " +
@@ -76,13 +76,13 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             using(var connection = _context.CreateConnection())
             {
                 connection.Open();
-                var res = await connection.QuerySingleAsync(query, parameters);
+                var res = await connection.QueryAsync(query, parameters);
                 connection.Close();
-                /*if (res == 0)
+                if (!res.Any())
                 {
                     return false;
-                }*/
-                return res;
+                }
+                return true;
             }
         }
 
@@ -194,6 +194,23 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
                 var res = await connection.QueryFirstOrDefaultAsync<TblContract>(query, new { @ServiceRequestID = id});
                 connection.Close();
                 return res;
+            }
+        }
+
+        public async Task<TblContract> GetContractByID(int id)
+        {
+            var query = "select * from tblContract where ContractID = @ContractID";
+
+            using (var conn = _context.CreateConnection())
+            {
+                conn.Open();
+                var res = await conn.QueryAsync<TblContract>(query, new { @ContractID = id });
+                conn.Close();
+                if (!res.Any())
+                {
+                    return null;
+                }
+                return res.FirstOrDefault();
             }
         }
     }

@@ -18,6 +18,7 @@ namespace AnService_Capstone.Core.Entities
         }
 
         public virtual DbSet<TblContract> TblContracts { get; set; }
+        public virtual DbSet<TblInviteCode> TblInviteCodes { get; set; }
         public virtual DbSet<TblInvoice> TblInvoices { get; set; }
         public virtual DbSet<TblMaterial> TblMaterials { get; set; }
         public virtual DbSet<TblMedium> TblMedia { get; set; }
@@ -94,11 +95,37 @@ namespace AnService_Capstone.Core.Entities
                     .HasConstraintName("FK_tblContract_tblRequestServices");
             });
 
+            modelBuilder.Entity<TblInviteCode>(entity =>
+            {
+                entity.HasKey(e => e.InviteCodeId);
+
+                entity.ToTable("tblInviteCode");
+
+                entity.Property(e => e.InviteCodeId).HasColumnName("InviteCodeID");
+
+                entity.Property(e => e.Code)
+                    .HasMaxLength(10)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.CustomerId).HasColumnName("CustomerID");
+
+                entity.Property(e => e.ExpireDate).HasColumnType("datetime");
+
+                entity.HasOne(d => d.Customer)
+                    .WithMany(p => p.TblInviteCodes)
+                    .HasForeignKey(d => d.CustomerId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_tblInviteCode_tblUsers");
+            });
+
             modelBuilder.Entity<TblInvoice>(entity =>
             {
                 entity.HasKey(e => e.InvoiceId);
 
                 entity.ToTable("tblInvoice");
+
+                entity.HasIndex(e => e.ContractId, "IX_tblInvoice")
+                    .IsUnique();
 
                 entity.Property(e => e.InvoiceId).HasColumnName("InvoiceID");
 
@@ -117,8 +144,8 @@ namespace AnService_Capstone.Core.Entities
                 entity.Property(e => e.TotalCostUpdate).HasColumnType("decimal(18, 2)");
 
                 entity.HasOne(d => d.Contract)
-                    .WithMany(p => p.TblInvoices)
-                    .HasForeignKey(d => d.ContractId)
+                    .WithOne(p => p.TblInvoice)
+                    .HasForeignKey<TblInvoice>(d => d.ContractId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_tblInvoice_tblContract");
 
@@ -177,7 +204,7 @@ namespace AnService_Capstone.Core.Entities
                 entity.Property(e => e.CustomerId).HasColumnName("CustomerID");
 
                 entity.Property(e => e.PromotionCode)
-                    .HasMaxLength(20)
+                    .HasMaxLength(10)
                     .IsUnicode(false);
 
                 entity.Property(e => e.PromotionDateExpired).HasColumnType("datetime");
@@ -259,8 +286,6 @@ namespace AnService_Capstone.Core.Entities
 
                 entity.Property(e => e.RequestDetailId).HasColumnName("RequestDetailID");
 
-                entity.Property(e => e.RequestDetailDescription).HasMaxLength(250);
-
                 entity.Property(e => e.RequestDetailPrice).HasColumnType("decimal(18, 2)");
 
                 entity.Property(e => e.ServiceId).HasColumnName("ServiceID");
@@ -336,6 +361,8 @@ namespace AnService_Capstone.Core.Entities
                 entity.Property(e => e.CustomerPhone)
                     .HasMaxLength(10)
                     .IsUnicode(false);
+
+                entity.Property(e => e.PromotionValue).HasColumnType("decimal(18, 2)");
 
                 entity.Property(e => e.ServiceRequestCreateDate).HasColumnType("datetime");
 
@@ -441,10 +468,6 @@ namespace AnService_Capstone.Core.Entities
                     .IsUnicode(false);
 
                 entity.Property(e => e.FullName).HasMaxLength(50);
-
-                entity.Property(e => e.InviteCode)
-                    .HasMaxLength(6)
-                    .IsUnicode(false);
 
                 entity.Property(e => e.Password)
                     .HasMaxLength(50)

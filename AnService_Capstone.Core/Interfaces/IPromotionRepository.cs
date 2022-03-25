@@ -15,7 +15,13 @@ namespace AnService_Capstone.Core.Interfaces
 
         public Task<IEnumerable<TblPromotion>> GetAllPromotionByUserID(int userID);
 
+        public Task<IEnumerable<TblPromotion>> GetAllPromotionValidByUserID(int userID);
+
+        public Task<TblPromotion> GetInformationPromotionByID(int id);
+
         public Task<bool> CheckEnteredCode(int userID);
+
+        public Task<bool> UpdateStatusPromotion(int id);
         /*public Task<bool> InsertPromotionDetail(int userID, int promotionID);*/
     }
 }

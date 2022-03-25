@@ -24,7 +24,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
 
         public async Task<UserViewModel> LoginStaff(UserLogin login)
         {
-            var query = "select UserID, Username, Password, FullName, PhoneNumber, Address, Email, InviteCode, RoleName, TypeJob, CreateDate, Status " +
+            var query = "select UserID, Username, Password, FullName, PhoneNumber, Address, Email, RoleName, TypeJob, CreateDate, Status " +
                 "from tblUsers u join tblRoles r on u.Role = r.RoleID " +
                 "where Username = @Username and Password = @Password and Status = 4";
             using (var connection = _context.CreateConnection())
@@ -42,7 +42,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
                 "from (tblUsers u join tblRoles r on u.Role = r.RoleID) " +
                 "join tblTypeJobs job on u.TypeJob = job.TypeJobID " +
                 "where PhoneNumber = @PhoneNumber and Status = 4";*/
-            var query = "select UserID, Username, Password, FullName, PhoneNumber, Address, Email, InviteCode, RoleName, CreateDate, Status " +
+            var query = "select UserID, Username, Password, FullName, PhoneNumber, Address, Email, RoleName, CreateDate, Status " +
                 "from (tblUsers u join tblRoles r on u.Role = r.RoleID) " +
                 "where PhoneNumber = @PhoneNumber";
             using (var connection = _context.CreateConnection())
@@ -69,10 +69,10 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             }*/
         }
 
-        public async Task<int> CreateAccountCustomer(CreateCustomer customer, string inviteCode)
+        public async Task<int> CreateAccountCustomer(CreateCustomer customer)
         {
-            var query = "insert into tblUsers(FullName, PhoneNumber, Address, Email, InviteCode, Role, CreateDate, Status) " +
-                "values(@FullName, @PhoneNumber, @Address, @Email, @InviteCode, @Role, @CreateDate, @Status) " +
+            var query = "insert into tblUsers(FullName, PhoneNumber, Address, Email, Role, CreateDate, Status) " +
+                "values(@FullName, @PhoneNumber, @Address, @Email, @Role, @CreateDate, @Status) " +
                 "SELECT CAST(SCOPE_IDENTITY() as int)";
 
             var parameters = new DynamicParameters();
@@ -80,7 +80,6 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             parameters.Add("PhoneNumber", customer.PhoneNumber, DbType.String);
             parameters.Add("Address", customer.Address, DbType.String);
             parameters.Add("Email", customer.Email, DbType.String);
-            parameters.Add("InviteCode", inviteCode, DbType.String);
             parameters.Add("Role", 3, DbType.Int32);
             parameters.Add("CreateDate", DateTime.Now, DbType.DateTime);
             parameters.Add("Status", 4, DbType.Int32);
@@ -94,7 +93,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             }
         }
 
-        public async Task<bool> CheckInviteCodeExist(string code)
+        /*public async Task<bool> CheckInviteCodeExist(string code)
         {
             var query = "select UserID from tblUsers where InviteCode = @InviteCode";
 
@@ -109,7 +108,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
                 }
                 return true;
             }
-        }
+        }*/
 
         public async Task<IEnumerable<TblUser>> GetWorkerByServiceID(int id)
         {
@@ -317,7 +316,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
 
         public async Task<UserViewModel> GetCustomerByID(int id)
         {
-            var query = "select UserID, FullName, PhoneNumber, Address, Email, InviteCode, CreateDate, Status " +
+            var query = "select UserID, FullName, PhoneNumber, Address, Email, CreateDate, Status " +
                 "from tblUsers " +
                 "where Role = 3 and UserID = @UserID";
             using (var connections = _context.CreateConnection())
@@ -446,7 +445,33 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             }
         }
 
-        public async Task<UserViewModel> GetCustomerByInviteCode(string inviteCode)
+        /*public async Task<bool> CreateInviteCode(int userID, string code)
+        {
+            var query = "insert into tblInviteCode(CustomerID, Code, IsUsed, ExpireDate) " +
+                "values (@CustomerID, @Code, @IsUsed, @ExpireDate)";
+            
+            var time = DateTime.Now.AddDays(30);
+
+            var parameters = new DynamicParameters();
+            parameters.Add("CustomerID", userID, DbType.Int32);
+            parameters.Add("CustCodeomerID", code, DbType.String);
+            parameters.Add("IsUsed", 0, DbType.Boolean);
+            parameters.Add("ExpireDate", time, DbType.DateTime);
+
+            using (var connection = _context.CreateConnection())
+            {
+                connection.Open();
+                var res = await connection.ExecuteAsync(query, parameters);
+                connection.Close();
+                if (res == 0)
+                {
+                    return false;
+                }
+                return true;
+            }
+        }*/
+
+        /*public async Task<UserViewModel> GetCustomerByInviteCode(string inviteCode)
         {
             var query = "select UserID, FullName, PhoneNumber, Address, Email, InviteCode, CreateDate, Status " +
                 "from tblUsers " +
@@ -461,6 +486,6 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
                 }
                 return res.FirstOrDefault();
             }
-        }
+        }*/
     }
 }

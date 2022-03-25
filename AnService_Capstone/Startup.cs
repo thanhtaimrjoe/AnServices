@@ -127,6 +127,7 @@ namespace AnService_Capstone
             services.AddScoped<IInvoiceRepository, InvoiceRepository>();
             services.AddScoped<ITypeJobRepository, TypeJobRepository>();
             services.AddScoped<IContractRepository, ContractRepository>();
+            services.AddScoped<IInviteCodeRepository, InviteCodeRepository>();
 
             services.AddSingleton<IHostedService, ScheduledTask>();
         }

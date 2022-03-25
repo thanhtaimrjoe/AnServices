@@ -15,9 +15,9 @@ namespace AnService_Capstone.Core.Interfaces
 
         public Task<UserViewModel> CheckPhoneNumberExist(string phoneNumber);
 
-        public Task<int> CreateAccountCustomer(CreateCustomer customer, string inviteCode);
+        public Task<int> CreateAccountCustomer(CreateCustomer customer);
 
-        public Task<bool> CheckInviteCodeExist(string code);
+        /*public Task<bool> CheckInviteCodeExist(string code);*/
 
         public Task<IEnumerable<TblUser>> GetWorkerByServiceID(int id);
 
@@ -47,12 +47,14 @@ namespace AnService_Capstone.Core.Interfaces
 
         public Task<IEnumerable<UserViewModel>> GetAllCustomers(string id, string name, string phone);
 
+        /*public Task<bool> CreateInviteCode(int userID, string code);*/
+
         /*public Task<IEnumerable<UserViewModel>> GetAllCustomersByName(string name);
 
         public Task<IEnumerable<UserViewModel>> GetAllCustomersByPhone(string phone);
 */
         /*public Task<IEnumerable<UserViewModel>> GetAllCustomersByPhoneAndName(string phone, string name);*/
 
-        public Task<UserViewModel> GetCustomerByInviteCode(string inviteCode);
+        /*public Task<UserViewModel> GetCustomerByInviteCode(string inviteCode);*/
     }
 }

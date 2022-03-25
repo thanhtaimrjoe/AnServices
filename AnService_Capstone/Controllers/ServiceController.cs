@@ -26,8 +26,9 @@ namespace AnService_Capstone.Controllers
         private readonly FirebaseService _firebaseService;
         private readonly UtilHelper _utilHelper;
         private readonly IRepairDetail _repariRepository;
+        private readonly IPromotionRepository _promotionRepository;
         public ServiceController(IServiceRepository serviceRepository, TwilioService twilioService, IUserRepository userRepository,
-            FirebaseService firebaseService, UtilHelper utilHelper, IRepairDetail repariRepository)
+            FirebaseService firebaseService, UtilHelper utilHelper, IRepairDetail repariRepository, IPromotionRepository promotionRepository)
         {
             _serviceRepository = serviceRepository;
             _twilioService = twilioService;
@@ -35,6 +36,7 @@ namespace AnService_Capstone.Controllers
             _firebaseService = firebaseService;
             _utilHelper = utilHelper;
             _repariRepository = repariRepository;
+            _promotionRepository = promotionRepository;
         }
 
         /// <summary>
@@ -65,7 +67,7 @@ namespace AnService_Capstone.Controllers
             }
             if (serviceDetail != false && media != false)
             {
-                var check = await _serviceRepository.CheckServiceRequestByUserIDOfTheDay(model.CustomerId);
+                /*var check = await _serviceRepository.CheckServiceRequestByUserIDOfTheDay(model.CustomerId);
                 if (!check)
                 {
                     var user = await _userRepository.GetCustomerByID(model.CustomerId);
@@ -73,7 +75,11 @@ namespace AnService_Capstone.Controllers
                     _twilioService.SendSMS(formatPhone, "Your account has been blocked because you have submitted more than 3 service requests. ");
                     _ = _userRepository.UpdateStatusUserByID(model.CustomerId, 10);
                     return BadRequest(new ErrorResponse("Your account has been banned"));
-                    /*return Ok("Your account has been banned");*/
+                    *//*return Ok("Your account has been banned");*//*
+                }*/
+                if (model.PromotionCode.PromotionID != 0)
+                {
+                    _ = await _promotionRepository.UpdateStatusPromotion(model.PromotionCode.PromotionID);
                 }
                 return Ok("Create Successfull");
             }
@@ -218,11 +224,11 @@ namespace AnService_Capstone.Controllers
         {
             IEnumerable<TblServiceRequest> service;
 
-            if (ServiceRequestCreateDate != null)
+            /*if (ServiceRequestCreateDate != null)
             {
-                ServiceRequestCreateDate = DateTime.ParseExact(ServiceRequestCreateDate, "yyyy-MM-dd HH:mm:ss",
+                ServiceRequestCreateDate = DateTime.ParseExact(ServiceRequestCreateDate, "yyyy-MM-dd",
                                            System.Globalization.CultureInfo.InvariantCulture).ToString("d");
-            }
+            }*/
             if (ServiceRequestStatus == 0 && ServiceRequestCreateDate == null)
             {
                 service = await _serviceRepository.GetAllServiceRequest();
@@ -246,6 +252,15 @@ namespace AnService_Capstone.Controllers
             }*/
             return Ok(service);
         }
+
+        /*[HttpGet]
+        [Route("[action]")]
+        public async Task<IActionResult> Test2(string ServiceRequestCreateDate)
+        {
+            ServiceRequestCreateDate = DateTime.ParseExact(ServiceRequestCreateDate, "yyyy-MM-dd",
+                                           System.Globalization.CultureInfo.InvariantCulture).ToString("d");
+            return Ok(ServiceRequestCreateDate);
+        }*/
 
         /*/// <summary>
         /// lấy danh sách request service có trong db
@@ -533,32 +548,32 @@ namespace AnService_Capstone.Controllers
                 return BadRequest(new ErrorResponse("Please enter status"));
             }
 
-            /*bool checkStatus = false;*/
+            bool checkStatus = true;
 
             var result = await _serviceRepository.UpdateStatusServiceRequestDetail(id, status);
 
-            var detail = await _serviceRepository.GetRequestDetailByID(id);
-
-            /*var services = await _serviceRepository.GetAllServiceRequestDetailsByServiceRequestID(detail.ServiceRequestId);*/
-
-            /*foreach (var serviceDetail in services)
+            if (result)
             {
-                if (serviceDetail.RequestDetailStatus == 11 || serviceDetail.RequestDetailStatus == 12)
+                var detail = await _serviceRepository.GetRequestDetailByID(id);
+
+                var services = await _serviceRepository.GetAllServiceRequestDetailsByServiceRequestID(detail.ServiceRequestId);
+
+                foreach (var serviceDetail in services)
                 {
-                    checkStatus = true;
+                    if (serviceDetail.RequestDetailStatus != 11 && serviceDetail.RequestDetailStatus != 12)
+                    {
+                        checkStatus = false;
+                    }
                 }
-            }*/
 
-            /*if (checkStatus)
-            {*/
-            _ = await _serviceRepository.UpdateStatusServiceRequest(detail.ServiceRequestId, 14);
-            /*}*/
+                if (checkStatus)
+                {
+                    _ = await _serviceRepository.UpdateStatusServiceRequest(detail.ServiceRequestId, 14);
+                }
 
-            if (!result)
-            {
-                return NotFound(new ErrorResponse("Update Fail"));
+                return Ok("Update Successful");
             }
-            return Ok("Update Successful");
+            return NotFound(new ErrorResponse("Update Fail"));
         }
 
         [HttpPut]
@@ -612,6 +627,25 @@ namespace AnService_Capstone.Controllers
             }
 
             var res = await _serviceRepository.UpdateStatusServiceRequest(serviceRequestID, 15);
+
+            if (res)
+            {
+                return Ok("Update Successful");
+            }
+
+            return BadRequest(new ErrorResponse("Update Fail"));
+        }
+
+        [HttpPut]
+        [Route("[action]")]
+        public async Task<IActionResult> ReworkRequestDetail(int requestDetailID)
+        {
+            if (requestDetailID == 0)
+            {
+                return BadRequest(new ErrorResponse("Please enter requestDetailID"));
+            }
+
+            var res = await _serviceRepository.UpdateStatusServiceRequestDetail(requestDetailID, 16);
 
             if (res)
             {
