@@ -23,7 +23,7 @@ namespace AnService_Capstone.Core.Entities
         public int? ServiceRequestStatus { get; set; }
         public DateTime? ServiceRequestCreateDate { get; set; }
         public int? ServiceRequestPackage { get; set; }
-        public decimal? PromotionValue { get; set; }
+        public int? PromotionId { get; set; }
 
         public virtual TblUser Customer { get; set; }
         public virtual TblStatus ServiceRequestStatusNavigation { get; set; }

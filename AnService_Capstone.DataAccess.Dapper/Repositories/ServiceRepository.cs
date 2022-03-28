@@ -126,8 +126,8 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
 
         public async Task<int> CreateServiceRequest(CreateService model)
         {
-            var query = "INSERT INTO tblServiceRequest(CustomerID, CustomerName, CustomerPhone, CustomerAddress, ServiceRequestDescription, ServiceRequestStatus, ServiceRequestCreateDate, ServiceRequestPackage, PromotionValue) " +
-                "VALUES (@CustomerID, @CustomerName, @CustomerPhone, @CustomerAddress, @ServiceRequestDescription, 2, @ServiceRequestCreateDate, @ServiceRequestPackage, @PromotionValue) " +
+            var query = "INSERT INTO tblServiceRequest(CustomerID, CustomerName, CustomerPhone, CustomerAddress, ServiceRequestDescription, ServiceRequestStatus, ServiceRequestCreateDate, ServiceRequestPackage, PromotionID) " +
+                "VALUES (@CustomerID, @CustomerName, @CustomerPhone, @CustomerAddress, @ServiceRequestDescription, 2, @ServiceRequestCreateDate, @ServiceRequestPackage, @PromotionID) " +
                 "SELECT CAST(SCOPE_IDENTITY() as int)";
 
             var parameters = new DynamicParameters();
@@ -138,7 +138,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             parameters.Add("ServiceRequestDescription", model.ServiceRequestDescription, DbType.String);
             parameters.Add("ServiceRequestCreateDate", DateTime.Now, DbType.DateTime);
             parameters.Add("ServiceRequestPackage", model.ServiceRequestPackage, DbType.Int32);
-            parameters.Add("PromotionValue", model.PromotionCode.PromotionValue, DbType.Double);
+            parameters.Add("PromotionID", model.PromotionID, DbType.Double);
 
             using (var connection = _context.CreateConnection())
             {
@@ -165,7 +165,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
 
         public async Task<IEnumerable<TblServiceRequest>> GetAllServiceRequest()
         {
-            var query = "select rs.ServiceRequestID, CustomerID, CustomerName, CustomerPhone, CustomerAddress, ServiceRequestDescription, ServiceRequestStatus, ServiceRequestCreateDate, ServiceRequestPackage, UserID, FullName, PhoneNumber, Address, Email, CreateDate, sta.StatusID, StatusName, MediaID, MediaUrl " +
+            var query = "select rs.ServiceRequestID, CustomerID, CustomerName, CustomerPhone, CustomerAddress, ServiceRequestDescription, ServiceRequestStatus, ServiceRequestCreateDate, ServiceRequestPackage, PromotionID, UserID, FullName, PhoneNumber, Address, Email, CreateDate, sta.StatusID, StatusName, MediaID, MediaUrl " +
                 "from ((tblServiceRequest rs join tblUsers u on rs.CustomerID = u.UserID) join tblStatus sta on rs.ServiceRequestStatus = sta.StatusID) join tblMedia media on rs.ServiceRequestID = media.ServiceRequestID " +
                 "order by case " +
                 "when ServiceRequestStatus = 2 then 0 " +
@@ -340,10 +340,19 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
 
         public async Task<IEnumerable<TblServiceRequest>> GetAllServiceRequestByDate(string date)
         {
-            var query = "select rs.ServiceRequestID, CustomerID, CustomerName, CustomerPhone, CustomerAddress, ServiceRequestDescription, ServiceRequestCreateDate, UserID, FullName, PhoneNumber, Address, Email, CreateDate, StatusID, StatusName, MediaID, MediaUrl " +
+            var query = "select rs.ServiceRequestID, CustomerID, CustomerName, CustomerPhone, CustomerAddress, ServiceRequestDescription, ServiceRequestCreateDate, ServiceRequestStatus, ServiceRequestPackage, PromotionID, UserID, FullName, PhoneNumber, Address, Email, CreateDate, StatusID, StatusName, MediaID, MediaUrl " +
                 "from ((tblServiceRequest rs join tblUsers u on rs.CustomerID = u.UserID) join tblStatus sta on rs.ServiceRequestStatus = sta.StatusID) join tblMedia media on rs.ServiceRequestID = media.ServiceRequestID " +
                 "where ServiceRequestCreateDate between @ServiceRequestCreateDateStart and @ServiceRequestCreateDateEnd " +
-                "order by ServiceRequestStatus asc, ServiceRequestCreateDate desc";
+                "order by case " +
+                "when ServiceRequestStatus = 2 then 0 " +
+                "when ServiceRequestStatus = 15 then 1 " +
+                "when ServiceRequestStatus = 3 then 2 " +
+                "when ServiceRequestStatus = 6 then 3 " +
+                "when ServiceRequestStatus = 14 then 4 " +
+                "when ServiceRequestStatus = 13 then 5 " +
+                "when ServiceRequestStatus = 8 then 6" +
+                "when ServiceRequestStatus = 1 then 7 " +
+                " end, ServiceRequestCreateDate DESC";
 
             using (var connection = _context.CreateConnection())
             {
@@ -374,7 +383,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
 
         public async Task<IEnumerable<TblServiceRequest>> GetAllServiceRequestByStatus(int status)
         {
-            var query = "select rs.ServiceRequestID, CustomerID, CustomerName, CustomerPhone, CustomerAddress, ServiceRequestDescription, ServiceRequestStatus, ServiceRequestCreateDate, ServiceRequestPackage, UserID, FullName, PhoneNumber, Address, Email, CreateDate, StatusID, StatusName, MediaID, MediaUrl " +
+            var query = "select rs.ServiceRequestID, CustomerID, CustomerName, CustomerPhone, CustomerAddress, ServiceRequestDescription, ServiceRequestStatus, ServiceRequestCreateDate, ServiceRequestPackage, PromotionID, UserID, FullName, PhoneNumber, Address, Email, CreateDate, StatusID, StatusName, MediaID, MediaUrl " +
                 "from ((tblServiceRequest rs join tblUsers u on rs.CustomerID = u.UserID) join tblStatus sta on rs.ServiceRequestStatus = sta.StatusID) join tblMedia media on rs.ServiceRequestID = media.ServiceRequestID " +
                 "where ServiceRequestStatus = @ServiceRequestStatus " +
                 "order by ServiceRequestStatus asc, ServiceRequestCreateDate desc";
@@ -408,7 +417,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
 
         public async Task<IEnumerable<TblServiceRequest>> GetServiceRequestByUserIDAndStatus(int user, int status)
         {
-            var query = "select rs.ServiceRequestID, CustomerID, CustomerName, CustomerPhone, CustomerAddress, ServiceRequestDescription, ServiceRequestStatus, ServiceRequestCreateDate, ServiceRequestPackage, UserID, FullName, PhoneNumber, Address, Email, StatusID, StatusName, MediaID, MediaUrl " +
+            var query = "select rs.ServiceRequestID, CustomerID, CustomerName, CustomerPhone, CustomerAddress, ServiceRequestDescription, ServiceRequestStatus, ServiceRequestCreateDate, ServiceRequestPackage, PromotionID, UserID, FullName, PhoneNumber, Address, Email, StatusID, StatusName, MediaID, MediaUrl " +
                 "from ((tblServiceRequest rs join tblUsers u on rs.CustomerID = u.UserID) join tblStatus sta on rs.ServiceRequestStatus = sta.StatusID) join tblMedia media on rs.ServiceRequestID = media.ServiceRequestID " +
                 "where CustomerID = @CustomerID and ServiceRequestStatus = @ServiceRequestStatus " +
                 "order by ServiceRequestCreateDate desc";
@@ -442,7 +451,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
 
         public async Task<TblServiceRequest> GetServiceRequestByID(int id)
         {
-            var query = "select rs.ServiceRequestID, rs.CustomerID, ServiceRequestStatus, CustomerName, CustomerPhone, CustomerAddress, ServiceRequestDescription, ServiceRequestCreateDate, ServiceRequestPackage, PromotionValue, UserID, FullName, PhoneNumber, Address, Email, StatusID, StatusName, MediaID, MediaUrl " +
+            var query = "select rs.ServiceRequestID, rs.CustomerID, ServiceRequestStatus, CustomerName, CustomerPhone, CustomerAddress, ServiceRequestDescription, ServiceRequestCreateDate, ServiceRequestPackage, PromotionID, UserID, FullName, PhoneNumber, Address, Email, StatusID, StatusName, MediaID, MediaUrl " +
                 "from ((tblServiceRequest rs join tblUsers u on rs.CustomerID = u.UserID) join tblStatus sta on rs.ServiceRequestStatus = sta.StatusID) join tblMedia media on rs.ServiceRequestID = media.ServiceRequestID " +
 
                 "where rs.ServiceRequestID = @ServiceRequestID";
@@ -573,7 +582,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
 
         public async Task<IEnumerable<TblServiceRequest>> GetAllServiceRequestByDateAndStatus(string date, int status)
         {
-            var query = "select rs.ServiceRequestID, CustomerID, CustomerName, CustomerPhone, CustomerAddress, ServiceRequestDescription, ServiceRequestStatus, ServiceRequestCreateDate, ServiceRequestPackage, UserID, FullName, PhoneNumber, Address, Email, CreateDate, StatusID, StatusName, MediaID, MediaUrl " +
+            var query = "select rs.ServiceRequestID, CustomerID, CustomerName, CustomerPhone, CustomerAddress, ServiceRequestDescription, ServiceRequestStatus, ServiceRequestCreateDate, ServiceRequestPackage, PromotionID, UserID, FullName, PhoneNumber, Address, Email, CreateDate, StatusID, StatusName, MediaID, MediaUrl " +
                 "from ((tblServiceRequest rs join tblUsers u on rs.CustomerID = u.UserID) join tblStatus sta on rs.ServiceRequestStatus = sta.StatusID) join tblMedia media on rs.ServiceRequestID = media.ServiceRequestID " +
                 "where ServiceRequestStatus = @ServiceRequestStatus and ServiceRequestCreateDate between @ServiceRequestCreateDateStart and @ServiceRequestCreateDateEnd " +
                 "order by ServiceRequestStatus asc, ServiceRequestCreateDate desc";

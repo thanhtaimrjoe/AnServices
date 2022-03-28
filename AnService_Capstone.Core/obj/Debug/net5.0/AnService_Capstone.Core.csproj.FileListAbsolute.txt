@@ -79,7 +79,6 @@ E:\Capstone\Backup_API\AnService_Capstone.Core\bin\Debug\net5.0\AnService_Capsto
 E:\Capstone\Backup_API\AnService_Capstone.Core\bin\Debug\net5.0\AnService_Capstone.Core.dll
 E:\Capstone\Backup_API\AnService_Capstone.Core\bin\Debug\net5.0\ref\AnService_Capstone.Core.dll
 E:\Capstone\Backup_API\AnService_Capstone.Core\bin\Debug\net5.0\AnService_Capstone.Core.pdb
-E:\Capstone\Backup_API\AnService_Capstone.Core\obj\Debug\net5.0\AnService_Capstone.Core.csproj.AssemblyReference.cache
 E:\Capstone\Backup_API\AnService_Capstone.Core\obj\Debug\net5.0\AnService_Capstone.Core.GeneratedMSBuildEditorConfig.editorconfig
 E:\Capstone\Backup_API\AnService_Capstone.Core\obj\Debug\net5.0\AnService_Capstone.Core.AssemblyInfoInputs.cache
 E:\Capstone\Backup_API\AnService_Capstone.Core\obj\Debug\net5.0\AnService_Capstone.Core.AssemblyInfo.cs
@@ -88,3 +87,4 @@ E:\Capstone\Backup_API\AnService_Capstone.Core\obj\Debug\net5.0\AnService_Capsto
 E:\Capstone\Backup_API\AnService_Capstone.Core\obj\Debug\net5.0\ref\AnService_Capstone.Core.dll
 E:\Capstone\Backup_API\AnService_Capstone.Core\obj\Debug\net5.0\AnService_Capstone.Core.pdb
 E:\Capstone\Backup_API\AnService_Capstone.Core\obj\Debug\net5.0\AnService_Capstone.Core.genruntimeconfig.cache
+E:\Capstone\Backup_API\AnService_Capstone.Core\obj\Debug\net5.0\AnService_Capstone.Core.csproj.AssemblyReference.cache

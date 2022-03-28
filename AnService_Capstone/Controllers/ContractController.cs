@@ -20,12 +20,14 @@ namespace AnService_Capstone.Controllers
         private readonly IContractRepository _contractRepository;
         private readonly FirebaseService _firebaseService;
         private readonly IServiceRepository _serviceRepository;
+        private readonly IPromotionRepository _promotionRepository;
 
-        public ContractController(IContractRepository contractRepository, FirebaseService firebaseService, IServiceRepository serviceRepository)
+        public ContractController(IContractRepository contractRepository, FirebaseService firebaseService, IServiceRepository serviceRepository, IPromotionRepository promotionRepository)
         {
             _contractRepository = contractRepository;
             _firebaseService = firebaseService;
             _serviceRepository = serviceRepository;
+            _promotionRepository = promotionRepository;
         }
 
         [HttpGet]
@@ -115,7 +117,9 @@ namespace AnService_Capstone.Controllers
             if (res)
             {
                 var contract = await _contractRepository.GetContractByID(id);
+                var service = await _serviceRepository.GetServiceRequestByID(contract.ServiceRequestId);
                 _ = await _serviceRepository.UpdateStatusServiceRequest(contract.ServiceRequestId, 3);
+                _ = await _promotionRepository.UpdateStatusPromotion((int)service.PromotionId);
                 return Ok("Update successfull");
             }
             return BadRequest(new ErrorResponse("Update fail"));
@@ -268,7 +272,7 @@ namespace AnService_Capstone.Controllers
             return BadRequest(new ErrorResponse("Create fail"));
         }*/
 
-        [HttpPost]
+        /*[HttpPost]
         [Route("[action]")]
         public async Task<IActionResult> Test([FromForm(Name = "file")]List<IFormFile> files)
         {
@@ -281,7 +285,7 @@ namespace AnService_Capstone.Controllers
             }
 
             return Ok(stringFile);
-        }
+        }*/
 
         /*[HttpPost]
         [Route("[action]")]

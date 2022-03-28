@@ -82,12 +82,6 @@ namespace AnService_Capstone.Core.Entities
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_tblContract_tblStatus");
 
-                entity.HasOne(d => d.Customer)
-                    .WithMany(p => p.TblContracts)
-                    .HasForeignKey(d => d.CustomerId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_tblContact_tblUsers");
-
                 entity.HasOne(d => d.ServiceRequest)
                     .WithMany(p => p.TblContracts)
                     .HasForeignKey(d => d.ServiceRequestId)
@@ -362,7 +356,7 @@ namespace AnService_Capstone.Core.Entities
                     .HasMaxLength(10)
                     .IsUnicode(false);
 
-                entity.Property(e => e.PromotionValue).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.PromotionId).HasColumnName("PromotionID");
 
                 entity.Property(e => e.ServiceRequestCreateDate).HasColumnType("datetime");
 

@@ -17,6 +17,7 @@ namespace AnService_Capstone.Core.Models.Response
         public string ContractEndDate { get; set; }
         public double? ContractDeposit { get; set; }
         public double? ContractTotalPrice { get; set; }
+        public int PromotionID { get; set; }
         public List<TblRequestDetail> Details { get; set; }
     }
 }

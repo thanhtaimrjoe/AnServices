@@ -16,6 +16,7 @@ namespace AnService_Capstone.Core.Models.Request
 
         public int ServiceRequestID { get; set; }
         public int ContractID { get; set; }
+        public int PromotionID { get; set; }
         /*public IEnumerable<RequestDetailPrice> RequestDetails { get; set; }*/
     }
 }

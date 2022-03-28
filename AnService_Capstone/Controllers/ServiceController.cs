@@ -77,10 +77,10 @@ namespace AnService_Capstone.Controllers
                     return BadRequest(new ErrorResponse("Your account has been banned"));
                     *//*return Ok("Your account has been banned");*//*
                 }*/
-                if (model.PromotionCode.PromotionID != 0)
+                /*if (model.PromotionID != 0)
                 {
-                    _ = await _promotionRepository.UpdateStatusPromotion(model.PromotionCode.PromotionID);
-                }
+                    _ = await _promotionRepository.UpdateStatusPromotion(model.PromotionID);
+                }*/
                 return Ok("Create Successfull");
             }
             return BadRequest(new ErrorResponse("Create Fail"));
@@ -224,11 +224,12 @@ namespace AnService_Capstone.Controllers
         {
             IEnumerable<TblServiceRequest> service;
 
-            /*if (ServiceRequestCreateDate != null)
+            if (ServiceRequestCreateDate != null)
             {
-                ServiceRequestCreateDate = DateTime.ParseExact(ServiceRequestCreateDate, "yyyy-MM-dd",
-                                           System.Globalization.CultureInfo.InvariantCulture).ToString("d");
-            }*/
+                ServiceRequestCreateDate = DateTime.ParseExact(ServiceRequestCreateDate, "yyyy-MM-dd hh:mm:ss",
+                                           System.Globalization.CultureInfo.InvariantCulture).ToString("yyyy-MM-dd");
+            }
+
             if (ServiceRequestStatus == 0 && ServiceRequestCreateDate == null)
             {
                 service = await _serviceRepository.GetAllServiceRequest();
@@ -257,8 +258,9 @@ namespace AnService_Capstone.Controllers
         [Route("[action]")]
         public async Task<IActionResult> Test2(string ServiceRequestCreateDate)
         {
-            ServiceRequestCreateDate = DateTime.ParseExact(ServiceRequestCreateDate, "yyyy-MM-dd",
-                                           System.Globalization.CultureInfo.InvariantCulture).ToString("d");
+            var service = await _serviceRepository.GetAllServiceRequest();
+            ServiceRequestCreateDate = DateTime.ParseExact(ServiceRequestCreateDate, "yyyy-MM-dd hh:mm:ss",
+                                           System.Globalization.CultureInfo.InvariantCulture).ToString("yyyy-MM-dd");
             return Ok(ServiceRequestCreateDate);
         }*/
 
@@ -702,10 +704,10 @@ namespace AnService_Capstone.Controllers
             {
                 result = await _serviceRepository.GetAllServiceRequestDetailsByServiceRequestID(id);
             }
-            /*if (result == null)
+            if (result == null)
             {
                 return NotFound(new ErrorResponse("No Request Service Availabe"));
-            }*/
+            }
             return Ok(result);
         }
 

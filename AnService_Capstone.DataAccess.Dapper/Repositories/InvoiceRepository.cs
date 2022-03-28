@@ -40,15 +40,16 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             }
         }
 
-        public async Task<bool> CreateInvoice(int id, int contractID, double total)
+        public async Task<bool> CreateInvoice(int id, int contractID, int promotionID, double total)
         {
-            var query = "insert into tblInvoice(ServiceRequestID,ContractID,TotalCost,InvoiceDateCreate) values(@ServiceRequestID,@ContractID,@TotalCost,@InvoiceDateCreate)";
+            var query = "insert into tblInvoice(ServiceRequestID,ContractID,TotalCost,InvoiceDateCreate,PromotionID) values(@ServiceRequestID,@ContractID,@TotalCost,@InvoiceDateCreate,@PromotionID)";
 
             var parameters = new DynamicParameters();
             parameters.Add("ServiceRequestID", id, DbType.Int32);
             parameters.Add("ContractID", contractID, DbType.Int32);
             parameters.Add("TotalCost", total, DbType.Double);
             parameters.Add("InvoiceDateCreate", DateTime.Now, DbType.DateTime);
+            parameters.Add("PromotionID", promotionID, DbType.Int32);
 
             using (var connection = _context.CreateConnection())
             {
@@ -65,7 +66,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
 
         public async Task<ContractViewModel> GetInfomationInvoiceByServiceRequestID(int id)
         {
-            var query = "select CustomerName, CustomerPhone, CustomerAddress, ServiceRequestDescription, ContractID, ContractStartDate, ContractEndDate, ContractDeposit, ContractTotalPrice, RequestDetailID, RequestDetailStatus, RequestDetailPrice, ser.ServiceID, ServiceName, ServiceImg " +
+            var query = "select CustomerName, CustomerPhone, CustomerAddress, ServiceRequestDescription, PromotionID, ContractID, ContractStartDate, ContractEndDate, ContractDeposit, ContractTotalPrice, RequestDetailID, RequestDetailStatus, RequestDetailPrice, ser.ServiceID, ServiceName, ServiceImg " +
                 "from ((tblServiceRequest request join tblContract ct on request.ServiceRequestID = ct.ServiceRequestID) " +
                 "join tblRequestDetails detail on request.ServiceRequestID = detail.ServiceRequestID) " +
                 "join tblServices ser on ser.ServiceID = detail.ServiceID " +

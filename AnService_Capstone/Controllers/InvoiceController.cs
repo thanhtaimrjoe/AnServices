@@ -14,12 +14,14 @@ namespace AnService_Capstone.Controllers
         private readonly IInvoiceRepository _invoice;
         private readonly IServiceRepository _serviceRepository;
         private readonly IContractRepository _contactRepository;
+        private readonly IPromotionRepository _promotionRepository;
 
-        public InvoiceController(IInvoiceRepository invoice, IServiceRepository serviceRepository, IContractRepository contactRepository)
+        public InvoiceController(IInvoiceRepository invoice, IServiceRepository serviceRepository, IContractRepository contactRepository, IPromotionRepository promotionRepository)
         {
             _invoice = invoice;
             _serviceRepository = serviceRepository;
             _contactRepository = contactRepository;
+            _promotionRepository = promotionRepository;
         }
 
         /// <summary>
@@ -69,19 +71,21 @@ namespace AnService_Capstone.Controllers
                 }
             }
 
+            var promotionObj = await _promotionRepository.GetInformationPromotionByID(invoice.PromotionID);
             var contact = await _contactRepository.GetContractByServiceRequestID(invoice.ServiceRequestID);
 
             double deposit = (double)(contact.ContractTotalPrice * contact.ContractDeposit);
             double vat = totalPrice * 0.1;
+            double promotion = totalPrice * (double)promotionObj.PromotionValue;
 
-            totalPrice = totalPrice - deposit + vat;
+            totalPrice = totalPrice - deposit - promotion + vat;
 
             /*foreach (var price in invoice.RequestDetails)
             {
                 totalPrice += price.Price;
             }*/
 
-            var res = await _invoice.CreateInvoice(invoice.ServiceRequestID, invoice.ContractID, totalPrice);
+            var res = await _invoice.CreateInvoice(invoice.ServiceRequestID, invoice.ContractID, invoice.PromotionID, totalPrice);
             if (res)
             {
                 _ = await _serviceRepository.UpdateStatusServiceRequest(invoice.ServiceRequestID, 14);
