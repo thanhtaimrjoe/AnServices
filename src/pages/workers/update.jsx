@@ -35,7 +35,7 @@ const UpdateReportAttribute = (props) => {
         <BasicStep
           createDate={requestMaterialCreateDate}
           typeJobName={typeJobName}
-          typeJobId={typeJobIdRecord}
+          typeJobId={typeJobId}
         />
       ),
     },
@@ -47,6 +47,7 @@ const UpdateReportAttribute = (props) => {
       setFormData(res);
       setTypeJobName(res.typeJob.typeJobName);
       setTypeJobIdRecord(res.typeJob.typeJobId);
+      setTypeJobId(res.typeJob.typeJobId);
       setRequestaterialCreateDate(res.createDate.split('T', 1));
       setRequestaterialCreateDate(moment(res.requestServiceCreateDate).format('DD/MM/YYYY'));
     });
@@ -84,7 +85,7 @@ const UpdateReportAttribute = (props) => {
         workerAddress: update.update.address,
         workerEmail: update.update.email,
         // typeJob: update.update.typeJobId,
-        typeJob: {typeJobIdRecord},
+        typeJob: {typeJobId},
 
       };
       return updateWorker(createContractValues).then((res) => {

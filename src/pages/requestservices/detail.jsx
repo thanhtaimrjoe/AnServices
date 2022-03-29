@@ -69,6 +69,7 @@ import storage from '../firebase/firebase';
 import { createContract } from '@/services/contracts';
 import CommonSelect from '@/components/CommonSelect/CommonSelect';
 import { createInvoice } from '@/services/invoice';
+import { getInformationPromotionByID } from '@/services/promotion';
 
 const DetailServiceRequest = (props) => {
   const {
@@ -123,6 +124,7 @@ const DetailServiceRequest = (props) => {
   const { RangePicker } = DatePicker;
   const [totalPrice, setTotalPrice] = useState([]);
   const [invoiceTotalPrice, setInvoiceTotalPrice] = useState([]);
+  const [promotionValueRecord, setPromotionValueRecord] = useState();
 
   //
 
@@ -205,8 +207,8 @@ const DetailServiceRequest = (props) => {
   const [requestServiceRecord, setRequestServiceDetail] = useState([]);
   const [staffCoordinatorRecord, setStaffCoordinatorRecord] = useState([]);
   useEffect(() => {
-    // getAllServiceRequestDetailsByServiceRequestID(updateRequestServiceState.serviceRequestId)
-    getTest(updateRequestServiceState.serviceRequestId)
+    getAllServiceRequestDetailsByServiceRequestID(updateRequestServiceState.serviceRequestId)
+    // getTest(updateRequestServiceState.serviceRequestId)
       .then((record) => {
         setRequestServiceDetail(record);
         setIsLoad(true);
@@ -244,7 +246,17 @@ const DetailServiceRequest = (props) => {
     getRepairDetailByServiceRequestID(updateRequestServiceState.serviceRequestId).then((record) => {
       setStaffCoordinatorRecord(record);
     });
+
+    if (updateRequestServiceState.promotionId === 0) {
+      setPromotionValueRecord(0.0);
+    } else {
+      getInformationPromotionByID(updateRequestServiceState.promotionId).then((record) => {
+        setPromotionValueRecord(record.promotionValue);
+      });
+    }
   }, []);
+
+  console.log('promotionValueRecord', promotionValueRecord);
 
   const [requestMaterialRecord, setRequestMaterialRecord] = useState([]);
   const [workerRecord, setWorkerRecord] = useState([]);
@@ -308,7 +320,6 @@ const DetailServiceRequest = (props) => {
           setContractEndDateData1(record.contractEndDate);
           setContractDepositData1(record.contractDeposit);
           setContractTotalPriceData1(record.contractTotalPrice);
-          console.log('totalprice', record.contractTotalPrice);
 
           setContractStartDateData(record.contractStartDate);
           setContractEndDateData(record.contractEndDate);
@@ -364,11 +375,8 @@ const DetailServiceRequest = (props) => {
   const onReworkServiceRequest = (value) => {
     // const update = normalizeReportForm(formData);
     return reworkRequestDetail(value.requestDetailId).then(
-      (res) =>
-      window.location.reload(),
-      message.success(
-        `Dịch vụ ${value?.service?.serviceName} đã được yêu cầu làm lại`,
-      ),
+      (res) => window.location.reload(),
+      message.success(`Dịch vụ ${value?.service?.serviceName} đã được yêu cầu làm lại`),
     );
   };
 
@@ -437,11 +445,17 @@ const DetailServiceRequest = (props) => {
   function onChange(value, requestDetailId, index) {
     if (updatePriceRequestDetailsData[index]) {
       updatePriceRequestDetailsData[index].requestDetailPrice = value;
+        // value - value * promotionValueRecord;
       setUpdatePriceRequestDetailsData([...updatePriceRequestDetailsData]);
     } else {
       setUpdatePriceRequestDetailsData([
         ...updatePriceRequestDetailsData,
-        { requestDetailID: requestDetailId, requestDetailPrice: value },
+        {
+          requestDetailID: requestDetailId,
+          requestDetailPrice: value - value * promotionValueRecord,
+          // requestDetailPrice: value - value * promotionValueRecord,
+
+        },
       ]);
     }
   }
@@ -484,13 +498,11 @@ const DetailServiceRequest = (props) => {
 
   function handleChangeMainWorker(value) {
     setMainStaffCoordinator(value);
-    console.log(`selected ${value}`);
+    // console.log(`selected ${value}`);
   }
 
   function handleChange(value) {
     setStaffCoordinator([...value]);
-    console.log(`selected ${value}`);
-    // console.log('selected1', staffCoordinator);
   }
 
   const onAcceptRequestMaterial = (values) => {
@@ -680,15 +692,17 @@ const DetailServiceRequest = (props) => {
     const createInvoiceData = {
       serviceRequestID: updateRequestServiceState.serviceRequestId,
       contractID: contractIDRecord,
+      promotionID: updateRequestServiceState.promotionId,
     };
     return createInvoice(createInvoiceData).then((res) => {
-      // if(res.status === 500) {
-      //   message.error("Hoá đơn này đã được gửi");
-      // }
-      message.success(
-        `Hoá đơn cho yêu cầu ${updateRequestServiceState.serviceRequestDescription} đã được gửi`,
-      );
-      setDisableInvoice(true);
+      if (res.status === 400) {
+        message.error('Hoá đơn này đã được gửi');
+      } else {
+        message.success(
+          `Hoá đơn cho yêu cầu ${updateRequestServiceState.serviceRequestDescription} đã được gửi`,
+        );
+        setDisableInvoice(true);
+      }
     });
   };
 
@@ -779,6 +793,22 @@ const DetailServiceRequest = (props) => {
       },
     },
     {
+      title: '',
+      key: 'typeServiceDecription',
+      width: 200,
+      render: (text, record) => {
+        console.log('record05', record)
+        const typeServiceDecription = { ...record };
+        return (
+          <Space>
+            {typeServiceDecription.requestDetailStatus === 9 && (
+              <a>{text?.service?.typeServiceNavigation?.typeServiceDecription}</a>
+            )}
+          </Space>
+        );
+      },
+    },
+    {
       title: 'Giá trị sửa chữa',
       dataIndex: 'requestDetailPrice',
       search: false,
@@ -814,8 +844,7 @@ const DetailServiceRequest = (props) => {
       title: '',
       key: 'action',
       render: (text, record) => {
-        const updateStatus = {...record};
-        console.log('updateStatus', updateStatus)
+        const updateStatus = { ...record };
         return (
           <Space>
             {updateStatus.requestDetailStatus === 12 && (
@@ -823,7 +852,7 @@ const DetailServiceRequest = (props) => {
             )}
           </Space>
         );
-      }
+      },
     },
   ];
 
@@ -910,7 +939,7 @@ const DetailServiceRequest = (props) => {
                 Điều phối thợ
               </Button>
             )} */}
-            {(record?.requestDetailStatus !== 11 && record?.requestDetailStatus !== 16) && (
+            {record?.requestDetailStatus !== 11 && record?.requestDetailStatus !== 16 && (
               <Button
                 // loading={staffCoordinatorConfirmLoading}
                 // disabled={disableStaffCoordinator}
@@ -988,7 +1017,7 @@ const DetailServiceRequest = (props) => {
               <a onClick={enableContractForm}>Sửa hợp đồng</a>
             )}
             {record.serviceRequestId !== updateRequestServiceState.serviceRequestId && (
-              <a>Hợp đồng của yêu cầu khác</a>
+              <div>Hợp đồng của yêu cầu khác</div>
             )}
           </Space>
         );
@@ -1399,12 +1428,30 @@ const DetailServiceRequest = (props) => {
               )}
             </Col>
             <Col span={12}>
-              <ProForm.Item name="contractDeposit" label="Voucher">
-                <Input
+              <ProForm.Item
+                name={promotionValueRecord}
+                initialValue={promotionValueRecord}
+                label="Voucher"
+              >
+                {/* <Input
                   placeholder="Không có voucher được áp dụng"
                   disabled={disable}
                   readOnly
-                ></Input>
+                ></Input> */}
+                <Select disabled>
+                  <Option value={0.0}>Không có voucher được áp dụng</Option>
+                  <Option value={0.05}>Áp dụng voucher giảm 5%</Option>
+                  <Option value={0.1}>Áp dụng voucher giảm 10%</Option>
+                  <Option value={0.15}>Áp dụng voucher giảm 15%</Option>
+                  <Option value={0.2}>Áp dụng voucher giảm 20%</Option>
+                  <Option value={0.25}>Áp dụng voucher giảm 25%</Option>
+                  <Option value={0.3}>Áp dụng voucher giảm 30%</Option>
+                  <Option value={0.35}>Áp dụng voucher giảm 35%</Option>
+                  <Option value={0.4}>Áp dụng voucher giảm 40%</Option>
+                  <Option value={0.45}>Áp dụng voucher giảm 45%</Option>
+                  <Option value={0.5}>Áp dụng voucher giảm 50%</Option>
+                  <Option value={0.55}>Áp dụng voucher giảm 55%</Option>
+                </Select>
               </ProForm.Item>
             </Col>
           </Row>
@@ -1491,6 +1538,7 @@ const DetailServiceRequest = (props) => {
               Gửi hợp đồng
             </Button>
             <Button
+              // danger={true}
               disabled={disableInvoice}
               loading={sendInvoiceConfirmLoading}
               type="primary"
