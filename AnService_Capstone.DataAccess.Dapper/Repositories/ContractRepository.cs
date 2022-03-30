@@ -57,8 +57,8 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
 
         public async Task<bool> CreateContract(CreateContract contract)
         {
-            var query = "insert into tblContract(CustomerID,ServiceRequestID,ContractTitle,ContractUrl,ContractStartDate,ContractEndDate,ContractDeposit,ContractTotalPrice,ContractStatus,ContractCreateDate) " +
-                "values (@CustomerID,@ServiceRequestID,@ContractTitle,@ContractUrl,@ContractStartDate,@ContractEndDate,@ContractDeposit,@ContractTotalPrice,@ContractStatus,@ContractCreateDate) " +
+            var query = "insert into tblContract(CustomerID,ServiceRequestID,ContractTitle,ContractUrl,ContractStartDate,ContractEndDate,ContractDeposit,ContractTotalPrice,ContractStatus,ContractCreateDate,ContractReference) " +
+                "values (@CustomerID,@ServiceRequestID,@ContractTitle,@ContractUrl,@ContractStartDate,@ContractEndDate,@ContractDeposit,@ContractTotalPrice,@ContractStatus,@ContractCreateDate,@ContractReference) " +
                 "SELECT CAST(SCOPE_IDENTITY() as int)";
 
             var parameters = new DynamicParameters();
@@ -73,7 +73,16 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             parameters.Add("ContractStatus", 2, DbType.Int32);
             parameters.Add("ContractCreateDate", DateTime.Now, DbType.DateTime);
 
-            using(var connection = _context.CreateConnection())
+            if (contract.ContractReference == 0)
+            {
+                parameters.Add("ContractReference", null, DbType.Int32);
+            }
+            else
+            {
+                parameters.Add("ContractReference", contract.ContractReference, DbType.Int32);
+            }
+
+            using (var connection = _context.CreateConnection())
             {
                 connection.Open();
                 var res = await connection.QueryAsync(query, parameters);
@@ -105,7 +114,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
 
         public async Task<IEnumerable<TblContract>> GetContractListByUserID(int id)
         {
-            var query = "select * from tblContract where CustomerID = @CustomerID";
+            var query = "select * from tblContract where CustomerID = @CustomerID order by ContractCreateDate desc";
 
             using (var connection = _context.CreateConnection())
             {
@@ -156,7 +165,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
 
         public async Task<bool> UpdateContract(CreateContract contract, int contractID)
         {
-            var query = "update tblContract set ContractUrl = @ContractUrl, ContractStartDate = @ContractStartDate, ContractEndDate = @ContractEndDate, ContractDeposit = @ContractDeposit, ContractTotalPrice = @ContractTotalPrice, ContractUpdateDate = @ContractUpdateDate where ContractID = @ContractID";
+            var query = "update tblContract set ContractUrl = @ContractUrl, ContractStartDate = @ContractStartDate, ContractEndDate = @ContractEndDate, ContractDeposit = @ContractDeposit, ContractTotalPrice = @ContractTotalPrice, ContractUpdateDate = @ContractUpdateDate, ContractReference = @ContractReference where ContractID = @ContractID";
 
             var parameters = new DynamicParameters();
             
@@ -167,6 +176,14 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             parameters.Add("ContractTotalPrice", contract.ContractTotalPrice, DbType.Double);
             parameters.Add("ContractStatus", 2, DbType.Int32);
             parameters.Add("ContractUpdateDate", DateTime.Now, DbType.DateTime);
+            if (contract.ContractReference == 0)
+            {
+                parameters.Add("ContractReference", null, DbType.Int32);
+            }
+            else
+            {
+                parameters.Add("ContractReference", contract.ContractReference, DbType.Int32);
+            }
             parameters.Add("ContractID", contractID, DbType.Int32); 
 
             using (var connection = _context.CreateConnection())

@@ -71,14 +71,18 @@ namespace AnService_Capstone.Controllers
                 }
             }
 
-            var promotionObj = await _promotionRepository.GetInformationPromotionByID(invoice.PromotionID);
             var contact = await _contactRepository.GetContractByServiceRequestID(invoice.ServiceRequestID);
-
             double deposit = (double)(contact.ContractTotalPrice * contact.ContractDeposit);
             double vat = totalPrice * 0.1;
-            double promotion = totalPrice * (double)promotionObj.PromotionValue;
 
-            totalPrice = totalPrice - deposit - promotion + vat;
+            var promotionObj = await _promotionRepository.GetInformationPromotionByID(invoice.PromotionID);
+            if (promotionObj != null)
+            {
+                double promotion = totalPrice * (double)promotionObj.PromotionValue;
+                totalPrice = totalPrice - deposit - promotion + vat;
+            }
+
+            totalPrice = totalPrice - deposit + vat;
 
             /*foreach (var price in invoice.RequestDetails)
             {

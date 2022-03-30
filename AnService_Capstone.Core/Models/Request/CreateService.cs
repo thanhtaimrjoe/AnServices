@@ -35,5 +35,6 @@ namespace AnService_Capstone.Core.Models.Request
         /*public List<IFormFile> File { get; set; }*/
         public List<string> MediaList { get; set; }
         public int PromotionID { get; set; }
+        public int ServiceRequestIDParent { get; set; }
     }
 }

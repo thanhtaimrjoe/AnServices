@@ -49,7 +49,15 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             parameters.Add("ContractID", contractID, DbType.Int32);
             parameters.Add("TotalCost", total, DbType.Double);
             parameters.Add("InvoiceDateCreate", DateTime.Now, DbType.DateTime);
-            parameters.Add("PromotionID", promotionID, DbType.Int32);
+
+            if (promotionID == 0)
+            {
+                parameters.Add("PromotionID", null, DbType.Int32);
+            }
+            else
+            {
+                parameters.Add("PromotionID", promotionID, DbType.Int32);
+            }
 
             using (var connection = _context.CreateConnection())
             {

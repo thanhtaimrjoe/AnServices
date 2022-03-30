@@ -76,6 +76,11 @@ namespace AnService_Capstone.Core.Entities
 
                 entity.Property(e => e.ServiceRequestId).HasColumnName("ServiceRequestID");
 
+                entity.HasOne(d => d.ContractReferenceNavigation)
+                    .WithMany(p => p.InverseContractReferenceNavigation)
+                    .HasForeignKey(d => d.ContractReference)
+                    .HasConstraintName("FK_tblContract_tblContract");
+
                 entity.HasOne(d => d.ContractStatusNavigation)
                     .WithMany(p => p.TblContracts)
                     .HasForeignKey(d => d.ContractStatus)

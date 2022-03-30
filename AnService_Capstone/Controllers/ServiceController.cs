@@ -72,7 +72,7 @@ namespace AnService_Capstone.Controllers
                 {
                     var user = await _userRepository.GetCustomerByID(model.CustomerId);
                     var formatPhone = _utilHelper.FormatPhoneNumber(user.PhoneNumber);
-                    _twilioService.SendSMS(formatPhone, "Your account has been blocked because you have submitted more than 3 service requests. ");
+                    _twilioService.SendSMS(formatPhone, "Tài khoản của bạn đã bị khóa vì bạn đã gửi hơn 3 yêu cầu dịch vụ. ");
                     _ = _userRepository.UpdateStatusUserByID(model.CustomerId, 10);
                     return BadRequest(new ErrorResponse("Your account has been banned"));
                     *//*return Ok("Your account has been banned");*//*
@@ -363,6 +363,24 @@ namespace AnService_Capstone.Controllers
             return Ok(result);
         }
 
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<IActionResult> GetAllServiceRequestByWorkerIDAndStatus(int id, IEnumerable<int> status)
+        {
+            if (id == 0)
+            {
+                return BadRequest(new ErrorResponse("Please enter id"));
+            }
+
+            var result = await _serviceRepository.GetAllServiceRequestByWorkerID(id);
+
+            if (result == null)
+            {
+                return NotFound(new ErrorResponse("No Request Service Availabe"));
+            }
+            return Ok(result);
+        }
+
         /// <summary>
         /// lấy detail của request service bằng request service id
         /// </summary>
@@ -562,7 +580,7 @@ namespace AnService_Capstone.Controllers
 
                 foreach (var serviceDetail in services)
                 {
-                    if (serviceDetail.RequestDetailStatus != 11 && serviceDetail.RequestDetailStatus != 12)
+                    if (serviceDetail.RequestDetailStatus != 11 && serviceDetail.RequestDetailStatus != 16)
                     {
                         checkStatus = false;
                     }
@@ -570,7 +588,7 @@ namespace AnService_Capstone.Controllers
 
                 if (checkStatus)
                 {
-                    _ = await _serviceRepository.UpdateStatusServiceRequest(detail.ServiceRequestId, 14);
+                    _ = await _serviceRepository.UpdateStatusServiceRequest(detail.ServiceRequestId, 9);
                 }
 
                 return Ok("Update Successful");
@@ -647,10 +665,27 @@ namespace AnService_Capstone.Controllers
                 return BadRequest(new ErrorResponse("Please enter requestDetailID"));
             }
 
+            bool checkStatus = true;
             var res = await _serviceRepository.UpdateStatusServiceRequestDetail(requestDetailID, 16);
 
             if (res)
             {
+                var detail = await _serviceRepository.GetRequestDetailByID(requestDetailID);
+
+                var services = await _serviceRepository.GetAllServiceRequestDetailsByServiceRequestID(detail.ServiceRequestId);
+
+                foreach (var serviceDetail in services)
+                {
+                    if (serviceDetail.RequestDetailStatus != 11 && serviceDetail.RequestDetailStatus != 16)
+                    {
+                        checkStatus = false;
+                    }
+                }
+
+                if (checkStatus)
+                {
+                    _ = await _serviceRepository.UpdateStatusServiceRequest(detail.ServiceRequestId, 9);
+                }
                 return Ok("Update Successful");
             }
 

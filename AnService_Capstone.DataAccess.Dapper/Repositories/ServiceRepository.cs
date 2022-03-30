@@ -172,10 +172,11 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
                 "when ServiceRequestStatus = 15 then 1 " +
                 "when ServiceRequestStatus = 3 then 2 " +
                 "when ServiceRequestStatus = 6 then 3 " +
-                "when ServiceRequestStatus = 14 then 4 " +
-                "when ServiceRequestStatus = 13 then 5 " +
-                "when ServiceRequestStatus = 8 then 6" +
-                "when ServiceRequestStatus = 1 then 7 " +
+                "when ServiceRequestStatus = 9 then 4 " +
+                "when ServiceRequestStatus = 14 then 5 " +
+                "when ServiceRequestStatus = 13 then 6 " +
+                "when ServiceRequestStatus = 8 then 7" +
+                "when ServiceRequestStatus = 1 then 8 " +
                 " end, ServiceRequestCreateDate DESC";
 
             using (var connection = _context.CreateConnection())
@@ -761,7 +762,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
 
                     foreach (var serviceDetail in services)
                     {
-                        if (serviceDetail.RequestDetailStatus != 11 && serviceDetail.RequestDetailStatus != 12)
+                        if (serviceDetail.RequestDetailStatus != 11 && serviceDetail.RequestDetailStatus != 16)
                         {
                             checkStatus = false;
                         }
@@ -797,6 +798,11 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
                 connection.Close();
                 return res;
             }
+        }
+
+        public Task<IEnumerable<TblServiceRequest>> GetAllServiceRequestByWorkerIDAndStatus(int id, IEnumerable<int> status)
+        {
+            throw new NotImplementedException();
         }
     }
 }
