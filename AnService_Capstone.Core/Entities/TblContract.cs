@@ -7,11 +7,6 @@ namespace AnService_Capstone.Core.Entities
 {
     public partial class TblContract
     {
-        public TblContract()
-        {
-            InverseContractReferenceNavigation = new HashSet<TblContract>();
-        }
-
         public int ContractId { get; set; }
         public int CustomerId { get; set; }
         public int ServiceRequestId { get; set; }
@@ -24,12 +19,9 @@ namespace AnService_Capstone.Core.Entities
         public int ContractStatus { get; set; }
         public DateTime? ContractCreateDate { get; set; }
         public DateTime? ContractUpdateDate { get; set; }
-        public int? ContractReference { get; set; }
 
-        public virtual TblContract ContractReferenceNavigation { get; set; }
         public virtual TblStatus ContractStatusNavigation { get; set; }
         public virtual TblServiceRequest ServiceRequest { get; set; }
         public virtual TblInvoice TblInvoice { get; set; }
-        public virtual ICollection<TblContract> InverseContractReferenceNavigation { get; set; }
     }
 }

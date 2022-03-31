@@ -462,6 +462,78 @@ namespace AnService_Capstone.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// dashboard
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<IActionResult> CountSatisfiedRequestDetail()
+        {
+            var res = await _serviceRepository.CountRequestServiceDetail(11);
+            return Ok(res);
+        }
+
+        /// <summary>
+        /// dashboard
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<IActionResult> CountUnsatisfiedRequestDetail()
+        {
+            var res = await _serviceRepository.CountRequestServiceDetail(12);
+            return Ok(res);
+        }
+
+        /// <summary>
+        /// dashboard
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<IActionResult> CountReworkRequestDetail()
+        {
+            var res = await _serviceRepository.CountRequestServiceDetail(16);
+            return Ok(res);
+        }
+
+        /// <summary>
+        /// dashboard
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<IActionResult> CountServiceRequest()
+        {
+            var res = await _serviceRepository.GetAllServiceRequest();
+            return Ok(res.Count());
+        }
+
+        /// <summary>
+        /// dashboard
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<IActionResult> CountCompletedServiceRequest()
+        {
+            var res = await _serviceRepository.CountServiceRequest(13);
+            return Ok(res);
+        }
+
+        /// <summary>
+        /// dashboard
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<IActionResult> CountDenyServiceRequest()
+        {
+            var res = await _serviceRepository.CountServiceRequest(1);
+            return Ok(res);
+        }
+
         /*/// <summary>
         /// filter request service theo status (approve, pending, deny, processing)
         /// </summary>
@@ -588,34 +660,12 @@ namespace AnService_Capstone.Controllers
 
                 if (checkStatus)
                 {
-                    _ = await _serviceRepository.UpdateStatusServiceRequest(detail.ServiceRequestId, 9);
+                    _ = await _serviceRepository.UpdateStatusServiceRequest(detail.ServiceRequestId, 17);
                 }
 
                 return Ok("Update Successful");
             }
             return NotFound(new ErrorResponse("Update Fail"));
-        }
-
-        [HttpPut]
-        [Route("[action]")]
-        public async Task<IActionResult> RemoveListServiceRequest(IEnumerable<int> requestServiceID)
-        {
-            bool result = false;
-            if (requestServiceID == null)
-            {
-                return BadRequest(new ErrorResponse("Please enter requestServiceID"));
-            }
-
-            foreach (var service in requestServiceID)
-            {
-                result = await _serviceRepository.UpdateStatusServiceRequest(service, 13);
-            }
-            
-            if (!result)
-            {
-                return NotFound(new ErrorResponse("Cancel Fail"));
-            }
-            return Ok("Cancel Successful");
         }
 
         [HttpPut]
@@ -721,6 +771,28 @@ namespace AnService_Capstone.Controllers
             }
             return BadRequest("Accept Error");
         }*/
+
+        [HttpDelete]
+        [Route("[action]")]
+        public async Task<IActionResult> RemoveListServiceRequest(IEnumerable<int> requestServiceID)
+        {
+            bool result = false;
+            if (requestServiceID == null)
+            {
+                return BadRequest(new ErrorResponse("Please enter requestServiceID"));
+            }
+
+            foreach (var service in requestServiceID)
+            {
+                result = await _serviceRepository.UpdateStatusServiceRequest(service, 5);
+            }
+
+            if (!result)
+            {
+                return NotFound(new ErrorResponse("Cancel Fail"));
+            }
+            return Ok("Cancel Successful");
+        }
 
         [HttpGet]
         [Route("[action]")]

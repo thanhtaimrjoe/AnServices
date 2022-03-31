@@ -9,6 +9,7 @@ namespace AnService_Capstone.Core.Entities
     {
         public TblServiceRequest()
         {
+            InverseServiceRequestReferenceNavigation = new HashSet<TblServiceRequest>();
             TblContracts = new HashSet<TblContract>();
             TblMedia = new HashSet<TblMedium>();
             TblRequestDetails = new HashSet<TblRequestDetail>();
@@ -24,9 +25,12 @@ namespace AnService_Capstone.Core.Entities
         public DateTime? ServiceRequestCreateDate { get; set; }
         public int? ServiceRequestPackage { get; set; }
         public int? PromotionId { get; set; }
+        public int? ServiceRequestReference { get; set; }
 
         public virtual TblUser Customer { get; set; }
+        public virtual TblServiceRequest ServiceRequestReferenceNavigation { get; set; }
         public virtual TblStatus ServiceRequestStatusNavigation { get; set; }
+        public virtual ICollection<TblServiceRequest> InverseServiceRequestReferenceNavigation { get; set; }
         public virtual ICollection<TblContract> TblContracts { get; set; }
         public virtual ICollection<TblMedium> TblMedia { get; set; }
         public virtual ICollection<TblRequestDetail> TblRequestDetails { get; set; }

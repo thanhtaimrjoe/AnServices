@@ -57,8 +57,8 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
 
         public async Task<bool> CreateContract(CreateContract contract)
         {
-            var query = "insert into tblContract(CustomerID,ServiceRequestID,ContractTitle,ContractUrl,ContractStartDate,ContractEndDate,ContractDeposit,ContractTotalPrice,ContractStatus,ContractCreateDate,ContractReference) " +
-                "values (@CustomerID,@ServiceRequestID,@ContractTitle,@ContractUrl,@ContractStartDate,@ContractEndDate,@ContractDeposit,@ContractTotalPrice,@ContractStatus,@ContractCreateDate,@ContractReference) " +
+            var query = "insert into tblContract(CustomerID,ServiceRequestID,ContractTitle,ContractUrl,ContractStartDate,ContractEndDate,ContractDeposit,ContractTotalPrice,ContractStatus,ContractCreateDate) " +
+                "values (@CustomerID,@ServiceRequestID,@ContractTitle,@ContractUrl,@ContractStartDate,@ContractEndDate,@ContractDeposit,@ContractTotalPrice,@ContractStatus,@ContractCreateDate) " +
                 "SELECT CAST(SCOPE_IDENTITY() as int)";
 
             var parameters = new DynamicParameters();
@@ -73,14 +73,14 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             parameters.Add("ContractStatus", 2, DbType.Int32);
             parameters.Add("ContractCreateDate", DateTime.Now, DbType.DateTime);
 
-            if (contract.ContractReference == 0)
+            /*if (contract.ContractReference == 0)
             {
                 parameters.Add("ContractReference", null, DbType.Int32);
             }
             else
             {
                 parameters.Add("ContractReference", contract.ContractReference, DbType.Int32);
-            }
+            }*/
 
             using (var connection = _context.CreateConnection())
             {
@@ -176,14 +176,14 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             parameters.Add("ContractTotalPrice", contract.ContractTotalPrice, DbType.Double);
             parameters.Add("ContractStatus", 2, DbType.Int32);
             parameters.Add("ContractUpdateDate", DateTime.Now, DbType.DateTime);
-            if (contract.ContractReference == 0)
+            /*if (contract.ContractReference == 0)
             {
                 parameters.Add("ContractReference", null, DbType.Int32);
             }
             else
             {
                 parameters.Add("ContractReference", contract.ContractReference, DbType.Int32);
-            }
+            }*/
             parameters.Add("ContractID", contractID, DbType.Int32); 
 
             using (var connection = _context.CreateConnection())

@@ -76,11 +76,6 @@ namespace AnService_Capstone.Core.Entities
 
                 entity.Property(e => e.ServiceRequestId).HasColumnName("ServiceRequestID");
 
-                entity.HasOne(d => d.ContractReferenceNavigation)
-                    .WithMany(p => p.InverseContractReferenceNavigation)
-                    .HasForeignKey(d => d.ContractReference)
-                    .HasConstraintName("FK_tblContract_tblContract");
-
                 entity.HasOne(d => d.ContractStatusNavigation)
                     .WithMany(p => p.TblContracts)
                     .HasForeignKey(d => d.ContractStatus)
@@ -372,6 +367,11 @@ namespace AnService_Capstone.Core.Entities
                     .HasForeignKey(d => d.CustomerId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_tblRequestServices_tblUsers");
+
+                entity.HasOne(d => d.ServiceRequestReferenceNavigation)
+                    .WithMany(p => p.InverseServiceRequestReferenceNavigation)
+                    .HasForeignKey(d => d.ServiceRequestReference)
+                    .HasConstraintName("FK_tblServiceRequest_tblServiceRequest");
 
                 entity.HasOne(d => d.ServiceRequestStatusNavigation)
                     .WithMany(p => p.TblServiceRequests)
