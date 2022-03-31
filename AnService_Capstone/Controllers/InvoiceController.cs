@@ -1,8 +1,10 @@
-﻿using AnService_Capstone.Core.Interfaces;
+﻿using AnService_Capstone.Core.Entities;
+using AnService_Capstone.Core.Interfaces;
 using AnService_Capstone.Core.Models.Request;
 using AnService_Capstone.Core.Models.Response;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace AnService_Capstone.Controllers
@@ -113,6 +115,35 @@ namespace AnService_Capstone.Controllers
                 return NotFound("No record");
             }
             return Ok(res);
+        }
+
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<IActionResult> GetInfomationInvoiceByServiceRequestIDForStaff(int serviceRequestID)
+        {
+            List<ContractViewModel> list = new List<ContractViewModel>();
+            ContractViewModel invoice;
+
+            if (serviceRequestID == 0)
+            {
+                return BadRequest(new ErrorResponse("Please enter serviceRequestID"));
+            }
+
+            invoice = await _invoice.GetInfomationInvoiceByServiceRequestID(serviceRequestID);
+            var serviceRequest = await _serviceRepository.GetServiceRequestByID(serviceRequestID);
+
+            if (serviceRequest.ServiceRequestReference == null)
+            {
+                return Ok(invoice);
+            }
+
+            list.Add(invoice);
+
+            var serviceRequestReference = await _serviceRepository.GetServiceRequestByID(serviceRequest.ServiceRequestId);
+            invoice = await _invoice.GetInfomationInvoiceByServiceRequestID(serviceRequestReference.ServiceRequestId);
+            list.Add(invoice);
+
+            return Ok(list);
         }
     }
 }

@@ -428,7 +428,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
 
         public async Task<IEnumerable<TblServiceRequest>> GetServiceRequestByUserIDAndStatus(int user, int status)
         {
-            var query = "select rs.ServiceRequestID, CustomerID, CustomerName, CustomerPhone, CustomerAddress, ServiceRequestDescription, ServiceRequestStatus, ServiceRequestCreateDate, ServiceRequestPackage, PromotionID, UserID, FullName, PhoneNumber, Address, Email, StatusID, StatusName, MediaID, MediaUrl " +
+            var query = "select rs.ServiceRequestID, CustomerID, CustomerName, CustomerPhone, CustomerAddress, ServiceRequestDescription, ServiceRequestStatus, ServiceRequestCreateDate, ServiceRequestPackage, PromotionID, ServiceRequestReference, UserID, FullName, PhoneNumber, Address, Email, StatusID, StatusName, MediaID, MediaUrl " +
                 "from ((tblServiceRequest rs join tblUsers u on rs.CustomerID = u.UserID) join tblStatus sta on rs.ServiceRequestStatus = sta.StatusID) join tblMedia media on rs.ServiceRequestID = media.ServiceRequestID " +
                 "where CustomerID = @CustomerID and ServiceRequestStatus = @ServiceRequestStatus " +
                 "order by ServiceRequestCreateDate desc";

@@ -66,7 +66,7 @@ namespace AnService_Capstone.Controllers
             var res = await _contractRepository.GetContractByServiceRequestID(requestServiceId);
             if (res == null)
             {
-                return Ok(contract);
+                return Ok(new ErrorResponse("No record"));
             }
             return Ok(res);
         }
