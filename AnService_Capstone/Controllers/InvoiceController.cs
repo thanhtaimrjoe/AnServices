@@ -140,7 +140,7 @@ namespace AnService_Capstone.Controllers
             list.Add(invoice);
 
             var serviceRequestReference = await _serviceRepository.GetServiceRequestByID(serviceRequest.ServiceRequestId);
-            invoice = await _invoice.GetInfomationInvoiceByServiceRequestID(serviceRequestReference.ServiceRequestId);
+            invoice = await _invoice.GetInfomationInvoiceByServiceRequestID((int)serviceRequestReference.ServiceRequestReference);
             list.Add(invoice);
 
             return Ok(list);

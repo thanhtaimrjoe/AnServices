@@ -13,8 +13,8 @@ namespace AnService_Capstone.Core.Models.Response
         public string CustomerAddress { get; set; }
         public string CustomerPhone { get; set; }
         public string ServiceRequestDescription { get; set; }
-        public string ContractStartDate { get; set; }
-        public string ContractEndDate { get; set; }
+        public DateTime ContractStartDate { get; set; }
+        public DateTime ContractEndDate { get; set; }
         public double? ContractDeposit { get; set; }
         public double? ContractTotalPrice { get; set; }
         public int PromotionID { get; set; }
