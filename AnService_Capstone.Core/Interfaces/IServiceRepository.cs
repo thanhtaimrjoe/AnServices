@@ -35,7 +35,7 @@ namespace AnService_Capstone.Core.Interfaces
 
         public Task<bool> AssignWorkerToRequest(int RequestDetailId, int workerID, int status, int priority);
 
-        public Task<IEnumerable<TblServiceRequest>> GetAllServiceRequestByWorkerID(int id);
+        public Task<IEnumerable<TblServiceRequest>> GetAllServiceRequestByWorkerID(int id, int status);
 
         /*public Task<IEnumerable<TblServiceRequest>> GetAllServiceRequestByWorkerIDAndStatus(int id, IEnumerable<int> status);*/
 
@@ -71,9 +71,13 @@ namespace AnService_Capstone.Core.Interfaces
 
         public void BackgroundServiceTask();
 
-        public Task<int> CountRequestServiceDetail(int status);
+        /*public Task<int> CountRequestServiceDetail(int status);
 
-        public Task<int> CountServiceRequest(int status);
+        public Task<int> CountServiceRequest(int status);*/
+
+        public Task<IEnumerable<Dashboard.AmountOfSalesInYear>> AmountOfSaleList();
+
+        public Task<Dashboard.ServiceStatusStatistic> CountServiceStatus();
 
         /*public Task<IEnumerable<TblRequestDetail>> GetAllRequestDetail();*/
     }

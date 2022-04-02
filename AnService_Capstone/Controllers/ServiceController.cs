@@ -344,17 +344,18 @@ namespace AnService_Capstone.Controllers
         /// lấy danh sách request service mà worker được điều phối bằng workerid
         /// </summary>
         /// <param name="id"></param>
+        /// <param name="status"></param>
         /// <returns></returns>
         [HttpGet]
         [Route("[action]")]
-        public async Task<IActionResult> GetAllServiceRequestByWorkerID(int id)
+        public async Task<IActionResult> GetAllServiceRequestByWorkerID(int id, int status)
         {
             if (id == 0)
             {
                 return BadRequest(new ErrorResponse("Please enter id"));
             }
 
-            var result = await _serviceRepository.GetAllServiceRequestByWorkerID(id);
+            var result = await _serviceRepository.GetAllServiceRequestByWorkerID(id, status);
 
             if (result == null)
             {
@@ -363,7 +364,7 @@ namespace AnService_Capstone.Controllers
             return Ok(result);
         }
 
-        [HttpGet]
+        /*[HttpGet]
         [Route("[action]")]
         public async Task<IActionResult> GetAllServiceRequestByWorkerIDAndStatus(int id, IEnumerable<int> status)
         {
@@ -379,7 +380,7 @@ namespace AnService_Capstone.Controllers
                 return NotFound(new ErrorResponse("No Request Service Availabe"));
             }
             return Ok(result);
-        }
+        }*/
 
         /// <summary>
         /// lấy detail của request service bằng request service id
@@ -462,7 +463,7 @@ namespace AnService_Capstone.Controllers
             return Ok(result);
         }
 
-        /// <summary>
+        /*/// <summary>
         /// dashboard
         /// </summary>
         /// <returns></returns>
@@ -532,7 +533,28 @@ namespace AnService_Capstone.Controllers
         {
             var res = await _serviceRepository.CountServiceRequest(1);
             return Ok(res);
+        }*/
+
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<IActionResult> Dashboard()
+        {
+            Dashboard dashboard = new Dashboard();
+            var res1 = await _serviceRepository.AmountOfSaleList();
+            var res2 = await _serviceRepository.CountServiceStatus();
+            dashboard.AmountOfSalesInYears = res1;
+            dashboard.ServiceStatusStatistics = res2;
+            return Ok(dashboard);
         }
+
+        /*[HttpGet]
+        [Route("[action]")]
+        public async Task<IActionResult> ServiceStatusStatistics()
+        {
+            Dashboard.ServiceRequest serviceRequest = new Dashboard.ServiceRequest();
+
+            
+        }*/
 
         /*/// <summary>
         /// filter request service theo status (approve, pending, deny, processing)

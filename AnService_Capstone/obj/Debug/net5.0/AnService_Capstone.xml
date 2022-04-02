@@ -200,11 +200,12 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:AnService_Capstone.Controllers.ServiceController.GetAllServiceRequestByWorkerID(System.Int32)">
+        <member name="M:AnService_Capstone.Controllers.ServiceController.GetAllServiceRequestByWorkerID(System.Int32,System.Int32)">
             <summary>
             lấy danh sách request service mà worker được điều phối bằng workerid
             </summary>
             <param name="id"></param>
+            <param name="status"></param>
             <returns></returns>
         </member>
         <member name="M:AnService_Capstone.Controllers.ServiceController.GetAllServiceRequestDetailsByServiceRequestID(System.Int32)">
@@ -228,42 +229,6 @@
             </summary>
             <param name="id"></param>
             <param name="status"></param>
-            <returns></returns>
-        </member>
-        <member name="M:AnService_Capstone.Controllers.ServiceController.CountSatisfiedRequestDetail">
-            <summary>
-            dashboard
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:AnService_Capstone.Controllers.ServiceController.CountUnsatisfiedRequestDetail">
-            <summary>
-            dashboard
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:AnService_Capstone.Controllers.ServiceController.CountReworkRequestDetail">
-            <summary>
-            dashboard
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:AnService_Capstone.Controllers.ServiceController.CountServiceRequest">
-            <summary>
-            dashboard
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:AnService_Capstone.Controllers.ServiceController.CountCompletedServiceRequest">
-            <summary>
-            dashboard
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:AnService_Capstone.Controllers.ServiceController.CountDenyServiceRequest">
-            <summary>
-            dashboard
-            </summary>
             <returns></returns>
         </member>
         <member name="M:AnService_Capstone.Controllers.ServiceController.CancelServiceRequestForCustomer(System.Int32)">

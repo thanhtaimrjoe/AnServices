@@ -233,14 +233,26 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
 
         }
 
-        public async Task<IEnumerable<TblServiceRequest>> GetAllServiceRequestByWorkerID(int id)
+        public async Task<IEnumerable<TblServiceRequest>> GetAllServiceRequestByWorkerID(int id, int status)
         {
-            var query = "select distinct rs.ServiceRequestID, CustomerID, CustomerName, CustomerPhone, CustomerAddress, ServiceRequestDescription, ServiceRequestStatus, ServiceRequestCreateDate, ServiceRequestPackage, UserID, FullName, PhoneNumber, Address, Email, StatusID, StatusName, MediaID, MediaUrl " +
-                "from ((((tblServiceRequest rs join tblRequestDetails rd on rs.ServiceRequestID = rd.ServiceRequestID) join tblRepairDetail repair on rd.RequestDetailID = repair.RequestDetailID) " +
-                "join tblUsers u on u.UserID = rs.CustomerID) join tblStatus sta on rs.ServiceRequestStatus = sta.StatusID) join tblMedia media on rs.ServiceRequestID = media.ServiceRequestID " +
-                "where WorkerID = @WorkerID " +
-                "order by StatusID ASC, ServiceRequestCreateDate DESC";
+            string query;
 
+            if (status == 0)
+            {
+                query = "select distinct rs.ServiceRequestID, CustomerID, CustomerName, CustomerPhone, CustomerAddress, ServiceRequestDescription, ServiceRequestStatus, ServiceRequestCreateDate, ServiceRequestPackage, UserID, FullName, PhoneNumber, Address, Email, StatusID, StatusName, MediaID, MediaUrl " +
+                    "from ((((tblServiceRequest rs join tblRequestDetails rd on rs.ServiceRequestID = rd.ServiceRequestID) join tblRepairDetail repair on rd.RequestDetailID = repair.RequestDetailID) " +
+                    "join tblUsers u on u.UserID = rs.CustomerID) join tblStatus sta on rs.ServiceRequestStatus = sta.StatusID) join tblMedia media on rs.ServiceRequestID = media.ServiceRequestID " +
+                    "where WorkerID = @WorkerID and ServiceRequestStatus != 13" +
+                    "order by StatusID ASC, ServiceRequestCreateDate DESC";
+            }
+            else
+            {
+                query = "select distinct rs.ServiceRequestID, CustomerID, CustomerName, CustomerPhone, CustomerAddress, ServiceRequestDescription, ServiceRequestStatus, ServiceRequestCreateDate, ServiceRequestPackage, UserID, FullName, PhoneNumber, Address, Email, StatusID, StatusName, MediaID, MediaUrl " +
+                    "from ((((tblServiceRequest rs join tblRequestDetails rd on rs.ServiceRequestID = rd.ServiceRequestID) join tblRepairDetail repair on rd.RequestDetailID = repair.RequestDetailID) " +
+                    "join tblUsers u on u.UserID = rs.CustomerID) join tblStatus sta on rs.ServiceRequestStatus = sta.StatusID) join tblMedia media on rs.ServiceRequestID = media.ServiceRequestID " +
+                    "where WorkerID = @WorkerID and ServiceRequestStatus = 13" +
+                    "order by StatusID ASC, ServiceRequestCreateDate DESC";
+            }
             using (var connection = _context.CreateConnection())
             {
                 /*connection.Open();
@@ -815,7 +827,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             throw new NotImplementedException();
         }*/
 
-        public async Task<int> CountRequestServiceDetail(int status)
+        /*public async Task<int> CountRequestServiceDetail(int status)
         {
             var query = "select count(*) from tblRequestDetails where RequestDetailStatus = @RequestDetailStatus";
 
@@ -826,16 +838,68 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
                 conn.Close();
                 return res;
             }
-        }
+        }*/
 
-        public async Task<int> CountServiceRequest(int status)
+        /*public async Task<int> CountServiceRequest(int status)
         {
             var query = "select count(*) from tblServiceRequest where ServiceRequestStatus = @ServiceRequestStatus";
 
             using (var conn = _context.CreateConnection())
             {
                 conn.Open();
-                var res = await conn.QueryFirstOrDefaultAsync<int>(query, new { @RequestDetailStatus = status });
+                var res = await conn.QueryFirstOrDefaultAsync<int>(query, new { @ServiceRequestStatus = status });
+                conn.Close();
+                return res;
+            }
+        }*/
+
+        public async Task<IEnumerable<Dashboard.AmountOfSalesInYear>> AmountOfSaleList()
+        {
+            var query = "SELECT * " +
+                "FROM (SELECT YEAR(ServiceRequestCreateDate) [Year], " +
+                "DATENAME(MONTH, ServiceRequestCreateDate) [Month], " +
+                "COUNT(1) [Sales Count] " +
+                "FROM tblServiceRequest " +
+                "where ServiceRequestStatus != 2 and ServiceRequestStatus != 5 " +
+                "GROUP BY YEAR(ServiceRequestCreateDate), " +
+                "DATENAME(MONTH, ServiceRequestCreateDate)) AS MontlySalesData " +
+                "PIVOT( SUM([Sales Count]) " +
+                "FOR Month IN ([January],[February],[March],[April],[May]," +
+                "[June],[July],[August],[September],[October],[November]," +
+                "[December])) AS MNamePivot";
+
+            using (var conn = _context.CreateConnection())
+            {
+                conn.Open();
+                var res = await conn.QueryAsync<Dashboard.AmountOfSalesInYear>(query);
+                conn.Close();
+                return res;
+            }
+        }
+
+        public async Task<Dashboard.ServiceStatusStatistic> CountServiceStatus()
+        {
+            var query = "SELECT [Chưa xử lý] as Pending," +
+                "[Đã từ chối] as [Deny]," +
+                "[Đã đồng ý] as Agreed," +
+                "[Đang xử lý] as Processing," +
+                "[Khách hàng đã hủy] as Cancel," +
+                "[Đã hoàn thành] as Accomplished," +
+                "[Chờ thanh toán] as Payment," +
+                "[Đang khảo sát] as Surveying " +
+                "FROM (SELECT StatusName as [Status], " +
+                "COUNT(1) [Sales Count] " +
+                "FROM tblServiceRequest sr join tblStatus s on sr.ServiceRequestStatus = s.StatusID " +
+                "where ServiceRequestStatus != 5 " +
+                "GROUP BY StatusName) AS MontlySalesData " +
+                "PIVOT( SUM([Sales Count]) " +
+                "FOR [Status] IN ([Chưa xử lý],[Đã từ chối],[Đã đồng ý],[Đang xử lý],[Khách hàng đã hủy]," +
+                "[Đã hoàn thành],[Chờ thanh toán],[Đang khảo sát])) AS MNamePivot";
+
+            using (var conn = _context.CreateConnection())
+            {
+                conn.Open();
+                var res = await conn.QueryFirstOrDefaultAsync<Dashboard.ServiceStatusStatistic>(query);
                 conn.Close();
                 return res;
             }
