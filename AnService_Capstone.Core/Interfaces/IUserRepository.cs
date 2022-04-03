@@ -45,7 +45,11 @@ namespace AnService_Capstone.Core.Interfaces
 
         public Task<bool> UpdateStatusUserByID(int id, int status);
 
+        public Task<bool> ChangePhoneNumber(int userID, string phoneNumber);
+
         public Task<IEnumerable<UserViewModel>> GetAllCustomers(string id, string name, string phone);
+
+        public Task<IEnumerable<UserViewModel>> GetAllNewUsersInMonth(int month, int role, int status);
 
         /*public Task<bool> CreateInviteCode(int userID, string code);*/
 

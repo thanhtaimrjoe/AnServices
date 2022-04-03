@@ -827,7 +827,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             throw new NotImplementedException();
         }*/
 
-        /*public async Task<int> CountRequestServiceDetail(int status)
+        public async Task<int> CountRequestServiceDetail(int status)
         {
             var query = "select count(*) from tblRequestDetails where RequestDetailStatus = @RequestDetailStatus";
 
@@ -838,7 +838,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
                 conn.Close();
                 return res;
             }
-        }*/
+        }
 
         /*public async Task<int> CountServiceRequest(int status)
         {
@@ -853,27 +853,135 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             }
         }*/
 
-        public async Task<IEnumerable<Dashboard.AmountOfSalesInYear>> AmountOfSaleList()
+        public async Task<IEnumerable<Dashboard.AmountOfSalesInYear>> AmountOfSaleList(int year, int status)
         {
-            var query = "SELECT * " +
-                "FROM (SELECT YEAR(ServiceRequestCreateDate) [Year], " +
+            string query;
+            if (status == 0)
+            {
+                query = "SELECT * " +
+                "FROM (SELECT " +
                 "DATENAME(MONTH, ServiceRequestCreateDate) [Month], " +
                 "COUNT(1) [Sales Count] " +
                 "FROM tblServiceRequest " +
-                "where ServiceRequestStatus != 2 and ServiceRequestStatus != 5 " +
-                "GROUP BY YEAR(ServiceRequestCreateDate), " +
+                "where ServiceRequestStatus != 2 and ServiceRequestStatus != 5 and ServiceRequestStatus != 1 and YEAR(ServiceRequestCreateDate) = @ServiceRequestCreateDate " +
+                "GROUP BY " +
                 "DATENAME(MONTH, ServiceRequestCreateDate)) AS MontlySalesData " +
                 "PIVOT( SUM([Sales Count]) " +
                 "FOR Month IN ([January],[February],[March],[April],[May]," +
                 "[June],[July],[August],[September],[October],[November]," +
                 "[December])) AS MNamePivot";
+            }
+            else if (status == 1)
+            {
+                query = "SELECT * " +
+                "FROM (SELECT " +
+                "DATENAME(MONTH, ServiceRequestCreateDate) [Month], " +
+                "COUNT(1) [Sales Count] " +
+                "FROM tblServiceRequest " +
+                "where ServiceRequestStatus = 13 and YEAR(ServiceRequestCreateDate) = @ServiceRequestCreateDate " +
+                "GROUP BY " +
+                "DATENAME(MONTH, ServiceRequestCreateDate)) AS MontlySalesData " +
+                "PIVOT( SUM([Sales Count]) " +
+                "FOR Month IN ([January],[February],[March],[April],[May]," +
+                "[June],[July],[August],[September],[October],[November]," +
+                "[December])) AS MNamePivot";
+            }
+            else
+            {
+                query = "SELECT * " +
+                "FROM (SELECT " +
+                "DATENAME(MONTH, ServiceRequestCreateDate) [Month], " +
+                "COUNT(1) [Sales Count] " +
+                "FROM tblServiceRequest " +
+                "where ServiceRequestStatus = 1 and YEAR(ServiceRequestCreateDate) = @ServiceRequestCreateDate " +
+                "GROUP BY " +
+                "DATENAME(MONTH, ServiceRequestCreateDate)) AS MontlySalesData " +
+                "PIVOT( SUM([Sales Count]) " +
+                "FOR Month IN ([January],[February],[March],[April],[May]," +
+                "[June],[July],[August],[September],[October],[November]," +
+                "[December])) AS MNamePivot";
+            }
 
             using (var conn = _context.CreateConnection())
             {
                 conn.Open();
-                var res = await conn.QueryAsync<Dashboard.AmountOfSalesInYear>(query);
+                var res = await conn.QueryAsync<Dashboard.AmountOfSalesInYear>(query, new { @ServiceRequestCreateDate = year});
                 conn.Close();
                 return res;
+            }
+        }
+
+        public async Task<IEnumerable<int>> AmountOfSaleList2(int year, int status)
+        {
+            string query;
+            List<int> list = new List<int>();
+            if (status == 0)
+            {
+                query = "SELECT * " +
+                "FROM (SELECT " +
+                "DATENAME(MONTH, ServiceRequestCreateDate) [Month], " +
+                "COUNT(1) [Sales Count] " +
+                "FROM tblServiceRequest " +
+                "where ServiceRequestStatus != 2 and ServiceRequestStatus != 5 and ServiceRequestStatus != 1 and YEAR(ServiceRequestCreateDate) = @ServiceRequestCreateDate " +
+                "GROUP BY " +
+                "DATENAME(MONTH, ServiceRequestCreateDate)) AS MontlySalesData " +
+                "PIVOT( SUM([Sales Count]) " +
+                "FOR Month IN ([January],[February],[March],[April],[May]," +
+                "[June],[July],[August],[September],[October],[November]," +
+                "[December])) AS MNamePivot";
+            }
+            else if (status == 1)
+            {
+                query = "SELECT * " +
+                "FROM (SELECT " +
+                "DATENAME(MONTH, ServiceRequestCreateDate) [Month], " +
+                "COUNT(1) [Sales Count] " +
+                "FROM tblServiceRequest " +
+                "where ServiceRequestStatus = 13 and YEAR(ServiceRequestCreateDate) = @ServiceRequestCreateDate " +
+                "GROUP BY " +
+                "DATENAME(MONTH, ServiceRequestCreateDate)) AS MontlySalesData " +
+                "PIVOT( SUM([Sales Count]) " +
+                "FOR Month IN ([January],[February],[March],[April],[May]," +
+                "[June],[July],[August],[September],[October],[November]," +
+                "[December])) AS MNamePivot";
+            }
+            else
+            {
+                query = "SELECT * " +
+                "FROM (SELECT " +
+                "DATENAME(MONTH, ServiceRequestCreateDate) [Month], " +
+                "COUNT(1) [Sales Count] " +
+                "FROM tblServiceRequest " +
+                "where ServiceRequestStatus = 1 and YEAR(ServiceRequestCreateDate) = @ServiceRequestCreateDate " +
+                "GROUP BY " +
+                "DATENAME(MONTH, ServiceRequestCreateDate)) AS MontlySalesData " +
+                "PIVOT( SUM([Sales Count]) " +
+                "FOR Month IN ([January],[February],[March],[April],[May]," +
+                "[June],[July],[August],[September],[October],[November]," +
+                "[December])) AS MNamePivot";
+            }
+
+            using (var conn = _context.CreateConnection())
+            {
+                conn.Open();
+                var res = await conn.QueryAsync<Dashboard.AmountOfSalesInYear>(query, new { @ServiceRequestCreateDate = year });
+                conn.Close();
+                foreach(var item in res)
+                {
+                    list.Add(item.January);
+                    list.Add(item.February);
+                    list.Add(item.March);
+                    list.Add(item.April);
+                    list.Add(item.May);
+                    list.Add(item.June);
+                    list.Add(item.July);
+                    list.Add(item.August);
+                    list.Add(item.September);
+                    list.Add(item.October);
+                    list.Add(item.November);
+                    list.Add(item.December);
+                }
+                return list;
             }
         }
 
@@ -900,6 +1008,30 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             {
                 conn.Open();
                 var res = await conn.QueryFirstOrDefaultAsync<Dashboard.ServiceStatusStatistic>(query);
+                conn.Close();
+                return res;
+            }
+        }
+
+        public async Task<IEnumerable<Dashboard.AmountOfSalesInYear>> SumRevenueByYear(int year)
+        {
+            var query = "SELECT * " +
+                "FROM (SELECT " +
+                "DATENAME(MONTH, ServiceRequestCreateDate) [Month], " +
+                "SUM(TotalCost) [Sales Count] " +
+                "FROM tblServiceRequest sr join tblInvoice invoice on sr.ServiceRequestID = invoice.ServiceRequestID " +
+                "where ServiceRequestStatus = 13 and YEAR(ServiceRequestCreateDate) = @ServiceRequestCreateDate " +
+                "GROUP BY " +
+                "DATENAME(MONTH, ServiceRequestCreateDate)) AS MontlySalesData " +
+                "PIVOT( SUM([Sales Count]) " +
+                "FOR Month IN ([January],[February],[March],[April],[May]," +
+                "[June],[July],[August],[September],[October],[November]," +
+                "[December])) AS MNamePivot";
+
+            using (var conn = _context.CreateConnection())
+            {
+                conn.Open();
+                var res = await conn.QueryAsync<Dashboard.AmountOfSalesInYear>(query, new { @ServiceRequestCreateDate = year});
                 conn.Close();
                 return res;
             }

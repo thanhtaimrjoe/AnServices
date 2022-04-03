@@ -71,11 +71,15 @@ namespace AnService_Capstone.Core.Interfaces
 
         public void BackgroundServiceTask();
 
-        /*public Task<int> CountRequestServiceDetail(int status);
+        public Task<int> CountRequestServiceDetail(int status);
 
-        public Task<int> CountServiceRequest(int status);*/
+        /*public Task<int> CountServiceRequest(int status);*/
 
-        public Task<IEnumerable<Dashboard.AmountOfSalesInYear>> AmountOfSaleList();
+        public Task<IEnumerable<Dashboard.AmountOfSalesInYear>> AmountOfSaleList(int year, int status);
+
+        public Task<IEnumerable<int>> AmountOfSaleList2(int year, int status);
+
+        public Task<IEnumerable<Dashboard.AmountOfSalesInYear>> SumRevenueByYear(int year);
 
         public Task<Dashboard.ServiceStatusStatistic> CountServiceStatus();
 

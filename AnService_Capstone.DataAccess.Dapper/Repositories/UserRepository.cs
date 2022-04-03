@@ -445,6 +445,36 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             }
         }
 
+        public async Task<IEnumerable<UserViewModel>> GetAllNewUsersInMonth(int month, int role, int status)
+        {
+            var query = "select * from tblUsers where Role = @Role and Status = @Status and MONTH(CreateDate) = @CreateDate";
+
+            using(var connections = _context.CreateConnection())
+            {
+                connections.Open();
+                var res = await connections.QueryAsync<UserViewModel>(query, new { @CreateDate = month, @Role = role, @Status = status });
+                connections.Close();
+                return res;
+            }
+        }
+
+        public async Task<bool> ChangePhoneNumber(int userID, string phoneNumber)
+        {
+            var query = "update tblUsers set PhoneNumber = @PhoneNumber where UserID = @UserID ";
+
+            using(var connection = _context.CreateConnection())
+            {
+                connection.Open();
+                var res = await connection.ExecuteAsync(query, new { @PhoneNumber = phoneNumber, @UserId = userID });
+                connection.Close();
+                if (res != 0)
+                {
+                    return true;
+                }
+                return false;
+            }
+        }
+
         /*public async Task<bool> CreateInviteCode(int userID, string code)
         {
             var query = "insert into tblInviteCode(CustomerID, Code, IsUsed, ExpireDate) " +

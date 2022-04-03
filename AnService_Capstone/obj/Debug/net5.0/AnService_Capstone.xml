@@ -231,6 +231,24 @@
             <param name="status"></param>
             <returns></returns>
         </member>
+        <member name="M:AnService_Capstone.Controllers.ServiceController.CountSatisfiedRequestDetail">
+            <summary>
+            dashboard
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:AnService_Capstone.Controllers.ServiceController.CountUnsatisfiedRequestDetail">
+            <summary>
+            dashboard
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:AnService_Capstone.Controllers.ServiceController.CountReworkRequestDetail">
+            <summary>
+            dashboard
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:AnService_Capstone.Controllers.ServiceController.CancelServiceRequestForCustomer(System.Int32)">
             <summary>
             Từ chối hoặc hủy bỏ request service

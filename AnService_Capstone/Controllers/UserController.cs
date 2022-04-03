@@ -574,6 +574,34 @@ namespace AnService_Capstone.Controllers
             }
             return Ok("Update Successful");
         }
+
+        [HttpPut]
+        [Route("[action]")]
+        public async Task<IActionResult> ChangePhoneNumber(int userID, string phoneNumber)
+        {
+            if (userID == 0)
+            {
+                return BadRequest(new ErrorResponse("Please enter id"));
+            }
+
+            if (phoneNumber == null || phoneNumber.Equals(""))
+            {
+                return BadRequest(new ErrorResponse("Please enter phoneNumber"));
+            }
+
+            var check = await _userRepository.CheckPhoneNumberExist(phoneNumber);
+            if (check != null)
+            {
+                return BadRequest(new ErrorResponse("Phone number is exist"));
+            }
+
+            var res = await _userRepository.ChangePhoneNumber(userID, phoneNumber);
+            if (!res)
+            {
+                return BadRequest(new ErrorResponse("Update Fail"));
+            }
+            return Ok("Update Successful");
+        }
     }
 }
 

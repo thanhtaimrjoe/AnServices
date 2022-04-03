@@ -10,7 +10,7 @@ namespace AnService_Capstone.Core.Models.Response
     {
         public class AmountOfSalesInYear
         {
-            public int Year { get; set; }
+            /*public int Year { get; set; }*/
             public int January { get; set; }
             public int February { get; set; }
             public int March { get; set; }
@@ -37,7 +37,22 @@ namespace AnService_Capstone.Core.Models.Response
             public int Surveying { get; set; }
         }
 
-        public IEnumerable<AmountOfSalesInYear> AmountOfSalesInYears { get; set; }
+        public AmountOfSalesInYear ReceivedServiceRequest { get; set; }
+        public AmountOfSalesInYear CompleteServiceRequest { get; set; }
+        public AmountOfSalesInYear CancelServiceRequest { get; set; }
         public ServiceStatusStatistic ServiceStatusStatistics { get; set; }
+        public int PromotionIsUsed { get; set; }
+        public int PromotionIsUsedInMonth { get; set; }
+        public int PromotionIsUsedInYear { get; set; }
+        public int UnsatisfiedRequestDetail { get; set; }
+        public int SatisfiedRequestDetail { get; set; }
+        public int ReworkRequestDetail { get; set; }
+        public int TotalCustomers { get; set; }
+        public int AmountOfBanCustomers { get; set; }
+        public int AmountOfBanCustomersInMonth { get; set; }
+        public int AmountOfNewCustomersInMonth { get; set; }
+        public int TotalWorkers { get; set; }
+        public int AmountOfNewWorkersInMonth { get; set; }
+        public AmountOfSalesInYear RevenueByYear { get; set; }
     }
 }

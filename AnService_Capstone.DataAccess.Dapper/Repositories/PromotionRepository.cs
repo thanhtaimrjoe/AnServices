@@ -37,6 +37,45 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             }
         }
 
+        public async Task<int> CountPromotionIsUsed()
+        {
+            var query = "select count(*) from tblPromotion where PromotionActive = 0";
+
+            using (var conn = _dapperContext.CreateConnection())
+            {
+                conn.Open();
+                var res = await conn.QueryFirstOrDefaultAsync<int>(query);
+                conn.Close();
+                return res;
+            }
+        }
+
+        public async Task<int> CountPromotionIsUsedInMonth(int month)
+        {
+            var query = "select count(*) from tblPromotion promo join tblServiceRequest sr on sr.PromotionID = promo.PromotionID where PromotionActive = 0 and MONTH(ServiceRequestCreateDate) = @ServiceRequestCreateDate";
+
+            using (var conn = _dapperContext.CreateConnection())
+            {
+                conn.Open();
+                var res = await conn.QueryFirstOrDefaultAsync<int>(query, new { @ServiceRequestCreateDate = month});
+                conn.Close();
+                return res;
+            }
+        }
+
+        public async Task<int> CountPromotionIsUsedInYear(int year)
+        {
+            var query = "select count(*) from tblPromotion promo join tblServiceRequest sr on sr.PromotionID = promo.PromotionID where PromotionActive = 0 and YEAR(ServiceRequestCreateDate) = @ServiceRequestCreateDate";
+
+            using (var conn = _dapperContext.CreateConnection())
+            {
+                conn.Open();
+                var res = await conn.QueryFirstOrDefaultAsync<int>(query, new { @ServiceRequestCreateDate = year});
+                conn.Close();
+                return res;
+            }
+        }
+
         public async Task<bool> GeneratorPromotionCode(int userID, string promotion, string description, double value)
         {
             var query = "insert into tblPromotion(CustomerID, PromotionCode, PromotionDescription, PromotionValue, PromotionActive, PromotionDateExpired) " +

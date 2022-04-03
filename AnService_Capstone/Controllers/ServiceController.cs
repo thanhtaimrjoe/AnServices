@@ -463,7 +463,7 @@ namespace AnService_Capstone.Controllers
             return Ok(result);
         }
 
-        /*/// <summary>
+        /// <summary>
         /// dashboard
         /// </summary>
         /// <returns></returns>
@@ -499,7 +499,7 @@ namespace AnService_Capstone.Controllers
             return Ok(res);
         }
 
-        /// <summary>
+        /*/// <summary>
         /// dashboard
         /// </summary>
         /// <returns></returns>
@@ -537,13 +537,59 @@ namespace AnService_Capstone.Controllers
 
         [HttpGet]
         [Route("[action]")]
-        public async Task<IActionResult> Dashboard()
+        public async Task<IActionResult> Test3(int year)
+        {
+            var res = await _serviceRepository.AmountOfSaleList2(year, 0);
+            return Ok(res);
+        }
+
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<IActionResult> Dashboard(int year)
         {
             Dashboard dashboard = new Dashboard();
-            var res1 = await _serviceRepository.AmountOfSaleList();
+
+            if (year == 0)
+            {
+                year = DateTime.Now.Year;
+            }
+
+            var res1 = await _serviceRepository.AmountOfSaleList(year, 0);
             var res2 = await _serviceRepository.CountServiceStatus();
-            dashboard.AmountOfSalesInYears = res1;
+            var res3 = await _promotionRepository.CountPromotionIsUsed();
+            var res4 = await _serviceRepository.CountRequestServiceDetail(11);
+            var res5 = await _serviceRepository.CountRequestServiceDetail(12);
+            var res6 = await _serviceRepository.SumRevenueByYear(year);
+            var res7 = await _serviceRepository.CountRequestServiceDetail(16);
+            var res8 = await _serviceRepository.AmountOfSaleList(year, 1);
+            var res9 = await _serviceRepository.AmountOfSaleList(year, 2);
+            var res10 = await _userRepository.GetAllCustomers(null, "", "");
+            var res11 = await _userRepository.GetAllCustomers("10", "", "");
+            var res12 = await _userRepository.GetAllNewUsersInMonth(DateTime.Now.Month, 3, 4);
+            var res13 = await _userRepository.GetAllWorker(null, "", "");
+            var res14 = await _userRepository.GetAllNewUsersInMonth(DateTime.Now.Month, 2, 4);
+            var res15 = await _userRepository.GetAllNewUsersInMonth(DateTime.Now.Month, 2, 10);
+            var res16 = await _promotionRepository.CountPromotionIsUsedInMonth(DateTime.Now.Month);
+            var res17 = await _promotionRepository.CountPromotionIsUsedInYear(year);
+
+            dashboard.ReceivedServiceRequest = res1.FirstOrDefault();
             dashboard.ServiceStatusStatistics = res2;
+            dashboard.PromotionIsUsed = res3;
+            dashboard.SatisfiedRequestDetail = res4;
+            dashboard.UnsatisfiedRequestDetail = res5;
+            dashboard.RevenueByYear = res6.FirstOrDefault();
+            dashboard.ReworkRequestDetail = res7;
+            dashboard.CompleteServiceRequest = res8.FirstOrDefault();
+            dashboard.CancelServiceRequest = res9.FirstOrDefault();
+            dashboard.TotalCustomers = res10.Count();
+            dashboard.AmountOfBanCustomers = res11.Count();
+            dashboard.AmountOfNewCustomersInMonth = res12.Count();
+            dashboard.TotalWorkers = res13.Count();
+            dashboard.AmountOfNewWorkersInMonth = res14.Count();
+            dashboard.AmountOfBanCustomersInMonth = res15.Count();
+            dashboard.PromotionIsUsedInMonth = res16;
+            dashboard.PromotionIsUsedInYear = res17;
+
             return Ok(dashboard);
         }
 
