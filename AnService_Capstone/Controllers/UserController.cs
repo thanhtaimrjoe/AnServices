@@ -2,6 +2,7 @@
 using AnService_Capstone.Core.Models.Request;
 using AnService_Capstone.Core.Models.Response;
 using AnService_Capstone.DataAccess.Dapper.Customize;
+using AnService_Capstone.DataAccess.Dapper.Services.SendEmail;
 using AnService_Capstone.DataAccess.Dapper.Services.SendSMS;
 using AnService_Capstone.DataAccess.Dapper.TokenGenerator;
 using Microsoft.AspNetCore.Cors;
@@ -9,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -31,10 +33,12 @@ namespace AnService_Capstone.Controllers
         private readonly TwilioService _twilioService;
         private readonly UtilHelper _utilHelper;
         private readonly IInviteCodeRepository _inviteCodeRepository;
+        private readonly IEmailSender _emailSender;
 
         public UserController(IUserRepository userRepository, AccessTokenGenerator accessTokenGenerator, 
             RefreshTokenGenerator refreshTokenGenerator, UtilHelper otpGenerator,
-            IPromotionRepository promotionRepository, TwilioService twilioService, UtilHelper   utilHelper, IInviteCodeRepository inviteCodeRepository)
+            IPromotionRepository promotionRepository, TwilioService twilioService, UtilHelper   utilHelper, IInviteCodeRepository inviteCodeRepository, 
+            IEmailSender emailSender)
         {
             _userRepository = userRepository;
             _accessTokenGenerator = accessTokenGenerator;
@@ -44,6 +48,7 @@ namespace AnService_Capstone.Controllers
             _twilioService = twilioService;
             _utilHelper = utilHelper;
             _inviteCodeRepository = inviteCodeRepository;
+            _emailSender = emailSender;
         }
 
 
@@ -71,6 +76,17 @@ namespace AnService_Capstone.Controllers
             var refreshToken = _refreshTokenGenerator.GenerateToken();
             var token = _accessTokenGenerator.GenerateToken(user, refreshToken);
             return Ok(token);
+        }
+
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> SendEmail(IEnumerable<IFormFile> files, int userID)
+        {
+            /*var files = Request.Form.Files.Any() ? Request.Form.Files : new FormFileCollection();*/
+            var customer = await _userRepository.GetCustomerByID(userID);
+            var message = new Message(customer.Email, "Hóa đơn cho dịch vụ sửa chữa", "Chào " + customer.FullName + "<br>AnService gửi đến anh/chị hóa đơn dịch vụ sửa chữa", files);
+            await _emailSender.SendEmailAsync(message);
+            return Ok();
         }
 
         /// <summary>

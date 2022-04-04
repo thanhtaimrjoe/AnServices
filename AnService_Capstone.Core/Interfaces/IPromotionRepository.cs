@@ -21,7 +21,7 @@ namespace AnService_Capstone.Core.Interfaces
 
         public Task<bool> CheckEnteredCode(int userID);
 
-        public Task<bool> UpdateStatusPromotion(int id);
+        public Task<bool> UpdateStatusPromotion(int id, int status);
 
         public Task<int> CountPromotionIsUsed();
 

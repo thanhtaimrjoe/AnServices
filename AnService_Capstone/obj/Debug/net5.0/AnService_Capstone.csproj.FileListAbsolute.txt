@@ -474,3 +474,7 @@ E:\Capstone\Backup_API\AnService_Capstone\obj\Debug\net5.0\ref\AnService_Capston
 E:\Capstone\Backup_API\AnService_Capstone\obj\Debug\net5.0\AnService_Capstone.xml
 E:\Capstone\Backup_API\AnService_Capstone\obj\Debug\net5.0\AnService_Capstone.pdb
 E:\Capstone\Backup_API\AnService_Capstone\obj\Debug\net5.0\AnService_Capstone.genruntimeconfig.cache
+E:\Capstone\Backup_API\AnService_Capstone\bin\Debug\net5.0\MailKit.dll
+E:\Capstone\Backup_API\AnService_Capstone\bin\Debug\net5.0\MimeKit.dll
+E:\Capstone\Backup_API\AnService_Capstone\bin\Debug\net5.0\NETCore.MailKit.dll
+E:\Capstone\Backup_API\AnService_Capstone\bin\Debug\net5.0\BouncyCastle.Crypto.dll

@@ -77,10 +77,10 @@ namespace AnService_Capstone.Controllers
                     return BadRequest(new ErrorResponse("Your account has been banned"));
                     *//*return Ok("Your account has been banned");*//*
                 }*/
-                /*if (model.PromotionID != 0)
+                if (model.PromotionID != 0)
                 {
-                    _ = await _promotionRepository.UpdateStatusPromotion(model.PromotionID);
-                }*/
+                    _ = await _promotionRepository.UpdateStatusPromotion(model.PromotionID, 0);
+                }
                 return Ok("Create Successfull");
             }
             return BadRequest(new ErrorResponse("Create Fail"));
@@ -535,13 +535,13 @@ namespace AnService_Capstone.Controllers
             return Ok(res);
         }*/
 
-        [HttpGet]
+        /*[HttpGet]
         [Route("[action]")]
         public async Task<IActionResult> Test3(int year)
         {
             var res = await _serviceRepository.AmountOfSaleList2(year, 0);
             return Ok(res);
-        }
+        }*/
 
         [HttpGet]
         [Route("[action]")]
@@ -663,7 +663,13 @@ namespace AnService_Capstone.Controllers
             }
 
             var result = await _serviceRepository.UpdateStatusServiceRequest(id, 8);
-
+            var service = await _serviceRepository.GetServiceRequestByID(id);
+            
+            if (service.PromotionId != 0)
+            {
+                _ = await _promotionRepository.UpdateStatusPromotion((int)service.PromotionId, 1);
+            }
+            
             if (!result)
             {
                 return NotFound(new ErrorResponse("Cancel Fail"));
@@ -686,6 +692,12 @@ namespace AnService_Capstone.Controllers
             }
 
             var result = await _serviceRepository.UpdateStatusServiceRequest(id, 1);
+            var service = await _serviceRepository.GetServiceRequestByID(id);
+
+            if (service.PromotionId != 0)
+            {
+                _ = await _promotionRepository.UpdateStatusPromotion((int)service.PromotionId, 1);
+            }
 
             if (!result)
             {
@@ -802,7 +814,7 @@ namespace AnService_Capstone.Controllers
 
                 if (checkStatus)
                 {
-                    _ = await _serviceRepository.UpdateStatusServiceRequest(detail.ServiceRequestId, 9);
+                    _ = await _serviceRepository.UpdateStatusServiceRequest(detail.ServiceRequestId, 17);
                 }
                 return Ok("Update Successful");
             }

@@ -119,7 +119,7 @@ namespace AnService_Capstone.Controllers
                 var contract = await _contractRepository.GetContractByID(id);
                 var service = await _serviceRepository.GetServiceRequestByID(contract.ServiceRequestId);
                 _ = await _serviceRepository.UpdateStatusServiceRequest(contract.ServiceRequestId, 3);
-                _ = await _promotionRepository.UpdateStatusPromotion((int)service.PromotionId);
+                /*_ = await _promotionRepository.UpdateStatusPromotion((int)service.PromotionId);*/
                 return Ok("Update successfull");
             }
             return BadRequest(new ErrorResponse("Update fail"));
@@ -192,6 +192,7 @@ namespace AnService_Capstone.Controllers
             if (check != null)
             {
                 var res2 = await _contractRepository.UpdateContract(contract, check.ContractId);
+                _ = await _contractRepository.UpdateStatusContract(check.ContractId, 2);
                 /*foreach (var updateDetail in contract.updatePriceRequestDetails)
                 {
                     _ = await _serviceRepository.UpdatePriceServiceRequestDetail(updateDetail.RequestDetailID, updateDetail.RequestDetailPrice);

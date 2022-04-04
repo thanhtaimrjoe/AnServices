@@ -76,7 +76,7 @@ namespace AnService_Capstone.Controllers
                 return Ok(result);
             }
             return NotFound(new ErrorResponse("No Record"));
-            return Ok(result);
+            /*return Ok(result);*/
         }
 
         /// <summary>

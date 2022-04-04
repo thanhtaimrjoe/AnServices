@@ -333,12 +333,12 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
 
         public async Task<bool> UpdateStatusUserByID(int id, int status)
         {
-            var query = "update tblUsers set Status = @Status where UserID = @UserID";
+            var query = "update tblUsers set Status = @Status, UpdateDate = UpdateDate where UserID = @UserID";
 
             using (var connections = _context.CreateConnection())
             {
                 connections.Open();
-                var res = await connections.ExecuteAsync(query, new { @Status = status, @UserID = id });
+                var res = await connections.ExecuteAsync(query, new { @Status = status, @UserID = id, @UpdateDate = DateTime.Now });
                 if (res == 0)
                 {
                     return false;
@@ -447,7 +447,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
 
         public async Task<IEnumerable<UserViewModel>> GetAllNewUsersInMonth(int month, int role, int status)
         {
-            var query = "select * from tblUsers where Role = @Role and Status = @Status and MONTH(CreateDate) = @CreateDate";
+            var query = "select UserID from tblUsers where Role = @Role and Status = @Status and MONTH(CreateDate) = @CreateDate";
 
             using(var connections = _context.CreateConnection())
             {
@@ -472,6 +472,36 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
                     return true;
                 }
                 return false;
+            }
+        }
+
+        public async Task<UserViewModel> GetCustomerByEmail(string email)
+        {
+            var query = "select UserID, FullName, PhoneNumber, Address, Email, CreateDate, Status " +
+                "from tblUsers " +
+                "where Role = 3 and Email = @Email";
+            using (var connections = _context.CreateConnection())
+            {
+                connections.Open();
+                var res = await connections.QueryAsync<UserViewModel>(query, new { @Email = email });
+                if (!res.Any())
+                {
+                    return null;
+                }
+                return res.FirstOrDefault();
+            }
+        }
+
+        public async Task<IEnumerable<UserViewModel>> GetAllNewBanUsersInMonth(int month)
+        {
+            var query = "select UserID from tblUsers where Role = 2 and Status = 10 and MONTH(UpdateDate) = @UpdateDate";
+
+            using (var connections = _context.CreateConnection())
+            {
+                connections.Open();
+                var res = await connections.QueryAsync<UserViewModel>(query, new { @UpdateDate = month });
+                connections.Close();
+                return res;
             }
         }
 

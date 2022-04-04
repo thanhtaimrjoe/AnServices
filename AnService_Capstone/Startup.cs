@@ -4,11 +4,13 @@ using AnService_Capstone.DataAccess.Dapper.Customize;
 using AnService_Capstone.DataAccess.Dapper.Repositories;
 using AnService_Capstone.DataAccess.Dapper.Services.BackgroundService;
 using AnService_Capstone.DataAccess.Dapper.Services.Firebase;
+using AnService_Capstone.DataAccess.Dapper.Services.SendEmail;
 using AnService_Capstone.DataAccess.Dapper.Services.SendSMS;
 using AnService_Capstone.DataAccess.Dapper.TokenGenerator;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -128,8 +130,21 @@ namespace AnService_Capstone
             services.AddScoped<ITypeJobRepository, TypeJobRepository>();
             services.AddScoped<IContractRepository, ContractRepository>();
             services.AddScoped<IInviteCodeRepository, InviteCodeRepository>();
+            services.AddScoped<IEmailSender, EmailSender>();
 
             services.AddSingleton<IHostedService, ScheduledTask>();
+
+            var emailConfig = Configuration
+            .GetSection("EmailConfiguration")
+            .Get<EmailConfiguration>();
+
+            services.AddSingleton(emailConfig);
+            services.AddControllers();
+            services.Configure<FormOptions>(o => {
+                o.ValueLengthLimit = int.MaxValue;
+                o.MultipartBodyLengthLimit = int.MaxValue;
+                o.MemoryBufferThreshold = int.MaxValue;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

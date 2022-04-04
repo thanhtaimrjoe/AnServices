@@ -911,7 +911,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             }
         }
 
-        public async Task<IEnumerable<int>> AmountOfSaleList2(int year, int status)
+        /*public async Task<IEnumerable<int>> AmountOfSaleList2(int year, int status)
         {
             string query;
             List<int> list = new List<int>();
@@ -983,7 +983,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
                 }
                 return list;
             }
-        }
+        }*/
 
         public async Task<Dashboard.ServiceStatusStatistic> CountServiceStatus()
         {

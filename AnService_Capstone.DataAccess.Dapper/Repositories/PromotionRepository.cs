@@ -169,14 +169,14 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             }
         }
 
-        public async Task<bool> UpdateStatusPromotion(int code)
+        public async Task<bool> UpdateStatusPromotion(int code, int status)
         {
-            var query = "update tblPromotion set PromotionActive = 0 where PromotionID = @PromotionID";
+            var query = "update tblPromotion set PromotionActive = @PromotionActive where PromotionID = @PromotionID";
 
             using (var con = _dapperContext.CreateConnection())
             {
                 con.Open();
-                var res = await con.ExecuteAsync(query, new { PromotionID = code });
+                var res = await con.ExecuteAsync(query, new { PromotionID = code, @PromotionActive = status });
                 con.Close();
                 if (res > 0)
                 {
