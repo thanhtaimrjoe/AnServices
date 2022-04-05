@@ -1,13 +1,13 @@
 // import React from 'react';
 import CommonSelect from '@/components/CommonSelect/CommonSelect';
 import ProForm from '@ant-design/pro-form';
-import { Col, Input, Row } from 'antd';
+import { Col, Descriptions, Input, Row } from 'antd';
 import React from 'react';
 
 
 const BasicStep = ({ customerName, userID, fullName, phoneNumber, address, 
   serviceName, serviceDescription, servicePrice, 
-  requestServiceCreateDate
+  requestServiceCreateDate, serviceRequestReference
 }) => {
   return (
     <div bordered={false} style={{ width: '200%', marginBottom: '4em' }}>
@@ -108,8 +108,20 @@ const BasicStep = ({ customerName, userID, fullName, phoneNumber, address,
             >
               <CommonSelect.SelectRequestServicePackage disabled />
             </ProForm.Item>
-          
           </Col>
+        </Row>
+        <Row gutter={16}>
+          {serviceRequestReference && 
+            <Col span={12}>
+              <Descriptions>
+                <Descriptions.Item
+                  label="Chú ý"
+                  labelStyle={{ fontWeight: 'bold', fontSize:'20px', marginTop:'20px' }}
+                  initialValue="Yêu cầu làm lại từ yêu cầu khác"
+                ><b style={{ marginTop:'20px', fontSize:'20px' }}>Yêu cầu làm lại từ yêu cầu khác</b></Descriptions.Item>
+              </Descriptions>
+            </Col>
+          }
         </Row>
       </div>
     </div>

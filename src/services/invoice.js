@@ -11,3 +11,7 @@ import request from '@/utils/request';
       data: prop,
     });
   };
+
+  export const getInfomationInvoiceByServiceRequestID = (serviceRequestID) => {
+    return request.get(`/Invoice/GetInfomationInvoiceByServiceRequestID?serviceRequestID=${serviceRequestID}`);
+  };

@@ -1,18 +1,12 @@
 import request from '@/utils/request';
 
-export const createPost = (prod) => {
-  return request.post(`/posts`, {
-    data: prod.update,
-  });
-};
-
 export const deletePost = (PostId) => {
   return request.delete(`/posts/${PostId}`);
 };
 
-export const updatePost = (PostId, prod) => {
-  return request.put(`/posts/${PostId}`, {
-    data: prod.update,
+export const removeListServiceRequest = (prod) => {
+  return request.delete(`/Service/RemoveListServiceRequest`, {
+  data: prod,
   });
 };
 
@@ -84,3 +78,4 @@ export const reworkRequestDetail = (requestDetailId) => {
 export const getTest = (serviceRequestId) => {
   return request.get(`/Service/Test?id=${serviceRequestId}`);
 };
+

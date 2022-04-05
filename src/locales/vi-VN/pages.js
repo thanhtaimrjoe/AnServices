@@ -74,8 +74,9 @@ export default {
   'pages.searchTable.batchDeletion': 'bacth deletion',
   'pages.searchTable.batchApproval': 'batch approval',
 
-  'pages.searchTable.workers': 'Vui lòng nhập',
-  'pages.searchTable.fullName': 'Vui lòng nhập',
+  // 'pages.toolBarRender.density' : 'Thu phóng',
+  'toolBarRender.density' : 'Thu phóng',
 
+  'pages.searchTable.accounts.sdt' : 'Nhập số điện thoại',
 
 };

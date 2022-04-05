@@ -32,7 +32,7 @@ const BasicStep = () => {
               {
                 required: true,
                 pattern: /(0[3|5|7|8|9])+([0-9]{8})\b/,
-                message: "Nhập 10 chữ số"
+                message: "Nhập số điện thoại 10 số"
               }
             ]}
           >

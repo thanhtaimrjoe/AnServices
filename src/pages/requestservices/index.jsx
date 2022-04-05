@@ -7,7 +7,7 @@ import { PageContainer } from '@ant-design/pro-layout';
 import AsyncButton from '@/components/AsyncButton';
 import ResoTable from '@/components/ResoTable/ResoTable';
 import { SERVICEREQUEST } from '@/utils/constrains';
-import { cancelServiceRequest } from '@/services/requestservices';
+import { cancelServiceRequest, removeListServiceRequest } from '@/services/requestservices';
 import TabPane from '@ant-design/pro-card/lib/components/TabPane';
 
 const ServiceRequestList = ({ history }) => {
@@ -25,7 +25,7 @@ const ServiceRequestList = ({ history }) => {
   };
 
   const deleteServiceRequestHandler = () => {
-    return cancelServiceRequest(selectedRows[0]).then(() => ref.current?.reload());
+    return removeListServiceRequest(selectedRows).then(() => ref.current?.reload());
   };
 
   return (
@@ -34,7 +34,7 @@ const ServiceRequestList = ({ history }) => {
          <Tabs defaultActiveKey="1" centered>
           <TabPane tab="Tất cả yêu cầu" key="1">
             <ResoTable
-            searchButton={false}
+              searchButton={false}
               scroll={{ x: 600 }}
               tableAlertOptionRender={({ _, __, onCleanSelected }) => [
                 <AsyncButton
@@ -156,7 +156,32 @@ const ServiceRequestList = ({ history }) => {
               resource="Service/GetAllServiceRequestStatusOrDate?serviceRequestStatus=6"
             />
           </TabPane>
-          <TabPane tab="Yêu cầu chờ KH thanh toán" key="6">
+          <TabPane tab="Yêu cầu đang chờ gửi hoá đơn" key="6">
+          <ResoTable
+              toolBarRender={false}
+              search={false}
+              scroll={{ x: 600 }}
+              tableAlertOptionRender={({ _, __, onCleanSelected }) => [
+                <AsyncButton
+                  isNeedConfirm={{
+                    title: 'Xác nhận xoá',
+                    content: 'Bạn có muốn xoá yêu cầu này không?',
+                    okText: 'Xác nhận',
+                    cancelText: 'Huỷ',
+                  }}
+                  btnProps={{ danger: true, type: 'link' }}
+                  onClick={() => deleteServiceRequestHandler().then(onCleanSelected)}
+                  title={`Xoá ${selectedRows.length} yêu cầu`}
+                />,
+              ]}
+              rowSelection={rowSelection}
+              actionRef={ref}
+              rowKey="serviceRequestId"
+              columns={SERVICEREQUEST}
+              resource="Service/GetAllServiceRequestStatusOrDate?serviceRequestStatus=17"
+            />
+          </TabPane>
+          <TabPane tab="Yêu cầu chờ KH thanh toán" key="7">
             <ResoTable
               toolBarRender={false}
               search={false}
@@ -181,7 +206,7 @@ const ServiceRequestList = ({ history }) => {
               resource="Service/GetAllServiceRequestStatusOrDate?serviceRequestStatus=14"
             />
           </TabPane>
-          <TabPane tab="Yêu cầu đã hoàn thành" key="7">
+          <TabPane tab="Yêu cầu đã hoàn thành" key="8">
             <ResoTable
               toolBarRender={false}
               search={false}
@@ -206,7 +231,7 @@ const ServiceRequestList = ({ history }) => {
               resource="Service/GetAllServiceRequestStatusOrDate?serviceRequestStatus=13"
             />
           </TabPane>
-          <TabPane tab="Yêu cầu đã từ chối" key="8">
+          <TabPane tab="Yêu cầu đã từ chối" key="9">
             <ResoTable
               toolBarRender={false}
               search={false}

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { FooterToolbar, PageContainer } from '@ant-design/pro-layout';
-import { Form, Typography, Space, Button, Result } from 'antd';
+import { Form, Typography, Space, Button, Result, message } from 'antd';
 import BasicStep from './stepsCreate/BasicStep';
 import { createCustomerAccount } from '@/services/accounts';
 import { useHistory } from 'umi';
@@ -31,7 +31,13 @@ const CreateAccount = (props) => {
     const createAccountData = normalizeReportForm(values);
     return createCustomerAccount(createAccountData).then((res) => {
       // setCreatedAccount({ ...values, id: res });
-      history.replace('/accounts/list');
+      if(res.status === 500) {
+        message.error("Số điện thoại đã tồn tại");
+      } else {
+        message.success("Đã tạo tài khoản khách hàng thành công")
+        history.replace('/accounts/list');
+      }
+      
     });
   };
 

@@ -11,6 +11,10 @@ export default {
   'menu.exception.404': '404',
   'menu.exception.500': '500',
 
+  // dashboard
+  'menu.dashboard': 'DASHBOARD',
+  'menu.dashboard.analysis': 'ANALYSIS',
+
   // accounts
   'menu.accounts': 'QUẢN LÝ KHÁCH',
   'menu.accounts.list': 'DANH SÁCH KHÁCH HÀNG',

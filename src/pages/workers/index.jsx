@@ -17,7 +17,7 @@ const WorkerList = ({ history }) => {
   const rowSelection = {
     selectedRowKeys: selectedRows,
     onChange: setSelectedRows,
-    type: 'select',
+    type: 'radio',
     
   };
   const addWorker = () => {
@@ -45,7 +45,9 @@ const WorkerList = ({ history }) => {
               }}
               btnProps={{ danger: true, type: 'link' }}
               onClick={() => deleteWorkerHandler().then(onCleanSelected)}
-              title={`Xoá ${selectedRows.length} thợ`}
+              // title={`Xoá ${selectedRows.length} thợ`}
+              title={`Xoá thợ này`}
+
              />,
           ]}
           toolBarRender={() => [

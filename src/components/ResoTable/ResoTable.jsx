@@ -151,7 +151,7 @@ const ResoTable = ({
         layout: 'vertical',
         defaultCollapsed: true,
         resetText: 'Làm mới',
-        searchText:'Tìm'
+        searchText:'Tìm',
       }}
       rowKey="id"
       toolBarRender={toolBarRender}

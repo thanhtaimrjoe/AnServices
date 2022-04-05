@@ -48,7 +48,8 @@ class AvatarDropdown extends React.Component {
       <HeaderDropdown overlay={menuHeaderDropdown}>
         <span className={`${styles.action} ${styles.account}`}>
           <Avatar size="small" className={styles.avatar} src={currentUser.avatar} alt="avatar" />
-          <span className={`${styles.name} anticon`}>{currentUser.name}</span>
+          {/* <span className={`${styles.name} anticon`}>{currentUser.name}</span> */}
+          <span className={`${styles.name} anticon`} ><b>{localStorage.getItem('USERNAME')}</b></span>
         </span>
       </HeaderDropdown>
     );

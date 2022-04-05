@@ -1,24 +1,12 @@
 import request from '@/utils/request';
 
-export const createPost = (prod) => {
-  return request.post(`/posts`, {
-    data: prod.update,
-  });
-};
-
 export const deletePost = (PostId) => {
   return request.delete(`/posts/${PostId}`);
 };
 
-export const updatePost = (PostId, prod) => {
-  return request.put(`/posts/${PostId}`, {
-    data: prod.update,
-  });
+export const getAllMaterialByServiceRequestID = (serviceRequestId) => {
+  return request.get(`/Material/GetAllMaterialByServiceRequestID?id=${serviceRequestId}`);
 };
-
-  export const getAllMaterialByServiceRequestID = (serviceRequestId) => {
-    return request.get(`/Material/GetAllMaterialByServiceRequestID?id=${serviceRequestId}`);
-  };
 
 export const getRequestMaterialByID = (id) => {
   return request.get(`/Material/GetRequestMaterialByID?id=${id}`);
@@ -43,21 +31,15 @@ export const updateRequestMaterial = (id, quantityNew, message, prod) => {
 };
 
 export const denyStatusRequestMaterial = (id, message, prod) => {
-  return request.put(
-    `/Material/DenyRequestMaterial?id=${id}&message=${message}`,
-    {
-      data: prod,
-    },
-  );
+  return request.put(`/Material/DenyRequestMaterial?id=${id}&message=${message}`, {
+    data: prod,
+  });
 };
 
 export const approveStatusRequestMaterial = (id, prod) => {
-  return request.put(
-    `/Material/ApproveRequestMaterial?id=${id}`,
-    {
-      data: prod.update,
-    },
-  );
+  return request.put(`/Material/ApproveRequestMaterial?id=${id}`, {
+    data: prod.update,
+  });
 };
 
 // export const denyStatusRequestMaterial = (prod, id, message) => {

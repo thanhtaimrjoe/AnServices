@@ -38,6 +38,7 @@ export const ACCOUNTS = [
     },
   },
   {
+    id:'accounts.sdt',
     title: 'Số điện thoại',
     dataIndex: 'phoneNumber',
     key: 'phoneNumber',

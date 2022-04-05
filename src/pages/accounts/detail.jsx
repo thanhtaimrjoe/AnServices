@@ -28,9 +28,6 @@ const DetailWorker = (props) => {
   const [disableBan, setDisableBan] = React.useState(true);
   const [disableUnban, setDisableUnban] = React.useState(true);
 
-
-
-
   const steps = [
     {
       title: 'Thông tin chính của khách hàng',
@@ -41,16 +38,15 @@ const DetailWorker = (props) => {
   useEffect(() => {
     // form.setFieldsValue(updateWorkerState);
     getCustomerById(updateCustomerState.userID).then((res) => {
-      setCustomerCreateDate(res.createDate.split('T',1));
+      setCustomerCreateDate(res.createDate.split('T', 1));
       setCustomerCreateDate(moment(res.createDate).format('DD/MM/YYYY'));
       setStatusRecordData(res.status);
-      console.log("record01", res.status)
-        if(res.status === 4) {
-          setDisableBan(false)
-        }
-        if(res.status === 10) {
-          setDisableUnban(false)
-        }
+      if (res.status === 4) {
+        setDisableBan(false);
+      }
+      if (res.status === 10) {
+        setDisableUnban(false);
+      }
     });
   }, []);
 
@@ -63,22 +59,29 @@ const DetailWorker = (props) => {
   }
 
   const onBackList = () => {
-      history.replace('/accounts/list')
+    history.replace('/accounts/list');
   };
 
   const onBanCustomer = () => {
-    return banUserByUserID(updateCustomerState.userID).then(() =>
-      onBackList(),
-      message.success("Chặn người dùng thành công"),
-
-    )
+    return banUserByUserID(updateCustomerState.userID).then((res) => {
+      if(res.status === 200) {
+        onBackList()
+        message.success('Chặn người dùng thành công')
+      } else {
+        message.error('Chặn người dùng không thành công')
+      }
+    });
   };
 
   const onUnbanCustomer = () => {
-    return unbanUserByUserID(updateCustomerState.userID).then(() =>
-      onBackList(),
-      message.success("Gỡ chặn người dùng thành công"),
-    )
+    return unbanUserByUserID(updateCustomerState.userID).then((res) => {
+      if(res.status === 500) {
+        message.error('Gỡ chặn người dùng không thành công')
+      } else {
+        onBackList()
+        message.success('Gỡ chặn người dùng thành công')
+      }
+    });
   };
 
   return (
@@ -100,9 +103,33 @@ const DetailWorker = (props) => {
           </Row>
           <Row style={{ width: '100%' }}>{steps[currentStep].content()}</Row>
           <FooterToolbar>
-            <AsyncButton title="Chặn người dùng" btnProps={{ type: 'danger', icon: <LockOutlined />, disabled:disableBan }} onClick={onBanCustomer} />
-            <AsyncButton title="Gỡ chặn người dùng" btnProps={{ type: 'primary', icon: <UnlockOutlined />, disabled:disableUnban }} onClick={onUnbanCustomer} />
-            <AsyncButton title="Trở về" btnProps={{ type: 'default', icon: <RollbackOutlined /> }} onClick={onBackList}  />
+            <AsyncButton
+              title="Chặn người dùng"
+              isNeedConfirm={{
+                title: 'Xác nhận chặn khách hàng',
+                content: 'Bạn có muốn chặn khách hàng này không',
+                okText: 'Xác nhận',
+                cancelText: 'Huỷ',
+              }}
+              btnProps={{ type: 'danger', icon: <LockOutlined />, disabled: disableBan }}
+              onClick={onBanCustomer}
+            />
+            <AsyncButton
+              title="Gỡ chặn người dùng"
+              isNeedConfirm={{
+                title: 'Xác nhận gỡ chặn khách hàng',
+                content: 'Bạn có muốn gỡ chặn khách hàng này không',
+                okText: 'Xác nhận',
+                cancelText: 'Huỷ',
+              }}
+              btnProps={{ type: 'primary', icon: <UnlockOutlined />, disabled: disableUnban }}
+              onClick={onUnbanCustomer}
+            />
+            <AsyncButton
+              title="Trở về"
+              btnProps={{ type: 'default', icon: <RollbackOutlined /> }}
+              onClick={onBackList}
+            />
           </FooterToolbar>
         </Card>
       </Form>

@@ -22,6 +22,7 @@ import {
   Col,
   DatePicker,
   BackTop,
+  Table,
 } from 'antd';
 // import { updateReportAttribute } from '@/services/reportattribute';
 import AsyncButton from '@/components/AsyncButton';
@@ -68,8 +69,9 @@ import { getAllReportByServiceRequestID } from '@/services/reports';
 import storage from '../firebase/firebase';
 import { createContract } from '@/services/contracts';
 import CommonSelect from '@/components/CommonSelect/CommonSelect';
-import { createInvoice } from '@/services/invoice';
+import { createInvoice, getInfomationInvoiceByServiceRequestID } from '@/services/invoice';
 import { getInformationPromotionByID } from '@/services/promotion';
+import ProDescriptions from '@ant-design/pro-descriptions';
 
 const DetailServiceRequest = (props) => {
   const {
@@ -88,6 +90,7 @@ const DetailServiceRequest = (props) => {
   const [phoneNumber, setPhoneNumber] = useState();
   const [address, setAddress] = useState();
   const [serviceName, setServiceName] = useState();
+  const [serviceRequestReference, setServiceRequestReference] = useState();
   const [serviceDescription, setServiceDescription] = useState();
   const [servicePrice, setServicePrice] = useState();
   const [serviceRequestCreateDate, setServiceRequestCreateDate] = useState();
@@ -111,6 +114,8 @@ const DetailServiceRequest = (props) => {
   const [mainStaffCoordinator, setMainStaffCoordinator] = useState();
   const [visible1, setVisible1] = React.useState(false);
   const [visible2, setVisible2] = React.useState(false);
+  const [visibleInvoice, setVisibleInvoice] = React.useState(false);
+
   const [disable, setDisable] = React.useState(true);
   const [disableInvoice, setDisableInvoice] = React.useState(true);
   const [disableStaffCoordinator, setDisableStaffCoordinator] = React.useState(true);
@@ -119,6 +124,8 @@ const DetailServiceRequest = (props) => {
   const [disableSurveyingServicerRequest, setDisableSurveyingServicerRequest] = React.useState(
     true,
   );
+  const [disableCreateContract, setDisableCreateContract] = React.useState(true);
+  const [disableWaitForPayAndCompletedServicerRequest, setDisableWaitForPayAndCompletedServicerRequest] = React.useState(false);
 
   const [updatePriceRequestDetailsData, setUpdatePriceRequestDetailsData] = useState([]);
   const { RangePicker } = DatePicker;
@@ -129,6 +136,17 @@ const DetailServiceRequest = (props) => {
   //
 
   // Invoice
+  const [customerAddress, setCustomerAddress] = useState();
+  const [customerPhone, setCustomerPhone] = useState();
+  const [contractStartDate, setContractStartDate] = useState();
+  const [contractEndDate, setContractEndDate] = useState();
+  const [contractDeposit, setContractDeposit] = useState();
+  const [contractDeposit1, setContractDeposit1] = useState();
+  const [contractTotalPrice, setContractTotalPrice] = useState();
+  const [contractTotalPrice1, setContractTotalPrice1] = useState();
+  const [contractDetails, setContractDetails] = useState([]);
+  const [promotionValue, setPromotionValue] = useState([]);
+  //
 
   const [selectedRows, setSelectedRows] = useState([]);
   const rowSelection = {
@@ -174,6 +192,7 @@ const DetailServiceRequest = (props) => {
           serviceDescription={serviceDescription}
           servicePrice={servicePrice}
           requestServiceCreateDate={serviceRequestCreateDate}
+          serviceRequestReference={serviceRequestReference}
         />
       ),
     },
@@ -183,24 +202,62 @@ const DetailServiceRequest = (props) => {
     // form.setFieldsValue(updateRequestServiceState);
     getServiceRequestByID(updateRequestServiceState.serviceRequestId).then((res) => {
       console.log('record01', updateRequestServiceState);
+      console.log('record011', res);
       setCustomerName(res.customerName);
       setUserID(res.customer.userId);
       setFullName(res.customer.fullName);
       setPhoneNumber(res.customer.phoneNumber);
       setAddress(res.customer.address);
+      setServiceRequestReference(res.serviceRequestReference);
       setServiceRequestCreateDate(res.serviceRequestCreateDate.split('T', 1));
       setServiceRequestCreateDate(moment(res.serviceRequestCreateDate).format('DD/MM/YYYY'));
+
+      if (res.serviceRequestStatus === 15) {
+        setDisableRejectServicerRequest(false);
+        setDisableCreateContract(false);
+      }
+
+      if (res.serviceRequestStatus === 2) {
+        setDisableSurveyingServicerRequest(false);
+        setDisableRejectServicerRequest(false);
+      }
+
+      if (res.serviceRequestStatus === 14) {
+        setDisableCompleteServicerRequest(false);
+      }
+
+      if(res.serviceRequestStatus === 13 || res.serviceRequestStatus === 14) {
+        setDisableWaitForPayAndCompletedServicerRequest(true);
+        getInfomationInvoiceByServiceRequestID(updateRequestServiceState.serviceRequestId).then(
+          (respones) => {
+            if (respones.status === 404) {
+              message.warning('Yêu cầu này chưa có hoá đơn');
+            } else {
+              console.log('record07', respones);
+              setCustomerAddress(respones.customerAddress);
+              setCustomerPhone(respones.customerPhone);
+              setContractStartDate(moment(respones.contractStartDate).format('DD/MM/YYYY'));
+              setContractEndDate(moment(respones.contractEndDate).format('DD/MM/YYYY'));
+              setContractDeposit(respones.contractDeposit * 100);
+              setContractDeposit1(respones.contractDeposit);
+              setContractTotalPrice(
+                respones.contractTotalPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','),
+              );
+              setContractTotalPrice1(respones.contractTotalPrice);
+              setContractDetails(respones.details);
+              if (respones.promotionID === 0) {
+                setPromotionValue(0);
+              } else {
+                getInformationPromotionByID(respones.promotionID).then((record) => {
+                  setPromotionValue(record.promotionValue);
+                });
+              }
+            }
+          },
+        );
+      }
     });
-    if (updateRequestServiceState.serviceRequestStatus === 15) {
-      setDisableRejectServicerRequest(false);
-    }
-    if (updateRequestServiceState.serviceRequestStatus === 2) {
-      setDisableSurveyingServicerRequest(false);
-      setDisableRejectServicerRequest(false);
-    }
-    if (updateRequestServiceState.serviceRequestStatus === 14) {
-      setDisableCompleteServicerRequest(false);
-    }
+    
   }, [updateRequestServiceState]);
 
   // Data cho chi tiết dịch vụ table
@@ -208,7 +265,7 @@ const DetailServiceRequest = (props) => {
   const [staffCoordinatorRecord, setStaffCoordinatorRecord] = useState([]);
   useEffect(() => {
     getAllServiceRequestDetailsByServiceRequestID(updateRequestServiceState.serviceRequestId)
-    // getTest(updateRequestServiceState.serviceRequestId)
+      // getTest(updateRequestServiceState.serviceRequestId)
       .then((record) => {
         setRequestServiceDetail(record);
         setIsLoad(true);
@@ -218,8 +275,7 @@ const DetailServiceRequest = (props) => {
           if (
             e.requestDetailStatus === 9 ||
             e.requestDetailStatus === 2 ||
-            e.requestDetailStatus === 6 ||
-            e.requestDetailStatus === 12
+            e.requestDetailStatus === 6 
           ) {
             tmp = false;
           }
@@ -248,15 +304,14 @@ const DetailServiceRequest = (props) => {
     });
 
     if (updateRequestServiceState.promotionId === 0) {
-      setPromotionValueRecord(0.0);
+      setPromotionValueRecord(0);
     } else {
       getInformationPromotionByID(updateRequestServiceState.promotionId).then((record) => {
         setPromotionValueRecord(record.promotionValue);
       });
     }
+    
   }, []);
-
-  console.log('promotionValueRecord', promotionValueRecord);
 
   const [requestMaterialRecord, setRequestMaterialRecord] = useState([]);
   const [workerRecord, setWorkerRecord] = useState([]);
@@ -286,9 +341,17 @@ const DetailServiceRequest = (props) => {
       });
       getContractListByUserID(updateRequestServiceState.customer.userId).then((record) => {
         setContractRecord(record);
+
         record.map((item) => {
+          if (item.serviceRequestId === updateRequestServiceState.serviceRequestReference) {
+            console.log('showrecord', item.serviceRequestId);
+          }
+
           if (item.serviceRequestId === updateRequestServiceState.serviceRequestId) {
             setContractIDRecord(item.contractId);
+            if (item.contractStatus === 3) {
+              setDisableStaffCoordinator(false);
+            }
           }
         });
       });
@@ -301,6 +364,7 @@ const DetailServiceRequest = (props) => {
         },
       );
     }
+
     if (isLoad && updateRequestServiceState) {
       getAllReportByServiceRequestID(updateRequestServiceState.serviceRequestId).then((record) => {
         setReportRequestService(record);
@@ -329,8 +393,6 @@ const DetailServiceRequest = (props) => {
   }, [isLoad]);
 
   // ===========================================
-
-  const [images2, setImage2] = useState([]);
 
   const images = updateRequestServiceState.tblMedia.map((img, index) => {
     if (!img.mediaUrl.includes('.mp4')) {
@@ -400,7 +462,6 @@ const DetailServiceRequest = (props) => {
 
   const onBackList = () => {
     history.replace('/requestservices/list');
-    // history.current?.reload();
   };
 
   const onStaffCoordinator = (values) => {
@@ -445,16 +506,15 @@ const DetailServiceRequest = (props) => {
   function onChange(value, requestDetailId, index) {
     if (updatePriceRequestDetailsData[index]) {
       updatePriceRequestDetailsData[index].requestDetailPrice = value;
-        // value - value * promotionValueRecord;
+      // value - value * promotionValueRecord;
       setUpdatePriceRequestDetailsData([...updatePriceRequestDetailsData]);
     } else {
       setUpdatePriceRequestDetailsData([
         ...updatePriceRequestDetailsData,
         {
           requestDetailID: requestDetailId,
-          requestDetailPrice: value - value * promotionValueRecord,
+          requestDetailPrice: value,
           // requestDetailPrice: value - value * promotionValueRecord,
-
         },
       ]);
     }
@@ -464,6 +524,27 @@ const DetailServiceRequest = (props) => {
     (item, index) => (item = item + index.requestDetailPrice),
     0,
   );
+
+  const usedServivesPrice = contractDetails.reduce(
+    (item, index) => (item = item + index.requestDetailPrice),
+    0,
+  );
+  const contractDepositPrice = contractTotalPrice1 * contractDeposit1;
+  const promotionValuePrice = usedServivesPrice * promotionValue;
+  const VATPrice = usedServivesPrice * 0.1;
+  const officialPrice = usedServivesPrice - contractDepositPrice - promotionValuePrice + VATPrice;
+
+  const usedServivesPriceFormat = usedServivesPrice
+    .toString()
+    .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  const contractDepositPriceFormat = contractDepositPrice
+    .toString()
+    .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  const promotionValuePriceFormat = promotionValuePrice
+    .toString()
+    .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  const VATPriceFormat = VATPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  const officialPriceFormat = officialPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 
   function onChangeStartDateToEndDate(value, date) {
     console.log('changed', value);
@@ -530,6 +611,10 @@ const DetailServiceRequest = (props) => {
   const showModalLoadImgVideo = (record) => {
     setImgReportRecord(record.tblMedia);
     setVisible2(true);
+  };
+
+  const showModalInvoice = () => {
+    setVisibleInvoice(true);
   };
 
   const onDenyModal = () => {
@@ -620,6 +705,7 @@ const DetailServiceRequest = (props) => {
     setVisible(false);
     setVisible1(false);
     setVisible2(false);
+    setVisibleInvoice(false);
   };
 
   const onCreateContract = async () => {
@@ -636,13 +722,16 @@ const DetailServiceRequest = (props) => {
     const isRightFormat = filesFormats.includes(file.type);
     if (file == null) {
       message.error('Vui lòng chọn tệp');
+      validate = false;
     }
     if (!isRightFormat) {
       message.error('Bạn chỉ có thể tải lên file pdf');
+      validate = false;
     }
     const isLt2M = file.size / 1024 / 1024 < 2;
     if (!isLt2M) {
       message.error('File phải nhỏ hơn 2MB!');
+      validate = false;
     }
     if (!contractStartDateData) {
       validate = false;
@@ -653,11 +742,12 @@ const DetailServiceRequest = (props) => {
       message.warning('Chưa chọn ngày kết thúc thi công');
     }
     if (!validate) {
-      console.log('Không gửi được');
+      message.error('Không gửi được');
+
     }
     const returnUrl = await upload();
     if (returnUrl) {
-      console.log('Gửi được');
+      message.success('Gửi được');
       const createContractValues = {
         userId: userID,
         username: customerName,
@@ -702,6 +792,7 @@ const DetailServiceRequest = (props) => {
           `Hoá đơn cho yêu cầu ${updateRequestServiceState.serviceRequestDescription} đã được gửi`,
         );
         setDisableInvoice(true);
+        onBackList();
       }
     });
   };
@@ -795,9 +886,8 @@ const DetailServiceRequest = (props) => {
     {
       title: '',
       key: 'typeServiceDecription',
-      width: 200,
+      // width: 200,
       render: (text, record) => {
-        console.log('record05', record)
         const typeServiceDecription = { ...record };
         return (
           <Space>
@@ -847,7 +937,7 @@ const DetailServiceRequest = (props) => {
         const updateStatus = { ...record };
         return (
           <Space>
-            {updateStatus.requestDetailStatus === 12 && (
+            {(updateStatus.requestDetailStatus === 12 && updateRequestServiceState.serviceRequestReference === null)  && (
               <a onClick={() => onReworkServiceRequest(record)}>Làm lại yêu cầu này</a>
             )}
           </Space>
@@ -897,7 +987,7 @@ const DetailServiceRequest = (props) => {
       search: false,
       render: (text, record) => {
         const updateWorkerState = { ...record };
-        // getWorkerByServiceId(record.serviceId);
+        // getWorkerByServiceId(updateWorkerState.serviceId);
         return (
           <Space size="middle">
             <Select
@@ -906,9 +996,12 @@ const DetailServiceRequest = (props) => {
               placeholder="Chọn thợ chính"
               onChange={handleChangeMainWorker}
             >
+              {/* chỉ lấy thợ ứng với typejob */}
               {/* {workerByServiceId.map((option) => (
-                <Option key={option.userId}>{option.fullName}</Option>
+                <Option key={option.userID}>{option.fullName}</Option>
               ))} */}
+
+              {/* Lấy tất cả thợ */}
               {workerRecord.map((option) => (
                 <Option key={option.userID}>{option.fullName}</Option>
               ))}
@@ -921,7 +1014,7 @@ const DetailServiceRequest = (props) => {
               onChange={handleChange}
             >
               {/* {workerByServiceId.map((option) => (
-                <Option key={option.userId}>{option.fullName}</Option>
+                <Option key={option.userID}>{option.fullName}</Option>
               ))} */}
               {workerRecord.map((option) => (
                 <Option key={option.userID}>{option.fullName}</Option>
@@ -939,10 +1032,13 @@ const DetailServiceRequest = (props) => {
                 Điều phối thợ
               </Button>
             )} */}
+
+
+            {/* LẤY TẤT CẢ THỢ */}
             {record?.requestDetailStatus !== 11 && record?.requestDetailStatus !== 16 && (
               <Button
                 // loading={staffCoordinatorConfirmLoading}
-                // disabled={disableStaffCoordinator}
+                disabled={disableStaffCoordinator}
                 onClick={() => onStaffCoordinator(updateWorkerState.requestDetailId)}
                 onChange={handleChange && handleChangeMainWorker}
                 state={updateWorkerState}
@@ -984,11 +1080,11 @@ const DetailServiceRequest = (props) => {
           status: 'processing',
         },
         3: {
-          text: 'Đã chấp thuận hợp đồng',
+          text: 'Đã chấp thuận',
           status: 'Success',
         },
         7: {
-          text: 'Yêu cầu sửa lại hợp đồng',
+          text: 'Yêu cầu sửa lại',
           status: 'Warning',
         },
       },
@@ -1009,16 +1105,23 @@ const DetailServiceRequest = (props) => {
       render: (text, record) => {
         const updateRequestSMaterialState = { ...record };
         setContractUrl(record.contractUrl);
+        console.log('recorde01', updateRequestSMaterialState)
         return (
           <Space size="middle">
             <a onClick={onOpenNewWindown}>Xem hợp đồng</a>
             <a onClick={onOpenNewWindown}>Tải xuống & in</a>
-            {record.serviceRequestId === updateRequestServiceState.serviceRequestId && (
+            {(record.serviceRequestId === updateRequestServiceState.serviceRequestId && updateRequestServiceState.serviceRequestStatus === 15)  && (
               <a onClick={enableContractForm}>Sửa hợp đồng</a>
             )}
-            {record.serviceRequestId !== updateRequestServiceState.serviceRequestId && (
+            {record.serviceRequestId !== updateRequestServiceState.serviceRequestId && record.serviceRequestId !== updateRequestServiceState.serviceRequestReference && (
               <div>Hợp đồng của yêu cầu khác</div>
             )}
+
+            {record.serviceRequestId === updateRequestServiceState.serviceRequestReference && (
+            <div style={{color:'red'}}>Hợp đồng của yêu cầu làm lại</div>
+            )} 
+
+
           </Space>
         );
       },
@@ -1234,6 +1337,40 @@ const DetailServiceRequest = (props) => {
     },
   ];
 
+  const INVOICE = [
+    {
+      title: 'STT',
+      dataIndex: 'index',
+      key: 'requestDetailId',
+      search: false,
+      render: (text, object, index) => {
+        return <div>{index + 1}</div>;
+      },
+    },
+    {
+      title: 'Tên dịch vụ đã sử dụng',
+      dataIndex: 'serviceName',
+      key: 'serviceName',
+      search: false,
+      render: (text, record, index) => {
+        return <div>{record.service.serviceName}</div>;
+      },
+    },
+    {
+      title: 'Giá dịch vụ đã sử dụng',
+      dataIndex: 'requestDetailPrice',
+      key: 'requestDetailPrice',
+      search: false,
+      render: (text, record, index) => {
+        return (
+          <div>
+            {record.requestDetailPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')} VNĐ
+          </div>
+        );
+      },
+    },
+  ];
+
   return (
     <PageContainer title="">
       <Form
@@ -1280,7 +1417,11 @@ const DetailServiceRequest = (props) => {
           />
 
           <Row>
-            <Button type="primary" style={{ marginLeft: '250px', width: '50%' }}>
+            <Button
+              type="primary"
+              style={{ marginLeft: '250px', width: '50%' }}
+              disabled={disableCreateContract}
+            >
               <a onClick={enableContractForm} href={createContractFile}>
                 Lập hợp đồng sửa chữa & báo giá
               </a>
@@ -1439,7 +1580,7 @@ const DetailServiceRequest = (props) => {
                   readOnly
                 ></Input> */}
                 <Select disabled>
-                  <Option value={0.0}>Không có voucher được áp dụng</Option>
+                  <Option value={0}>Không có voucher được áp dụng</Option>
                   <Option value={0.05}>Áp dụng voucher giảm 5%</Option>
                   <Option value={0.1}>Áp dụng voucher giảm 10%</Option>
                   <Option value={0.15}>Áp dụng voucher giảm 15%</Option>
@@ -1539,7 +1680,7 @@ const DetailServiceRequest = (props) => {
             </Button>
             <Button
               // danger={true}
-              disabled={disableInvoice}
+              disabled={disableInvoice||disableWaitForPayAndCompletedServicerRequest}
               loading={sendInvoiceConfirmLoading}
               type="primary"
               style={{ width: '25%' }}
@@ -1608,6 +1749,130 @@ const DetailServiceRequest = (props) => {
           />
 
           {/* <Divider style={{ marginBottom: 32 }} /> */}
+
+          {/* XEM HOÁ ĐƠN */}
+          {(updateRequestServiceState.serviceRequestStatus === 13 || updateRequestServiceState.serviceRequestStatus === 14) && (
+            <Row className={styles.invoice}>
+              <Button type="primary" onClick={() => showModalInvoice()}>
+                Xem hoá đơn
+              </Button>
+           </Row>
+          )}
+          
+
+          <Modal
+            title="Hoá đơn"
+            visible={visibleInvoice}
+            onOk={handleCancel}
+            // confirmLoading={confirmLoading}
+            onCancel={handleCancel}
+            cancelText="Đóng"
+            okText="Đồng ý"
+          >
+            <Descriptions>
+              <Descriptions.Item
+                span={6}
+                label="Tên chủ công trình"
+                labelStyle={{ fontWeight: '500' }}
+              >
+                {customerName}
+              </Descriptions.Item>
+              <Descriptions.Item
+                span={6}
+                label="Địa chỉ công trình"
+                labelStyle={{ fontWeight: '500' }}
+              >
+                {customerAddress}
+              </Descriptions.Item>
+              <Descriptions.Item
+                span={6}
+                label="SĐT chủ công trình"
+                labelStyle={{ fontWeight: '500' }}
+              >
+                {customerPhone}
+              </Descriptions.Item>
+              <Descriptions.Item span={6} label="Mô tả yêu cầu" labelStyle={{ fontWeight: '500' }}>
+                {updateRequestServiceState.serviceRequestDescription}
+              </Descriptions.Item>
+              <Descriptions.Item
+                span={6}
+                label="Ngày bắt đầu thi công"
+                labelStyle={{ fontWeight: '500' }}
+              >
+                {contractStartDate}
+              </Descriptions.Item>
+              <Descriptions.Item
+                span={6}
+                label="Ngày kết thúc thi công"
+                labelStyle={{ fontWeight: '500' }}
+              >
+                {contractEndDate}
+              </Descriptions.Item>
+              <Descriptions.Item span={6} label="Đặt cọc" labelStyle={{ fontWeight: '500' }}>
+                {contractDeposit}%
+              </Descriptions.Item>
+            </Descriptions>
+            <ProTable
+              style={{
+                marginBottom: 24,
+              }}
+              pagination={false}
+              search={false}
+              options={false}
+              toolBarRender={false}
+              dataSource={contractDetails}
+              columns={INVOICE}
+            />
+            <hr width="80%" align="center" color="black" />
+            <Descriptions
+              style={{
+                marginTop: 24,
+              }}
+            >
+              <Descriptions.Item
+                span={6}
+                label="Tổng tiền hợp đồng ban đầu"
+                labelStyle={{ fontWeight: '500' }}
+              >
+                {contractTotalPrice} VNĐ
+              </Descriptions.Item>
+              <Descriptions.Item
+                span={6}
+                label="Tổng tiền dịch vụ đã sử dụng"
+                labelStyle={{ fontWeight: '500' }}
+              >
+                {usedServivesPriceFormat} VNĐ
+              </Descriptions.Item>
+              <Descriptions.Item
+                span={6}
+                label="Trừ tiền đặt cọc"
+                labelStyle={{ fontWeight: '500' }}
+              >
+                -{contractDepositPriceFormat} VNĐ
+              </Descriptions.Item>
+              <Descriptions.Item
+                span={6}
+                label="Giảm giá theo voucher"
+                labelStyle={{ fontWeight: '500' }}
+              >
+                -{promotionValuePriceFormat} VNĐ
+              </Descriptions.Item>
+              <Descriptions.Item
+                span={6}
+                label="Thuế GTGT/VAT (10%)"
+                labelStyle={{ fontWeight: '500' }}
+              >
+                {VATPriceFormat} VNĐ
+              </Descriptions.Item>
+              <Descriptions.Item
+                span={6}
+                label="Thành tiền"
+                labelStyle={{ fontWeight: 'bold', color: 'red' }}
+              >
+                <b style={{ color: 'red' }}>{officialPriceFormat} VNĐ</b>
+              </Descriptions.Item>
+            </Descriptions>
+          </Modal>
 
           <BackTop type="primary">
             <div className={styles.style}>UP</div>

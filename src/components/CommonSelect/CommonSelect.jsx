@@ -230,10 +230,10 @@ const SelectRequestServiceStatus = (props) => {
           value: '6',
           label: 'Đang xử lý',
         },
-        // {
-        //   value: '9',
-        //   label: 'Chờ xác nhận',
-        // },
+        {
+          value: '17',
+          label: 'Chờ gửi hoá đơn',
+        },
         {
           value: '14',
           label: 'Chờ thanh toán',
@@ -246,10 +246,10 @@ const SelectRequestServiceStatus = (props) => {
           value: '1',
           label: 'Đã từ chối',
         },
-        
-        
-        
-        
+        {
+          value: '8',
+          label: 'Khách hàng đã huỷ',
+        },
       ]}
       {...props}
     />

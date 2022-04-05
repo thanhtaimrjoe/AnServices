@@ -30,13 +30,15 @@ const CreateWorker = (props) => {
 
   const onCreateWorker = (values) => {
     const createWorkerData = normalizeReportForm(values);
+      // setCreatedWorker({ ...values, userID : res });
     
     return createWorker(createWorkerData).then((res) => {
       if(res.status === 500) {
         message.error("Số điện thoại đã tồn tại");
+      } else {
+        message.success("Đã tạo tài khoản thợ thành công");
+        history.replace('/workers/list');
       }
-      // setCreatedWorker({ ...values, userID : res });
-      history.replace('/workers/list');
     });
     
   };

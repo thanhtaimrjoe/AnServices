@@ -46,7 +46,25 @@ export default [
             path: '/',
             redirect: '/user/login',
           },
-          
+
+          // // DASHBOARD
+          {
+            path: '/dashboard',
+            name: 'dashboard',
+            icon: 'dashboard',
+            routes: [
+              {
+                path: '/dashboard',
+                redirect: '/dashboard/analysis',
+              },
+              {
+                name: 'analysis',
+                icon: 'smile',
+                path: '/dashboard/analysis',
+                component: './dashboard/analysis',
+              },
+            ],
+          },
 
           // ACCOUNTS
           {
