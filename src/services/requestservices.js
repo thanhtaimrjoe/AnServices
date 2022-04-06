@@ -43,11 +43,6 @@ export const createServiceRequest = (prod) => {
   export const getServiceRequestByID = (serviceRequestId) => {
     return request.get(`/Service/GetServiceRequestByID?id=${serviceRequestId}`);
   };
-// export const updatePostStatus = (PostId, prod) => {
-//   return request.put(`/posts/${PostId}`, {
-//     data: prod.update,
-//   });
-// };
 
 export const assignWorkerToRequest = (prod) => {
   return request.post(`/Service/AssignWorkerToRequest`, {
@@ -78,4 +73,3 @@ export const reworkRequestDetail = (requestDetailId) => {
 export const getTest = (serviceRequestId) => {
   return request.get(`/Service/Test?id=${serviceRequestId}`);
 };
-

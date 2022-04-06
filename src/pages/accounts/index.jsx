@@ -51,6 +51,8 @@ const AccountList = ({ history }) => {
           rowSelection={rowSelection}
           actionRef={ref}
           rowKey="userID"
+          // rowKey={(record) => record.userID}
+
           columns={ACCOUNTS}
           resource="User/GetAllCustomers"
         />

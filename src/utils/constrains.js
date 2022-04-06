@@ -12,6 +12,7 @@ export const ACCOUNTS = [
   {
     title: 'STT',
     dataIndex: 'index',
+    key: 'index',
     search: false,
     render: (text, object, index) => {
       return <div>{index+1}</div>

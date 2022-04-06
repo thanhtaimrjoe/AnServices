@@ -63,7 +63,6 @@ const UpdateReportAttribute = (props) => {
 
   const onUpdateWorker = () => {
     const update = normalizeReportForm(formData);
-    console.log('record01', update.update);
 
     // setTypeJobId(update.update.typeJobId);
     let validate = true;

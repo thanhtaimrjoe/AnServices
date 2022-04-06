@@ -12,7 +12,7 @@ const rankingListData = [];
 
 for (let i = 0; i < 6; i += 1) {
   rankingListData.push({
-    title: `工专路 ${i} 号店`,
+    title: `Số yêu cầu ${i} đã nhận `,
     total: 323234,
   });
 }
@@ -28,83 +28,44 @@ const SalesCard = ({
   yearPickerValue,
 }) => {
   const thisYear = new Date();
+  const [workerTasks, setWorkerTasks] = useState([]);
+
+
   // const sortRevenue = revenueByYearArray.sort(function(a,b){return b-a});
 
-  // useEffect(() => {
-  //   dashboard().then((res) => {
-      
-  //     if (res.completeServiceRequest !== null) {
-  //       completeServiceRequestArray.splice(0, 12);
-  //       setCompleteServiceRequestArray([
-  //         ...completeServiceRequestArray,
-  //         res.completeServiceRequest.january,
-  //         res.completeServiceRequest.february,
-  //         res.completeServiceRequest.march,
-  //         res.completeServiceRequest.april,
-  //         res.completeServiceRequest.may,
-  //         res.completeServiceRequest.june,
-  //         res.completeServiceRequest.july,
-  //         res.completeServiceRequest.august,
-  //         res.completeServiceRequest.september,
-  //         res.completeServiceRequest.october,
-  //         res.completeServiceRequest.november,
-  //         res.completeServiceRequest.december,
-  //       ]);
-  //     } else {
-  //       setCompleteServiceRequestArray([
-  //         ...completeServiceRequestArray,
-  //         0,
-  //         0,
-  //         0,
-  //         0,
-  //         0,
-  //         0,
-  //         0,
-  //         0,
-  //         0,
-  //         0,
-  //         0,
-  //         0,
-  //       ]);
-  //     }
+  useEffect(() => {
+    dashboard().then((res) => {
+      setWorkerTasks(res.workerTasks)
+    });
 
-  //     if (res.cancelServiceRequest !== null) {
-  //       cancelServiceRequestArray.splice(0, 12);
-  //       setCancelServiceRequestArray([
-  //         ...cancelServiceRequestArray,
-  //         res.cancelServiceRequest.january,
-  //         res.cancelServiceRequest.february,
-  //         res.cancelServiceRequest.march,
-  //         res.cancelServiceRequest.april,
-  //         res.cancelServiceRequest.may,
-  //         res.cancelServiceRequest.june,
-  //         res.cancelServiceRequest.july,
-  //         res.cancelServiceRequest.august,
-  //         res.cancelServiceRequest.september,
-  //         res.cancelServiceRequest.october,
-  //         res.cancelServiceRequest.november,
-  //         res.cancelServiceRequest.december,
-  //       ]);
-  //     } else {
-  //       setCancelServiceRequestArray([
-  //         ...cancelServiceRequestArray,
-  //         0,
-  //         0,
-  //         0,
-  //         0,
-  //         0,
-  //         0,
-  //         0,
-  //         0,
-  //         0,
-  //         0,
-  //         0,
-  //         0,
-  //       ]);
-  //     }
-  //   });
+  }, []);
 
-  // }, []);
+  const workerReceivedServiceListData = [];
+
+  workerTasks.map((item) => {
+    workerReceivedServiceListData.push({
+      title: `${item.fullName}`,
+      total: item.times,
+    })
+  })
+
+  const workerHaveMostSatisfiedRequestDetailListData = [];
+
+  workerTasks.map((item) => {
+    workerHaveMostSatisfiedRequestDetailListData.push({
+      title: `${item.fullName}`,
+      total: item.done,
+    })
+  })
+
+  const workerHaveMostUnsatisfiedRequestDetailListData = [];
+
+  workerTasks.map((item) => {
+    workerHaveMostUnsatisfiedRequestDetailListData.push({
+      title: `${item.fullName}`,
+      total: item.bad,
+    })
+  })
 
   return (
     <Card
@@ -181,9 +142,9 @@ const SalesCard = ({
               </Col>
               <Col xl={8} lg={12} md={12} sm={24} xs={24}>
                 <div className={styles.salesRank}>
-                  <h4 className={styles.rankingTitle}>Xếp hạng</h4>
+                  <h4 className={styles.rankingTitle}>Xếp hạng thợ nhận nhiều yêu cầu nhất</h4>
                   <ul className={styles.rankingList}>
-                    {rankingListData.map((item, i) => (
+                    {workerReceivedServiceListData.map((item, i) => (
                       <li key={item.title}>
                         <span
                           className={`${styles.rankingItemNumber} ${i < 3 ? styles.active : ''}`}
@@ -194,7 +155,7 @@ const SalesCard = ({
                           {item.title}
                         </span>
                         <span className={styles.rankingItemValue}>
-                          {numeral(item.total).format('0,0')}
+                          {numeral(item.total).format('0,0')} yêu cầu
                         </span>
                       </li>
                     ))}
@@ -245,9 +206,9 @@ const SalesCard = ({
               </Col>
               <Col xl={8} lg={12} md={12} sm={24} xs={24}>
                 <div className={styles.salesRank}>
-                  <h4 className={styles.rankingTitle}>Xếp hạng</h4>
+                  <h4 className={styles.rankingTitle}>Xếp hạng thợ nhận nhiều dịch vụ hài lòng nhất</h4>
                   <ul className={styles.rankingList}>
-                    {rankingListData.map((item, i) => (
+                    {workerHaveMostSatisfiedRequestDetailListData.map((item, i) => (
                       <li key={item.title}>
                         <span
                           className={`${styles.rankingItemNumber} ${i < 3 ? styles.active : ''}`}
@@ -307,9 +268,9 @@ const SalesCard = ({
               </Col>
               <Col xl={8} lg={12} md={12} sm={24} xs={24}>
                 <div className={styles.salesRank}>
-                  <h4 className={styles.rankingTitle}>Xếp hạng</h4>
+                  <h4 className={styles.rankingTitle}>Xếp hạng thợ nhận nhiều dịch vụ không hài lòng nhất</h4>
                   <ul className={styles.rankingList}>
-                    {rankingListData.map((item, i) => (
+                    {workerHaveMostUnsatisfiedRequestDetailListData.map((item, i) => (
                       <li key={item.title}>
                         <span
                           className={`${styles.rankingItemNumber} ${i < 3 ? styles.active : ''}`}

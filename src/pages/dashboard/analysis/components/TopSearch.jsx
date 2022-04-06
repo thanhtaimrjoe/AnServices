@@ -8,25 +8,25 @@ import Trend from './Trend';
 import styles from '../style.less';
 const columns = [
   {
-    title: '排名',
+    title: 'STT',
     dataIndex: 'index',
     key: 'index',
   },
   {
-    title: '搜索关键词',
+    title: 'Từ khoá',
     dataIndex: 'keyword',
     key: 'keyword',
     render: (text) => <a href="/">{text}</a>,
   },
   {
-    title: '用户数',
+    title: 'Số người tìm kiếm',
     dataIndex: 'count',
     key: 'count',
     sorter: (a, b) => a.count - b.count,
     className: styles.alignRight,
   },
   {
-    title: '周涨幅',
+    title: 'Tăng hằng tuần',
     dataIndex: 'range',
     key: 'range',
     sorter: (a, b) => a.range - b.range,
@@ -48,7 +48,7 @@ const TopSearch = ({ loading, visitData2, searchData, dropdownGroup }) => (
   <Card
     loading={loading}
     bordered={false}
-    title="线上热门搜索"
+    title="Chưa biết làm gì"
     extra={dropdownGroup}
     style={{
       height: '100%',
@@ -65,8 +65,8 @@ const TopSearch = ({ loading, visitData2, searchData, dropdownGroup }) => (
         <NumberInfo
           subTitle={
             <span>
-              搜索用户数
-              <Tooltip title="指标说明">
+              Hông biết
+              <Tooltip title="Mô tả chỉ số">
                 <InfoCircleOutlined
                   style={{
                     marginLeft: 8,
@@ -92,8 +92,8 @@ const TopSearch = ({ loading, visitData2, searchData, dropdownGroup }) => (
         <NumberInfo
           subTitle={
             <span>
-              人均搜索次数
-              <Tooltip title="指标说明">
+              Hông biết nữa
+              <Tooltip title="Mô tả chỉ số">
                 <InfoCircleOutlined
                   style={{
                     marginLeft: 8,

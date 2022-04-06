@@ -182,7 +182,6 @@ const Analysis = () => {
 
   useEffect(() => {
     dashboard().then((res) => {
-      console.log('record01', res);
       setPending(res.serviceStatusStatistics.pending);
       setSurveying(res.serviceStatusStatistics.surveying);
       setAgreed(res.serviceStatusStatistics.agreed);
