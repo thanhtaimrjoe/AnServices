@@ -13,8 +13,8 @@ namespace AnService_Capstone.DataAccess.Dapper.Services.SendEmail
         public MailboxAddress To { get; set; }
         public string Subject { get; set; }
         public string Content { get; set; }
-        public IEnumerable<IFormFile> Attachments { get; set; }
-        public Message(string to, string subject, string content, IEnumerable<IFormFile> attachments)
+        public IFormFileCollection Attachments { get; set; }
+        public Message(string to, string subject, string content, IFormFileCollection attachments)
         {
             To = new MailboxAddress(to);
             Subject = subject;

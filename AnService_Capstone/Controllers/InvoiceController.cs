@@ -2,6 +2,7 @@
 using AnService_Capstone.Core.Interfaces;
 using AnService_Capstone.Core.Models.Request;
 using AnService_Capstone.Core.Models.Response;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -32,6 +33,7 @@ namespace AnService_Capstone.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("[action]")]
+        [Authorize(Roles = "Staff")]
         public async Task<IActionResult> CreateInvoice(CreateInvoice invoice)
         {
             if (!ModelState.IsValid)
@@ -102,6 +104,7 @@ namespace AnService_Capstone.Controllers
 
         [HttpGet]
         [Route("[action]")]
+        [Authorize(Roles = "Staff, Customer")]
         public async Task<IActionResult> GetInfomationInvoiceByServiceRequestID(int serviceRequestID)
         {
             if (serviceRequestID == 0)
@@ -119,6 +122,7 @@ namespace AnService_Capstone.Controllers
 
         [HttpGet]
         [Route("[action]")]
+        [Authorize(Roles = "Staff, Customer")]
         public async Task<IActionResult> GetInfomationInvoiceByServiceRequestIDForStaff(int serviceRequestID)
         {
             List<ContractViewModel> list = new List<ContractViewModel>();

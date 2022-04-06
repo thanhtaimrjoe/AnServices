@@ -403,6 +403,7 @@ E:\Capstone\Backup_API\AnService_Capstone\bin\Debug\net5.0\Dapper.dll
 E:\Capstone\Backup_API\AnService_Capstone\bin\Debug\net5.0\Firebase.Auth.dll
 E:\Capstone\Backup_API\AnService_Capstone\bin\Debug\net5.0\Firebase.Storage.dll
 E:\Capstone\Backup_API\AnService_Capstone\bin\Debug\net5.0\Humanizer.dll
+E:\Capstone\Backup_API\AnService_Capstone\bin\Debug\net5.0\MailKit.dll
 E:\Capstone\Backup_API\AnService_Capstone\bin\Debug\net5.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 E:\Capstone\Backup_API\AnService_Capstone\bin\Debug\net5.0\Microsoft.Data.SqlClient.dll
 E:\Capstone\Backup_API\AnService_Capstone\bin\Debug\net5.0\Microsoft.EntityFrameworkCore.dll
@@ -424,8 +425,11 @@ E:\Capstone\Backup_API\AnService_Capstone\bin\Debug\net5.0\Microsoft.IdentityMod
 E:\Capstone\Backup_API\AnService_Capstone\bin\Debug\net5.0\Microsoft.IdentityModel.Tokens.dll
 E:\Capstone\Backup_API\AnService_Capstone\bin\Debug\net5.0\System.ServiceModel.dll
 E:\Capstone\Backup_API\AnService_Capstone\bin\Debug\net5.0\Microsoft.OpenApi.dll
+E:\Capstone\Backup_API\AnService_Capstone\bin\Debug\net5.0\MimeKit.dll
 E:\Capstone\Backup_API\AnService_Capstone\bin\Debug\net5.0\NCrontab.dll
+E:\Capstone\Backup_API\AnService_Capstone\bin\Debug\net5.0\NETCore.MailKit.dll
 E:\Capstone\Backup_API\AnService_Capstone\bin\Debug\net5.0\Newtonsoft.Json.dll
+E:\Capstone\Backup_API\AnService_Capstone\bin\Debug\net5.0\BouncyCastle.Crypto.dll
 E:\Capstone\Backup_API\AnService_Capstone\bin\Debug\net5.0\Swashbuckle.AspNetCore.Swagger.dll
 E:\Capstone\Backup_API\AnService_Capstone\bin\Debug\net5.0\Swashbuckle.AspNetCore.SwaggerGen.dll
 E:\Capstone\Backup_API\AnService_Capstone\bin\Debug\net5.0\Swashbuckle.AspNetCore.SwaggerUI.dll
@@ -474,7 +478,3 @@ E:\Capstone\Backup_API\AnService_Capstone\obj\Debug\net5.0\ref\AnService_Capston
 E:\Capstone\Backup_API\AnService_Capstone\obj\Debug\net5.0\AnService_Capstone.xml
 E:\Capstone\Backup_API\AnService_Capstone\obj\Debug\net5.0\AnService_Capstone.pdb
 E:\Capstone\Backup_API\AnService_Capstone\obj\Debug\net5.0\AnService_Capstone.genruntimeconfig.cache
-E:\Capstone\Backup_API\AnService_Capstone\bin\Debug\net5.0\MailKit.dll
-E:\Capstone\Backup_API\AnService_Capstone\bin\Debug\net5.0\MimeKit.dll
-E:\Capstone\Backup_API\AnService_Capstone\bin\Debug\net5.0\NETCore.MailKit.dll
-E:\Capstone\Backup_API\AnService_Capstone\bin\Debug\net5.0\BouncyCastle.Crypto.dll

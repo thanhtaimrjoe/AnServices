@@ -3,6 +3,7 @@ using AnService_Capstone.Core.Interfaces;
 using AnService_Capstone.Core.Models.Request;
 using AnService_Capstone.Core.Models.Response;
 using AnService_Capstone.DataAccess.Dapper.Services.Firebase;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -32,6 +33,7 @@ namespace AnService_Capstone.Controllers
 
         [HttpGet]
         [Route("[action]")]
+        [Authorize(Roles = "Staff")]
         public async Task<IActionResult> GetContractListByUserID(int id)
         {
             if (id == 0)
@@ -55,6 +57,7 @@ namespace AnService_Capstone.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("[action]")]
+        [Authorize(Roles = "Staff, Customer")]
         public async Task<IActionResult> GetContractByServiceRequestID(int requestServiceId)
         {
             IEnumerable<TblContract> contract = new List<TblContract>();
@@ -106,6 +109,7 @@ namespace AnService_Capstone.Controllers
         /// <returns></returns>
         [HttpPut]
         [Route("[action]")]
+        [Authorize(Roles = "Customer")]
         public async Task<IActionResult> ApproveContract(int id)
         {
             if (id == 0)
@@ -132,6 +136,7 @@ namespace AnService_Capstone.Controllers
         /// <returns></returns>
         [HttpPut]
         [Route("[action]")]
+        [Authorize(Roles = "Customer")]
         public async Task<IActionResult> DenyContract(int id)
         {
             if (id == 0)
@@ -154,6 +159,7 @@ namespace AnService_Capstone.Controllers
         /// <returns></returns>
         [HttpPut]
         [Route("[action]")]
+        [Authorize(Roles = "Customer")]
         public async Task<IActionResult> RequestUpdateContract(int id)
         {
             if (id == 0)
@@ -175,6 +181,7 @@ namespace AnService_Capstone.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("[action]")]
+        [Authorize(Roles = "Staff")]
         public async Task<IActionResult> CreateContract(CreateContract contract)
         {
             if (!ModelState.IsValid)

@@ -80,9 +80,9 @@ namespace AnService_Capstone.Controllers
 
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> SendEmail(IEnumerable<IFormFile> files, int userID)
+        public async Task<IActionResult> SendEmail(IFormFileCollection files, int userID)
         {
-            /*var files = Request.Form.Files.Any() ? Request.Form.Files : new FormFileCollection();*/
+            /*files = Request.Form.Files.Any() ? Request.Form.Files : new FormFileCollection();*/
             var customer = await _userRepository.GetCustomerByID(userID);
             var message = new Message(customer.Email, "Hóa đơn cho dịch vụ sửa chữa", "Chào " + customer.FullName + "<br>AnService gửi đến anh/chị hóa đơn dịch vụ sửa chữa", files);
             await _emailSender.SendEmailAsync(message);
@@ -252,10 +252,10 @@ namespace AnService_Capstone.Controllers
         {
             var worker = await _userRepository.GetWorkerByServiceID(id);
 
-            if (worker == null)
+            /*if (worker == null)
             {
                 return NotFound(new ErrorResponse("No Worker Is Available"));
-            }
+            }*/
             return Ok(worker);
         }
 

@@ -1,6 +1,7 @@
 ﻿using AnService_Capstone.Core.Interfaces;
 using AnService_Capstone.Core.Models.Response;
 using AnService_Capstone.DataAccess.Dapper.Customize;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -22,6 +23,7 @@ namespace AnService_Capstone.Controllers
 
         [HttpPost]
         [Route("[action]")]
+        [Authorize(Roles = "Customer")]
         public async Task<IActionResult> CreateInviteCode(int userID)
         {
             if (userID == 0)

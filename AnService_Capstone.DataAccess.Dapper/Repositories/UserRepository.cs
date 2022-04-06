@@ -114,17 +114,17 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
         {
             var query = "select UserID, FullName, PhoneNumber, Status " +
                 "from (tblUsers u join tblTypeJobs t on u.TypeJob = t.TypeJobID) join tblServices s on s.TypeWorkerJob = t.TypeJobID " +
-                "where s.ServiceID = @ServiceID";
+                "where s.ServiceID = @ServiceID and Status = 4";
 
             using(var connection = _context.CreateConnection())
             {
                 connection.Open();
                 var user = await connection.QueryAsync<TblUser>(query, new { @ServiceID = id });
                 connection.Close();
-                if (user.Count() == 0)
+                /*if (user.Count() == 0)
                 {
                     return null;
-                }
+                }*/
                 return user;
             }
         }

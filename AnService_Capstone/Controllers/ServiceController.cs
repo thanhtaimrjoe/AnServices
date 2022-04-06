@@ -545,6 +545,7 @@ namespace AnService_Capstone.Controllers
 
         [HttpGet]
         [Route("[action]")]
+        /*[Authorize(Roles = "Staff")]*/
         public async Task<IActionResult> Dashboard(int year)
         {
             Dashboard dashboard = new Dashboard();
@@ -571,6 +572,7 @@ namespace AnService_Capstone.Controllers
             var res15 = await _userRepository.GetAllNewUsersInMonth(DateTime.Now.Month, 2, 10);
             var res16 = await _promotionRepository.CountPromotionIsUsedInMonth(DateTime.Now.Month);
             var res17 = await _promotionRepository.CountPromotionIsUsedInYear(year);
+            var res18 = await _serviceRepository.CountTaskOfWorker();
 
             dashboard.ReceivedServiceRequest = res1.FirstOrDefault();
             dashboard.ServiceStatusStatistics = res2;
@@ -589,6 +591,7 @@ namespace AnService_Capstone.Controllers
             dashboard.AmountOfBanCustomersInMonth = res15.Count();
             dashboard.PromotionIsUsedInMonth = res16;
             dashboard.PromotionIsUsedInYear = res17;
+            dashboard.WorkerTasks = res18;
 
             return Ok(dashboard);
         }

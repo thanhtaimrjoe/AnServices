@@ -792,7 +792,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
 
                     if (checkStatus)
                     {
-                        _ = await UpdateStatusServiceRequest(detail.ServiceRequestId, 14);
+                        _ = await UpdateStatusServiceRequest(detail.ServiceRequestId, 17);
                     }
                 }
             }
@@ -1033,6 +1033,21 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
                 conn.Open();
                 var res = await conn.QueryAsync<Dashboard.AmountOfSalesInYear>(query, new { @ServiceRequestCreateDate = year});
                 conn.Close();
+                return res;
+            }
+        }
+
+        public async Task<IEnumerable<Dashboard.WorkerTask>> CountTaskOfWorker()
+        {
+            var query = "select FullName, Count(WorkerID) as Times, sum(case when RequestDetailStatus = 11 then 1 else 0 end) as Done, sum(case when RequestDetailStatus = 12 then 1 else 0 end) as Bad " +
+                "from tblRepairDetail repair join tblUsers u on repair.WorkerID = u.UserID join tblRequestDetails detail on detail.RequestDetailID = repair.RequestDetailID " +
+                "group by FullName " +
+                "order by Times desc ";
+            using (var connection = _context.CreateConnection())
+            {
+                connection.Open();
+                var res = await connection.QueryAsync<Dashboard.WorkerTask>(query);
+                connection.Close();
                 return res;
             }
         }

@@ -83,6 +83,8 @@ namespace AnService_Capstone.Core.Interfaces
 
         public Task<Dashboard.ServiceStatusStatistic> CountServiceStatus();
 
+        public Task<IEnumerable<Dashboard.WorkerTask>> CountTaskOfWorker();
+
         /*public Task<IEnumerable<TblRequestDetail>> GetAllRequestDetail();*/
     }
 }

@@ -37,6 +37,14 @@ namespace AnService_Capstone.Core.Models.Response
             public int Surveying { get; set; }
         }
 
+        public class WorkerTask
+        {
+            public string FullName { get; set; }
+            public int Times { get; set; }
+            public int Done { get; set; }
+            public int Bad { get; set; }
+        }
+
         public AmountOfSalesInYear ReceivedServiceRequest { get; set; }
         public AmountOfSalesInYear CompleteServiceRequest { get; set; }
         public AmountOfSalesInYear CancelServiceRequest { get; set; }
@@ -54,5 +62,6 @@ namespace AnService_Capstone.Core.Models.Response
         public int TotalWorkers { get; set; }
         public int AmountOfNewWorkersInMonth { get; set; }
         public AmountOfSalesInYear RevenueByYear { get; set; }
+        public IEnumerable<WorkerTask> WorkerTasks { get; set; }
     }
 }

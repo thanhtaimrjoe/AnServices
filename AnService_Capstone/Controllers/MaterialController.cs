@@ -1,6 +1,7 @@
 ﻿using AnService_Capstone.Core.Interfaces;
 using AnService_Capstone.Core.Models.Request;
 using AnService_Capstone.Core.Models.Response;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -25,6 +26,7 @@ namespace AnService_Capstone.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("[action]")]
+        [Authorize(Roles = "Worker")]
         public async Task<IActionResult> InsertRequestMaterial(RequestMaterial model)
         {
             if (!ModelState.IsValid)
@@ -46,6 +48,7 @@ namespace AnService_Capstone.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("[action]")]
+        [Authorize(Roles = "Worker, Staff")]
         public async Task<IActionResult> GetAllRequestMaterial()
         {
             var result = await _materialReposiory.GetAllRequestMaterial();
@@ -63,6 +66,7 @@ namespace AnService_Capstone.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("[action]")]
+        [Authorize(Roles = "Worker, Staff")]
         public async Task<IActionResult> GetAllMaterialByRequestDetailID(int id)
         {
             if (id == 0)
@@ -86,6 +90,7 @@ namespace AnService_Capstone.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("[action]")]
+        [Authorize(Roles = "Worker, Staff")]
         public async Task<IActionResult> GetAllMaterialByServiceRequestID(int id)
         {
             if (id == 0)
@@ -108,6 +113,7 @@ namespace AnService_Capstone.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("[action]")]
+        [Authorize(Roles = "Worker")]
         public async Task<IActionResult> GetAllMaterial()
         {
             var rs = await _materialReposiory.GetAllMaterial();
@@ -125,6 +131,7 @@ namespace AnService_Capstone.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("[action]")]
+        [Authorize(Roles = "Worker, Staff")]
         public async Task<IActionResult> GetRequestMaterialByID(int id)
         {
             if (id == 0)
@@ -142,6 +149,7 @@ namespace AnService_Capstone.Controllers
 
         [HttpGet]
         [Route("[action]")]
+        [Authorize(Roles = "Worker")]
         public async Task<IActionResult> GetUnitList()
         {
             var res = await _materialReposiory.GetListUnit();
@@ -161,6 +169,7 @@ namespace AnService_Capstone.Controllers
         /// <returns></returns>
         [HttpPut]
         [Route("[action]")]
+        [Authorize(Roles = "Staff")]
         public async Task<IActionResult> UpdateStatusRequestMaterial(int id, int status)
         {
             if (id == 0)
@@ -188,6 +197,7 @@ namespace AnService_Capstone.Controllers
         /// <returns></returns>
         [HttpPut]
         [Route("[action]")]
+        [Authorize(Roles = "Staff")]
         public async Task<IActionResult> ApproveRequestMaterial(int id)
         {
             if (id == 0)
@@ -211,6 +221,7 @@ namespace AnService_Capstone.Controllers
         /// <returns></returns>
         [HttpPut]
         [Route("[action]")]
+        [Authorize(Roles = "Staff")]
         public async Task<IActionResult> DenyRequestMaterial(int id, string message)
         {
             if (id == 0)
@@ -240,6 +251,7 @@ namespace AnService_Capstone.Controllers
         /// <returns></returns>
         [HttpPut]
         [Route("[action]")]
+        [Authorize(Roles = "Staff")]
         public async Task<IActionResult> UpdateRequestMaterial(int id, int quantityNew, string message)
         {
             if (id == 0)
@@ -272,6 +284,7 @@ namespace AnService_Capstone.Controllers
         /// <returns></returns>
         [HttpPut]
         [Route("[action]")]
+        [Authorize(Roles = "Worker")]
         public async Task<IActionResult> CancelRequestMaterial(int id)
         {
             if (id == 0)
