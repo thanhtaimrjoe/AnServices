@@ -1,24 +1,29 @@
 export default {
   primary: '#353D4C', //xanh
-  second: '#B74E4E', //do
-  third: '#FFFFFF', //trang
-  fourth: '#EAECEE', //xanh nhat
-  sixth: '#000000', //den
-  approve: 'green',
-  deny: 'red',
-  pending: '#CFC93B',
-  //---------------------
-  yellow: '#D4D74F',
-  purple: '#91ACEF',
-  green: '#4FD174',
-  blue: '#0FBCF9',
-  red: '#FF6B6B',
-  candyWhite: '#EDE1C9',
-  //---------------------
-  btn: '#F0A247', //orange
-  field: '#EAECEE',
+  second: '#929292', //do
+  //------Request Detail status------
+  pending: '#A07D00',
+  inProgress: '#C024E7',
+  confirming: '#2F1FE2',
+  happy: '#00BF36',
+  unhappy: '#E72020',
+  rework: '#037189',
+  //-------------Button--------------
+  resend: '#B74E4E',
+  request: '#D7E6F9',
+  service: '#D7E6F9',
+  detail: '#62F694',
+  disable: '#DDDDDD',
+  //-------------Other--------------
+  white: '#FFFFFF',
+  red: '#E72020',
+  error: '#FF0000',
+  userCover: '#758096',
+  cover: '#F2F0E0',
+  field: '#EAEAEA',
+  fieldFocus: '#353D4C',
+  fieldBlur: '#B8B8B8',
   placeholder: '#929292',
-  //---------------------
+  background: '#FFFFFF',
   background1: '#FFFFFF',
-  background2: '#EAECEE',
 };

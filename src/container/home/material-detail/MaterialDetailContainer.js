@@ -26,33 +26,38 @@ export default function MaterialDetailContainer(props) {
   const message = useSelector(state => state.message);
   //reducer --- report
   const report = useSelector(state => state.report);
+  //get token
+  const token = 'Bearer ' + user.token;
 
   //get dispatch
   const dispatch = useDispatch();
   //call api --- get all material by request detail id
-  const getAllMaterialByRequestDetailID = id =>
-    dispatch(actGetAllMaterialByRequestDetailIDRequest(id));
+  const getAllMaterialByRequestDetailID = (id, token) =>
+    dispatch(actGetAllMaterialByRequestDetailIDRequest(id, token));
   //reset used material state
   const resetUsedMaterialState = () => dispatch(actResetUsedMaterialState());
   //call api --- insert request material
-  const insertRequestMaterialRequest = requestMaterial =>
-    dispatch(actInsertRequestMaterialRequest(requestMaterial));
+  const insertRequestMaterialRequest = (requestMaterial, token) =>
+    dispatch(actInsertRequestMaterialRequest(requestMaterial, token));
   //reset message
   const resetMessage = () => dispatch(actResetMessage());
   //call api --- get all report by worker id
-  const getAllReportByRequestDetailIDRequest = requestDetailId =>
-    dispatch(actGetAllReportByRequestDetailIDRequest(requestDetailId));
+  const getAllReportByRequestDetailIDRequest = (requestDetailId, token) =>
+    dispatch(actGetAllReportByRequestDetailIDRequest(requestDetailId, token));
   //call api ---cancel request material
-  const cancelRequestMaterialRequest = usedMaterialId =>
-    dispatch(actCancelRequestMaterialRequest(usedMaterialId));
+  const cancelRequestMaterialRequest = (usedMaterialId, token) =>
+    dispatch(actCancelRequestMaterialRequest(usedMaterialId, token));
   //reset report state
   const resetReportState = () => dispatch(actResetReportState());
 
   useEffect(() => {
     resetUsedMaterialState();
     resetReportState();
-    getAllMaterialByRequestDetailID(requestDetailItem.requestDetailId);
-    getAllReportByRequestDetailIDRequest(requestDetailItem.requestDetailId);
+    getAllMaterialByRequestDetailID(requestDetailItem.requestDetailId, token);
+    getAllReportByRequestDetailIDRequest(
+      requestDetailItem.requestDetailId,
+      token,
+    );
     //check message of insert request material
     if (message === 'INSERT_REQUEST_MATERIAL_SUCCESS') {
       Alert.alert('Thông báo', 'Yêu cầu của bạn đã được gửi thành công', [
@@ -80,8 +85,11 @@ export default function MaterialDetailContainer(props) {
     const willFocusSubscription = navigation.addListener('focus', () => {
       resetUsedMaterialState();
       resetReportState();
-      getAllMaterialByRequestDetailID(requestDetailItem.requestDetailId);
-      getAllReportByRequestDetailIDRequest(requestDetailItem.requestDetailId);
+      getAllMaterialByRequestDetailID(requestDetailItem.requestDetailId, token);
+      getAllReportByRequestDetailIDRequest(
+        requestDetailItem.requestDetailId,
+        token,
+      );
     });
     return willFocusSubscription;
   }, [message]);
@@ -115,7 +123,7 @@ export default function MaterialDetailContainer(props) {
       requestDetailID: requestDetailItem.requestDetailId,
       materialList: [materialNewItem],
     };
-    insertRequestMaterialRequest(requestMaterial);
+    insertRequestMaterialRequest(requestMaterial, token);
   };
 
   //button --- cancel request material
@@ -124,7 +132,7 @@ export default function MaterialDetailContainer(props) {
       {
         text: 'Có',
         onPress: () => {
-          cancelRequestMaterialRequest(usedMaterialId);
+          cancelRequestMaterialRequest(usedMaterialId, token);
         },
       },
       {
@@ -147,6 +155,7 @@ export default function MaterialDetailContainer(props) {
       message={message}
       requestServicePackage={requestServicePackage}
       isPrimary={requestDetailItem.tblRepairDetails[0].isPrimary}
+      requestDetailStatus={requestDetailItem.requestDetailStatus}
       usedMaterial={usedMaterial}
       report={report}
       onShowReportProblem={onShowReportProblem}

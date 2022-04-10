@@ -30,7 +30,7 @@ export default function VerifyOTPContainer(props) {
     // } else {
     //   Alert.alert(
     //     'Thông báo',
-    //     'Mã OTP bạn đã nhập không khớp, vui lòng thử lại',
+    //     'Mã xác nhận bạn nhập không khớp, vui lòng thử lại',
     //   );
     // }
   };

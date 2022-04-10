@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 import {styles} from './LoginStyle';
 import Color from '../../../style/Color';
-import IconURL from '../../../style/IconURL'
+import IconURL from '../../../style/IconURL';
 
 export default function Login(props) {
   const {loading} = props;
@@ -43,10 +43,7 @@ export default function Login(props) {
     <KeyboardAvoidingView style={{flex: 1}}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.container}>
-          <Image
-            style={styles.image}
-            source={{uri: IconURL.welcomeImg}}
-          />
+          <Image style={styles.image} source={{uri: IconURL.loginImg}} />
           <Text style={styles.bigText}>Đăng nhập</Text>
           <Text style={styles.smallText}>
             Chúng tôi sẽ gửi mã xác nhận gồm 6 chữ số ngay sau khi bạn nhập số
@@ -60,8 +57,8 @@ export default function Login(props) {
             onChangeText={text => setPhoneNumber(text)}
           />
           {loading ? (
-            <View style={styles.button}>
-              <ActivityIndicator color={Color.primary} size={'large'} />
+            <View style={styles.buttonLoading}>
+              <ActivityIndicator color={Color.white} size={'large'} />
             </View>
           ) : (
             <TouchableOpacity style={styles.button} onPress={onSendOTP}>

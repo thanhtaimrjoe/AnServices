@@ -9,15 +9,20 @@ import {
 import React, {useState} from 'react';
 import {styles} from './HomeStyle';
 import Loading from '../../general/Loading';
-import IconURL from '../../../style/IconURL'
+import IconURL from '../../../style/IconURL';
 export default function Home(props) {
-  const {user, refreshing, requestService, listFilterStatus} = props;
+  const {user, workerInfo, refreshing, requestService, listFilterStatus} =
+    props;
   //state --- status
-  const [status, setStatus] = useState('Đang nhận');
+  const [status, setStatus] = useState({
+    statusID: 0,
+    statusName: 'Đang nhận',
+  });
 
   //set state status
-  const onSetStatusFilter = status => {
+  const onGetAllServiceRequestByWorkerID = status => {
     setStatus(status);
+    props.onGetAllServiceRequestByWorkerID(status.statusID);
   };
 
   //button --- navigate to request service detail
@@ -26,8 +31,8 @@ export default function Home(props) {
   };
 
   //button --- refresh request service by worker id
-  const onRefreshRequestServiceByWorkerID = () => {
-    props.onRefreshRequestServiceByWorkerID();
+  const onRefreshServiceRequestByWorkerID = () => {
+    props.onRefreshServiceRequestByWorkerID(status.statusID);
   };
 
   return (
@@ -36,18 +41,23 @@ export default function Home(props) {
       refreshControl={
         <RefreshControl
           refreshing={refreshing}
-          onRefresh={onRefreshRequestServiceByWorkerID}
+          onRefresh={onRefreshServiceRequestByWorkerID}
         />
       }>
-      <View style={styles.welcomeContainer}>
-        <Text style={styles.welcomeText}>Xin chào,</Text>
-        <Text style={styles.welcomeName}>{user.fullName}</Text>
-        <Image
-          source={{uri: IconURL.welcomeImg}}
-          style={styles.welcomeImg}
-        />
+      <View style={styles.logoContainer}>
+        <Image source={{uri: IconURL.anserviceImg}} style={styles.logoImg} />
+        <Text style={styles.logoText}>AnServices</Text>
       </View>
-      <Text style={styles.requestServiceListTitle}>Dịch vụ đang nhận</Text>
+      <View style={styles.userInfoContainer}>
+        <Image source={{uri: IconURL.userImg}} style={styles.userIcon} />
+        <View>
+          <Text style={styles.userInfoName}>{user.fullName}</Text>
+          <Text style={styles.userInfoDescription}>
+            {workerInfo.typeJob && workerInfo.typeJob.typeJobName}
+          </Text>
+        </View>
+      </View>
+      <Text style={styles.requestServiceListTitle}>Danh sách dịch vụ</Text>
       <View style={styles.filter}>
         {listFilterStatus.map((item, index) => {
           return (
@@ -55,22 +65,26 @@ export default function Home(props) {
               key={index}
               style={[
                 styles.filterBtn,
-                status === item.status && styles.filterBtnActive,
+                status.statusID === item.statusID && styles.filterBtnActive,
               ]}
-              onPress={() => onSetStatusFilter(item.status)}>
+              onPress={() => onGetAllServiceRequestByWorkerID(item)}>
               <Text
                 style={[
-                  styles.filterBtnText,
-                  status === item.status && styles.filterBtnTextActive,
+                  styles.filterText,
+                  status.statusID === item.statusID && styles.filterTextActive,
                 ]}>
-                {item.status}
+                {item.statusName}
               </Text>
             </TouchableOpacity>
           );
         })}
       </View>
       <View style={styles.requestServiceListContainer}>
-        {requestService.length === 0 && <Loading />}
+        {requestService.length === 0 && (
+          <View style={styles.loadingScreen}>
+            <Loading />
+          </View>
+        )}
         {requestService.errorsMsg ? (
           <View style={styles.errorView}>
             <Image

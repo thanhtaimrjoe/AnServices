@@ -18,12 +18,14 @@ export default function CompletedReportContainer(props) {
   const user = useSelector(state => state.user);
   //reducer --- message
   const message = useSelector(state => state.message);
+  //get token
+  const token = 'Bearer ' + user.token;
 
   //get dispatch
   const dispatch = useDispatch();
   //call api --- create report
-  const createReportRequest = reportItem =>
-    dispatch(actCreateReportRequest(reportItem));
+  const createReportRequest = (reportItem, token) =>
+    dispatch(actCreateReportRequest(reportItem, token));
   //reset message
   const resetMessage = () => dispatch(actResetMessage());
 
@@ -35,7 +37,7 @@ export default function CompletedReportContainer(props) {
           onPress: () => {
             setUploading(false);
             resetMessage();
-            navigation.goBack();
+            navigation.pop(2);
           },
         },
       ]);
@@ -80,7 +82,7 @@ export default function CompletedReportContainer(props) {
       reportDescription: description,
       mediaList: mediaURL,
     };
-    createReportRequest(reportItem);
+    createReportRequest(reportItem, token);
   };
 
   return (

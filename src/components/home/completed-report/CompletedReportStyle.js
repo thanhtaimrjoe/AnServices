@@ -5,68 +5,61 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Color.background1,
-    paddingHorizontal: 16,
+    paddingHorizontal: 15,
   },
   //service
   serviceContainer: {
-    marginVertical: 16,
+    marginVertical: 20,
   },
   serviceTitle: {
     fontSize: 18,
     color: Color.primary,
-    marginBottom: 8,
+    marginBottom: 10,
   },
   //service item
   serviceItemContainer: {
     width: '100%',
     flexDirection: 'row',
-    backgroundColor: Color.fourth,
+    backgroundColor: Color.cover,
     borderRadius: 10,
-    justifyContent: 'space-evenly',
     alignItems: 'center',
-    paddingVertical: 5,
+    paddingHorizontal: 24,
+    paddingVertical: 8,
   },
   serviceItemTextContainer: {
-    width: '60%',
+    width: '70%',
   },
   serviceItemName: {
     fontSize: 18,
     fontWeight: '500',
     color: Color.primary,
   },
-  serviceItemDescription: {
-    fontSize: 14,
-    color: Color.primary,
-  },
-  serviceItemPrice: {
-    fontSize: 14,
-    color: Color.primary,
-  },
   serviceItemImg: {
-    width: 90,
-    height: 90,
+    width: 69,
+    height: 69,
+    marginRight: 20,
   },
   //request
   requestContainer: {
-    marginBottom: 16,
+    marginBottom: 20,
   },
   requestTitle: {
     fontSize: 18,
     color: Color.primary,
-    marginBottom: 8,
+    marginBottom: 10,
   },
   //request item
   requestItemContainer: {
     width: '100%',
     flexDirection: 'row',
-    backgroundColor: Color.fourth,
+    backgroundColor: Color.cover,
     borderRadius: 10,
-    justifyContent: 'space-evenly',
     alignItems: 'center',
-    paddingVertical: 5,
+    paddingHorizontal: 24,
+    paddingVertical: 8,
   },
   requestItemTextContainer: {
-    width: '60%',
+    width: '70%',
   },
   requestItemName: {
     fontSize: 18,
@@ -82,12 +75,13 @@ const styles = StyleSheet.create({
     color: Color.primary,
   },
   requestItemImg: {
-    width: 90,
-    height: 90,
+    width: 69,
+    height: 69,
+    marginRight: 20,
   },
   //description field
   descriptionContainer: {
-    marginBottom: 25,
+    marginBottom: 10,
   },
   descriptionTitle: {
     fontSize: 18,
@@ -103,7 +97,7 @@ const styles = StyleSheet.create({
   },
   //media
   mediaContainer: {
-    marginBottom: 25,
+    marginBottom: 10,
   },
   mediaTitle: {
     fontSize: 18,
@@ -144,7 +138,7 @@ const styles = StyleSheet.create({
     right: 5,
   },
   mediaRemoveIcon: {
-    color: Color.third,
+    color: Color.white,
     fontSize: 18,
   },
   //dialog
@@ -158,7 +152,7 @@ const styles = StyleSheet.create({
     width: '90%',
     borderRadius: 10,
     paddingHorizontal: 16,
-    backgroundColor: Color.third,
+    backgroundColor: Color.white,
   },
   dialogTitle: {
     fontSize: 18,
@@ -176,7 +170,7 @@ const styles = StyleSheet.create({
   },
   dialogMediaText: {
     fontSize: 18,
-    color: Color.third,
+    color: Color.white,
   },
   //media view dialog
   mediaFull: {
@@ -187,21 +181,31 @@ const styles = StyleSheet.create({
   //confirm button
   confirmBtn: {
     width: '100%',
-    height: 45,
+    paddingVertical: 12,
     borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: Color.btn,
+    backgroundColor: Color.primary,
+    marginBottom: 20,
+  },
+  confirmLoadingBtn: {
+    width: '100%',
+    paddingVertical: 8,
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: Color.primary,
     marginBottom: 20,
   },
   confirmBtnText: {
     fontSize: 18,
     fontWeight: '500',
-    color: Color.primary,
+    color: Color.white,
   },
   //error message
   errorMessage: {
     color: 'red',
+    marginTop: 5,
   },
 });
 export {styles};

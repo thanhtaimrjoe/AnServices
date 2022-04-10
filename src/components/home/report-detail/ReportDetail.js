@@ -10,7 +10,9 @@ import {
 import React, {useEffect, useState} from 'react';
 import {styles} from './ReportDetailStyle';
 import Video from 'react-native-video';
-import IconURL from '../../../style/IconURL'
+import IconURL from '../../../style/IconURL';
+import moment from 'moment';
+import 'moment/locale/vi';
 
 export default function ReportDetail(props) {
   const {reportDetail, requestDetailItem} = props;
@@ -20,6 +22,7 @@ export default function ReportDetail(props) {
   const [mediaItem, setMediaItem] = useState();
   //state --- showMediaViewDialog
   const [showMediaViewDialog, setShowMediaViewDialog] = useState(false);
+  moment().locale('vi');
 
   useEffect(() => {
     mediaItem;
@@ -58,7 +61,9 @@ export default function ReportDetail(props) {
       <View style={styles.dateContainer}>
         <Text style={styles.dateTitle}>Thời gian báo cáo</Text>
         <View style={styles.dateView}>
-          <Text style={styles.dateText}>{reportDetail.reportDate}</Text>
+          <Text style={styles.dateText}>
+            {moment(reportDetail.reportDate).format('dddd Do MMMM YYYY')}
+          </Text>
         </View>
       </View>
       <View style={styles.mediaContainer}>
@@ -80,9 +85,7 @@ export default function ReportDetail(props) {
                   <Video
                     style={styles.mediaView}
                     source={{uri: item.mediaUrl}}
-                    poster={
-                      IconURL.loadingVideoImg
-                    }
+                    poster={IconURL.loadingVideoImg}
                     posterResizeMode={'cover'}
                     paused={pause}
                     onLoad={() => {
@@ -116,9 +119,7 @@ export default function ReportDetail(props) {
                   }}
                   resizeMode="cover"
                   style={styles.mediaFull}
-                  poster={
-                    IconURL.loadingVideoImg
-                  }
+                  poster={IconURL.loadingVideoImg}
                   posterResizeMode={'cover'}
                   controls={true}
                 />

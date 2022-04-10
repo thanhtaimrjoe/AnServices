@@ -3,130 +3,123 @@ import Color from '../../../style/Color';
 const styles = StyleSheet.create({
   container: {
     backgroundColor: Color.background1,
-    paddingHorizontal: 16,
+    paddingHorizontal: 15,
     flex: 1,
   },
-  //service
+  //service button
   serviceContainer: {
-    marginTop: 16,
-  },
-  //service item
-  serviceItemContainer: {
-    width: '100%',
-    flexDirection: 'row',
-    backgroundColor: Color.field,
-    borderRadius: 10,
-    justifyContent: 'space-evenly',
-    alignItems: 'center',
-    paddingVertical: 5,
-  },
-  serviceItemTextContainer: {
-    width: '60%',
-    height: '80%',
-  },
-  serviceItemName: {
-    fontSize: 18,
-    fontWeight: '500',
-    color: Color.primary,
-  },
-  serviceItemDescription: {
-    fontSize: 14,
-    color: Color.primary,
-  },
-  serviceItemImg: {
-    width: 90,
-    height: 90,
-  },
-  //material
-  materialTitle: {
-    fontSize: 20,
-    color: Color.primary,
-    fontWeight: '500',
-    marginBottom: 10,
-    marginTop: 25,
-  },
-  materialHeader: {
-    width: '75%',
     flexDirection: 'row',
     justifyContent: 'space-between',
+    marginTop: 15,
+    marginBottom: 20,
   },
-  materialHeaderName: {
-    fontSize: 18,
-    color: Color.primary,
-    marginLeft: 30,
+  serviceButtonContainer: {
+    width: '30%',
+    alignItems: 'center',
+    paddingVertical: 8,
+    paddingHorizontal: 14,
+    borderRadius: 10,
+    backgroundColor: Color.service,
   },
-  materialHeaderQuantity: {
-    fontSize: 18,
-    color: Color.primary,
+  serviceButtonDisableContainer: {
+    width: '30%',
+    alignItems: 'center',
+    paddingVertical: 8,
+    paddingHorizontal: 14,
+    borderRadius: 10,
+    backgroundColor: Color.disable,
   },
-  //error message from api
-  errorMsg: {
-    marginTop: 100,
-    fontSize: 16,
+  serviceButtonIcon: {
+    width: 45,
+    height: 45,
+  },
+  serviceButtonText: {
     textAlign: 'center',
     color: Color.primary,
   },
+  serviceButtonDisableText: {
+    textAlign: 'center',
+    color: Color.second,
+  },
   //material list
   materialListItemContainer: {
-    marginBottom: 16,
+    marginBottom: 20,
+  },
+  materialTitle: {
+    fontSize: 18,
+    color: Color.primary,
+    fontWeight: '500',
   },
   //material item
   materialContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginVertical: 5,
-  },
-  materialItemContainer: {
-    width: '100%',
-    backgroundColor: Color.field,
-    flexDirection: 'row',
-    padding: 8,
+    marginTop: 15,
+    padding: 16,
     borderRadius: 10,
+    backgroundColor: Color.cover,
   },
-  materialItemIconApprove: {
-    fontSize: 16,
-    color: Color.approve,
-    marginHorizontal: 8,
+  materialMainInfoContainer: {
+    flexDirection: 'row',
   },
-  materialItemIconDeny: {
-    fontSize: 20,
-    color: Color.deny,
-    marginHorizontal: 9,
+  materialMainTextContainer: {
+    width: '70%',
   },
-  materialItemIconCancel: {
-    fontSize: 20,
-    color: Color.deny,
-    marginHorizontal: 6,
-  },
-  materialItemIconPending: {
-    fontSize: 16,
-    color: Color.pending,
-    marginHorizontal: 8,
-  },
-  materialItemNameContainer: {
-    width: '40%',
-    marginRight: 8,
-  },
-  materialItemName: {
+  materialName: {
     color: Color.primary,
-  },
-  materialItemNote: {
-    color: Color.placeholder,
-  },
-  materialItemQuantity: {
-    color: Color.second,
+    fontSize: 18,
     fontWeight: '500',
-    width: '20%',
+    marginBottom: 5,
   },
-  marterialIconContainer: {
-    justifyContent: 'center',
-    paddingHorizontal: 8,
-    borderRadius: 10,
-    marginLeft: 10,
+  materialNote: {
+    color: Color.placeholder,
+    marginBottom: 5,
+  },
+  materialQuantityContainer: {
+    flexDirection: 'row',
+  },
+  materialQuantityTitle: {
+    color: Color.primary,
+    marginRight: 4,
+  },
+  materialQuantity: {
+    color: Color.red,
+    fontWeight: '500',
+    marginRight: 4,
+  },
+  materialQuantityDeny: {
+    color: Color.red,
+    fontWeight: '500',
+    marginRight: 4,
+    textDecorationLine: 'line-through',
+  },
+  materialIconContainer: {
+    width: '30%',
+    justifyContent: 'space-between',
+    alignItems: 'flex-end',
   },
   materialIcon: {
-    fontSize: 18,
+    width: 30,
+    height: 30,
+  },
+  materialOtherContainer: {
+    flexDirection: 'row',
+  },
+  materialButtonContainer: {
+    padding: 6,
+    marginLeft: 2,
+  },
+  messageContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  messageTitle: {
     color: Color.primary,
+    marginRight: 8,
+  },
+  messageMainContainer: {
+    width: '80%',
+    padding: 8,
+    backgroundColor: Color.white,
   },
   //dialog
   dialogBackground: {
@@ -137,134 +130,116 @@ const styles = StyleSheet.create({
   },
   //request material dialog
   requestMaterialContainer: {
-    width: '80%',
+    width: '85%',
     padding: 16,
     backgroundColor: 'white',
   },
   requestMaterialTitle: {
-    fontSize: 22,
+    fontSize: 24,
     textAlign: 'center',
     fontWeight: '500',
     color: Color.primary,
-    marginBottom: 8,
+    marginBottom: 20,
   },
   requestMaterialNameContainer: {
     flexDirection: 'row',
+    marginBottom: 20,
   },
   requestMaterialName: {
     fontSize: 18,
     color: Color.primary,
-    marginBottom: 8,
   },
   requestMaterialNameData: {
     fontSize: 18,
-    color: Color.second,
+    color: Color.red,
     fontWeight: '500',
-    marginBottom: 8,
   },
-  requestMaterialQuantityAndUnitContainer: {
+  //request material quantity
+  materialInfoContainer1: {
     flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 20,
   },
-  requestMaterialQuantityContainer: {
-    width: '50%',
-  },
-  requestMaterialQuantityTitle: {
-    fontSize: 18,
+  materialQuantityTitle1: {
     color: Color.primary,
+    marginRight: 10,
   },
-  requestMaterialQuantity: {
-    width: '60%',
-    borderRadius: 10,
-    paddingLeft: 8,
-    color: Color.primary,
-    backgroundColor: Color.field,
-  },
-  requestMaterialUnitContainer: {
+  materialQuantity1: {
     width: '30%',
-  },
-  requestMaterialUnitTitle: {
-    fontSize: 18,
-    color: Color.primary,
-  },
-  requestMaterialUnit: {
-    fontSize: 16,
-    justifyContent: 'center',
-    paddingVertical: 14,
-    paddingLeft: 8,
-    color: Color.primary,
+    padding: 8,
     borderRadius: 10,
+    color: Color.primary,
     backgroundColor: Color.field,
+    marginRight: 20,
   },
-  requestMaterialNoteContainer: {
-    width: '100%',
-    marginBottom: 10,
-  },
-  requestMaterialNoteTitle: {
-    fontSize: 18,
+  //request material unit
+  materialUnitTitle1: {
     color: Color.primary,
   },
-  requestMaterialNote: {
-    width: '100%',
+  materialUnitText1: {
+    fontWeight: '500',
+    color: Color.primary,
+  },
+  //request material note
+  materialNoteContainer1: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  materialNoteTitle1: {
+    color: Color.primary,
+    marginRight: 20,
+  },
+  materialNote1: {
+    width: '75%',
+    padding: 8,
     borderRadius: 10,
-    paddingLeft: 8,
     color: Color.primary,
     backgroundColor: Color.field,
   },
   //request button
   btnRequest: {
     width: '100%',
-    height: 45,
-    backgroundColor: Color.btn,
+    paddingVertical: 12,
+    borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: Color.primary,
+  },
+  btnRequestLoading: {
+    width: '100%',
+    paddingVertical: 8,
     borderRadius: 10,
-    marginTop: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: Color.primary,
   },
   btnRequestText: {
-    color: Color.primary,
     fontSize: 18,
     fontWeight: '500',
-  },
-  //message
-  messageHeaderName: {
-    color: Color.primary,
-    fontSize: 18,
-    paddingLeft: 8,
-  },
-  messageContentContainer: {
-    width: '100%',
-    padding: 8,
-    backgroundColor: Color.field,
-    borderRadius: 10,
-  },
-  messageContent: {
-    color: Color.sixth,
+    color: Color.white,
   },
   //report
-  reportProblemListContainer: {
-    marginBottom: 16,
-  },
+  reportProblemListContainer: {},
   reportTitle: {
-    fontSize: 20,
+    fontSize: 18,
     color: Color.primary,
     fontWeight: '500',
-    marginTop: 25,
-    marginBottom: 10,
+    marginBottom: 15,
   },
   //Report Item
   reportProblemItem: {
     width: '100%',
     flexDirection: 'row',
-    paddingHorizontal: 16,
+    padding: 16,
     alignItems: 'center',
-    backgroundColor: Color.fourth,
+    backgroundColor: Color.request,
     borderRadius: 10,
-    height: 65,
-    marginBottom: 8,
+    marginBottom: 15,
   },
   reportProblemItemImg: {
-    width: 40,
-    height: 40,
+    width: 30,
+    height: 30,
     marginRight: 16,
   },
   reportProblemItemName: {
@@ -274,7 +249,7 @@ const styles = StyleSheet.create({
   },
   //error message from api
   errorView: {
-    paddingVertical: 20,
+    paddingVertical: 50,
     alignItems: 'center',
   },
   errorMsg: {
@@ -285,6 +260,11 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     width: 80,
     height: 80,
+  },
+  //loading screen
+  loadingScreen: {
+    width: '100%',
+    paddingVertical: 50,
   },
 });
 export {styles};

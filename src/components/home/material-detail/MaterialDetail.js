@@ -11,10 +11,9 @@ import {
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {styles} from './MaterialDetailStyle';
-import Icon from 'react-native-vector-icons/FontAwesome5';
 import Loading from '../../general/Loading';
 import Color from '../../../style/Color';
-import IconURL from '../../../style/IconURL'
+import IconURL from '../../../style/IconURL';
 
 export default function MaterialDetail(props) {
   const {
@@ -24,6 +23,7 @@ export default function MaterialDetail(props) {
     isPrimary,
     usedMaterial,
     report,
+    requestDetailStatus,
   } = props;
 
   //state --- materialNewItem
@@ -89,19 +89,6 @@ export default function MaterialDetail(props) {
     props.onRequestNewMaterial(materialNewItem);
   };
 
-  //get all available message of used material
-  const getAllMessageWithMaterialName = () => {
-    var result = '';
-    if (usedMaterial.length > 0 && !usedMaterial.errorsMsg) {
-      usedMaterial.map((item, index) => {
-        if (item.message) {
-          result += item.material.materialName + ': ' + item.message + '\n';
-        }
-      });
-    }
-    return result;
-  };
-
   //button ---- show report detail
   const onShowReportDetail = item => {
     props.onShowReportDetail(item);
@@ -109,87 +96,83 @@ export default function MaterialDetail(props) {
 
   return (
     <ScrollView style={styles.container}>
-      {isPrimary && (
-        <View style={styles.serviceContainer}>
+      <View style={styles.serviceContainer}>
+        {isPrimary &&
+        requestServicePackage === 2 &&
+        (requestDetailStatus === 2 || requestDetailStatus === 6) ? (
           <TouchableOpacity
-            style={styles.serviceItemContainer}
-            onPress={onShowReportProblem}>
-            <Image
-              source={{uri: IconURL.problemReportImg}}
-              style={styles.serviceItemImg}
-            />
-            <View style={styles.serviceItemTextContainer}>
-              <Text style={styles.serviceItemName}>Báo cáo vấn đề</Text>
-              <Text style={styles.serviceItemDescription}>
-                Báo cáo tình trạng của khách hàng về cho chúng tôi
-              </Text>
-            </View>
-          </TouchableOpacity>
-        </View>
-      )}
-
-      {isPrimary && (
-        <View style={styles.serviceContainer}>
-          <TouchableOpacity
-            style={styles.serviceItemContainer}
-            onPress={onShowCompletedReport}>
-            <Image
-              source={{uri: IconURL.completeReportImg}}
-              style={styles.serviceItemImg}
-            />
-            <View style={styles.serviceItemTextContainer}>
-              <Text style={styles.serviceItemName}>Báo cáo hoàn thành</Text>
-              <Text style={styles.serviceItemDescription}>
-                Báo cáo sau khi đã hoàn thành xong công việc
-              </Text>
-            </View>
-          </TouchableOpacity>
-        </View>
-      )}
-      {requestServicePackage === 2 && isPrimary && (
-        <View style={styles.serviceContainer}>
-          <TouchableOpacity
-            style={styles.serviceItemContainer}
+            style={styles.serviceButtonContainer}
             onPress={onShowRequestMaterial}>
             <Image
-              source={{uri: IconURL.requestMaterialImg}}
-              style={styles.serviceItemImg}
+              source={{uri: IconURL.materialImg}}
+              style={styles.serviceButtonIcon}
             />
-            <View style={styles.serviceItemTextContainer}>
-              <Text style={styles.serviceItemName}>Yêu cầu vật liệu</Text>
-              <Text style={styles.serviceItemDescription}>
-                Hãy gửi yêu cầu vật liệu để sửa chữa về cho chúng tôi
-              </Text>
-            </View>
+            <Text style={styles.serviceButtonText}>Yêu cầu vật liệu</Text>
           </TouchableOpacity>
+        ) : (
+          <View style={styles.serviceButtonDisableContainer}>
+            <Image
+              source={{uri: IconURL.materialDisableImg}}
+              style={styles.serviceButtonIcon}
+            />
+            <Text style={styles.serviceButtonDisableText}>
+              Yêu cầu vật liệu
+            </Text>
+          </View>
+        )}
+        {isPrimary &&
+        (requestDetailStatus === 2 || requestDetailStatus === 6) ? (
+          <TouchableOpacity
+            style={styles.serviceButtonContainer}
+            onPress={onShowReportProblem}>
+            <Image
+              source={{uri: IconURL.problemImg}}
+              style={styles.serviceButtonIcon}
+            />
+            <Text style={styles.serviceButtonText}>Báo cáo vấn đề</Text>
+          </TouchableOpacity>
+        ) : (
+          <View style={styles.serviceButtonDisableContainer}>
+            <Image
+              source={{uri: IconURL.problemDisableImg}}
+              style={styles.serviceButtonIcon}
+            />
+            <Text style={styles.serviceButtonDisableText}>Báo cáo vấn đề</Text>
+          </View>
+        )}
+        {isPrimary &&
+        (requestDetailStatus === 2 || requestDetailStatus === 6) ? (
+          <TouchableOpacity
+            style={styles.serviceButtonContainer}
+            onPress={onShowCompletedReport}>
+            <Image
+              source={{uri: IconURL.completeImg}}
+              style={styles.serviceButtonIcon}
+            />
+            <Text style={styles.serviceButtonText}>Báo cáo hoàn thành</Text>
+          </TouchableOpacity>
+        ) : (
+          <View style={styles.serviceButtonDisableContainer}>
+            <Image
+              source={{uri: IconURL.completeDisableImg}}
+              style={styles.serviceButtonIcon}
+            />
+            <Text style={styles.serviceButtonDisableText}>
+              Báo cáo hoàn thành
+            </Text>
+          </View>
+        )}
+      </View>
+      <Text style={styles.materialTitle}>Danh sách vật liệu yêu cầu</Text>
+      {usedMaterial.length === 0 && (
+        <View style={styles.loadingScreen}>
+          <Loading />
         </View>
       )}
-      <Text style={styles.materialTitle}>Danh sách vật liệu yêu cầu</Text>
-      {
-        usedMaterial.length > 0 &&
-        !usedMaterial.errorsMsg && (
-<View style={styles.materialHeader}>
-        <Text style={styles.materialHeaderName}>Tên vật liệu</Text>
-        <Text style={styles.materialHeaderQuantity}>Số lượng</Text>
-      </View>
-        )
-      }
-      
-      {/* {usedMaterial.length === 0 && <Loading />}
       {usedMaterial.errorsMsg && (
-        <Text style={styles.errorMsg}>
-          Hiện tại bạn chưa có bất kì vật liệu nào
-        </Text>
-      )} */}
-      {usedMaterial.length === 0 && (
         <View style={styles.errorView}>
-          <Image
-            source={{uri: IconURL.notFoundImg}}
-            style={styles.errorImg}
-          />
-          <Text style={styles.errorMsg}>
-            Hiện tại bạn chưa có bất kì vật liệu nào
-          </Text>
+          <Image source={{uri: IconURL.notFoundImg}} style={styles.errorImg} />
+          <Text style={styles.errorMsg}>Chưa có yêu cầu vật liệu nào</Text>
         </View>
       )}
       <View style={styles.materialListItemContainer}>
@@ -198,60 +181,103 @@ export default function MaterialDetail(props) {
           usedMaterial.map((item, index) => {
             return (
               <View key={index} style={styles.materialContainer}>
-                <View style={styles.materialItemContainer}>
-                  {item.status.statusId === 3 && (
-                    <Icon name="check" style={styles.materialItemIconApprove} />
-                  )}
-                  {item.status.statusId === 1 && (
-                    <Icon name="times" style={styles.materialItemIconDeny} />
-                  )}
-                  {item.status.statusId === 2 && (
-                    <Icon
-                      name="spinner"
-                      style={styles.materialItemIconPending}
-                    />
-                  )}
-                  {item.status.statusId === 8 && (
-                    <Icon name="ban" style={styles.materialItemIconCancel} />
-                  )}
-                  <View style={styles.materialItemNameContainer}>
-                    <Text style={styles.materialItemName}>
+                <View style={styles.materialMainInfoContainer}>
+                  <View style={styles.materialMainTextContainer}>
+                    <Text style={styles.materialName}>
                       {item.material.materialName}
                     </Text>
                     {item.note && (
-                      <Text style={styles.materialItemNote}>{item.note}</Text>
+                      <Text style={styles.materialNote}>{item.note}</Text>
+                    )}
+                    <View style={styles.materialQuantityContainer}>
+                      <Text style={styles.materialQuantityTitle}>
+                        Số lượng:
+                      </Text>
+                      {item.quantityNew ? (
+                        <Text style={styles.materialQuantityDeny}>
+                          {item.quantity}
+                        </Text>
+                      ) : (
+                        <Text style={styles.materialQuantity}>
+                          {item.quantity}
+                        </Text>
+                      )}
+                      {item.quantityNew && (
+                        <Text style={styles.materialQuantity}>
+                          {item.quantityNew}
+                        </Text>
+                      )}
+                    </View>
+                  </View>
+                  <View style={styles.materialIconContainer}>
+                    {item.status.statusId === 3 && (
+                      <Image
+                        source={{uri: IconURL.materialApprove}}
+                        style={styles.materialIcon}
+                      />
+                    )}
+                    {item.status.statusId === 1 && (
+                      <Image
+                        source={{uri: IconURL.materialDeny}}
+                        style={styles.materialIcon}
+                      />
+                    )}
+                    {item.status.statusId === 2 && (
+                      <Image
+                        source={{uri: IconURL.materialPending}}
+                        style={styles.materialIcon}
+                      />
+                    )}
+                    {item.status.statusId === 8 && (
+                      <Image
+                        source={{uri: IconURL.materialDeny}}
+                        style={styles.materialIcon}
+                      />
+                    )}
+                    {(requestDetailStatus === 2 ||
+                      requestDetailStatus === 6) && (
+                      <View style={styles.materialOtherContainer}>
+                        <TouchableOpacity
+                          style={styles.materialButtonContainer}
+                          onPress={() => onShowRequestMaterialDialog(item)}>
+                          <Image
+                            source={{uri: IconURL.plus}}
+                            style={styles.materialIcon}
+                          />
+                        </TouchableOpacity>
+                        {item.status.statusId === 3 ||
+                        item.status.statusId === 1 ||
+                        item.status.statusId === 8 ? (
+                          <View style={styles.materialButtonContainer}>
+                            <Image
+                              source={{uri: IconURL.cancelDisalbe}}
+                              style={styles.materialIcon}
+                            />
+                          </View>
+                        ) : (
+                          <TouchableOpacity
+                            style={styles.materialButtonContainer}
+                            onPress={() =>
+                              onCancelRequestMaterial(item.usedMaterialId)
+                            }>
+                            <Image
+                              source={{uri: IconURL.cancel}}
+                              style={styles.materialIcon}
+                            />
+                          </TouchableOpacity>
+                        )}
+                      </View>
                     )}
                   </View>
-                  {item.quantityNew ? (
-                    <Text style={styles.materialItemQuantity}>
-                      {item.quantity} {'->'} {item.quantityNew}{' '}
-                      {item.material.unit}
-                    </Text>
-                  ) : (
-                    <Text style={styles.materialItemQuantity}>
-                      {item.quantity} {item.material.unit}
-                    </Text>
-                  )}
-                  {isPrimary && (
-                    <TouchableOpacity
-                      style={styles.marterialIconContainer}
-                      onPress={() => onShowRequestMaterialDialog(item)}>
-                      <Icon name="plus" style={styles.materialIcon} />
-                    </TouchableOpacity>
-                  )}
-                  {isPrimary &&
-                    item.status.statusId !== 3 &&
-                    item.status.statusId !== 1 &&
-                    item.status.statusId !== 8 && (
-                      <TouchableOpacity
-                        style={styles.marterialIconContainer}
-                        onPress={() =>
-                          onCancelRequestMaterial(item.usedMaterialId)
-                        }>
-                        <Icon name="times" style={styles.materialIcon} />
-                      </TouchableOpacity>
-                    )}
                 </View>
+                {item.message && (
+                  <View style={styles.messageContainer}>
+                    <Text style={styles.messageTitle}>Tin nhắn</Text>
+                    <View style={styles.messageMainContainer}>
+                      <Text>{item.message}</Text>
+                    </View>
+                  </View>
+                )}
               </View>
             );
           })}
@@ -271,32 +297,27 @@ export default function MaterialDetail(props) {
                     {materialItem.material.materialName}
                   </Text>
                 </View>
-                <View style={styles.requestMaterialQuantityAndUnitContainer}>
-                  <View style={styles.requestMaterialQuantityContainer}>
-                    <Text style={styles.requestMaterialQuantityTitle}>
-                      Số lượng
-                    </Text>
-                    <TextInput
-                      style={styles.requestMaterialQuantity}
-                      keyboardType={'numeric'}
-                      onChangeText={text => onHandleQuantity(text)}
-                    />
-                  </View>
+                <View style={styles.materialInfoContainer1}>
+                  <Text style={styles.materialQuantityTitle1}>Số lượng:</Text>
+                  <TextInput
+                    keyboardType="numeric"
+                    style={styles.materialQuantity1}
+                    onChangeText={text => onHandleQuantity(text)}
+                  />
                   {materialItem.material.materialId !== 55 && (
-                    <View style={styles.requestMaterialUnitContainer}>
-                      <Text style={styles.requestMaterialUnitTitle}>
-                        Đơn vị
-                      </Text>
-                      <Text style={styles.requestMaterialUnit}>
-                        {materialItem.material.unit}
-                      </Text>
-                    </View>
+                    <Text style={styles.materialUnitTitle1}>Đơn vị: </Text>
+                  )}
+                  {materialItem.material.materialId !== 55 && (
+                    <Text style={styles.materialUnitText1}>
+                      {materialItem.material.unit}
+                    </Text>
                   )}
                 </View>
-                <View style={styles.requestMaterialNoteContainer}>
-                  <Text style={styles.requestMaterialNoteTitle}>Ghi chú</Text>
+                <View style={styles.materialNoteContainer1}>
+                  <Text style={styles.materialNoteTitle1}>Ghi chú:</Text>
                   <TextInput
-                    style={styles.requestMaterialNote}
+                    style={styles.materialNote1}
+                    multiline={true}
                     placeholder={
                       materialItem.material.materialId === 55
                         ? 'Tên vật liệu, Đơn vị, Ghi chú'
@@ -307,8 +328,8 @@ export default function MaterialDetail(props) {
                   />
                 </View>
                 {uploading ? (
-                  <View style={styles.btnRequest}>
-                    <ActivityIndicator size={'large'} color={Color.primary} />
+                  <View style={styles.btnRequestLoading}>
+                    <ActivityIndicator size={'large'} color={Color.white} />
                   </View>
                 ) : (
                   <TouchableOpacity
@@ -322,56 +343,43 @@ export default function MaterialDetail(props) {
           </TouchableWithoutFeedback>
         </Modal>
       )}
-      {usedMaterial.length > 0 && !usedMaterial.errorsMsg && (
-        <View>
-          <Text style={styles.messageHeaderName}>Tin nhắn</Text>
-          <View style={styles.messageContentContainer}>
-            <Text style={styles.messageContent}>
-              {getAllMessageWithMaterialName()}
-            </Text>
-          </View>
+      <Text style={styles.reportTitle}>Danh sách báo cáo</Text>
+      {report.length === 0 && (
+        <View style={styles.loadingScreen}>
+          <Loading />
         </View>
       )}
-      <View style={styles.reportProblemListContainer}>
-        <Text style={styles.reportTitle}>Danh sách báo cáo</Text>
-        {report.length === 0 && <Loading />}
-        {report.errorsMsg && (
-          <View style={styles.errorView}>
-            <Image
-              source={{uri: IconURL.notFoundImg}}
-              style={styles.errorImg}
-            />
-            <Text style={styles.errorMsg}>
-              Hiện tại bạn chưa có báo cáo nào
-            </Text>
-          </View>
-        )}
-        {report.length > 0 &&
-          !report.errorsMsg &&
-          report.map((item, index) => {
-            return (
-              <TouchableOpacity
-                key={index}
-                style={styles.reportProblemItem}
-                onPress={() => onShowReportDetail(item)}>
-                {item.reportTitle === 'Báo cáo vấn đề' ? (
-                  <Image
-                    source={{uri: IconURL.problemReportImg}}
-                    style={styles.reportProblemItemImg}
-                  />
-                ) : (
-                  <Image
-                    source={{uri: IconURL.completeReportImg}}
-                    style={styles.reportProblemItemImg}
-                  />
-                )}
-                <Text style={styles.reportProblemItemName}>
-                  {item.reportDescription}
-                </Text>
-              </TouchableOpacity>
-            );
-          })}
-      </View>
+      {report.errorsMsg && (
+        <View style={styles.errorView}>
+          <Image source={{uri: IconURL.notFoundImg}} style={styles.errorImg} />
+          <Text style={styles.errorMsg}>Hiện tại bạn chưa có báo cáo nào</Text>
+        </View>
+      )}
+      {report.length > 0 &&
+        !report.errorsMsg &&
+        report.map((item, index) => {
+          return (
+            <TouchableOpacity
+              key={index}
+              style={styles.reportProblemItem}
+              onPress={() => onShowReportDetail(item)}>
+              {item.reportTitle === 'Báo cáo vấn đề' ? (
+                <Image
+                  source={{uri: IconURL.problemColorImg}}
+                  style={styles.reportProblemItemImg}
+                />
+              ) : (
+                <Image
+                  source={{uri: IconURL.completeColorImg}}
+                  style={styles.reportProblemItemImg}
+                />
+              )}
+              <Text style={styles.reportProblemItemName}>
+                {item.reportDescription}
+              </Text>
+            </TouchableOpacity>
+          );
+        })}
     </ScrollView>
   );
 }

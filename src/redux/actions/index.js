@@ -32,15 +32,13 @@ export const actLoginCustomerOrWorkerRequest = phoneNumber => {
           },
         },
       );
-      if (response.ok) {
-        const json = await response.json();
-        if (json) {
-          dispatch(actGetUserInfo(json));
-        }
-      } else {
-        dispatch(actGetErrorConnectAPIMessage());
+      const json = await response.json();
+      if (json) {
+        dispatch(actGetUserInfo(json));
       }
-    } catch (error) {}
+    } catch (error) {
+      actGetErrorConnectAPIMessage();
+    }
   };
 };
 //fetch user
@@ -50,13 +48,14 @@ export const actGetUserInfo = user => {
     user,
   };
 };
-//call api
-export const actSendSmsByPhoneNumberRequest = phoneNumber => {
+//call api --- authen
+export const actSendSmsByPhoneNumberRequest = (phoneNumber, token) => {
   return async dispatch => {
     try {
       const response = await fetch(API + 'User/SendSms', {
         method: 'POST',
         headers: {
+          Authorization: token,
           Accept: 'application/json',
           'Content-Type': 'application/json',
         },
@@ -80,16 +79,130 @@ export const actGetOTP = otp => {
     otp,
   };
 };
-//------------SERVICE----------------
-//call api***
-export const actGetAllRequestServiceByWorkerIDRequest = id => {
+//call api --- authen
+export const actGetWorkerByIDRequest = (userID, token) => {
+  return async dispatch => {
+    try {
+      const response = await fetch(API + 'User/GetWorkerById?id=' + userID, {
+        method: 'GET',
+        headers: {
+          Authorization: token,
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+      });
+      const json = await response.json();
+      if (json) {
+        dispatch(actGetWorkerInfo(json));
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+};
+//get worker info
+export const actGetWorkerInfo = workerInfo => {
+  return {
+    type: types.GET_WORKER_BY_ID,
+    workerInfo,
+  };
+};
+//call api
+export const actCheckPhoneNumberExistOrNotRequest = newPhoneNumber => {
   return async dispatch => {
     try {
       const response = await fetch(
-        API + 'Service/GetAllServiceRequestByWorkerID?id=' + id,
+        API + 'User/LoginCustomerOrWorker?phoneNumber=' + newPhoneNumber,
+        {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+        },
+      );
+      if (response.ok) {
+        const json = await response.json();
+        if (json) {
+          dispatch(actPhoneNumberWasExist());
+        }
+      } else {
+        dispatch(actPhoneNumberNotExist());
+      }
+    } catch (error) {}
+  };
+};
+
+//phone number was exist
+export const actPhoneNumberWasExist = () => {
+  return {
+    type: types.PHONE_NUMBER_WAS_EXIST,
+  };
+};
+
+//phone number not exist
+export const actPhoneNumberNotExist = () => {
+  return {
+    type: types.PHONE_NUMBER_NOT_EXIST,
+  };
+};
+//call api
+export const actChangePhoneNumberRequest = (userID, newPhoneNumber) => {
+  return async dispatch => {
+    try {
+      const response = await fetch(
+        API +
+          'User/ChangePhoneNumber?userID=' +
+          userID +
+          '&phoneNumber=' +
+          newPhoneNumber,
+        {
+          method: 'PUT',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+        },
+      );
+      if (response.status === 200) {
+        dispatch(actChangePhoneNumberSuccess());
+      } else {
+        dispatch(actChangePhoneNumberFailure());
+      }
+    } catch (error) {}
+  };
+};
+//change phone number success
+export const actChangePhoneNumberSuccess = () => {
+  return {
+    type: types.CHANGE_PHONE_NUMBER_SUCCESS,
+  };
+};
+//change phone number failure
+export const actChangePhoneNumberFailure = () => {
+  return {
+    type: types.CHANGE_PHONE_NUMBER_FAILURE,
+  };
+};
+//------------SERVICE----------------
+//call api*** --- authen
+export const actGetAllServiceRequestByWorkerIDRequest = (
+  userID,
+  status,
+  token,
+) => {
+  return async dispatch => {
+    try {
+      const response = await fetch(
+        API +
+          'Service/GetAllServiceRequestByWorkerID?id=' +
+          userID +
+          '&status=' +
+          status,
         {
           method: 'GET',
           headers: {
+            Authorization: token,
             Accept: 'application/json',
             'Content-Type': 'application/json',
           },
@@ -111,15 +224,21 @@ export const actGetAllRequestServiceByWorkerID = requestService => {
     requestService,
   };
 };
+//reset service request
+export const actResetServiceRequest = () => {
+  return {
+    type: types.RESET_SERVICE_REQUEST,
+  };
+};
 //reset requestDetail
 export const actResetRequestDetail = () => {
   return {
     type: types.RESET_REQUEST_DETAIL,
   };
 };
-//call api
+//call api --- authen
 export const actGetAllRequestServiceDetailsByRequestServiceIDAndWorkerIDRequest =
-  (requestServiceID, workerID) => {
+  (requestServiceID, workerID, token) => {
     return async dispatch => {
       try {
         const response = await fetch(
@@ -131,6 +250,7 @@ export const actGetAllRequestServiceDetailsByRequestServiceIDAndWorkerIDRequest 
           {
             method: 'GET',
             headers: {
+              Authorization: token,
               Accept: 'application/json',
               'Content-Type': 'application/json',
             },
@@ -156,8 +276,8 @@ export const actGetRequestServiceDetailsByRequestServiceIDAndWorkerID =
     };
   };
 //---------------MATERIAL-----------------
-//call api
-export const actGetAllMaterialByRequestDetailIDRequest = id => {
+//call api --- authen
+export const actGetAllMaterialByRequestDetailIDRequest = (id, token) => {
   return async dispatch => {
     try {
       const response = await fetch(
@@ -165,6 +285,7 @@ export const actGetAllMaterialByRequestDetailIDRequest = id => {
         {
           method: 'GET',
           headers: {
+            Authorization: token,
             Accept: 'application/json',
             'Content-Type': 'application/json',
           },
@@ -192,13 +313,14 @@ export const actResetUsedMaterialState = () => {
     type: types.RESET_USED_MATERIAL_STATE,
   };
 };
-//call api
-export const actGetAllMaterialRequest = () => {
+//call api --- authen
+export const actGetAllMaterialRequest = token => {
   return async dispatch => {
     try {
       const response = await fetch(API + 'Material/GetAllMaterial', {
         method: 'GET',
         headers: {
+          Authorization: token,
           Accept: 'application/json',
           'Content-Type': 'application/json',
         },
@@ -219,13 +341,14 @@ export const actGetAllMaterial = material => {
     material,
   };
 };
-//call api
-export const actInsertRequestMaterialRequest = requestMaterial => {
+//call api --- authen
+export const actInsertRequestMaterialRequest = (requestMaterial, token) => {
   return async dispatch => {
     try {
       const response = await fetch(API + 'Material/InsertRequestMaterial', {
         method: 'POST',
         headers: {
+          Authorization: token,
           Accept: 'application/json',
           'Content-Type': 'application/json',
         },
@@ -256,8 +379,8 @@ export const actInsertRequestMaterialFailure = () => {
     type: types.INSERT_REQUEST_MATERIAL_FAILURE,
   };
 };
-//call api
-export const actCancelRequestMaterialRequest = usedMaterialId => {
+//call api --- authen
+export const actCancelRequestMaterialRequest = (usedMaterialId, token) => {
   return async dispatch => {
     try {
       const response = await fetch(
@@ -265,12 +388,12 @@ export const actCancelRequestMaterialRequest = usedMaterialId => {
         {
           method: 'PUT',
           headers: {
+            Authorization: token,
             Accept: 'application/json',
             'Content-Type': 'application/json',
           },
         },
       );
-      //console.log('response.status', response.status);
       if (response.status === 200) {
         dispatch(actCancelRequestMaterialSuccess());
       } else {
@@ -295,13 +418,14 @@ export const actCancelRequestMaterialFailure = () => {
   };
 };
 //---------------REPORT-------------------
-//call api
-export const actCreateReportRequest = reportItem => {
+//call api --- authen
+export const actCreateReportRequest = (reportItem, token) => {
   return async dispatch => {
     try {
       const response = await fetch(API + 'Report/CreateReport', {
         method: 'POST',
         headers: {
+          Authorization: token,
           Accept: 'application/json',
           'Content-Type': 'application/json',
         },
@@ -336,8 +460,11 @@ export const actCreateReportFailure = () => {
     type: types.CREATE_REPORT_FAILURE,
   };
 };
-//call api
-export const actGetAllReportByRequestDetailIDRequest = requestDetailId => {
+//call api --- authen
+export const actGetAllReportByRequestDetailIDRequest = (
+  requestDetailId,
+  token,
+) => {
   return async dispatch => {
     try {
       const response = await fetch(
@@ -345,6 +472,7 @@ export const actGetAllReportByRequestDetailIDRequest = requestDetailId => {
         {
           method: 'GET',
           headers: {
+            Authorization: token,
             Accept: 'application/json',
             'Content-Type': 'application/json',
           },
@@ -370,27 +498,5 @@ export const actGetAllReportByRequestDetailID = report => {
 export const actResetReportState = () => {
   return {
     type: types.RESET_REPORT_STATE,
-  };
-};
-//test
-export const actTestRequest = formData => {
-  return async dispatch => {
-    //console.log('zo api1111', formData);
-    try {
-      //console.log('zo api', formData);
-      const response = await fetch(
-        'https://anservice-capstone.conveyor.cloud/api/Contract/' + 'Test',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-          body: formData,
-        },
-      );
-      //console.log('response.status', response.status);
-    } catch (error) {
-      console.error(error);
-    }
   };
 };

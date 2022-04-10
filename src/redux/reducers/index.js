@@ -7,6 +7,7 @@ import usedMaterial from './usedMaterial';
 import material from './material';
 import message from './message';
 import report from './report';
+import workerInfo from './workerInfo';
 const myReducer = combineReducers({
   user,
   otp,
@@ -16,5 +17,6 @@ const myReducer = combineReducers({
   material,
   message,
   report,
+  workerInfo,
 });
 export default myReducer;

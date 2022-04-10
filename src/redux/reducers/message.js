@@ -11,6 +11,18 @@ const myReducer = (state = inititalState, action) => {
     case types.ERROR_CONNECT_API:
       state = 'ERROR_CONNECT_API';
       return state;
+    case types.PHONE_NUMBER_WAS_EXIST:
+      state = 'PHONE_NUMBER_WAS_EXIST';
+      return state;
+    case types.PHONE_NUMBER_NOT_EXIST:
+      state = 'PHONE_NUMBER_NOT_EXIST';
+      return state;
+    case types.CHANGE_PHONE_NUMBER_SUCCESS:
+      state = 'CHANGE_PHONE_NUMBER_SUCCESS';
+      return state;
+    case types.CHANGE_PHONE_NUMBER_FAILURE:
+      state = 'CHANGE_PHONE_NUMBER_FAILURE';
+      return state;
     case types.INSERT_REQUEST_MATERIAL_SUCCESS:
       state = 'INSERT_REQUEST_MATERIAL_SUCCESS';
       return state;

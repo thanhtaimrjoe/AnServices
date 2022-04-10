@@ -14,6 +14,8 @@ export default function RequestDetailContainer(props) {
   const user = useSelector(state => state.user);
   //reducer --- requestDetail
   const requestDetail = useSelector(state => state.requestDetail);
+  //get token
+  const token = 'Bearer ' + user.token;
 
   //get dispatch
   const dispatch = useDispatch();
@@ -21,11 +23,13 @@ export default function RequestDetailContainer(props) {
   const getAllRequestServiceDetailsByRequestServiceIDAndWorkerIDRequest = (
     requestServiceID,
     workerID,
+    token,
   ) =>
     dispatch(
       actGetAllRequestServiceDetailsByRequestServiceIDAndWorkerIDRequest(
         requestServiceID,
         workerID,
+        token,
       ),
     );
   //reset request detail
@@ -36,7 +40,18 @@ export default function RequestDetailContainer(props) {
     getAllRequestServiceDetailsByRequestServiceIDAndWorkerIDRequest(
       requestService.serviceRequestId,
       user.id,
+      token,
     );
+    //reload page when focused
+    const willFocusSubscription = navigation.addListener('focus', () => {
+      resetRequestDetail();
+      getAllRequestServiceDetailsByRequestServiceIDAndWorkerIDRequest(
+        requestService.serviceRequestId,
+        user.id,
+        token,
+      );
+    });
+    return willFocusSubscription;
   }, []);
 
   //button --- navigate to material detail

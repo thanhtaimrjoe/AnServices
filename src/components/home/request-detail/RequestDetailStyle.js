@@ -3,31 +3,30 @@ import Color from '../../../style/Color';
 const styles = StyleSheet.create({
   container: {
     backgroundColor: Color.background1,
-    paddingHorizontal: 16,
+    padding: 15,
     flex: 1,
   },
   //package
   packageContainer: {
-    marginBottom: 15,
+    marginBottom: 20,
   },
   packageTitle: {
     fontSize: 18,
     color: Color.primary,
     marginBottom: 10,
-    marginTop: 16,
   },
   //package item
   packageItemContainer: {
     width: '100%',
     flexDirection: 'row',
-    backgroundColor: Color.fourth,
+    backgroundColor: Color.cover,
     borderRadius: 10,
-    justifyContent: 'space-evenly',
     alignItems: 'center',
-    paddingVertical: 5,
+    paddingHorizontal: 24,
+    paddingVertical: 8,
   },
   packageItemTextContainer: {
-    width: '60%',
+    width: '65%',
   },
   packageItemName: {
     fontSize: 18,
@@ -39,110 +38,122 @@ const styles = StyleSheet.create({
     color: Color.primary,
   },
   packageItemImg: {
-    width: 80,
-    height: 80,
+    width: 69,
+    height: 69,
+    marginRight: 20,
   },
-  //service
+  //service list
   serviceContainer: {
-    marginBottom: 10,
+    marginBottom: 20,
   },
-  title: {
+  serviceTitle: {
     fontSize: 18,
     color: Color.primary,
-    marginBottom: 10,
-    marginTop: 16,
   },
   //service item
   serviceItem: {
-    marginBottom: 20,
+    marginTop: 10,
   },
   serviceItemContainer: {
     width: '100%',
-    flexDirection: 'row',
-    backgroundColor: Color.fourth,
+    backgroundColor: Color.cover,
     borderRadius: 10,
-    justifyContent: 'space-evenly',
-    alignItems: 'center',
-    paddingVertical: 8,
-    marginBottom: 5,
   },
-  serviceItemTextContainer: {
-    width: 161,
+  serviceItemMainContainer: {
+    flexDirection: 'row',
+    paddingTop: 16,
+    paddingHorizontal: 16,
+  },
+  serviceItemInforContainer: {
+    width: '70%',
+    marginRight: 10,
   },
   serviceItemName: {
-    width: 161,
     fontSize: 18,
     fontWeight: '500',
     color: Color.primary,
     marginBottom: 5,
   },
-  serviceItemIcon: {
-    fontSize: 20,
+  serviceItemDescriptionContainer: {
+    flexDirection: 'row',
+    marginBottom: 5,
+  },
+  serviceItemTitle: {
+    fontSize: 16,
     color: Color.primary,
+    marginRight: 4,
   },
-  serviceItemIconDisable: {
-    fontSize: 20,
-    color: Color.fourth,
+  serviceItemStatus2: {
+    fontSize: 16,
+    color: Color.pending,
+    fontWeight: '500',
   },
-  serviceItemImg: {
-    width: 80,
-    height: 80,
+  serviceItemStatus6: {
+    fontSize: 16,
+    color: Color.inProgress,
+    fontWeight: '500',
   },
-  //repair date begin
-  repairDateBegin: {
+  serviceItemStatus9: {
+    fontSize: 16,
+    color: Color.confirming,
+    fontWeight: '500',
+  },
+  serviceItemStatus11: {
+    fontSize: 16,
+    color: Color.happy,
+    fontWeight: '500',
+  },
+  serviceItemStatus12: {
+    fontSize: 16,
+    color: Color.unhappy,
+    fontWeight: '500',
+  },
+  serviceItemStatus16: {
+    fontSize: 16,
+    color: Color.rework,
+    fontWeight: '500',
+  },
+  serviceItemPriority: {
+    fontSize: 16,
+    color: Color.red,
+    fontWeight: '500',
+  },
+  serviceItemDateContainer: {
+    flexDirection: 'row',
+    marginBottom: 16,
+    paddingHorizontal: 16,
+  },
+  serviceItemDate: {
     fontSize: 16,
     color: Color.primary,
   },
-  //request detail status
-  requestDetailStatusContainer: {
+  serviceItemImg: {
+    width: 70,
+    height: 70,
+  },
+  serviceItemBtn: {
+    backgroundColor: Color.detail,
+    padding: 10,
     flexDirection: 'row',
+    justifyContent: 'center',
     alignItems: 'center',
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 10,
   },
-  requestDetailStatusTitle: {
-    color: Color.second,
+  serviceItemBtnText: {
+    fontSize: 16,
+    fontWeight: '500',
+    color: Color.primary,
+    marginRight: 8,
   },
-  requestDetailStatusID2: {
-    marginLeft: 8,
-    padding: 7,
-    borderRadius: 10,
-    backgroundColor: Color.yellow,
-  },
-  requestDetailStatusID6: {
-    marginLeft: 8,
-    padding: 7,
-    borderRadius: 10,
-    backgroundColor: Color.purple,
-  },
-  requestDetailStatusID9: {
-    marginLeft: 8,
-    padding: 7,
-    borderRadius: 10,
-    backgroundColor: Color.green,
-  },
-  requestDetailStatusID11: {
-    marginLeft: 8,
-    padding: 7,
-    borderRadius: 10,
-    backgroundColor: Color.blue,
-  },
-  requestDetailStatusID12: {
-    marginLeft: 8,
-    padding: 7,
-    borderRadius: 10,
-    backgroundColor: Color.red,
-  },
-  requestDetailStatusID16: {
-    marginLeft: 8,
-    padding: 7,
-    borderRadius: 10,
-    backgroundColor: Color.candyWhite,
-  },
-  requestDetailStatusText: {
+  serviceItemBtnIcon: {
+    fontSize: 16,
     color: Color.primary,
   },
+
   //fullName
   fullNameContainer: {
-    marginBottom: 25,
+    marginBottom: 20,
   },
   fullNameTitle: {
     fontSize: 18,
@@ -156,11 +167,11 @@ const styles = StyleSheet.create({
     backgroundColor: Color.field,
   },
   fullNameText: {
-    color: Color.sixth,
+    color: Color.primary,
   },
   //phone
   phoneContainer: {
-    marginBottom: 25,
+    marginBottom: 20,
   },
   phoneTitle: {
     fontSize: 18,
@@ -174,11 +185,11 @@ const styles = StyleSheet.create({
     backgroundColor: Color.field,
   },
   phoneText: {
-    color: Color.sixth,
+    color: Color.primary,
   },
   //description
   descriptionContainer: {
-    marginBottom: 25,
+    marginBottom: 20,
   },
   descriptionTitle: {
     fontSize: 18,
@@ -193,11 +204,11 @@ const styles = StyleSheet.create({
     backgroundColor: Color.field,
   },
   descriptionText: {
-    color: Color.sixth,
+    color: Color.primary,
   },
   //media
   mediaContainer: {
-    marginBottom: 25,
+    marginBottom: 20,
   },
   mediaTitle: {
     fontSize: 18,
@@ -242,7 +253,7 @@ const styles = StyleSheet.create({
   },
   //address
   addressContainer: {
-    marginBottom: 25,
+    marginBottom: 20,
   },
   addressTitle: {
     fontSize: 18,
@@ -257,7 +268,12 @@ const styles = StyleSheet.create({
     backgroundColor: Color.field,
   },
   addressText: {
-    color: Color.sixth,
+    color: Color.primary,
+  },
+  //loading screen
+  loadingScreen: {
+    width: '100%',
+    paddingVertical: 16,
   },
 });
 export {styles};

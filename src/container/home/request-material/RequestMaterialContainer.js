@@ -20,26 +20,29 @@ export default function RequestMaterialContainer(props) {
   const material = useSelector(state => state.material);
   //reducer --- message
   const message = useSelector(state => state.message);
+  //get token
+  const token = 'Bearer ' + user.token;
 
   //get dispatch
   const dispatch = useDispatch();
   //call api --- get all material
-  const getAllMaterialRequest = () => dispatch(actGetAllMaterialRequest());
+  const getAllMaterialRequest = token =>
+    dispatch(actGetAllMaterialRequest(token));
   //call api --- insert request material
-  const insertRequestMaterialRequest = requestMaterial =>
-    dispatch(actInsertRequestMaterialRequest(requestMaterial));
+  const insertRequestMaterialRequest = (requestMaterial, token) =>
+    dispatch(actInsertRequestMaterialRequest(requestMaterial, token));
   //reset message
   const resetMessage = () => dispatch(actResetMessage());
 
   useEffect(() => {
-    getAllMaterialRequest();
+    getAllMaterialRequest(token);
     if (message === 'INSERT_REQUEST_MATERIAL_SUCCESS') {
+      resetMessage();
+      setUploading(false);
       Alert.alert('Thông báo', 'Yêu cầu của bạn đã được gửi thành công', [
         {
           text: 'OK',
           onPress: () => {
-            resetMessage();
-            setUploading(false);
             navigation.goBack();
           },
         },
@@ -55,7 +58,7 @@ export default function RequestMaterialContainer(props) {
       requestDetailID: requestDetailItem.requestDetailId,
       materialList: materialList,
     };
-    insertRequestMaterialRequest(requestMaterial);
+    insertRequestMaterialRequest(requestMaterial, token);
   };
 
   return (

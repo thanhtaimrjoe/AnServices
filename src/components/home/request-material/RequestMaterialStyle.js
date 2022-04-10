@@ -5,29 +5,30 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Color.background1,
-    paddingHorizontal: 16,
+    paddingHorizontal: 15,
   },
   //service
   serviceContainer: {
-    marginVertical: 16,
+    marginVertical: 20,
   },
   serviceTitle: {
     fontSize: 18,
     color: Color.primary,
-    marginBottom: 8,
+    marginTop: 15,
+    marginBottom: 10,
   },
   //service item
   serviceItemContainer: {
     width: '100%',
     flexDirection: 'row',
-    backgroundColor: Color.fourth,
+    backgroundColor: Color.cover,
     borderRadius: 10,
-    justifyContent: 'space-evenly',
     alignItems: 'center',
-    paddingVertical: 5,
+    paddingHorizontal: 24,
+    paddingVertical: 8,
   },
   serviceItemTextContainer: {
-    width: '60%',
+    width: '70%',
   },
   serviceItemName: {
     fontSize: 18,
@@ -43,30 +44,31 @@ const styles = StyleSheet.create({
     color: Color.primary,
   },
   serviceItemImg: {
-    width: 90,
-    height: 90,
+    width: 69,
+    height: 69,
+    marginRight: 20,
   },
   //request
   requestContainer: {
-    marginBottom: 16,
+    marginBottom: 20,
   },
   requestTitle: {
     fontSize: 18,
     color: Color.primary,
-    marginBottom: 8,
+    marginBottom: 10,
   },
   //request item
   requestItemContainer: {
     width: '100%',
     flexDirection: 'row',
-    backgroundColor: Color.fourth,
+    backgroundColor: Color.cover,
     borderRadius: 10,
-    justifyContent: 'space-evenly',
     alignItems: 'center',
-    paddingVertical: 5,
+    paddingHorizontal: 24,
+    paddingVertical: 8,
   },
   requestItemTextContainer: {
-    width: '60%',
+    width: '70%',
   },
   requestItemName: {
     fontSize: 18,
@@ -82,98 +84,81 @@ const styles = StyleSheet.create({
     color: Color.primary,
   },
   requestItemImg: {
-    width: 90,
-    height: 90,
+    width: 69,
+    height: 69,
+    marginRight: 20,
   },
-  //material tittle
-  materialTitleContainer: {
-    flexDirection: 'row',
-    marginBottom: 8,
-  },
-  materialTitleName: {
+  //material
+  materialTitle: {
     fontSize: 18,
     color: Color.primary,
-    marginRight: 120,
+    marginBottom: 10,
   },
   //show list material
   materialContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    padding: 12,
-    marginBottom: 8,
+    paddingVertical: 16,
+    paddingHorizontal: 16,
+    marginBottom: 20,
     borderRadius: 10,
-    backgroundColor: Color.fourth,
+    backgroundColor: Color.field,
+  },
+  materialMainContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   //material picker
   materialPickerContainer: {
     width: '85%',
     paddingVertical: 6,
     borderRadius: 10,
-    marginRight: 8,
-    backgroundColor: Color.third,
-    marginBottom: 12,
+    backgroundColor: Color.white,
   },
   materialPickerItem: {
     color: Color.primary,
-    backgroundColor: Color.third,
+    backgroundColor: Color.white,
   },
   //material quantity
-  materialQuantityContainer: {
-    width: '25%',
+  materialInfoContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 10,
   },
   materialQuantityTitle: {
-    fontSize: 16,
     color: Color.primary,
+    marginRight: 10,
   },
   materialQuantity: {
-    paddingLeft: 10,
+    width: '30%',
+    padding: 8,
     borderRadius: 10,
-    marginRight: 8,
-    //borderWidth: 1,
     color: Color.primary,
-    backgroundColor: Color.third,
-    //borderColor: Color.primary,
+    backgroundColor: Color.white,
+    marginRight: 20,
   },
   //material unit
-  materialUnitContainer: {
-    width: '25%',
-  },
   materialUnitTitle: {
-    fontSize: 16,
     color: Color.primary,
   },
-  materialUnit: {
-    paddingVertical: 14,
-    paddingLeft: 10,
-    borderRadius: 10,
-    marginRight: 8,
-    //borderWidth: 1,
-    //borderColor: Color.primary,
-    backgroundColor: Color.third,
-  },
   materialUnitText: {
-    fontSize: 16,
-    color: Color.sixth,
+    fontWeight: '500',
+    color: Color.primary,
   },
   //material note
   materialNoteContainer: {
-    width: '50%',
-  },
-  materialNoteOtherContainer: {
-    width: '75%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 10,
   },
   materialNoteTitle: {
-    fontSize: 16,
     color: Color.primary,
+    marginRight: 20,
   },
   materialNote: {
-    paddingLeft: 10,
+    width: '75%',
+    padding: 8,
     borderRadius: 10,
-    marginRight: 8,
-    //borderWidth: 1,
-    //borderColor: Color.primary,
     color: Color.primary,
-    backgroundColor: Color.third,
+    backgroundColor: Color.white,
   },
   //remove button
   removeContainer: {
@@ -182,7 +167,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   removeIcon: {
-    fontSize: 20,
+    fontSize: 25,
     color: Color.primary,
   },
   //add button
@@ -198,20 +183,34 @@ const styles = StyleSheet.create({
     fontSize: 32,
     color: Color.primary,
   },
-  //request button
-  btnRequest: {
+  //confirm button
+  confirmBtn: {
     width: '100%',
-    height: 45,
-    backgroundColor: Color.btn,
+    paddingVertical: 12,
+    borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 10,
+    backgroundColor: Color.primary,
     marginBottom: 20,
   },
-  btnRequestText: {
-    color: Color.primary,
+  confirmLoadingBtn: {
+    width: '100%',
+    paddingVertical: 8,
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: Color.primary,
+    marginBottom: 20,
+  },
+  confirmBtnText: {
     fontSize: 18,
     fontWeight: '500',
+    color: Color.white,
+  },
+  //error message
+  errorMessage: {
+    color: 'red',
+    marginTop: 5,
   },
 });
 export {styles};

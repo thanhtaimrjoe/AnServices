@@ -11,30 +11,20 @@ const styles = StyleSheet.create({
   },
   profileContainer: {
     width: '100%',
-    height: 120,
     alignItems: 'center',
-  },
-  avtContainer: {
-    width: 90,
-    height: 90,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: 2,
-    borderRadius: 50,
-    borderColor: Color.primary,
   },
   avtIcon: {
-    fontSize: 50,
-    color: Color.primary,
+    width: 90,
+    height: 90,
   },
   profileName: {
     fontSize: 24,
     color: Color.primary,
-    marginTop: 8,
+    marginTop: 10,
   },
   settingContainer: {
     marginTop: 50,
-    backgroundColor: Color.fourth,
+    backgroundColor: Color.field,
     borderRadius: 10,
     width: '100%',
   },
@@ -66,10 +56,10 @@ const styles = StyleSheet.create({
     right: 16,
   },
   signOutBtn: {
-    marginTop: 60,
-    width: 202,
-    height: 45,
-    backgroundColor: Color.btn,
+    marginTop: 50,
+    paddingVertical: 12,
+    paddingHorizontal: 60,
+    backgroundColor: Color.primary,
     borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',
@@ -77,7 +67,7 @@ const styles = StyleSheet.create({
   signOutText: {
     fontSize: 18,
     fontWeight: '500',
-    color: Color.primary,
+    color: Color.white,
   },
 });
 export {styles};

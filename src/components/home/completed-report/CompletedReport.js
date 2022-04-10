@@ -15,7 +15,7 @@ import Color from '../../../style/Color';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import Video from 'react-native-video';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-import IconURL from '../../../style/IconURL'
+import IconURL from '../../../style/IconURL';
 
 export default function CompletedReport(props) {
   const {uploading, requestDetailItem} = props;
@@ -33,6 +33,8 @@ export default function CompletedReport(props) {
   const [showMediaDialog, setShowMediaDialog] = useState(false);
   //state --- showMediaViewDialog
   const [showMediaViewDialog, setShowMediaViewDialog] = useState(false);
+  //state --- isFocusedDescription
+  const [isFocusedDescription, setIsFocusedDescription] = useState(false);
 
   useEffect(() => {
     media;
@@ -151,7 +153,7 @@ export default function CompletedReport(props) {
         <Text style={styles.requestTitle}>Yêu cầu bạn đã chọn</Text>
         <View style={styles.requestItemContainer}>
           <Image
-            source={{uri: IconURL.completeReportImg}}
+            source={{uri: IconURL.completeColorImg}}
             style={styles.requestItemImg}
           />
           <View style={styles.requestItemTextContainer}>
@@ -165,9 +167,19 @@ export default function CompletedReport(props) {
       <View style={styles.descriptionContainer}>
         <Text style={styles.descriptionTitle}>Mô tả tình trạng</Text>
         <TextInput
+          onFocus={() => setIsFocusedDescription(true)}
+          onBlur={() => setIsFocusedDescription(false)}
           onChangeText={text => setDescription(text)}
           multiline={true}
-          style={styles.descriptionInput}
+          style={[
+            styles.descriptionInput,
+            {
+              borderColor: isFocusedDescription
+                ? Color.fieldFocus
+                : Color.fieldBlur,
+            },
+            {borderWidth: isFocusedDescription ? 1.5 : 1},
+          ]}
           placeholder="Nhập tình trạng"
           placeholderTextColor={Color.placeholder}
         />
@@ -240,8 +252,8 @@ export default function CompletedReport(props) {
         </Modal>
       )}
       {uploading ? (
-        <View style={styles.confirmBtn}>
-          <ActivityIndicator color={Color.primary} size={'large'} />
+        <View style={styles.confirmLoadingBtn}>
+          <ActivityIndicator color={Color.white} size={'large'} />
         </View>
       ) : (
         <TouchableOpacity

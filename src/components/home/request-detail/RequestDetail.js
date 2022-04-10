@@ -16,6 +16,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import IconURL from '../../../style/IconURL';
 import moment from 'moment';
 import 'moment/locale/vi';
+import Loading from '../../general/Loading';
 
 export default function RequestDetail(props) {
   const {requestService, requestDetail} = props;
@@ -82,122 +83,103 @@ export default function RequestDetail(props) {
         })}
       </View>
       <View style={styles.serviceContainer}>
-        <Text style={styles.title}>Loại dịch vụ</Text>
+        <Text style={styles.serviceTitle}>Loại dịch vụ</Text>
         {requestDetail.length > 0 ? (
           requestDetail.map((item, index) => {
-            if (
-              item.requestDetailStatus === 11 ||
-              item.requestDetailStatus === 12 ||
-              item.requestDetailStatus === 16
-            ) {
-              return (
-                <View key={index} style={styles.serviceItem}>
-                  <View style={styles.serviceItemContainer}>
-                    <Image
-                      source={{uri: item.service.serviceImg}}
-                      style={styles.serviceItemImg}
-                    />
-                    <View style={styles.serviceItemTextContainer}>
+            return (
+              <View key={index} style={styles.serviceItem}>
+                <View style={styles.serviceItemContainer}>
+                  <View style={styles.serviceItemMainContainer}>
+                    <View style={styles.serviceItemInforContainer}>
                       <Text style={styles.serviceItemName}>
                         {item.service.serviceName}
                       </Text>
-                      <View style={styles.requestDetailStatusContainer}>
-                        <Text style={styles.requestDetailStatusTitle}>
-                          Tình trạng
-                        </Text>
-                        {item.requestDetailStatus === 11 && (
-                          <View style={styles.requestDetailStatusID11}>
-                            <Text style={styles.requestDetailStatusText}>
-                              Hài lòng
-                            </Text>
-                          </View>
-                        )}
-                        {item.requestDetailStatus === 12 && (
-                          <View style={styles.requestDetailStatusID12}>
-                            <Text style={styles.requestDetailStatusText}>
-                              Không hài lòng
-                            </Text>
-                          </View>
-                        )}
-                        {item.requestDetailStatus === 16 && (
-                          <View style={styles.requestDetailStatusID16}>
-                            <Text style={styles.requestDetailStatusText}>
-                              Làm lại yêu cầu
-                            </Text>
-                          </View>
-                        )}
-                      </View>
-                    </View>
-                    <Icon
-                      name="chevron-right"
-                      style={styles.serviceItemIconDisable}
-                    />
-                  </View>
-                  <Text style={styles.repairDateBegin}>
-                    Ngày nhận yêu cầu:{' '}
-                    {moment(item.tblRepairDetails[0].repairDateBegin).format(
-                      'dddd Do MMMM YYYY',
-                    )}
-                  </Text>
-                </View>
-              );
-            } else {
-              return (
-                <View key={index} style={styles.serviceItem}>
-                  <TouchableOpacity
-                    style={styles.serviceItemContainer}
-                    onPress={() => onShowMaterialDetail(item)}>
-                    <Image
-                      source={{uri: item.service.serviceImg}}
-                      style={styles.serviceItemImg}
-                    />
-                    <View style={styles.serviceItemTextContainer}>
-                      <Text style={styles.serviceItemName}>
-                        {item.service.serviceName}
-                      </Text>
-                      <View style={styles.requestDetailStatusContainer}>
-                        <Text style={styles.requestDetailStatusTitle}>
-                          Tình trạng
-                        </Text>
-
+                      <View style={styles.serviceItemDescriptionContainer}>
+                        <Text style={styles.serviceItemTitle}>Tình trạng:</Text>
                         {item.requestDetailStatus === 2 && (
-                          <View style={styles.requestDetailStatusID2}>
-                            <Text style={styles.requestDetailStatusText}>
-                              Chưa xử lý
-                            </Text>
-                          </View>
+                          <Text style={styles.serviceItemStatus2}>
+                            Chưa xử lý
+                          </Text>
                         )}
                         {item.requestDetailStatus === 6 && (
-                          <View style={styles.requestDetailStatusID6}>
-                            <Text style={styles.requestDetailStatusText}>
-                              Đang xử lý
-                            </Text>
-                          </View>
+                          <Text style={styles.serviceItemStatus6}>
+                            Đang xử lý
+                          </Text>
                         )}
                         {item.requestDetailStatus === 9 && (
-                          <View style={styles.requestDetailStatusID9}>
-                            <Text style={styles.requestDetailStatusText}>
-                              Chờ xác nhận
-                            </Text>
-                          </View>
+                          <Text style={styles.serviceItemStatus9}>
+                            Chờ xác nhận
+                          </Text>
+                        )}
+                        {item.requestDetailStatus === 11 && (
+                          <Text style={styles.serviceItemStatus11}>
+                            Hài lòng
+                          </Text>
+                        )}
+                        {item.requestDetailStatus === 12 && (
+                          <Text style={styles.serviceItemStatus12}>
+                            Không hài lòng
+                          </Text>
+                        )}
+                        {item.requestDetailStatus === 16 && (
+                          <Text style={styles.serviceItemStatus16}>
+                            Làm lại yêu cầu
+                          </Text>
+                        )}
+                      </View>
+                      <View style={styles.serviceItemDescriptionContainer}>
+                        <Text style={styles.serviceItemTitle}>Độ ưu tiên:</Text>
+                        {item.tblRepairDetails[0].requestDetailPriority ===
+                          1 && (
+                          <Text style={styles.serviceItemPriority}>Thấp</Text>
+                        )}
+                        {item.tblRepairDetails[0].requestDetailPriority ===
+                          2 && (
+                          <Text style={styles.serviceItemPriority}>
+                            Trung bình
+                          </Text>
+                        )}
+                        {item.tblRepairDetails[0].requestDetailPriority ===
+                          3 && (
+                          <Text style={styles.serviceItemPriority}>Cao</Text>
+                        )}
+                        {item.tblRepairDetails[0].requestDetailPriority ===
+                          4 && (
+                          <Text style={styles.serviceItemPriority}>
+                            Rất cao
+                          </Text>
                         )}
                       </View>
                     </View>
-                    <Icon name="chevron-right" style={styles.serviceItemIcon} />
+                    <Image
+                      source={{uri: item.service.serviceImg}}
+                      style={styles.serviceItemImg}
+                    />
+                  </View>
+                  <View style={styles.serviceItemDateContainer}>
+                    <Text style={styles.serviceItemTitle}>Ngày nhận:</Text>
+                    <Text style={styles.serviceItemDate}>
+                      {moment(item.tblRepairDetails[0].repairDateBegin).format(
+                        'dddd Do MMMM YYYY',
+                      )}
+                    </Text>
+                  </View>
+                  <TouchableOpacity
+                    style={styles.serviceItemBtn}
+                    onPress={() => onShowMaterialDetail(item)}>
+                    <Text style={styles.serviceItemBtnText}>Xem chi tiết</Text>
+                    <Icon
+                      name="arrow-right"
+                      style={styles.serviceItemBtnIcon}
+                    />
                   </TouchableOpacity>
-                  <Text style={styles.repairDateBegin}>
-                    Ngày nhận yêu cầu:{' '}
-                    {moment(item.tblRepairDetails[0].repairDateBegin).format(
-                      'dddd Do MMMM YYYY',
-                    )}
-                  </Text>
                 </View>
-              );
-            }
+              </View>
+            );
           })
         ) : (
-          <View>
-            <ActivityIndicator size={'large'} color={Color.primary} />
+          <View style={styles.loadingScreen}>
+            <Loading />
           </View>
         )}
       </View>

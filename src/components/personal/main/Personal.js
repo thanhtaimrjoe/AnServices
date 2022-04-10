@@ -1,10 +1,16 @@
-import {View, Text, TouchableOpacity} from 'react-native';
+import {View, Text, TouchableOpacity, Image} from 'react-native';
 import React from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {styles} from './PersonalStyle';
+import IconURL from '../../../style/IconURL';
 
 export default function Personal(props) {
   const {user, options} = props;
+
+  //button --- show change phone number page
+  const onShowChangePhoneNumber = () => {
+    props.onShowChangePhoneNumber();
+  };
 
   //log out
   const onLogOut = () => {
@@ -14,9 +20,7 @@ export default function Personal(props) {
   return (
     <View style={styles.container}>
       <View style={styles.profileContainer}>
-        <View style={styles.avtContainer}>
-          <Icon name="user-alt" style={styles.avtIcon} />
-        </View>
+        <Image source={{uri: IconURL.userImg}} style={styles.avtIcon} />
         <Text style={styles.profileName}>{user.fullName}</Text>
       </View>
       <View style={styles.settingContainer}>
@@ -28,7 +32,8 @@ export default function Personal(props) {
                 index === options.length - 1
                   ? styles.settingItemContainer
                   : styles.settingItemBorderContainer
-              }>
+              }
+              onPress={onShowChangePhoneNumber}>
               <Icon name={item.icon} style={styles.settingItemIcon} />
               <Text style={styles.settingItemName}>{item.name}</Text>
               <Icon name="chevron-right" style={styles.settingItemBack} />

@@ -5,7 +5,6 @@ import {useDispatch, useSelector} from 'react-redux';
 import {
   actCreateReportRequest,
   actResetMessage,
-  actTestRequest,
 } from '../../../redux/actions/index';
 import {Alert} from 'react-native';
 
@@ -19,16 +18,16 @@ export default function ReportProblemContainer(props) {
   const user = useSelector(state => state.user);
   //reducer --- message
   const message = useSelector(state => state.message);
+  //get token
+  const token = 'Bearer ' + user.token;
 
   //get dispatch
   const dispatch = useDispatch();
   //call api --- create report
-  const createReportRequest = reportProblem =>
-    dispatch(actCreateReportRequest(reportProblem));
+  const createReportRequest = (reportProblem, token) =>
+    dispatch(actCreateReportRequest(reportProblem, token));
   //reset message
   const resetMessage = () => dispatch(actResetMessage());
-  //test
-  const testRequest = formData => dispatch(actTestRequest(formData));
 
   useEffect(() => {
     if (message === 'CREATE_REPORT_SUCCESS') {
@@ -67,7 +66,6 @@ export default function ReportProblemContainer(props) {
   //button --- create report problem
   const onCreateReportProblem = async (description, media) => {
     setUploading(true);
-    //console.log('media', media);
     const mediaURL = [];
     //upload image and get image url from firebase
     await Promise.all(
@@ -84,29 +82,7 @@ export default function ReportProblemContainer(props) {
       reportDescription: description,
       mediaList: mediaURL,
     };
-    createReportRequest(reportProblem);
-    //---------------------------------------
-    // var formData = new FormData();
-    // media.map((item, index) => {
-    //   // const file = {
-    //   //   uri: item.uri,
-    //   //   name: item.fileName,
-    //   //   type: item.type,
-    //   // };
-    //   // formData.append('file', {
-    //   //   uri: item.uri,
-    //   //   name: item.fileName,
-    //   //   type: item.type,
-    //   // });
-    //   console.log('fileName', item.fileName);
-    //   formData.append('file', {
-    //     uri: item.uri,
-    //     name: item.fileName,
-    //     type: 'image/jpg',
-    //   });
-    // });
-    // console.log('zzz', formData);
-    // testRequest(formData);
+    createReportRequest(reportProblem, token);
   };
 
   return (

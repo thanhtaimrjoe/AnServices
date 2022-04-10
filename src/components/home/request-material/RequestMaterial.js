@@ -13,7 +13,7 @@ import {styles} from './RequestMaterialStyle';
 import {Picker} from '@react-native-picker/picker';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import Color from '../../../style/Color';
-import IconURL from '../../../style/IconURL'
+import IconURL from '../../../style/IconURL';
 
 export default function RequestMaterial(props) {
   const {uploading, requestDetailItem, material} = props;
@@ -124,7 +124,7 @@ export default function RequestMaterial(props) {
         <Text style={styles.requestTitle}>Yêu cầu bạn đã chọn</Text>
         <View style={styles.requestItemContainer}>
           <Image
-            source={{uri: IconURL.requestMaterialImg}}
+            source={{uri: IconURL.materialColorImg}}
             style={styles.requestItemImg}
           />
           <View style={styles.requestItemTextContainer}>
@@ -135,70 +135,63 @@ export default function RequestMaterial(props) {
           </View>
         </View>
       </View>
-      <View style={styles.materialTitleContainer}>
-        <Text style={styles.materialTitleName}>Chọn vật liệu</Text>
-      </View>
+      <Text style={styles.materialTitle}>Chọn vật liệu</Text>
       {materialList.map((item, index) => {
         return (
           <View key={index} style={styles.materialContainer}>
-            <View style={styles.materialPickerContainer}>
-              <Picker
-                style={styles.materialPickerItemContainer}
-                dropdownIconColor={Color.primary}
-                selectedValue={item.id}
-                onValueChange={(itemValue, itemIndex) => {
-                  onHandlePicker(itemValue, index);
-                }}>
-                <Picker.Item
-                  style={styles.materialPickerItem}
-                  label="- - -"
-                  value={0}
-                />
-                {material.map((item, index) => {
-                  return (
-                    <Picker.Item
-                      key={index}
-                      style={styles.materialPickerItem}
-                      label={item.materialName}
-                      value={item.materialId}
-                    />
-                  );
-                })}
-              </Picker>
+            <View style={styles.materialMainContainer}>
+              <View style={styles.materialPickerContainer}>
+                <Picker
+                  dropdownIconColor={Color.primary}
+                  selectedValue={item.id}
+                  onValueChange={(itemValue, itemIndex) => {
+                    onHandlePicker(itemValue, index);
+                  }}>
+                  <Picker.Item
+                    style={styles.materialPickerItem}
+                    label="- - -"
+                    value={0}
+                  />
+                  {material.map((item, index) => {
+                    return (
+                      <Picker.Item
+                        key={index}
+                        style={styles.materialPickerItem}
+                        label={item.materialName}
+                        value={item.materialId}
+                      />
+                    );
+                  })}
+                </Picker>
+              </View>
+              <TouchableOpacity
+                style={styles.removeContainer}
+                onPress={() => onRemoveItem(index)}>
+                <Icon name="times" style={styles.removeIcon} />
+              </TouchableOpacity>
             </View>
-            <TouchableOpacity
-              style={styles.removeContainer}
-              onPress={() => onRemoveItem(index)}>
-              <Icon name="trash" style={styles.removeIcon} />
-            </TouchableOpacity>
-            <View style={styles.materialQuantityContainer}>
-              <Text style={styles.materialQuantityTitle}>Số lượng</Text>
+            <View style={styles.materialInfoContainer}>
+              <Text style={styles.materialQuantityTitle}>Số lượng:</Text>
               <TextInput
                 keyboardType="numeric"
                 style={styles.materialQuantity}
                 value={materialList[index].quantity + ''}
                 onChangeText={text => onHandleQuantity(text, index)}
               />
+              {item.id !== 55 && (
+                <Text style={styles.materialUnitTitle}>Đơn vị: </Text>
+              )}
+              {item.id !== 55 && (
+                <Text style={styles.materialUnitText}>
+                  {materialList[index].unit}
+                </Text>
+              )}
             </View>
-            {item.id !== 55 && (
-              <View style={styles.materialUnitContainer}>
-                <Text style={styles.materialUnitTitle}>Đơn vị</Text>
-                <View style={styles.materialUnit}>
-                  <Text style={styles.materialUnitText}>
-                    {materialList[index].unit}
-                  </Text>
-                </View>
-              </View>
-            )}
-            <View
-              style={
-                item.id !== 55
-                  ? styles.materialNoteContainer
-                  : styles.materialNoteOtherContainer
-              }>
-              <Text style={styles.materialNoteTitle}>Ghi chú</Text>
+            <View style={styles.materialNoteContainer}>
+              <Text style={styles.materialNoteTitle}>Ghi chú:</Text>
               <TextInput
                 style={styles.materialNote}
+                multiline={true}
                 placeholder={
                   item.id === 55 ? 'Tên vật liệu, Đơn vị, Ghi chú' : ''
                 }
@@ -214,14 +207,14 @@ export default function RequestMaterial(props) {
         <Text style={styles.btnAddText}>+</Text>
       </TouchableOpacity>
       {uploading ? (
-        <View style={styles.btnRequest}>
-          <ActivityIndicator size={'large'} color={Color.primary} />
+        <View style={styles.confirmLoadingBtn}>
+          <ActivityIndicator size={'large'} color={Color.white} />
         </View>
       ) : (
         <TouchableOpacity
-          style={styles.btnRequest}
+          style={styles.confirmBtn}
           onPress={onInsertRequestMaterial}>
-          <Text style={styles.btnRequestText}>Yêu cầu</Text>
+          <Text style={styles.confirmBtnText}>Yêu cầu</Text>
         </TouchableOpacity>
       )}
     </ScrollView>

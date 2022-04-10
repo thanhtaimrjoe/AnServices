@@ -3,7 +3,7 @@ import Color from './Color';
 const styles = StyleSheet.create({
   headerTitle: {
     color: Color.primary,
-    fontSize: 20,
+    fontSize: 18,
   },
 });
 export {styles};

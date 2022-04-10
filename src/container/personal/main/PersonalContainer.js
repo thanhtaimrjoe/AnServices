@@ -21,6 +21,11 @@ export default function PersonalContainer(props) {
   //clear all reducer before log out
   const clearData = () => dispatch(actClearData());
 
+  //button --- show change phone number page
+  const onShowChangePhoneNumber = () => {
+    navigation.navigate('ChangePhoneNumberContainer');
+  };
+
   //clear all reducers -> log out -> back to log in page
   const onLogOut = () => {
     clearData();
@@ -32,5 +37,12 @@ export default function PersonalContainer(props) {
     );
   };
 
-  return <Personal user={user} options={options} onLogOut={onLogOut} />;
+  return (
+    <Personal
+      user={user}
+      options={options}
+      onShowChangePhoneNumber={onShowChangePhoneNumber}
+      onLogOut={onLogOut}
+    />
+  );
 }

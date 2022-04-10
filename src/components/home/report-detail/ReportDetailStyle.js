@@ -8,42 +8,40 @@ const styles = StyleSheet.create({
   },
   //service
   serviceContainer: {
-    marginVertical: 16,
+    marginTop: 15,
+    marginBottom: 20,
   },
   serviceTitle: {
     fontSize: 18,
     color: Color.primary,
-    marginBottom: 8,
+    marginBottom: 10,
   },
   //service item
   serviceItemContainer: {
     width: '100%',
     flexDirection: 'row',
-    backgroundColor: Color.fourth,
+    backgroundColor: Color.cover,
     borderRadius: 10,
-    justifyContent: 'space-evenly',
     alignItems: 'center',
-    paddingVertical: 5,
+    paddingHorizontal: 24,
+    paddingVertical: 8,
   },
   serviceItemTextContainer: {
-    width: '60%',
+    width: '70%',
   },
   serviceItemName: {
     fontSize: 18,
     fontWeight: '500',
     color: Color.primary,
   },
-  serviceItemDescription: {
-    fontSize: 14,
-    color: Color.primary,
-  },
   serviceItemImg: {
-    width: 90,
-    height: 90,
+    width: 69,
+    height: 69,
+    marginRight: 20,
   },
   //description
   descriptionContainer: {
-    marginBottom: 16,
+    marginBottom: 20,
   },
   descriptionTitle: {
     fontSize: 18,
@@ -57,11 +55,11 @@ const styles = StyleSheet.create({
     backgroundColor: Color.field,
   },
   descriptionText: {
-    color: Color.sixth,
+    color: Color.primary,
   },
   //date
   dateContainer: {
-    marginBottom: 16,
+    marginBottom: 20,
   },
   dateTitle: {
     fontSize: 18,
@@ -75,11 +73,11 @@ const styles = StyleSheet.create({
     backgroundColor: Color.field,
   },
   dateText: {
-    color: Color.sixth,
+    color: Color.primary,
   },
   //media
   mediaContainer: {
-    marginBottom: 16,
+    marginBottom: 20,
   },
   mediaTitle: {
     fontSize: 18,

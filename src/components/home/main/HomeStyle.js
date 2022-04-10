@@ -4,66 +4,90 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Color.background1,
+    paddingHorizontal: 15,
   },
-  welcomeContainer: {
+  //logo anservice
+  logoContainer: {
     width: '100%',
-    height: 238,
-    backgroundColor: Color.fourth,
-    paddingTop: 16,
+    padding: 8,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginTop: 15,
+    marginBottom: 20,
   },
-  welcomeText: {
-    fontSize: 18,
-    color: Color.primary,
-    marginLeft: 16,
+  logoImg: {
+    width: 42,
+    height: 42,
+    marginRight: 6,
   },
-  welcomeName: {
-    fontSize: 18,
+  logoText: {
+    fontSize: 24,
     fontWeight: '500',
     color: Color.primary,
-    marginLeft: 16,
   },
-  welcomeImg: {
-    alignSelf: 'flex-end',
-    width: 270,
-    height: 170,
+  //user information
+  userInfoContainer: {
+    width: '100%',
+    paddingVertical: 12,
+    paddingHorizontal: 18,
+    flexDirection: 'row',
+    borderRadius: 10,
+    backgroundColor: Color.userCover,
+    marginBottom: 20,
+  },
+  userIcon: {
+    width: 50,
+    height: 50,
+    marginRight: 16,
+  },
+  userInfoName: {
+    fontSize: 18,
+    fontWeight: '500',
+    color: Color.white,
+  },
+  userInfoDescription: {
+    color: Color.white,
   },
   requestServiceListTitle: {
     fontSize: 18,
     fontWeight: '500',
     color: Color.primary,
-    marginTop: 30,
-    paddingHorizontal: 16,
+    marginBottom: 20,
   },
   //filter
   filter: {
-    marginVertical: 25,
     flexDirection: 'row',
     width: '100%',
-    paddingHorizontal: 16,
-  },
-  filterBtnActive: {
-    padding: 8,
-    backgroundColor: Color.btn,
-    borderRadius: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 16,
+    marginBottom: 20,
   },
   filterBtn: {
-    padding: 8,
-    borderRadius: 10,
+    paddingVertical: 6,
+    paddingHorizontal: 14,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: Color.second,
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: 16,
+    marginRight: 14,
   },
-  filterBtnTextActive: {
-    color: Color.primary,
+  filterBtnActive: {
+    paddingVertical: 6,
+    paddingHorizontal: 14,
+    backgroundColor: Color.primary,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: Color.primary,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 14,
   },
-  filterBtnText: {
-    color: Color.primary,
+  filterText: {
+    color: Color.second,
+  },
+  filterTextActive: {
+    color: Color.white,
   },
   requestServiceListContainer: {
-    paddingHorizontal: 16,
     alignItems: 'center',
   },
   //error message from api
@@ -74,6 +98,7 @@ const styles = StyleSheet.create({
   errorMsg: {
     fontSize: 16,
     color: Color.primary,
+    textAlign: 'center',
   },
   errorImg: {
     marginBottom: 20,
@@ -83,34 +108,27 @@ const styles = StyleSheet.create({
   //request service item
   requestServiceItemContainer: {
     width: '100%',
-    height: 63,
-    backgroundColor: Color.field,
+    padding: 16,
+    backgroundColor: Color.request,
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 16,
     borderRadius: 10,
     marginBottom: 16,
   },
   requestServiceItemImg: {
-    width: 30,
-    height: 30,
+    width: 40,
+    height: 40,
     marginRight: 16,
   },
   requestServiceItemName: {
-    width: '60%',
+    width: '80%',
     fontSize: 18,
     color: Color.primary,
   },
-  requestServiceItemStatusContainer: {
-    width: '25%',
-    paddingVertical: 5,
-    borderRadius: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: Color.primary,
-  },
-  requestServiceItemStatus: {
-    color: Color.third,
+  //loading screen
+  loadingScreen: {
+    width: '100%',
+    paddingVertical: 100,
   },
 });
 export {styles};

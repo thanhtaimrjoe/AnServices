@@ -1,10 +1,9 @@
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import HomeStack from './HomeStack';
-import PersonalContainer from '../container/personal/main/PersonalContainer';
 import Color from '../style/Color';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import ListStack from './ListStack';
+import PersonalStack from './PersonalStack';
 const Tab = createBottomTabNavigator();
 export default function BottomTab() {
   return (
@@ -15,36 +14,22 @@ export default function BottomTab() {
         options={{
           headerShown: false,
           tabBarIcon: ({color}) => <Icon name="home" size={26} color={color} />,
-          tabBarActiveTintColor: Color.second,
-          tabBarInactiveTintColor: Color.primary,
+          tabBarActiveTintColor: Color.primary,
+          tabBarInactiveTintColor: Color.second,
           tabBarLabel: 'Trang chủ',
           tabBarLabelStyle: {fontSize: 14},
         }}
       />
       <Tab.Screen
-        name="ListStack"
-        component={ListStack}
-        options={{
-          headerShown: false,
-          tabBarIcon: ({color}) => (
-            <Icon name="exclamation-triangle" size={26} color={color} />
-          ),
-          tabBarActiveTintColor: Color.second,
-          tabBarInactiveTintColor: Color.primary,
-          tabBarLabel: 'Unknown',
-          tabBarLabelStyle: {fontSize: 14},
-        }}
-      />
-      <Tab.Screen
-        name="PersonalContainer"
-        component={PersonalContainer}
+        name="PersonalStack"
+        component={PersonalStack}
         options={{
           headerShown: false,
           tabBarIcon: ({color}) => (
             <Icon name="user-alt" size={26} color={color} />
           ),
-          tabBarActiveTintColor: Color.second,
-          tabBarInactiveTintColor: Color.primary,
+          tabBarActiveTintColor: Color.primary,
+          tabBarInactiveTintColor: Color.second,
           tabBarLabel: 'Cá nhân',
           tabBarLabelStyle: {fontSize: 14},
         }}

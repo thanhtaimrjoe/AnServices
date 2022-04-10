@@ -1,19 +1,19 @@
-import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
   TouchableOpacity,
-  Image,
+  Alert,
+  Keyboard,
+  ActivityIndicator,
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
-  Keyboard,
-  Alert,
 } from 'react-native';
-import {styles} from './VerifyOTPStyle';
+import React, {useEffect, useState} from 'react';
+import {styles} from './VerifyPhoneNumberStyle';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
-import IconURL from '../../../style/IconURL';
 
-export default function VerifyOTP(props) {
+export default function VerifyPhoneNumber(props) {
+  const {loading, newPhoneNumber} = props;
   //state --- code
   const [code, setCode] = useState('');
   //--------------
@@ -41,7 +41,7 @@ export default function VerifyOTP(props) {
     }
   };
 
-  //button --- verify otp
+  //button --- verify otp and change phone number
   const onVerifyOTP = () => {
     //check code equal 6 number or not
     if (code.length < 6) {
@@ -63,19 +63,18 @@ export default function VerifyOTP(props) {
   };
 
   return (
-    <KeyboardAvoidingView>
+    <KeyboardAvoidingView style={{flex: 1}}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.container}>
-          <Image style={styles.image} source={{uri: IconURL.verifyOTPImg}} />
-          <Text style={styles.bigText}>Xác nhận OTP</Text>
-          <Text style={styles.smallText}>
-            Mã xác nhận đã được gửi đến số của bạn
-          </Text>
+          <View style={styles.titleContainer}>
+            <Text style={styles.titleText}>Nhập mã xác nhận đã gửi đến số</Text>
+            <Text style={styles.titlePhoneNumber}>{newPhoneNumber}</Text>
+          </View>
           <OTPInputView
             style={styles.otpContainer}
             pinCount={6}
             autoFocusOnLoad={false}
-            onCodeChanged={code => setCode(code)}
+            onCodeChanged={text => setCode(text)}
             codeInputFieldStyle={styles.otpField}
           />
           <View style={styles.resendContainer}>
@@ -90,9 +89,15 @@ export default function VerifyOTP(props) {
               </TouchableOpacity>
             )}
           </View>
-          <TouchableOpacity style={styles.button} onPress={onVerifyOTP}>
-            <Text style={styles.buttonText}>Xác nhận</Text>
-          </TouchableOpacity>
+          {loading ? (
+            <View style={styles.confirmLoadingBtn}>
+              <ActivityIndicator color={Color.white} size={'large'} />
+            </View>
+          ) : (
+            <TouchableOpacity style={styles.confirmBtn} onPress={onVerifyOTP}>
+              <Text style={styles.confirmBtnText}>Xác nhận</Text>
+            </TouchableOpacity>
+          )}
         </View>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
