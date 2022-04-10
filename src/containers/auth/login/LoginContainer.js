@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Alert} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import Login from '../../../components/auth/login/Login';
@@ -8,19 +8,30 @@ import {
 } from '../../../redux/actions/index';
 export default function LoginContainer(props) {
   const {navigation} = props;
+  //state --- uploading
+  const [loading, setLoading] = useState(false);
+  //state --- phoneNumber
+  const [phoneNumber, setPhoneNumber] = useState();
   //reducer --- user
   const user = useSelector(state => state.user);
+  //get token
+  const token = 'Bearer ' + user.token;
 
   useEffect(() => {
     if (user.userRole === 'Worker') {
+      setLoading(false);
       Alert.alert(
         'Thông báo',
         'Rất tiếc, số điện thoại này đã được đăng ký bởi thợ của chúng tôi',
       );
-    } else {
-      //console.log('qua trang');
     }
-  }, []);
+    if (user.userRole === 'Customer') {
+      navigateToVerifyOTP();
+    }
+    if (user.errorsMsg && user.errorsMsg[0] === 'Phone number is not exists') {
+      navigateToVerifyOTP();
+    }
+  }, [user]);
 
   //get dispatch
   const dispatch = useDispatch();
@@ -28,18 +39,18 @@ export default function LoginContainer(props) {
   const loginCustomerOrWorkerRequest = phoneNumber =>
     dispatch(actLoginCustomerOrWorkerRequest(phoneNumber));
   //call api --- send sms to phone number
-  const sendSmsByPhoneNumber = phoneNumber =>
-    dispatch(actSendSmsByPhoneNumberRequest(phoneNumber));
+  const sendSmsByPhoneNumber = (phoneNumber, token) =>
+    dispatch(actSendSmsByPhoneNumberRequest(phoneNumber, token));
   //conver 0123... to (+84)123
   const convertPhoneNumber = phoneNumber => {
     return (phoneNumber = phoneNumber.replace(0, '+84'));
   };
 
-  //button --- send otp
-  const sendOTP = phoneNumber => {
+  //navigate to verify otp
+  const navigateToVerifyOTP = () => {
     const convertedPhoneNumber = convertPhoneNumber(phoneNumber);
-    loginCustomerOrWorkerRequest(phoneNumber);
-    //sendSmsByPhoneNumber(convertedPhoneNumber);
+    //sendSmsByPhoneNumber(convertedPhoneNumber, token);
+    setLoading(false);
     //navigate to verify otp page
     navigation.navigate('VerifyOTPContainer', {
       phoneNumber: phoneNumber,
@@ -47,5 +58,12 @@ export default function LoginContainer(props) {
     });
   };
 
-  return <Login onSendOTP={sendOTP} />;
+  //button --- send otp
+  const sendOTP = phoneNumber => {
+    setLoading(true);
+    setPhoneNumber(phoneNumber);
+    loginCustomerOrWorkerRequest(phoneNumber);
+  };
+
+  return <Login loading={loading} onSendOTP={sendOTP} />;
 }

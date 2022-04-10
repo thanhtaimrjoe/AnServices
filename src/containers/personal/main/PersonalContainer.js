@@ -16,16 +16,12 @@ export default function PersonalContainer(props) {
 
   //button --- show share to friend page
   const onShowShareToFriendPage = () => {
-    navigation.navigate('ShareToFriendContainer', {
-      userID: user.id,
-    })
+    navigation.navigate('ShareToFriendContainer')
   }
 
   //button --- show promotion management page
   const onShowPromotionManagementPage = () => {
-    navigation.navigate('PromotionManagementContainer', {
-      userID: user.id,
-    })
+    navigation.navigate('PromotionManagementContainer')
   }
 
   //clear all reducers -> log out -> back to log in page

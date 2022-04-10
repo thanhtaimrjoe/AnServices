@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import {styles} from './ListRequestServiceStyle';
 import Loading from '../../general/Loading';
-import IconURL from '../../../style/IconURL'
+import IconURL from '../../../style/IconURL';
 
 export default function ListRequestService(props) {
   const {status, refreshing, listFilterStatus, serviceRequest} = props;
@@ -30,8 +30,12 @@ export default function ListRequestService(props) {
   };
 
   //button --- navigate to invoice
-  const onShowInvoice = serviceRequestId => {
-    props.onShowInvoice(serviceRequestId);
+  const onShowInvoice = (
+    serviceRequestId,
+    promotionId,
+    serviceRequestReference,
+  ) => {
+    props.onShowInvoice(serviceRequestId, promotionId, serviceRequestReference);
   };
 
   return (
@@ -55,7 +59,14 @@ export default function ListRequestService(props) {
                   status.statusID === item.statusID && styles.filterBtnActive,
                 ]}
                 onPress={() => onGetServiceRequestByStatus(item)}>
-                <Text style={styles.filterText}>{item.statusName}</Text>
+                <Text
+                  style={[
+                    styles.filterText,
+                    status.statusID === item.statusID &&
+                      styles.filterTextActive,
+                  ]}>
+                  {item.statusName}
+                </Text>
               </TouchableOpacity>
             );
           })}
@@ -64,10 +75,7 @@ export default function ListRequestService(props) {
       {serviceRequest.length === 0 && <Loading />}
       {serviceRequest.errorsMsg && (
         <View style={styles.errorView}>
-          <Image
-            source={{uri: IconURL.notFoundImg}}
-            style={styles.errorImg}
-          />
+          <Image source={{uri: IconURL.notFoundImg}} style={styles.errorImg} />
           <Text style={styles.errorMsg}>Không có yêu cầu nào có sẵn</Text>
         </View>
       )}
@@ -94,7 +102,13 @@ export default function ListRequestService(props) {
                   </Text>
                   <TouchableOpacity
                     style={styles.invoiceBtn}
-                    onPress={() => onShowInvoice(item.serviceRequestId)}>
+                    onPress={() =>
+                      onShowInvoice(
+                        item.serviceRequestId,
+                        item.promotionId,
+                        item.serviceRequestReference,
+                      )
+                    }>
                     <Text style={styles.invoiceBtnText}>Xem hóa đơn</Text>
                   </TouchableOpacity>
                 </View>

@@ -3,7 +3,7 @@ import Color from '../../../style/Color';
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: Color.background1,
+    backgroundColor: Color.background,
     paddingHorizontal: 16,
     flex: 1,
   },
@@ -20,14 +20,14 @@ const styles = StyleSheet.create({
   packageItemContainer: {
     width: '100%',
     flexDirection: 'row',
-    backgroundColor: Color.forth,
+    backgroundColor: Color.cover,
     borderRadius: 10,
-    justifyContent: 'space-evenly',
     alignItems: 'center',
-    paddingVertical: 5,
+    paddingHorizontal: 24,
+    paddingVertical: 8,
   },
   packageItemTextContainer: {
-    width: '60%',
+    width: '65%',
   },
   packageItemName: {
     fontSize: 18,
@@ -39,8 +39,9 @@ const styles = StyleSheet.create({
     color: Color.primary,
   },
   packageItemImg: {
-    width: 80,
-    height: 80,
+    width: 69,
+    height: 69,
+    marginRight: 20,
   },
   //service
   serviceContainer: {
@@ -54,29 +55,29 @@ const styles = StyleSheet.create({
   //service item
   serviceItem: {
     width: '100%',
-    backgroundColor: Color.forth,
+    backgroundColor: Color.cover,
     borderRadius: 10,
     marginBottom: 10,
   },
   serviceItemContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-evenly',
     alignItems: 'center',
+    paddingHorizontal: 24,
     paddingVertical: 8,
-    borderBottomWidth: 1,
-    borderBottomColor: Color.third,
   },
   serviceItemTextContainer: {
-    width: 161,
+    width: '65%',
   },
   serviceItemName: {
     fontSize: 18,
     fontWeight: '500',
     color: Color.primary,
+    marginBottom: 3,
   },
   serviceItemImg: {
-    width: 80,
-    height: 80,
+    width: 69,
+    height: 69,
+    marginRight: 20,
   },
   //request detail status
   requestDetailStatusContainer: {
@@ -84,44 +85,46 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   requestDetailStatusTitle: {
-    color: Color.second,
+    color: Color.primary,
   },
   requestDetailStatusID2: {
-    marginLeft: 8,
-    padding: 7,
-    borderRadius: 10,
-    backgroundColor: Color.yellow,
+    marginLeft: 4,
+    fontWeight: '500',
+    color: Color.pending,
   },
   requestDetailStatusID6: {
-    marginLeft: 8,
-    padding: 7,
-    borderRadius: 10,
-    backgroundColor: Color.purple,
+    marginLeft: 4,
+    fontWeight: '500',
+    color: Color.inProgress,
   },
   requestDetailStatusID9: {
-    marginLeft: 8,
-    padding: 7,
-    borderRadius: 10,
-    backgroundColor: Color.green,
+    marginLeft: 4,
+    fontWeight: '500',
+    color: Color.confirming,
   },
   requestDetailStatusID11: {
-    marginLeft: 8,
-    padding: 7,
-    borderRadius: 10,
-    backgroundColor: Color.blue,
+    marginLeft: 4,
+    fontWeight: '500',
+    color: Color.happy,
   },
   requestDetailStatusID12: {
-    marginLeft: 8,
-    padding: 7,
-    borderRadius: 10,
-    backgroundColor: Color.red,
+    marginLeft: 4,
+    fontWeight: '500',
+    color: Color.unhappy,
+  },
+  requestDetailStatusID16: {
+    marginLeft: 4,
+    fontWeight: '500',
+    color: Color.rework,
   },
   requestDetailStatusText: {
     color: Color.primary,
   },
   //rate
   rateContainer: {
-    marginTop: 8,
+    paddingVertical: 8,
+    borderTopWidth: 1,
+    borderTopColor: Color.white,
   },
   rareTitleContainer: {
     flexDirection: 'row',
@@ -131,26 +134,39 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: Color.primary,
   },
-  rateTitleWarning: {
-    color: Color.red,
-    fontWeight: '500',
-  },
   rateTitleBold: {
-    color: Color.blue,
+    color: Color.happy,
     fontWeight: '500',
   },
   rateTitleTime: {
     textAlign: 'center',
-    color: Color.primary,
+    color: Color.red,
     fontWeight: '500',
   },
   rateBtnContainer: {
+    borderTopWidth: 1,
+    borderTopColor: Color.white,
     flexDirection: 'row',
     justifyContent: 'space-evenly',
   },
-  rateBtn: {
+  rateHappyBtn: {
+    backgroundColor: Color.happyBtn,
+    width: '50%',
+    padding: 4,
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
+    borderRightWidth: 1,
+    borderRightColor: Color.white,
+    borderBottomLeftRadius: 10,
+  },
+  rateUnhappyBtn: {
+    backgroundColor: Color.unhappyBtn,
+    width: '50%',
+    padding: 4,
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderBottomRightRadius: 10,
   },
   rateImg: {
     width: 50,
@@ -171,10 +187,10 @@ const styles = StyleSheet.create({
   fullNameView: {
     borderRadius: 10,
     padding: 10,
-    backgroundColor: Color.fifth,
+    backgroundColor: Color.field,
   },
   fullNameText: {
-    color: Color.sixth,
+    color: Color.primary,
   },
   //phone field
   phoneContainer: {
@@ -189,10 +205,10 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 10,
     paddingHorizontal: 10,
-    backgroundColor: Color.fifth,
+    backgroundColor: Color.field,
   },
   phoneText: {
-    color: Color.sixth,
+    color: Color.primary,
   },
   //description field
   descriptionContainer: {
@@ -207,10 +223,10 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 10,
     paddingHorizontal: 10,
-    backgroundColor: Color.fifth,
+    backgroundColor: Color.field,
   },
   descriptionText: {
-    color: Color.sixth,
+    color: Color.primary,
   },
   //media
   mediaContainer: {
@@ -269,25 +285,25 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 10,
     paddingHorizontal: 10,
-    backgroundColor: Color.fifth,
+    backgroundColor: Color.field,
   },
   addressText: {
-    color: Color.sixth,
+    color: Color.primary,
   },
   //cancel request button
   cancelBtn: {
     width: '100%',
-    height: 45,
+    paddingVertical: 12,
     borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: Color.btn,
+    backgroundColor: Color.primary,
     marginBottom: 15,
   },
   cancelBtnText: {
     fontSize: 18,
     fontWeight: '500',
-    color: Color.primary,
+    color: Color.white,
   },
   //contract
   contractContainer: {
@@ -309,14 +325,26 @@ const styles = StyleSheet.create({
     height: 65,
   },
   contractItemImg: {
-    width: 40,
-    height: 40,
+    width: 30,
+    height: 30,
     marginRight: 16,
   },
   contractItemName: {
     width: '55%',
     fontSize: 18,
     color: Color.primary,
+  },
+  contractItemStatus: {
+    width: '30%',
+    padding: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 20,
+    backgroundColor: Color.primary,
+  },
+  contractItemStatusText: {
+    color: Color.white,
+    textAlign: 'center',
   },
   //invoice
   invoiceContainer: {
@@ -358,7 +386,7 @@ const styles = StyleSheet.create({
     width: '90%',
     borderRadius: 10,
     padding: 16,
-    backgroundColor: Color.third,
+    backgroundColor: Color.background,
   },
   dialogHeader: {
     flexDirection: 'row',
@@ -376,13 +404,31 @@ const styles = StyleSheet.create({
   btnDownload: {
     padding: 10,
     borderRadius: 10,
-    backgroundColor: Color.btn1,
+    backgroundColor: Color.primary,
     alignItems: 'center',
     marginBottom: 16,
   },
+  btnContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  btnApprove: {
+    width: '45%',
+    padding: 10,
+    alignItems: 'center',
+    borderRadius: 10,
+    backgroundColor: Color.approve,
+  },
+  btnRequestUpdate: {
+    width: '45%',
+    padding: 10,
+    alignItems: 'center',
+    borderRadius: 10,
+    backgroundColor: Color.requestUpdate,
+  },
   btnText: {
     fontSize: 16,
-    color: Color.third,
+    color: Color.white,
   },
 });
 export {styles};

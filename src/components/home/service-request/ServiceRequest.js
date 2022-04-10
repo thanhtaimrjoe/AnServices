@@ -17,8 +17,10 @@ import Color from '../../../style/Color';
 import {styles} from './ServiceRequestStyle';
 import Video from 'react-native-video';
 import IconURL from '../../../style/IconURL';
+import Loading from '../../general/Loading';
+import moment from 'moment';
 export default function ServiceRequest(props) {
-  const {services, uploading} = props;
+  const {services, promotion, uploading, serviceRequestRework} = props;
   //initital state
   const initialState = [];
   //state --- full name and fullNameError
@@ -52,6 +54,18 @@ export default function ServiceRequest(props) {
   const [showMediaDialog, setShowMediaDialog] = useState(false);
   //state --- showMediaViewDialog
   const [showMediaViewDialog, setShowMediaViewDialog] = useState(false);
+  //state --- showPromotionDialog
+  const [showPromotionDialog, setShowPromotionDialog] = useState(false);
+  //state --- promotionItem
+  const [promotionItem, setPromotionItem] = useState();
+  //state --- isFocusedFullName
+  const [isFocusedFullName, setIsFocusedFullName] = useState(false);
+  //state --- isFocusedPhoneNumber
+  const [isFocusedPhoneNumber, setIsFocusedPhoneNumber] = useState(false);
+  //state --- isFocusedAddress
+  const [isFocusedAddress, setIsFocusedAddress] = useState(false);
+  //state --- isFocusedDescription
+  const [isFocusedDescription, setIsFocusedDescription] = useState(false);
 
   //package information
   const packages = [
@@ -74,6 +88,26 @@ export default function ServiceRequest(props) {
     selectedPackage;
     media;
     mediaItem;
+    promotionItem;
+    //auto fill data when request service rework
+    if (serviceRequestRework) {
+      //package
+      packages.map((item, index) => {
+        if (serviceRequestRework.requestServicePackage === item.packageId) {
+          setSelectedPackage(item);
+        }
+      });
+      //service
+      setSelectedService(serviceRequestRework.serviceList);
+      //full name
+      setFullName(serviceRequestRework.customerName);
+      //phone number
+      setPhoneNumber(serviceRequestRework.customerPhone);
+      //address
+      setAddress(serviceRequestRework.customerAddress);
+      //description
+      setDescription(serviceRequestRework.requestServiceDescription);
+    }
   }, []);
 
   //show service dialog
@@ -88,6 +122,9 @@ export default function ServiceRequest(props) {
     }
     if (showPackageDialog) {
       setShowPackageDialog(false);
+    }
+    if (showPromotionDialog) {
+      setShowPromotionDialog(false);
     }
   };
 
@@ -133,6 +170,22 @@ export default function ServiceRequest(props) {
     setShowMediaViewDialog(true);
   };
 
+  //show promotion dialog
+  const onShowPromotionDialog = () => {
+    setShowPromotionDialog(true);
+  };
+
+  //select promotion
+  const onSelectPromotion = item => {
+    setPromotionItem(item);
+    setShowPromotionDialog(false);
+  };
+
+  //remove promotion
+  const onRemovePromotion = () => {
+    setPromotionItem();
+  };
+
   //validation
   const validateValue = () => {
     var result = true;
@@ -147,6 +200,11 @@ export default function ServiceRequest(props) {
     //validate full name
     if (fullName.trim().length === 0) {
       setFullNameError('Họ và tên nhập không đúng');
+      result = false;
+    }
+    //check phone number 10 digit
+    if (phoneNumber.trim().length < 10 || phoneNumber.trim().length > 10) {
+      setPhoneNumberError('Số điện thoại phải là 10 chữ số');
       result = false;
     }
     //validate phone
@@ -176,6 +234,7 @@ export default function ServiceRequest(props) {
     //validate media
     if (media.length === 0) {
       setMediaError('Bạn chưa chọn ảnh hoặc video');
+      result = false;
     }
     return result;
   };
@@ -194,6 +253,8 @@ export default function ServiceRequest(props) {
 
   //button --- create service request
   const onCreateServiceRequest = () => {
+    //create promotionID
+    const promotionID = promotionItem ? promotionItem.promotionId : 0;
     if (checkSizeMedia()) {
       var validation = validateValue();
       if (validation) {
@@ -205,6 +266,7 @@ export default function ServiceRequest(props) {
           selectedService,
           description,
           media,
+          promotionID,
         );
       }
     } else {
@@ -283,10 +345,14 @@ export default function ServiceRequest(props) {
             </View>
           </View>
         )}
-        <TouchableOpacity style={styles.addBtn} onPress={onShowPackageDialog}>
-          <Text style={styles.addBtnIcon}>+</Text>
-        </TouchableOpacity>
-        <Text style={styles.errorMessage}>{selectedPackageError}</Text>
+        {!serviceRequestRework && (
+          <TouchableOpacity style={styles.addBtn} onPress={onShowPackageDialog}>
+            <Text style={styles.addBtnIcon}>+</Text>
+          </TouchableOpacity>
+        )}
+        {!serviceRequestRework && (
+          <Text style={styles.errorMessage}>{selectedPackageError}</Text>
+        )}
       </View>
       <Modal transparent={true} visible={showPackageDialog}>
         <View style={styles.dialogBackground}>
@@ -346,10 +412,14 @@ export default function ServiceRequest(props) {
             </View>
           );
         })}
-        <TouchableOpacity style={styles.addBtn} onPress={onShowServiceDialog}>
-          <Text style={styles.addBtnIcon}>+</Text>
-        </TouchableOpacity>
-        <Text style={styles.errorMessage}>{selectedServiceError}</Text>
+        {!serviceRequestRework && (
+          <TouchableOpacity style={styles.addBtn} onPress={onShowServiceDialog}>
+            <Text style={styles.addBtnIcon}>+</Text>
+          </TouchableOpacity>
+        )}
+        {!serviceRequestRework && (
+          <Text style={styles.errorMessage}>{selectedServiceError}</Text>
+        )}
       </View>
       <Modal transparent={true} visible={showServiceDialog}>
         <View style={styles.dialogBackground}>
@@ -389,18 +459,41 @@ export default function ServiceRequest(props) {
       <View style={styles.fullNameContainer}>
         <Text style={styles.fullNameTitle}>Họ và tên chủ công trình</Text>
         <TextInput
+          value={fullName}
+          onFocus={() => setIsFocusedFullName(true)}
+          onBlur={() => setIsFocusedFullName(false)}
           onChangeText={text => setFullName(text)}
-          style={styles.fullNameInput}
+          style={[
+            styles.fullNameInput,
+            {
+              borderColor: isFocusedFullName
+                ? Color.fieldFocus
+                : Color.fieldBlur,
+            },
+            {borderWidth: isFocusedFullName ? 1.5 : 1},
+          ]}
           placeholder="Nhập họ và tên"
           placeholderTextColor={Color.placeholder}
+          erro
         />
         <Text style={styles.errorMessage}>{fullNameError}</Text>
       </View>
       <View style={styles.phoneContainer}>
         <Text style={styles.phoneTitle}>Số điện thoại chủ công trình</Text>
         <TextInput
+          value={phoneNumber}
+          onFocus={() => setIsFocusedPhoneNumber(true)}
+          onBlur={() => setIsFocusedPhoneNumber(false)}
           onChangeText={text => setPhoneNumber(text)}
-          style={styles.phoneInput}
+          style={[
+            styles.phoneInput,
+            {
+              borderColor: isFocusedPhoneNumber
+                ? Color.fieldFocus
+                : Color.fieldBlur,
+            },
+            {borderWidth: isFocusedPhoneNumber ? 1.5 : 1},
+          ]}
           placeholder="Nhập số điện thoại"
           placeholderTextColor={Color.placeholder}
           keyboardType="number-pad"
@@ -410,9 +503,20 @@ export default function ServiceRequest(props) {
       <View style={styles.addressContainer}>
         <Text style={styles.addressTitle}>Địa chỉ</Text>
         <TextInput
+          value={address}
+          onFocus={() => setIsFocusedAddress(true)}
+          onBlur={() => setIsFocusedAddress(false)}
           onChangeText={text => setAddress(text)}
           multiline={true}
-          style={styles.addressInput}
+          style={[
+            styles.addressInput,
+            {
+              borderColor: isFocusedAddress
+                ? Color.fieldFocus
+                : Color.fieldBlur,
+            },
+            {borderWidth: isFocusedAddress ? 1.5 : 1},
+          ]}
           placeholder="Nhập địa chỉ"
           placeholderTextColor={Color.placeholder}
         />
@@ -421,9 +525,20 @@ export default function ServiceRequest(props) {
       <View style={styles.descriptionContainer}>
         <Text style={styles.descriptionTitle}>Mô tả tình trạng</Text>
         <TextInput
+          value={description}
+          onFocus={() => setIsFocusedDescription(true)}
+          onBlur={() => setIsFocusedDescription(false)}
           onChangeText={text => setDescription(text)}
           multiline={true}
-          style={styles.descriptionInput}
+          style={[
+            styles.descriptionInput,
+            {
+              borderColor: isFocusedDescription
+                ? Color.fieldFocus
+                : Color.fieldBlur,
+            },
+            {borderWidth: isFocusedDescription ? 1.5 : 1},
+          ]}
           placeholder="Nhập tình trạng"
           placeholderTextColor={Color.placeholder}
         />
@@ -516,9 +631,78 @@ export default function ServiceRequest(props) {
           </TouchableWithoutFeedback>
         </Modal>
       )}
+      {!serviceRequestRework && (
+        <View style={styles.promotionContainer}>
+          <TouchableOpacity
+            style={styles.promotionBtnContainer}
+            onPress={onShowPromotionDialog}>
+            <Text style={styles.promotionBtnText}>Mã giảm giá</Text>
+            <Icon name="chevron-down" style={styles.promotionIcon} />
+          </TouchableOpacity>
+          {promotionItem && (
+            <View style={styles.promotionMainContainer}>
+              <Text style={styles.promotionMainText}>
+                Giảm {promotionItem.promotionValue * 100}%
+              </Text>
+              <TouchableOpacity
+                style={styles.promotionCancelBtn}
+                onPress={onRemovePromotion}>
+                <Text style={styles.promotionCancelText}>Hủy</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+        </View>
+      )}
+      <Modal transparent={true} visible={showPromotionDialog}>
+        <View style={styles.dialogBackground}>
+          <ScrollView style={styles.dialogContainer}>
+            <View style={styles.dialogHeader}>
+              <Text style={styles.dialogTitle}>Voucher của bạn</Text>
+              <TouchableOpacity
+                onPress={onExitDialog}
+                style={styles.exitIconContainer}>
+                <Icon name="times" style={styles.exitIcon} />
+              </TouchableOpacity>
+            </View>
+            {promotion.length === 0 && <Loading />}
+            {promotion.errorsMsg && (
+              <View style={styles.errorView}>
+                <Image
+                  source={{uri: IconURL.notFoundImg}}
+                  style={styles.errorImg}
+                />
+                <Text style={styles.errorMsg}>Không có voucher nào có sẵn</Text>
+              </View>
+            )}
+            {promotion.length > 0 &&
+              !promotion.errorsMsg &&
+              promotion.map((item, index) => {
+                return (
+                  <TouchableOpacity key={index} style={styles.promotionItem} onPress={() => onSelectPromotion(item)}>
+              <View style={styles.promotionInfo}>
+                <Text style={styles.promotionItemName}>
+                  Giảm {item.promotionValue * 100}%
+                </Text>
+                <Text style={styles.promotionItemDescription}>
+                  {item.promotionDescription}
+                </Text>
+              </View>
+              <View style={styles.promotionItemDate}>
+                <Text style={styles.promotionItemDateText}>Ngày hết hạn</Text>
+                <Text style={styles.promotionItemDateText}>
+                  {moment(item.promotionDateExpired).format('Do MMMM YYYY')}
+                </Text>
+              </View>
+              <View style={styles.circle}></View>
+            </TouchableOpacity>
+                );
+              })}
+          </ScrollView>
+        </View>
+      </Modal>
       {uploading ? (
-        <View style={styles.confirmBtn}>
-          <ActivityIndicator color={Color.primary} size={'large'} />
+        <View style={styles.confirmLoadingBtn}>
+          <ActivityIndicator color={Color.white} size={'large'} />
         </View>
       ) : (
         <TouchableOpacity

@@ -1,11 +1,5 @@
 import React, {useEffect} from 'react';
-import {
-  View,
-  Text,
-  Image,
-  TouchableOpacity,
-  ScrollView,
-} from 'react-native';
+import {View, Text, Image, TouchableOpacity, ScrollView} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import Loading from '../../general/Loading';
 import {styles} from './HomeStyle';
@@ -18,10 +12,6 @@ export default function Home(props) {
   const onServiceRequest = () => {
     props.onServiceRequest();
   };
-  //button
-  const onViewContract = () => {
-    props.onViewContract();
-  };
 
   return (
     <ScrollView style={styles.container}>
@@ -33,21 +23,17 @@ export default function Home(props) {
               Đừng lo, chúng tôi sẽ cung cấp những dịch vụ tốt nhất dành cho bạn
             </Text>
           </View>
-          <Image
-            source={{uri: IconURL.adsImg}}
-            style={styles.adsImg}
-          />
+          <Image source={{uri: IconURL.adsImg}} style={styles.adsImg} />
         </View>
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={styles.requestBtn}
             onPress={onServiceRequest}>
-            <Icon name="tools" style={styles.requestIcon} />
+            <Image
+              source={{uri: IconURL.serviceRequestImg}}
+              style={styles.requestIcon}
+            />
             <Text style={styles.requestText}>Yêu cầu sửa chữa</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.requestBtn} onPress={onViewContract}>
-            <Icon name="file-contract" style={styles.requestIcon} />
-            <Text style={styles.requestText}>Xem hợp đồng</Text>
           </TouchableOpacity>
         </View>
       </View>

@@ -7,7 +7,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: Color.background1,
+    backgroundColor: Color.background,
   },
   profileContainer: {
     width: '100%',
@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
   },
   settingContainer: {
     marginTop: 50,
-    backgroundColor: Color.forth,
+    backgroundColor: Color.field,
     borderRadius: 10,
     width: '100%',
   },
@@ -61,9 +61,9 @@ const styles = StyleSheet.create({
   },
   signOutBtn: {
     marginTop: 60,
-    width: 202,
-    height: 45,
-    backgroundColor: Color.btn,
+    paddingVertical: 12,
+    paddingHorizontal: 50,
+    backgroundColor: Color.primary,
     borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',
@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
   signOutText: {
     fontSize: 18,
     fontWeight: '500',
-    color: Color.primary,
+    color: Color.white,
   },
 });
 export {styles};

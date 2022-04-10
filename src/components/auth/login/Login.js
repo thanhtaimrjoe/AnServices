@@ -9,12 +9,14 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   Alert,
+  ActivityIndicator,
 } from 'react-native';
 import {styles} from './LoginStyle';
 import Color from '../../../style/Color';
 import IconURL from '../../../style/IconURL';
 
 export default function Login(props) {
+  const {loading} = props;
   //state --- phone number
   const [phoneNumber, setPhoneNumber] = useState('');
 
@@ -42,10 +44,7 @@ export default function Login(props) {
     <KeyboardAvoidingView style={{flex: 1}}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.container}>
-          <Image
-            style={styles.image}
-            source={{uri: IconURL.loginImg}}
-          />
+          <Image style={styles.image} source={{uri: IconURL.loginImg}} />
           <Text style={styles.bigText}>Đăng nhập</Text>
           <Text style={styles.smallText}>
             Chúng tôi sẽ gửi mã xác nhận gồm 6 chữ số ngay sau khi bạn nhập số
@@ -58,9 +57,15 @@ export default function Login(props) {
             keyboardType="number-pad"
             onChangeText={text => setPhoneNumber(text)}
           />
-          <TouchableOpacity style={styles.button} onPress={onSendOTP}>
-            <Text style={styles.buttonText}>Gửi OTP</Text>
-          </TouchableOpacity>
+          {loading ? (
+            <View style={styles.loadingBtn}>
+              <ActivityIndicator size={'large'} color={Color.white} />
+            </View>
+          ) : (
+            <TouchableOpacity style={styles.btn} onPress={onSendOTP}>
+              <Text style={styles.btnText}>Gửi OTP</Text>
+            </TouchableOpacity>
+          )}
         </View>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>

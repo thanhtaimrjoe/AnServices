@@ -5,12 +5,12 @@ import user from './user';
 import serviceRequest from './serviceRequest';
 import otp from './otp';
 import requestDetail from './requestDetail';
-import contract from './contract';
 import invoice from './invoice';
-import code from './code';
 import promotion from './promotion';
+import promotionInfo from './promotionInfo';
 import contractInfo from './contractInfo';
 import inviteCode from './inviteCode';
+import contractParentInfo from './contractParentInfo';
 const myReducer = combineReducers({
   services,
   message,
@@ -18,11 +18,11 @@ const myReducer = combineReducers({
   serviceRequest,
   otp,
   requestDetail,
-  contract,
   invoice,
-  code,
   promotion,
+  promotionInfo,
   contractInfo,
   inviteCode,
+  contractParentInfo,
 });
 export default myReducer;

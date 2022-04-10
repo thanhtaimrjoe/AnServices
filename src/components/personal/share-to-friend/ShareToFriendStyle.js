@@ -6,7 +6,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: Color.background1,
+    backgroundColor: Color.background,
   },
   image: {
     width: 300,
@@ -28,27 +28,16 @@ const styles = StyleSheet.create({
   },
   //Share to friend button
   shareToFriendBtnContainer: {
-    padding: 10,
+    paddingVertical: 12,
+    paddingHorizontal: 50,
     borderRadius: 10,
-    backgroundColor: Color.btn,
+    backgroundColor: Color.primary,
   },
   shareToFriendBtnText: {
     fontSize: 18,
     fontWeight: '500',
-    color: Color.primary,
+    color: Color.white,
   },
-  //Invite code
-  // inviteCodeContainer: {
-  //     padding: 10,
-  //     borderWidth: 1,
-  //     borderRadius: 10,
-  //     borderColor: Color.primary
-  // },
-  // inviteCode: {
-  //     fontSize: 18,
-  //     fontWeight: '500',
-  //     color: Color.primary
-  // },
   //loading
   loadingIcon: {
     marginBottom: 16,

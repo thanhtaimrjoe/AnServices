@@ -7,22 +7,24 @@ import {
 } from '../../../redux/actions/index';
 
 export default function InviteCodeContainer(props) {
-  //get param from previous page
-  const {userID} = props.route.params;
+  //reducer --- user
+  const user = useSelector(state => state.user);
   //reducer --- inviteCode
   const inviteCode = useSelector(state => state.inviteCode);
+  //get token
+  const token = 'Bearer ' + user.token;
 
   //get dispatch
   const dispatch = useDispatch();
   //call api
-  const createInviteCodeRequest = userID =>
-    dispatch(actCreateInviteCodeRequest(userID));
+  const createInviteCodeRequest = (userID, token) =>
+    dispatch(actCreateInviteCodeRequest(userID, token));
   //reset invite code
-  const resetInviteCode = userID => dispatch(actResetInviteCode(userID));
+  const resetInviteCode = () => dispatch(actResetInviteCode());
 
   useEffect(() => {
     resetInviteCode();
-    createInviteCodeRequest(userID);
+    createInviteCodeRequest(user.id, token);
   }, []);
 
   return <InviteCode inviteCode={inviteCode} />;

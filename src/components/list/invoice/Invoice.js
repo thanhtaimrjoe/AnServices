@@ -1,13 +1,16 @@
-import {View, Text, Image, ScrollView} from 'react-native';
-import React, { useState } from 'react';
+import {View, Text, Image, ScrollView, TouchableOpacity} from 'react-native';
+import React, {useState} from 'react';
 import {styles} from './InvoiceStyle';
-import Loading from '../../general/Loading';
+import IconURL from '../../../style/IconURL';
+import moment from 'moment';
+import 'moment/locale/vi';
 
 export default function Invoice(props) {
-  const {invoice} = props;
-  //state --- total service price
-  //const [totalServicePrice, setTotalServicePrice] = useState(0);
-  
+  const {invoice, promotionInfo, serviceRequestReference} = props;
+
+  //moment locale
+  moment().locale('vi');
+
   //add comma to integer
   const addCommaToInteger = value => {
     if (value) {
@@ -24,11 +27,14 @@ export default function Invoice(props) {
         result += item.requestDetailPrice;
       });
       //setTotalServicePrice(result);
-    return result;
+      return result;
     }
-    
-    
-  }
+  };
+
+  //button --- show parent's invoice
+  const onShowParentInvoice = () => {
+    props.onShowParentInvoice();
+  };
 
   return (
     <ScrollView style={styles.container}>
@@ -75,7 +81,7 @@ export default function Invoice(props) {
                     {item.service.serviceName}
                   </Text>
                   <View style={styles.serviceItemPriceContainer}>
-                    <Text style={styles.serviceItemPriceTitle}>Số tiền: </Text>
+                    <Text style={styles.serviceItemPriceTitle}>Giá tiền: </Text>
                     <Text style={styles.serviceItemPrice}>
                       {addCommaToInteger(item.requestDetailPrice)}đ
                     </Text>
@@ -89,7 +95,7 @@ export default function Invoice(props) {
         <Text style={styles.contractStartDateTitle}>Ngày bắt đầu thi công</Text>
         <View style={styles.contractStartDateView}>
           <Text style={styles.contractStartDateText}>
-            {invoice.contractStartDate}
+            {moment(invoice.contractStartDate).format('Do MMMM YYYY')}
           </Text>
         </View>
       </View>
@@ -97,21 +103,47 @@ export default function Invoice(props) {
         <Text style={styles.contractEndDateTitle}>Ngày kết thúc thi công</Text>
         <View style={styles.contractEndDateView}>
           <Text style={styles.contractEndDateText}>
-            {invoice.contractEndDate}
+            {moment(invoice.contractEndDate).format('Do MMMM YYYY')}
           </Text>
         </View>
       </View>
-      <View style={styles.contractDepositContainer}>
-        <Text style={styles.contractDepositTitle}>Đã đặt cọc</Text>
-        <View style={styles.contractDepositView}>
-          <Text style={styles.contractDepositText}>
-            {invoice.contractDeposit * 100}%
-          </Text>
+      <View style={styles.depositAndVoucherContainer}>
+        <View style={styles.contractDepositContainer}>
+          <Text style={styles.contractDepositTitle}>Đã đặt cọc</Text>
+          <View style={styles.contractDepositView}>
+            <Text style={styles.contractDepositText}>
+              {invoice.contractDeposit * 100}%
+            </Text>
+          </View>
+        </View>
+        <View style={styles.contractDepositContainer}>
+          <Text style={styles.contractDepositTitle}>Áp dụng voucher</Text>
+          <View style={styles.contractDepositView}>
+            <Text style={styles.contractDepositText}>
+              {!promotionInfo.errorsMsg
+                ? promotionInfo.promotionValue * 100
+                : 0}
+              %
+            </Text>
+          </View>
         </View>
       </View>
+      {serviceRequestReference !== null && (
+        <TouchableOpacity
+          style={styles.invoiceItemContainer}
+          onPress={onShowParentInvoice}>
+          <Image
+            source={{uri: IconURL.invoiceImg}}
+            style={styles.invoiceItemImg}
+          />
+          <Text style={styles.invoiceItemName}>Hóa đơn của yêu cầu trước</Text>
+        </TouchableOpacity>
+      )}
       <View style={styles.invoiceTotalContainer}>
-      <View style={styles.invoiceTotalPriceContainer}>
-          <Text style={styles.invoiceTotalPriceTitle}>Tổng tiền hợp đồng ban đầu:</Text>
+        <View style={styles.invoiceTotalPriceContainer}>
+          <Text style={styles.invoiceTotalPriceTitle}>
+            Tổng tiền hợp đồng ban đầu:
+          </Text>
           <Text style={styles.invoiceTotalPrice}>
             {addCommaToInteger(invoice.contractTotalPrice)}đ
           </Text>
@@ -126,31 +158,49 @@ export default function Invoice(props) {
           <Text style={styles.invoiceTotalPriceTitle}>Trừ tiền đặt cọc:</Text>
           <Text style={styles.invoiceTotalPrice}>
             -
-            {invoice.contractDeposit === 0 && 0}
-            {addCommaToInteger(
-              invoice.contractTotalPrice * invoice.contractDeposit,
-            )}
+            {invoice.contractDeposit === 0
+              ? 0
+              : addCommaToInteger(
+                  invoice.contractTotalPrice * invoice.contractDeposit,
+                )}
+            đ
+          </Text>
+        </View>
+        <View style={styles.invoiceTotalPriceContainer}>
+          <Text style={styles.invoiceTotalPriceTitle}>
+            Giảm giá theo voucher:
+          </Text>
+          <Text style={styles.invoiceTotalPrice}>
+            -
+            {promotionInfo.errorsMsg
+              ? 0
+              : addCommaToInteger(
+                  getTotalServicePrice() * promotionInfo.promotionValue,
+                )}
             đ
           </Text>
         </View>
         <View style={styles.invoiceTotalPriceContainer}>
           <Text style={styles.invoiceTotalPriceTitle}>Thuế VAT(10%):</Text>
           <Text style={styles.invoiceTotalPrice}>
-            +
-            {addCommaToInteger(
-              getTotalServicePrice()*0.1,
-            )}
-            đ
+            +{addCommaToInteger(getTotalServicePrice() * 0.1)}đ
           </Text>
         </View>
         <View style={styles.invoiceTotalPriceContainer}>
           <Text style={styles.invoiceTotalPriceMainTitle}>Thành tiền:</Text>
           <Text style={styles.invoiceTotalPriceMain}>
-            {addCommaToInteger(
-              getTotalServicePrice() -
-                invoice.contractTotalPrice * invoice.contractDeposit +
-                getTotalServicePrice()*0.1,
-            )}
+            {promotionInfo.errorsMsg
+              ? addCommaToInteger(
+                  getTotalServicePrice() -
+                    invoice.contractTotalPrice * invoice.contractDeposit +
+                    getTotalServicePrice() * 0.1,
+                )
+              : addCommaToInteger(
+                  getTotalServicePrice() -
+                    invoice.contractTotalPrice * invoice.contractDeposit +
+                    getTotalServicePrice() * 0.1 -
+                    getTotalServicePrice() * promotionInfo.promotionValue,
+                )}
             đ
           </Text>
         </View>

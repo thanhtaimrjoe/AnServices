@@ -1,112 +1,63 @@
 import {StyleSheet} from 'react-native';
 import Color from '../../../style/Color';
 const styles = StyleSheet.create({
-    container: {
-        backgroundColor: Color.background1,
-        flex: 1,
-        paddingHorizontal: 16,
-      },
-      title: {
-        marginVertical: 16,
-        fontSize: 24,
-        color: Color.primary,
-        fontWeight: '500',
-      },
-      //Request Service Item
-      requestServiceItemContainer: {
-        width: '100%',
-        backgroundColor: Color.field1,
-        borderRadius: 10,
-        marginBottom: 8,
-      },
-      requestServiceItem: {
-        width: '100%',
-        flexDirection: 'row',
-        paddingHorizontal: 16,
-        alignItems: 'center',
-        backgroundColor: Color.forth,
-        borderRadius: 10,
-        height: 65,
-        //marginBottom: 8,
-      },
-      requestServiceItemImg: {
-        width: 40,
-        height: 40,
-        marginRight: 16,
-      },
-      requestServiceItemName: {
-        width: '80%',
-        fontSize: 18,
-        color: Color.primary,
-      },
-      //error message from api
-      errorView: {
-        marginTop: 100,
-        alignItems: 'center',
-      },
-      errorMsg: {
-        fontSize: 16,
-        color: Color.primary,
-      },
-      errorImg: {
-        marginBottom: 20,
-        width: 100,
-        height: 100,
-      },
-      //dialog
-  dialogBackground: {
-    backgroundColor: '#000000aa',
-    justifyContent: 'center',
-    alignItems: 'center',
+  container: {
+    backgroundColor: Color.background,
     flex: 1,
+    padding: 15,
   },
-  dialogContainer: {
-    width: '90%',
-    borderRadius: 10,
-    padding: 16,
-    backgroundColor: Color.third,
-  },
-  dialogHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 10,
-  },
-  dialogTitle: {
-    fontSize: 20,
-    fontWeight: '500',
-    color: Color.primary,
-  },
-  exitIcon: {
-    fontSize: 24,
-    color: Color.primary,
-  },
-  promotionDescription: {
-    fontSize: 16,
-    color: Color.primary
-  },
-  promotionCodeContainer: {
-    marginTop: 10,
+  //promotion item
+  promotionItem: {
     width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: Color.purple
+    backgroundColor: Color.promotion,
+    marginBottom: 8,
+    borderRadius: 10,
   },
-  promotionCode: {
-    width: '65%',
-    fontSize: 18,
+  promotionInfo: {
+    width: '60%',
     padding: 16,
-    color: Color.third,
-    backgroundColor: Color.red
+    borderRightWidth: 1,
   },
-  promotionCodeBtn: {
-    width: '35%',
-    alignItems: 'center',
-    padding: 16,
-    backgroundColor: Color.btn,
-  },
-  promotionCodeBtnText: {
+  promotionItemName: {
     fontSize: 18,
+    fontWeight: '500',
     color: Color.primary,
-  }
+  },
+  promotionItemDescription: {
+    color: Color.primary,
+  },
+  promotionItemDate: {
+    width: '40%',
+    padding: 16,
+  },
+  promotionItemDateText: {
+    paddingVertical: 5,
+    color: Color.primary,
+  },
+  circle: {
+    backgroundColor: Color.white,
+    width: 40,
+    height: 40,
+    borderRadius: 50,
+    position: 'absolute',
+    top: 25,
+    right: -20,
+  },
+  //error message from api
+  errorView: {
+    marginTop: 200,
+    alignItems: 'center',
+  },
+  errorMsg: {
+    fontSize: 16,
+    color: Color.primary,
+  },
+  errorImg: {
+    marginBottom: 20,
+    width: 100,
+    height: 100,
+  },
 });
 export {styles};

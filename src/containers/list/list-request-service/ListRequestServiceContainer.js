@@ -19,6 +19,8 @@ export default function ListRequestServiceContainer(props) {
   const user = useSelector(state => state.user);
   //reducer --- serviceRequest
   const serviceRequest = useSelector(state => state.serviceRequest);
+  //get token
+  const token = 'Bearer ' + user.token;
   //list filter status
   const listFilterStatus = [
     {
@@ -36,6 +38,10 @@ export default function ListRequestServiceContainer(props) {
     {
       statusID: 6,
       statusName: 'Đang xử lý',
+    },
+    {
+      statusID: 17,
+      statusName: 'Chờ gửi hóa đơn',
     },
     {
       statusID: 14,
@@ -58,19 +64,19 @@ export default function ListRequestServiceContainer(props) {
   //get dipatch
   const dispatch = useDispatch();
   //call api --- get service request by user id and status
-  const getServiceRequestByUserIDAndStatusRequest = (userID, statusID) =>
-    dispatch(actGetServiceRequestByUserIDAndStatusRequest(userID, statusID));
+  const getServiceRequestByUserIDAndStatusRequest = (userID, statusID, token) =>
+    dispatch(actGetServiceRequestByUserIDAndStatusRequest(userID, statusID, token));
   //reset service request
   const resetServiceRequest = () => dispatch(actResetServiceRequest());
 
   useEffect(() => {
-    getServiceRequestByUserIDAndStatusRequest(user.id, status.statusID);
+    getServiceRequestByUserIDAndStatusRequest(user.id, status.statusID, token);
   }, []);
 
   //refresh request service by status
   const onRefreshServiceRequestByStatus = () => {
     setRefreshing(true);
-    getServiceRequestByUserIDAndStatusRequest(user.id, status.statusID);
+    getServiceRequestByUserIDAndStatusRequest(user.id, status.statusID, token);
     setRefreshing(false);
   };
 
@@ -87,13 +93,19 @@ export default function ListRequestServiceContainer(props) {
     resetServiceRequest();
     //change status state after tap
     setStatus(status);
-    getServiceRequestByUserIDAndStatusRequest(user.id, status.statusID);
+    getServiceRequestByUserIDAndStatusRequest(user.id, status.statusID, token);
   };
 
   //button --- show invoice
-  const onShowInvoice = serviceRequestId => {
+  const onShowInvoice = (
+    serviceRequestId,
+    promotionId,
+    serviceRequestReference,
+  ) => {
     navigation.navigate('InvoiceContainer', {
       serviceRequestId: serviceRequestId,
+      promotionId: promotionId,
+      serviceRequestReference: serviceRequestReference,
     });
   };
 

@@ -3,13 +3,9 @@ import ShareToFriend from '../../../components/personal/share-to-friend/ShareToF
 
 export default function ShareToFriendContainer(props) {
   const {navigation} = props;
-  //get param from previous page
-  const {userID} = props.route.params;
 
   const onShowInviteCode = () => {
-    navigation.navigate('InviteCodeContainer', {
-      userID: userID,
-    });
+    navigation.navigate('InviteCodeContainer');
   };
 
   return <ShareToFriend onShowInviteCode={onShowInviteCode} />;

@@ -24,19 +24,10 @@ export default function HomeContainer(props) {
 
   //button --- navigate to service request page
   const onServiceRequest = () => {
-    navigation.navigate('ServiceRequestContainer');
+    navigation.navigate('ServiceRequestContainer', {
+      serviceRequestRework: null,
+    });
   };
 
-  //button --- view contract
-  const onViewContract = () => {
-    navigation.navigate('ContractContainer');
-  };
-
-  return (
-    <Home
-      services={services}
-      onServiceRequest={onServiceRequest}
-      onViewContract={onViewContract}
-    />
-  );
+  return <Home services={services} onServiceRequest={onServiceRequest} />;
 }

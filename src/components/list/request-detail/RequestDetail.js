@@ -17,7 +17,8 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import IconURL from '../../../style/IconURL';
 
 export default function RequestDetail(props) {
-  const {serviceRequest, requestDetail, contractInfo} = props;
+  const {serviceRequest, requestDetail, contractInfo, contractParentInfo} =
+    props;
   //state --- pause
   const [pause, setPause] = useState(false);
   //state --- mediaItem
@@ -48,6 +49,48 @@ export default function RequestDetail(props) {
   useEffect(() => {
     mediaItem;
   }, []);
+  const getReworkService = requestDetail => {
+    var checkReworkservice = false;
+    requestDetail.map((item, index) => {
+      if (item.requestDetailStatus === 16) {
+        checkReworkservice = true;
+      }
+    });
+    if (checkReworkservice) {
+      return (
+        <TouchableOpacity
+          style={styles.cancelBtn}
+          onPress={onCreateServiceRequest}>
+          <Text style={styles.cancelBtnText}>Yêu cầu sửa lại</Text>
+        </TouchableOpacity>
+      );
+    }
+  };
+  //
+  const onCreateServiceRequest = () => {
+    const reworkService = [];
+    Alert.alert(
+      'Lưu ý',
+      'Những dịch vụ với tình trạng Làm lại yêu cầu sẽ được yêu cầu lại.\nBạn chắc chắn chứ?',
+      [
+        {
+          text: 'Có',
+          onPress: () => {
+            //get list rework service
+            requestDetail.map((item, index) => {
+              if (item.requestDetailStatus === 16) {
+                reworkService.push(item.service);
+              }
+            });
+            props.onCreateServiceRequest(reworkService);
+          },
+        },
+        {
+          text: 'Không',
+        },
+      ],
+    );
+  };
 
   //button --- happy service
   const onHappyService = requestDetailId => {
@@ -83,8 +126,12 @@ export default function RequestDetail(props) {
   };
 
   //button --- show invoice page
-  const onShowInvoice = serviceRequestId => {
-    props.onShowInvoice(serviceRequestId);
+  const onShowInvoice = (
+    serviceRequestId,
+    promotionId,
+    serviceRequestReference,
+  ) => {
+    props.onShowInvoice(serviceRequestId, promotionId, serviceRequestReference);
   };
 
   //show dialog
@@ -107,6 +154,38 @@ export default function RequestDetail(props) {
   const onViewContractDetail = contractUrl => {
     setShowContractDialog(false);
     props.onViewContractDetail(contractUrl);
+  };
+
+  //btn --- approve contract
+  const onApproveContract = contractId => {
+    Alert.alert('Thông báo', 'Bạn có chắc với lựa chọn này?', [
+      {
+        text: 'Có',
+        onPress: () => {
+          setShowContractDialog(false);
+          props.onApproveContract(contractId);
+        },
+      },
+      {
+        text: 'Không',
+      },
+    ]);
+  };
+
+  //btn --- request update contract
+  const onRequestUpdateContract = contractId => {
+    Alert.alert('Thông báo', 'Bạn có chắc với lựa chọn này?', [
+      {
+        text: 'Có',
+        onPress: () => {
+          setShowContractDialog(false);
+          props.onRequestUpdateContract(contractId);
+        },
+      },
+      {
+        text: 'Không',
+      },
+    ]);
   };
 
   return (
@@ -149,50 +228,37 @@ export default function RequestDetail(props) {
                     </Text>
                     <View style={styles.requestDetailStatusContainer}>
                       <Text style={styles.requestDetailStatusTitle}>
-                        Tình trạng
+                        Tình trạng:
                       </Text>
-
                       {item.requestDetailStatus === 2 && (
-                        <View style={styles.requestDetailStatusID2}>
-                          <Text style={styles.requestDetailStatusText}>
-                            Chưa xử lý
-                          </Text>
-                        </View>
+                        <Text style={styles.requestDetailStatusID2}>
+                          Chưa xử lý
+                        </Text>
                       )}
                       {item.requestDetailStatus === 6 && (
-                        <View style={styles.requestDetailStatusID6}>
-                          <Text style={styles.requestDetailStatusText}>
-                            Đang xử lý
-                          </Text>
-                        </View>
+                        <Text style={styles.requestDetailStatusID6}>
+                          Đang xử lý
+                        </Text>
                       )}
                       {item.requestDetailStatus === 9 && (
-                        <View style={styles.requestDetailStatusID9}>
-                          <Text style={styles.requestDetailStatusText}>
-                            Chờ xác nhận
-                          </Text>
-                        </View>
+                        <Text style={styles.requestDetailStatusID9}>
+                          Chờ xác nhận
+                        </Text>
                       )}
                       {item.requestDetailStatus === 11 && (
-                        <View style={styles.requestDetailStatusID11}>
-                          <Text style={styles.requestDetailStatusText}>
-                            Hài lòng
-                          </Text>
-                        </View>
+                        <Text style={styles.requestDetailStatusID11}>
+                          Hài lòng
+                        </Text>
                       )}
                       {item.requestDetailStatus === 12 && (
-                        <View style={styles.requestDetailStatusID12}>
-                          <Text style={styles.requestDetailStatusText}>
-                            Không hài lòng
-                          </Text>
-                        </View>
+                        <Text style={styles.requestDetailStatusID12}>
+                          Không hài lòng
+                        </Text>
                       )}
                       {item.requestDetailStatus === 16 && (
-                        <View style={styles.requestDetailStatusID12}>
-                          <Text style={styles.requestDetailStatusText}>
-                            Làm lại yêu cầu
-                          </Text>
-                        </View>
+                        <Text style={styles.requestDetailStatusID16}>
+                          Làm lại yêu cầu
+                        </Text>
                       )}
                     </View>
                   </View>
@@ -200,40 +266,42 @@ export default function RequestDetail(props) {
                 {item.requestDetailStatus === 9 && (
                   <View style={styles.rateContainer}>
                     <Text style={styles.rateTitle}>
-                      Chúng tôi đã hoàn thành dịch vụ. Mời bạn đánh giá để hoàn
-                      thành dịch vụ.
+                      Thợ của chúng tôi đã làm xong.
+                    </Text>
+                    <Text style={styles.rateTitle}>
+                      Mời bạn đánh giá để hoàn thành dịch vụ.
+                    </Text>
+                    <Text style={styles.rateTitle}>
+                      Lưu ý: Dịch vụ tự động xác nhận
                     </Text>
                     <View style={styles.rareTitleContainer}>
-                      <Text style={styles.rateTitleWarning}>Lưu ý: </Text>
-                      <Text style={styles.rateTitle}>
-                        Dịch vụ tự động xác nhận{' '}
-                      </Text>
                       <Text style={styles.rateTitleBold}>HÀI LÒNG </Text>
                       <Text style={styles.rateTitle}>sau </Text>
+                      {item.service.typeServiceNavigation.typeServiceId ===
+                        1 && <Text style={styles.rateTitleTime}>1 ngày</Text>}
                     </View>
-                    {item.service.typeServiceNavigation.typeServiceId === 1 && (
-                      <Text style={styles.rateTitleTime}>1 ngày</Text>
-                    )}
-                    <View style={styles.rateBtnContainer}>
-                      <TouchableOpacity
-                        style={styles.rateBtn}
-                        onPress={() => onHappyService(item.requestDetailId)}>
-                        <Image
-                          source={{uri: IconURL.happyImg}}
-                          style={styles.rateImg}
-                        />
-                        <Text style={styles.rateBtnText}>Hài lòng</Text>
-                      </TouchableOpacity>
-                      <TouchableOpacity
-                        style={styles.rateBtn}
-                        onPress={() => onUnhappyService(item.requestDetailId)}>
-                        <Image
-                          source={{uri: IconURL.unHappyImg}}
-                          style={styles.rateImg}
-                        />
-                        <Text style={styles.rateBtnText}>Không hài lòng</Text>
-                      </TouchableOpacity>
-                    </View>
+                  </View>
+                )}
+                {item.requestDetailStatus === 9 && (
+                  <View style={styles.rateBtnContainer}>
+                    <TouchableOpacity
+                      style={styles.rateHappyBtn}
+                      onPress={() => onHappyService(item.requestDetailId)}>
+                      <Image
+                        source={{uri: IconURL.happyImg}}
+                        style={styles.rateImg}
+                      />
+                      <Text style={styles.rateBtnText}>Hài lòng</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={styles.rateUnhappyBtn}
+                      onPress={() => onUnhappyService(item.requestDetailId)}>
+                      <Image
+                        source={{uri: IconURL.unHappyImg}}
+                        style={styles.rateImg}
+                      />
+                      <Text style={styles.rateBtnText}>Không hài lòng</Text>
+                    </TouchableOpacity>
                   </View>
                 )}
               </View>
@@ -292,7 +360,6 @@ export default function RequestDetail(props) {
                   <Video
                     style={styles.mediaView}
                     source={{uri: item.mediaUrl}}
-                    poster={IconURL.loadingVideoImg}
                     posterResizeMode={'cover'}
                     paused={pause}
                     onLoad={() => {
@@ -335,14 +402,7 @@ export default function RequestDetail(props) {
           </TouchableWithoutFeedback>
         </Modal>
       )}
-      {serviceRequest.serviceRequestStatus === 2 && (
-        <TouchableOpacity
-          style={styles.cancelBtn}
-          onPress={onCancelServiceRequest}>
-          <Text style={styles.cancelBtnText}>Hủy yêu cầu</Text>
-        </TouchableOpacity>
-      )}
-      {serviceRequest.serviceRequestStatus === 13 && (
+      {!contractInfo.errorsMsg && (
         <View style={styles.contractContainer}>
           <Text style={styles.contractTitle}>Hợp đồng</Text>
           <TouchableOpacity
@@ -355,6 +415,36 @@ export default function RequestDetail(props) {
             <Text style={styles.contractItemName}>
               {contractInfo.contractTitle}
             </Text>
+            <View style={styles.contractItemStatus}>
+              <Text style={styles.contractItemStatusText}>
+                {contractInfo.contractStatus === 2 && 'Đang chờ'}
+                {contractInfo.contractStatus === 7 && 'Sửa lại'}
+                {contractInfo.contractStatus === 3 && 'Đồng ý'}
+              </Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+      )}
+      {contractParentInfo.contractTitle && !contractParentInfo.errorsMsg && (
+        <View style={styles.contractContainer}>
+          <Text style={styles.contractTitle}>Hợp đồng của yêu cầu trước</Text>
+          <TouchableOpacity
+            style={styles.contractItemContainer}
+            onPress={() => onShowDialog(contractParentInfo)}>
+            <Image
+              source={{uri: IconURL.contractImg}}
+              style={styles.contractItemImg}
+            />
+            <Text style={styles.contractItemName}>
+              {contractParentInfo.contractTitle}
+            </Text>
+            <View style={styles.contractItemStatus}>
+              <Text style={styles.contractItemStatusText}>
+                {contractParentInfo.contractStatus === 2 && 'Đang chờ'}
+                {contractParentInfo.contractStatus === 7 && 'Sửa lại'}
+                {contractParentInfo.contractStatus === 3 && 'Đồng ý'}
+              </Text>
+            </View>
           </TouchableOpacity>
         </View>
       )}
@@ -380,6 +470,25 @@ export default function RequestDetail(props) {
                 onPress={() => onDownloadContract(contractItem.contractUrl)}>
                 <Text style={styles.btnText}>Tải về</Text>
               </TouchableOpacity>
+              {contractItem.contractStatus !== 3 &&
+                contractItem.contractStatus !== 7 && (
+                  <View style={styles.btnContainer}>
+                    <TouchableOpacity
+                      style={styles.btnApprove}
+                      onPress={() =>
+                        onApproveContract(contractItem.contractId)
+                      }>
+                      <Text style={styles.btnText}>Chấp thuận</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={styles.btnRequestUpdate}
+                      onPress={() =>
+                        onRequestUpdateContract(contractItem.contractId)
+                      }>
+                      <Text style={styles.btnText}>Yêu cầu sửa</Text>
+                    </TouchableOpacity>
+                  </View>
+                )}
             </View>
           </View>
         </Modal>
@@ -389,7 +498,13 @@ export default function RequestDetail(props) {
           <Text style={styles.invoiceTitle}>Hóa đơn</Text>
           <TouchableOpacity
             style={styles.invoiceItemContainer}
-            onPress={() => onShowInvoice(serviceRequest.serviceRequestId)}>
+            onPress={() =>
+              onShowInvoice(
+                serviceRequest.serviceRequestId,
+                serviceRequest.promotionId,
+                serviceRequest.serviceRequestReference,
+              )
+            }>
             <Image
               source={{uri: IconURL.invoiceImg}}
               style={styles.invoiceItemImg}
@@ -398,6 +513,14 @@ export default function RequestDetail(props) {
           </TouchableOpacity>
         </View>
       )}
+      {serviceRequest.serviceRequestStatus === 2 && (
+        <TouchableOpacity
+          style={styles.cancelBtn}
+          onPress={onCancelServiceRequest}>
+          <Text style={styles.cancelBtnText}>Hủy yêu cầu</Text>
+        </TouchableOpacity>
+      )}
+      {getReworkService(requestDetail)}
     </ScrollView>
   );
 }

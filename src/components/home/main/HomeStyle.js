@@ -3,14 +3,13 @@ import Color from '../../../style/Color';
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: Color.background1,
+    backgroundColor: Color.background,
     flex: 1,
   },
   header: {
     width: '100%',
-    padding: 16,
-    backgroundColor: Color.forth,
-    marginBottom: 20,
+    padding: 15,
+    backgroundColor: Color.background,
   },
   //ads
   adsContainer: {
@@ -20,12 +19,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
-    backgroundColor: Color.third,
+    backgroundColor: Color.cover,
     marginBottom: 20,
   },
   adsTextContainer: {
-    width: 153,
-    height: 82,
+    width: '50%',
   },
   adsTitle: {
     fontSize: 18,
@@ -37,34 +35,56 @@ const styles = StyleSheet.create({
     color: Color.primary,
   },
   adsImg: {
-    width: 149,
+    width: '40%',
     height: '100%',
   },
-  //request service button and view contract button
+  //request service button
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
   },
   requestBtn: {
-    width: 69,
-    height: 94,
+    width: '30%',
+    paddingVertical: 12,
+    borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: Color.request,
   },
   requestIcon: {
-    fontSize: 40,
-    color: Color.primary,
+    width: 45,
+    height: 45,
+    marginBottom: 10,
   },
   requestText: {
-    paddingTop: 5,
     fontSize: 14,
+    paddingHorizontal: 12,
+    color: Color.primary,
+    textAlign: 'center',
+  },
+  //view contract button
+  contractBtn: {
+    width: '30%',
+    paddingVertical: 12,
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: Color.contract,
+  },
+  contractIcon: {
+    width: 45,
+    height: 45,
+    marginBottom: 10,
+  },
+  contractText: {
+    fontSize: 14,
+    paddingHorizontal: 12,
     color: Color.primary,
     textAlign: 'center',
   },
   //service list
   serviceContainer: {
-    paddingHorizontal: 16,
-    flex: 1,
+    paddingHorizontal: 15,
   },
   serviceTitle: {
     fontSize: 18,
@@ -75,32 +95,30 @@ const styles = StyleSheet.create({
   //service item
   serviceItemContainer: {
     flexDirection: 'row',
-    backgroundColor: Color.forth,
+    backgroundColor: Color.cover,
     borderRadius: 10,
-    justifyContent: 'space-evenly',
     alignItems: 'center',
-    paddingVertical: 5,
-    marginBottom: 20,
+    paddingHorizontal: 24,
+    paddingVertical: 8,
+    marginBottom: 15,
   },
   serviceItemTextContainer: {
-    width: 161,
+    width: '65%',
   },
   serviceItemName: {
     fontSize: 18,
     fontWeight: '500',
     color: Color.primary,
+    marginBottom: 5,
   },
   serviceItemDescription: {
     fontSize: 14,
     color: Color.primary,
   },
-  serviceItemPrice: {
-    fontSize: 14,
-    color: Color.primary,
-  },
   serviceItemImg: {
-    width: 101,
-    height: 96,
+    width: 69,
+    height: 69,
+    marginRight: 20,
   },
   //error message from api
   errorView: {

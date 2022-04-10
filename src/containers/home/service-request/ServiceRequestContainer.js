@@ -6,12 +6,15 @@ import {
   actResetMessage,
   actCreateServiceRequestRequest,
   actClearData,
+  actGetAllPromotionValidByUserIDRequest,
 } from '../../../redux/actions/index';
 import storage from '@react-native-firebase/storage';
 import {CommonActions} from '@react-navigation/native';
 
 export default function ServiceRequestContainer(props) {
   const {navigation} = props;
+  //get param from previous page
+  const {serviceRequestRework} = props.route.params;
   //state --- uploading
   const [uploading, setUploading] = useState(false);
   //reducer --- services
@@ -22,18 +25,24 @@ export default function ServiceRequestContainer(props) {
   const message = useSelector(state => state.message);
   //get token
   const token = 'Bearer ' + user.token;
+  //reducer --- promotion
+  const promotion = useSelector(state => state.promotion);
 
   //get dipatch
   const dispatch = useDispatch();
   //reset message
   const resetMessage = () => dispatch(actResetMessage());
   //call api --- create request service
-  const createServiceRequest = requestService =>
-    dispatch(actCreateServiceRequestRequest(requestService));
+  const createServiceRequest = (requestService, token) =>
+    dispatch(actCreateServiceRequestRequest(requestService,token));
   //clear all reducer before log out
   const clearData = () => dispatch(actClearData());
+  //call api --- get all promotion valid by user id
+  const getAllPromotionValidByUserID = (userID, token) =>
+    dispatch(actGetAllPromotionValidByUserIDRequest(userID, token));
 
   useEffect(() => {
+    getAllPromotionValidByUserID(user.id, token);
     if (message === 'CREATE_SERVICE_REQUEST_SUCCESS') {
       Alert.alert(
         'Gửi yêu cầu thành công',
@@ -60,7 +69,6 @@ export default function ServiceRequestContainer(props) {
             onPress: () => {
               setUploading(false);
               resetMessage();
-              onLogOut();
             },
           },
         ],
@@ -69,7 +77,7 @@ export default function ServiceRequestContainer(props) {
     if (message === 'CREATE_SERVICE_REQUEST_BANNED') {
       Alert.alert(
         'Gửi yêu cầu thất bại',
-        'Tài khoản của bạn đã bị khóa do gửi yêu cầu quá 3 lần',
+        'Tài khoản của bạn đã bị khóa do gửi yêu cầu quá 3 lần trong 1 ngày',
         [
           {
             text: 'OK',
@@ -125,6 +133,7 @@ export default function ServiceRequestContainer(props) {
     selectedService,
     description,
     media,
+    promotionID,
   ) => {
     setUploading(true);
     const mediaURL = [];
@@ -141,6 +150,9 @@ export default function ServiceRequestContainer(props) {
     selectedService.map(item => {
       serviceList.push(item.serviceId);
     });
+    const serviceRequestIDParent = serviceRequestRework
+      ? serviceRequestRework.serviceRequestIDParent
+      : 0;
     //create requestService
     const requestService = {
       customerId: user.id,
@@ -151,32 +163,18 @@ export default function ServiceRequestContainer(props) {
       serviceList: serviceList,
       requestServiceDescription: description,
       mediaList: mediaURL,
+      promotionID: promotionID,
+      serviceRequestIDParent: serviceRequestIDParent,
     };
-    //-------------------------------------------
-    // var formData = new FormData();
-    // formData.append('CustomerId', user.id);
-    // formData.append('CustomerName', fullName);
-    // formData.append('CustomerPhone', phoneNumber);
-    // formData.append('CustomerAddress', address);
-    // formData.append('RequestServicePackage', packageId);
-    // selectedService.map((item, index) => {
-    //   formData.append('ServiceList', item.serviceId);
-    // });
-    // formData.append('RequestServiceDescription', description);
-    // media.map((item, index) => {
-    //   formData.append('File', {
-    //     uri: item.uri,
-    //     type: item.type,
-    //     name: item.fileName,
-    //   });
-    // });
-    createServiceRequest(requestService);
+    createServiceRequest(requestService, token);
   };
 
   return (
     <ServiceRequest
       services={services}
+      promotion={promotion}
       uploading={uploading}
+      serviceRequestRework={serviceRequestRework}
       onCreateServiceRequest={onCreateServiceRequest}
     />
   );

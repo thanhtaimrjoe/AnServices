@@ -37,13 +37,14 @@ export const actLoginCustomerOrWorkerRequest = phoneNumber => {
     }
   };
 };
-//call api
-export const actSendSmsByPhoneNumberRequest = phoneNumber => {
+//call api --- authen
+export const actSendSmsByPhoneNumberRequest = (phoneNumber, token) => {
   return async dispatch => {
     try {
       const response = await fetch(API + 'User/SendSms', {
         method: 'POST',
         headers: {
+          Authorization: token,
           Accept: 'application/json',
           'Content-Type': 'application/json',
         },
@@ -56,7 +57,7 @@ export const actSendSmsByPhoneNumberRequest = phoneNumber => {
         dispatch(actGetOTP(json));
       }
     } catch (error) {
-      //console.error(error);
+      console.error(error);
     }
   };
 };
@@ -128,14 +129,14 @@ export const actGetUserInfo = user => {
 };
 
 //------------SERVICE----------------
-//call api
+//call api --- authen
 export const actGetAllServiceRequest = token => {
   return async dispatch => {
     try {
       const response = await fetch(API + 'Service/GetAllService', {
         method: 'GET',
         headers: {
-          //Authorization: token,
+          Authorization: token,
           Accept: 'application/json',
           'Content-Type': 'application/json',
         },
@@ -156,13 +157,14 @@ export const actGetAllService = services => {
     services,
   };
 };
-//call api***
-export const actCreateServiceRequestRequest = requestService => {
+//call api*** --- authen
+export const actCreateServiceRequestRequest = (requestService, token) => {
   return async dispatch => {
     try {
       const response = await fetch(API + 'Service/CreateServiceRequest', {
         method: 'POST',
         headers: {
+          Authorization: token,
           Accept: 'application/json',
           'Content-Type': 'application/json',
         },
@@ -175,13 +177,18 @@ export const actCreateServiceRequestRequest = requestService => {
           serviceList: requestService.serviceList,
           serviceRequestDescription: requestService.requestServiceDescription,
           mediaList: requestService.mediaList,
+          promotionID: requestService.promotionID,
+          serviceRequestIDParent: requestService.serviceRequestIDParent,
         }),
       });
       if (response.status === 200) {
         dispatch(createRequestSuccess());
       } else {
         const json = await response.json();
-        if (json.errorsMsg[0] === 'Your account has been banned') {
+        if (
+          json.errorsMsg &&
+          json.errorsMsg[0] === 'Your account has been banned'
+        ) {
           dispatch(createRequestBanned());
         } else {
           dispatch(createRequestFailure());
@@ -193,32 +200,6 @@ export const actCreateServiceRequestRequest = requestService => {
     }
   };
 };
-/*
-//call api with formData format
-export const actCreateServiceRequestRequest = formData => {
-  return async dispatch => {
-    try {
-      const response = await fetch(API + 'Service/CreateServiceRequest', {
-        method: 'POST',
-        // headers: {
-        //   //Accept: 'application/json',
-        // },
-        body: formData,
-      });
-      console.log('response', response);
-      if (response.status === 200) {
-        dispatch(createRequestSuccess());
-      } else {
-        dispatch(createRequestFailure());
-      }
-    } catch (error) {
-      console.error(error);
-      console.log('error', error);
-      dispatch(createRequestFailure());
-    }
-  };
-};
-*/
 //create request service SUCCESS
 export const createRequestSuccess = () => {
   return {
@@ -237,32 +218,35 @@ export const createRequestBanned = () => {
     type: types.CREATE_SERVICE_REQUEST_BANNED,
   };
 };
-//call api***
-export const actGetAllRequestServiceDetailsByRequestServiceIDRequest =
-  serviceRequestId => {
-    return async dispatch => {
-      try {
-        const response = await fetch(
-          API +
-            'Service/GetAllServiceRequestDetailsByServiceRequestID?id=' +
-            serviceRequestId,
-          {
-            method: 'GET',
-            headers: {
-              Accept: 'application/json',
-              'Content-Type': 'application/json',
-            },
+//call api*** --- authen
+export const actGetAllRequestServiceDetailsByRequestServiceIDRequest = (
+  serviceRequestId,
+  token,
+) => {
+  return async dispatch => {
+    try {
+      const response = await fetch(
+        API +
+          'Service/GetAllServiceRequestDetailsByServiceRequestID?id=' +
+          serviceRequestId,
+        {
+          method: 'GET',
+          headers: {
+            Authorization: token,
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
           },
-        );
-        const json = await response.json();
-        if (json) {
-          dispatch(actGetAllRequestServiceDetailsByRequestServiceID(json));
-        }
-      } catch (error) {
-        console.error(error);
+        },
+      );
+      const json = await response.json();
+      if (json) {
+        dispatch(actGetAllRequestServiceDetailsByRequestServiceID(json));
       }
-    };
+    } catch (error) {
+      console.error(error);
+    }
   };
+};
 //fetch request detail
 export const actGetAllRequestServiceDetailsByRequestServiceID =
   requestDetail => {
@@ -271,10 +255,11 @@ export const actGetAllRequestServiceDetailsByRequestServiceID =
       requestDetail,
     };
   };
-//call api***
+//call api*** --- authen
 export const actGetServiceRequestByUserIDAndStatusRequest = (
   userID,
   statusID,
+  token,
 ) => {
   return async dispatch => {
     try {
@@ -287,6 +272,7 @@ export const actGetServiceRequestByUserIDAndStatusRequest = (
         {
           method: 'GET',
           headers: {
+            Authorization: token,
             Accept: 'application/json',
             'Content-Type': 'application/json',
           },
@@ -320,8 +306,8 @@ export const actResetRequestDetail = () => {
     type: types.RESET_REQUEST_DETAIL,
   };
 };
-//call api***
-export const actCancelServiceRequestRequest = serviceRequestId => {
+//call api*** --- authen
+export const actCancelServiceRequestRequest = (serviceRequestId, token) => {
   return async dispatch => {
     try {
       const response = await fetch(
@@ -329,6 +315,7 @@ export const actCancelServiceRequestRequest = serviceRequestId => {
         {
           method: 'PUT',
           headers: {
+            Authorization: token,
             Accept: 'application/json',
             'Content-Type': 'application/json',
           },
@@ -357,10 +344,11 @@ export const actCancelServiceRequestFailure = () => {
     type: types.CANCEL_SERVICE_REQUEST_FAILURE,
   };
 };
-//call api***
+//call api*** --- authen
 export const actUpdateStatusRequestServiceDetailRequest = (
   requestDetailId,
   status,
+  token,
 ) => {
   return async dispatch => {
     try {
@@ -373,6 +361,7 @@ export const actUpdateStatusRequestServiceDetailRequest = (
         {
           method: 'PUT',
           headers: {
+            Authorization: token,
             Accept: 'application/json',
             'Content-Type': 'application/json',
           },
@@ -402,38 +391,8 @@ export const actUpdateStatusRequestServiceDetailFailure = () => {
   };
 };
 //------------CONTRACT----------------
-//call api
-export const actGetContractListByUserIDRequest = userID => {
-  return async dispatch => {
-    try {
-      const response = await fetch(
-        API + 'Contract/GetContractListByUserID?id=' + userID,
-        {
-          method: 'GET',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-          },
-        },
-      );
-      const json = await response.json();
-      if (json) {
-        dispatch(actGetContractListByUserID(json));
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-};
-//fetch contract
-export const actGetContractListByUserID = contract => {
-  return {
-    type: types.GET_CONTRACT_LIST_BY_USER_ID,
-    contract,
-  };
-};
-//call api
-export const actApproveContractRequest = contractId => {
+//call api --- authen
+export const actApproveContractRequest = (contractId, token) => {
   return async dispatch => {
     try {
       const response = await fetch(
@@ -441,6 +400,7 @@ export const actApproveContractRequest = contractId => {
         {
           method: 'PUT',
           headers: {
+            Authorization: token,
             Accept: 'application/json',
             'Content-Type': 'application/json',
           },
@@ -469,8 +429,8 @@ export const actApproveContractFailure = () => {
     type: types.APPROVE_CONTRACT_FAILURE,
   };
 };
-//call api
-export const actRequestUpdateContractRequest = contractId => {
+//call api --- authen
+export const actRequestUpdateContractRequest = (contractId, token) => {
   return async dispatch => {
     try {
       const response = await fetch(
@@ -478,6 +438,7 @@ export const actRequestUpdateContractRequest = contractId => {
         {
           method: 'PUT',
           headers: {
+            Authorization: token,
             Accept: 'application/json',
             'Content-Type': 'application/json',
           },
@@ -506,8 +467,11 @@ export const actRequestUpdateContractFailure = () => {
     type: types.REQUEST_UPDATE_CONTRACT_FAILURE,
   };
 };
-//call api
-export const actGetContractByServiceRequestIDRequest = serviceRequestID => {
+//call api --- authen
+export const actGetContractByServiceRequestIDRequest = (
+  serviceRequestID,
+  token,
+) => {
   return async dispatch => {
     try {
       const response = await fetch(
@@ -517,6 +481,7 @@ export const actGetContractByServiceRequestIDRequest = serviceRequestID => {
         {
           method: 'GET',
           headers: {
+            Authorization: token,
             Accept: 'application/json',
             'Content-Type': 'application/json',
           },
@@ -531,40 +496,86 @@ export const actGetContractByServiceRequestIDRequest = serviceRequestID => {
     }
   };
 };
-//
+//get contract by service request id
 export const actGetContractByServiceRequestID = contractInfo => {
   return {
     type: types.GET_CONTRACT_BY_SERVICE_REQUEST_ID,
     contractInfo,
   };
 };
-//------------INVOICE----------------
-//call api***
-export const actGetInfomationInvoiceByRequestServiceIDRequest =
-  serviceRequestId => {
-    return async dispatch => {
-      try {
-        const response = await fetch(
-          API +
-            'Invoice/GetInfomationInvoiceByServiceRequestID?serviceRequestID=' +
-            serviceRequestId,
-          {
-            method: 'GET',
-            headers: {
-              Accept: 'application/json',
-              'Content-Type': 'application/json',
-            },
+//call api --- authen
+export const actGetContractParentByServiceRequestReferenceRequest = (
+  serviceRequestReference,
+  token,
+) => {
+  return async dispatch => {
+    try {
+      const response = await fetch(
+        API +
+          'Contract/GetContractByServiceRequestID?requestServiceId=' +
+          serviceRequestReference,
+        {
+          method: 'GET',
+          headers: {
+            Authorization: token,
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
           },
-        );
-        const json = await response.json();
-        if (json) {
-          dispatch(actGetInfomationInvoiceByRequestServiceID(json));
-        }
-      } catch (error) {
-        console.error(error);
+        },
+      );
+      const json = await response.json();
+      if (json) {
+        dispatch(actGetContractParentByServiceRequestReference(json));
       }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+};
+//get contract parent by service request reference
+export const actGetContractParentByServiceRequestReference =
+  contractParentInfo => {
+    return {
+      type: types.GET_CONTRACT_PARENT_BY_SERVICE_REQUEST_REFERENCE,
+      contractParentInfo,
     };
   };
+//reset contract parent
+export const actResetContractParent = () => {
+  return {
+    type: types.RESET_CONTRACT_PARENT,
+  };
+};
+//------------INVOICE----------------
+//call api*** --- authen
+export const actGetInfomationInvoiceByRequestServiceIDRequest = (
+  serviceRequestId,
+  token,
+) => {
+  return async dispatch => {
+    try {
+      const response = await fetch(
+        API +
+          'Invoice/GetInfomationInvoiceByServiceRequestID?serviceRequestID=' +
+          serviceRequestId,
+        {
+          method: 'GET',
+          headers: {
+            Authorization: token,
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+        },
+      );
+      const json = await response.json();
+      if (json) {
+        dispatch(actGetInfomationInvoiceByRequestServiceID(json));
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+};
 //get information invoice by request service id
 export const actGetInfomationInvoiceByRequestServiceID = invoice => {
   return {
@@ -578,56 +589,50 @@ export const actResetInvoice = () => {
     type: types.RESET_INVOICE,
   };
 };
-//------------INVOICE----------------
-//call api
-export const actGetPromotionCodeRequest = (userID, inviteCode) => {
+//------------PROMOTION----------------
+//call api --- authen
+export const actGetAllPromotionValidByUserIDRequest = (userID, token) => {
+  return async dispatch => {
+    try {
+      const response = await fetch(
+        API + 'Promotion/GetAllPromotionValidByUserID?userID=' + userID,
+        {
+          method: 'GET',
+          headers: {
+            Authorization: token,
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+        },
+      );
+      const json = await response.json();
+      if (json) {
+        dispatch(actGetAllPromotionValidByUserID(json));
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+};
+//fetch all promotion valid by user id
+export const actGetAllPromotionValidByUserID = promotion => {
+  return {
+    type: types.GET_ALL_PROMOTION_VALID_BY_USER_ID,
+    promotion,
+  };
+};
+//call api --- authen
+export const actGetInformationPromotionByIDRequest = (promotionID, token) => {
   return async dispatch => {
     try {
       const response = await fetch(
         API +
-          'Promotion/GetPromotionCode?userID=' +
-          userID +
-          '&inviteCode=' +
-          inviteCode,
-        {
-          method: 'POST',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-          },
-        },
-      );
-      const json = await response.json();
-      if (json) {
-        dispatch(actGetPromotionCode(json));
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-};
-//fetch promotion code
-export const actGetPromotionCode = code => {
-  return {
-    type: types.GET_PROMOTION_CODE,
-    code,
-  };
-};
-//reset promotion error msg
-export const actResetPromotionErrorMsg = () => {
-  return {
-    type: types.RESET_PROMOTION_ERROR_MSG,
-  };
-};
-//call api
-export const actGetAllPromotionByUserIDRequest = userID => {
-  return async dispatch => {
-    try {
-      const response = await fetch(
-        API + 'Promotion/GetAllPromotionByUserID?userID=' + userID,
+          'Promotion/GetInformationPromotionByID?promotionID=' +
+          promotionID,
         {
           method: 'GET',
           headers: {
+            Authorization: token,
             Accept: 'application/json',
             'Content-Type': 'application/json',
           },
@@ -635,23 +640,23 @@ export const actGetAllPromotionByUserIDRequest = userID => {
       );
       const json = await response.json();
       if (json) {
-        dispatch(actGetAllPromotionByUserID(json));
+        dispatch(actGetInformationPromotionByID(json));
       }
     } catch (error) {
       console.error(error);
     }
   };
 };
-//fetch all promotion code by user id
-export const actGetAllPromotionByUserID = promotion => {
+//get information promotion by id
+export const actGetInformationPromotionByID = promotionInfo => {
   return {
-    type: types.GET_ALL_PROMOTION_BY_USER_ID,
-    promotion,
+    type: types.GET_INFORMATION_PROMOTION_BY_ID,
+    promotionInfo,
   };
 };
 //------------INVITE CODE----------------
-//call api
-export const actCreateInviteCodeRequest = userID => {
+//call api --- authen
+export const actCreateInviteCodeRequest = (userID, token) => {
   return async dispatch => {
     try {
       const response = await fetch(
@@ -659,6 +664,7 @@ export const actCreateInviteCodeRequest = userID => {
         {
           method: 'POST',
           headers: {
+            Authorization: token,
             Accept: 'application/json',
             'Content-Type': 'application/json',
           },

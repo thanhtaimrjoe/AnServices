@@ -5,11 +5,8 @@ const myReducer = (state = inititalState, action) => {
     case types.CLEAR_DATA:
       state = inititalState;
       return state;
-    case types.RESET_PROMOTION_ERROR_MSG:
-      state = inititalState;
-      return state;
-    case types.GET_PROMOTION_CODE:
-      state = action.code;
+    case types.GET_INFORMATION_PROMOTION_BY_ID:
+      state = action.promotionInfo;
       return state;
     default:
       return state;

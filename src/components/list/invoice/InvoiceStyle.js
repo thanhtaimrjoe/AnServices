@@ -2,7 +2,7 @@ import {StyleSheet} from 'react-native';
 import Color from '../../../style/Color';
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: Color.background1,
+    backgroundColor: Color.background,
     paddingHorizontal: 16,
     flex: 1,
   },
@@ -18,10 +18,10 @@ const styles = StyleSheet.create({
   fullNameView: {
     borderRadius: 10,
     padding: 10,
-    backgroundColor: Color.fifth,
+    backgroundColor: Color.field,
   },
   fullNameText: {
-    color: Color.sixth,
+    color: Color.primary,
   },
   //phone field
   phoneContainer: {
@@ -35,10 +35,10 @@ const styles = StyleSheet.create({
   phoneView: {
     borderRadius: 10,
     padding: 10,
-    backgroundColor: Color.fifth,
+    backgroundColor: Color.field,
   },
   phoneText: {
-    color: Color.sixth,
+    color: Color.primary,
   },
   //address field
   addressContainer: {
@@ -52,10 +52,10 @@ const styles = StyleSheet.create({
   addressView: {
     borderRadius: 10,
     padding: 10,
-    backgroundColor: Color.fifth,
+    backgroundColor: Color.field,
   },
   addressText: {
-    color: Color.sixth,
+    color: Color.primary,
   },
   //description field
   descriptionContainer: {
@@ -69,10 +69,10 @@ const styles = StyleSheet.create({
   descriptionView: {
     borderRadius: 10,
     padding: 10,
-    backgroundColor: Color.fifth,
+    backgroundColor: Color.field,
   },
   descriptionText: {
-    color: Color.sixth,
+    color: Color.primary,
   },
   //service
   serviceContainer: {
@@ -86,18 +86,16 @@ const styles = StyleSheet.create({
   //service item
   serviceItemContainer: {
     width: '100%',
-    backgroundColor: Color.forth,
+    backgroundColor: Color.cover,
     borderRadius: 10,
     flexDirection: 'row',
-    justifyContent: 'space-around',
     alignItems: 'center',
+    paddingHorizontal: 24,
     paddingVertical: 8,
-    borderBottomWidth: 1,
-    borderBottomColor: Color.third,
     marginBottom: 10,
   },
   serviceItemTextContainer: {
-    width: '55%',
+    width: '65%',
   },
   serviceItemName: {
     fontSize: 18,
@@ -106,8 +104,9 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   serviceItemImg: {
-    width: 80,
-    height: 80,
+    width: 69,
+    height: 69,
+    marginRight: 20,
   },
   serviceItemPriceContainer: {
     flexDirection: 'row',
@@ -133,10 +132,10 @@ const styles = StyleSheet.create({
   contractStartDateView: {
     borderRadius: 10,
     padding: 10,
-    backgroundColor: Color.fifth,
+    backgroundColor: Color.field,
   },
   contractStartDateText: {
-    color: Color.sixth,
+    color: Color.primary,
   },
   //contract end date
   contractEndDateContainer: {
@@ -150,14 +149,19 @@ const styles = StyleSheet.create({
   contractEndDateView: {
     borderRadius: 10,
     padding: 10,
-    backgroundColor: Color.fifth,
+    backgroundColor: Color.field,
   },
   contractEndDateText: {
-    color: Color.sixth,
+    color: Color.primary,
   },
-  //contract deposit date
-  contractDepositContainer: {
+  //deposit and voucher container
+  depositAndVoucherContainer: {
+    flexDirection: 'row',
     marginBottom: 15,
+  },
+  //contract deposit
+  contractDepositContainer: {
+    width: '50%',
   },
   contractDepositTitle: {
     fontSize: 18,
@@ -165,17 +169,36 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   contractDepositView: {
-    width: '20%',
+    width: '40%',
     borderRadius: 10,
     padding: 10,
-    backgroundColor: Color.fifth,
+    backgroundColor: Color.field,
   },
   contractDepositText: {
-    color: Color.sixth,
+    color: Color.primary,
+  },
+  //invoice item
+  invoiceItemContainer: {
+    width: '100%',
+    paddingVertical: 8,
+    flexDirection: 'row',
+    paddingHorizontal: 16,
+    alignItems: 'center',
+    backgroundColor: Color.field,
+    borderRadius: 10,
+    marginBottom: 10,
+  },
+  invoiceItemImg: {
+    width: 40,
+    height: 40,
+    marginRight: 16,
+  },
+  invoiceItemName: {
+    fontSize: 18,
+    color: Color.primary,
   },
   //invoice total price
   invoiceTotalContainer: {
-    marginBottom: 15,
     borderTopWidth: 1,
     borderTopColor: Color.primary,
   },

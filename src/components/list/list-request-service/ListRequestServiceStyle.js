@@ -2,7 +2,7 @@ import {StyleSheet} from 'react-native';
 import Color from '../../../style/Color';
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: Color.background1,
+    backgroundColor: Color.background,
     flex: 1,
     paddingHorizontal: 16,
   },
@@ -18,26 +18,35 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   filterBtn: {
-    padding: 3,
-    borderRadius: 10,
+    paddingVertical: 6,
+    paddingHorizontal: 14,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: Color.second,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 16,
   },
   filterBtnActive: {
-    padding: 5,
-    backgroundColor: Color.btn,
-    borderRadius: 10,
+    paddingVertical: 6,
+    paddingHorizontal: 14,
+    backgroundColor: Color.primary,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: Color.primary,
     justifyContent: 'center',
     alignItems: 'center',
   },
   filterText: {
-    color: Color.primary,
+    color: Color.second,
+  },
+  filterTextActive: {
+    color: Color.white,
   },
   //Service Request Item
   serviceRequestItemContainer: {
     width: '100%',
-    backgroundColor: Color.field1,
+    backgroundColor: Color.request1,
     borderRadius: 10,
     marginBottom: 8,
   },
@@ -46,7 +55,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingHorizontal: 16,
     alignItems: 'center',
-    backgroundColor: Color.forth,
+    backgroundColor: Color.request,
     borderRadius: 10,
     height: 65,
     //marginBottom: 8,
@@ -75,10 +84,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: 8,
     borderRadius: 10,
-    backgroundColor: Color.btn,
+    backgroundColor: Color.primary,
   },
   invoiceBtnText: {
-    color: Color.primary,
+    color: Color.white,
   },
   //error message from api
   errorView: {

@@ -6,7 +6,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: Color.background1,
+    backgroundColor: Color.background,
   },
   image: {
     width: 300,
@@ -28,15 +28,16 @@ const styles = StyleSheet.create({
   },
   //Invite code
   inviteCodeContainer: {
-      padding: 10,
-      borderWidth: 1,
-      borderRadius: 10,
-      borderColor: Color.primary
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderWidth: 1,
+    borderRadius: 10,
+    borderColor: Color.primary,
   },
   inviteCode: {
-      fontSize: 18,
-      fontWeight: '500',
-      color: Color.primary
+    fontSize: 18,
+    fontWeight: '500',
+    color: Color.primary,
   },
   //loading
   loadingIcon: {

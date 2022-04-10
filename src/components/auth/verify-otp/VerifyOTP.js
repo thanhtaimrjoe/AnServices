@@ -69,10 +69,7 @@ export default function VerifyOTP(props) {
     <KeyboardAvoidingView>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.container}>
-          <Image
-            style={styles.image}
-            source={{uri: IconURL.verifyOTPImg}}
-          />
+          <Image style={styles.image} source={{uri: IconURL.verifyOTPImg}} />
           <Text style={styles.bigText}>Xác nhận OTP</Text>
           <Text style={styles.smallText}>
             Mã xác nhận đã được gửi đến số của bạn
@@ -80,7 +77,7 @@ export default function VerifyOTP(props) {
           <OTPInputView
             style={styles.otpContainer}
             pinCount={6}
-            autoFocusOnLoad
+            autoFocusOnLoad={false}
             onCodeChanged={code => setCode(code)}
             codeInputFieldStyle={styles.otpField}
           />

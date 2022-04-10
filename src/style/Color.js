@@ -1,25 +1,32 @@
 export default {
-  primary: '#353D4C', //xanh
-  second: '#B74E4E', //do
-  third: '#FFFFFF', //trang
-  forth: '#EAECEE', //nhat
-  fifth: '#EEEEF1', //xanh nhat
-  sixth: '#000000',
-  btn1: '#9c2828',
-  btn2: '#24784a',
-  btn3: '#A9AB3E',
+  primary: '#353D4C',
+  second: '#929292',
+  //-------------Other--------------
+  white: '#FFFFFF',
+  red: '#FF0000',
+  error: '#FF0000',
+  cover: '#F2F0E0',
+  //-------------Button--------------
+  request: '#D7E6F9',
+  request1: '#C8D4E2',
+  contract: '#FFF5DD',
+  promotion: '#AFDF80',
+  happyBtn: '#ACEFB2',
+  unhappyBtn: '#FFB9B9',
+  approve: '#24784a',
+  requestUpdate: '#A9AB3E',
+  //------Request Detail status------
+  pending: '#A07D00',
+  inProgress: '#C024E7',
+  confirming: '#2F1FE2',
+  happy: '#00BF36',
+  unhappy: '#E72020',
+  rework: '#037189',
   //---------------------
-  yellow: '#D4D74F',
-  purple: '#91ACEF',
-  green: '#4FD174',
-  blue: '#0FBCF9',
-  red: '#FF6B6B',
-  //---------------------
-  btn: '#F0A247', //orange
-  field: '#EAECEE',
-  field1: '#DEDEDE',
+  field: '#EAEAEA',
+  fieldFocus: '#353D4C',
+  fieldBlur: '#B8B8B8',
   placeholder: '#929292',
   //---------------------
-  background1: '#FFFFFF',
-  background2: '#EAECEE',
+  background: '#FFFFFF',
 };

@@ -17,8 +17,8 @@ export default function BottomTab() {
         options={{
           headerShown: false,
           tabBarIcon: ({color}) => <Icon name="home" size={26} color={color} />,
-          tabBarActiveTintColor: Color.second,
-          tabBarInactiveTintColor: Color.primary,
+          tabBarActiveTintColor: Color.primary,
+          tabBarInactiveTintColor: Color.second,
           tabBarLabel: 'Trang chủ',
           tabBarLabelStyle: {fontSize: 14},
         }}
@@ -31,8 +31,8 @@ export default function BottomTab() {
           tabBarIcon: ({color}) => (
             <Icon name="tools" size={26} color={color} />
           ),
-          tabBarActiveTintColor: Color.second,
-          tabBarInactiveTintColor: Color.primary,
+          tabBarActiveTintColor: Color.primary,
+          tabBarInactiveTintColor: Color.second,
           tabBarLabel: 'Xem yêu cầu',
           tabBarLabelStyle: {fontSize: 14},
         }}
@@ -45,8 +45,8 @@ export default function BottomTab() {
           tabBarIcon: ({color}) => (
             <Icon name="user-alt" size={26} color={color} />
           ),
-          tabBarActiveTintColor: Color.second,
-          tabBarInactiveTintColor: Color.primary,
+          tabBarActiveTintColor: Color.primary,
+          tabBarInactiveTintColor: Color.second,
           tabBarLabel: 'Cá nhân',
           tabBarLabelStyle: {fontSize: 14},
         }}

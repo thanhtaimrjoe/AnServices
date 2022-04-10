@@ -2,14 +2,13 @@ import {StyleSheet} from 'react-native';
 import Color from '../../../style/Color';
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: Color.background1,
-    paddingHorizontal: 16,
+    backgroundColor: Color.background,
+    paddingHorizontal: 15,
     flex: 1,
   },
   //package
   packageContainer: {
-    marginBottom: 15,
-    marginTop: 16,
+    marginVertical: 15,
   },
   packageTitle: {
     fontSize: 18,
@@ -28,11 +27,10 @@ const styles = StyleSheet.create({
   //add button
   addBtn: {
     width: '100%',
-    height: 32,
     borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: Color.fifth,
+    backgroundColor: Color.field,
   },
   addBtnIcon: {
     fontSize: 25,
@@ -46,10 +44,10 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   dialogContainer: {
-    width: '90%',
+    width: '100%',
     borderRadius: 10,
     paddingHorizontal: 16,
-    backgroundColor: Color.third,
+    backgroundColor: Color.background,
   },
   dialogHeader: {
     flexDirection: 'row',
@@ -79,21 +77,21 @@ const styles = StyleSheet.create({
   },
   dialogMediaText: {
     fontSize: 18,
-    color: Color.third,
+    color: Color.white,
   },
   //service item
   serviceItemContainer: {
     width: '100%',
     flexDirection: 'row',
-    backgroundColor: Color.forth,
+    backgroundColor: Color.cover,
     borderRadius: 10,
-    justifyContent: 'space-around',
     alignItems: 'center',
-    paddingVertical: 5,
+    paddingHorizontal: 24,
+    paddingVertical: 8,
     marginBottom: 20,
   },
   serviceItemTextContainer: {
-    width: '55%',
+    width: '65%',
   },
   serviceItemName: {
     fontSize: 18,
@@ -105,8 +103,9 @@ const styles = StyleSheet.create({
     color: Color.primary,
   },
   serviceItemImg: {
-    width: 80,
-    height: 80,
+    width: 69,
+    height: 69,
+    marginRight: 20,
   },
   serviceRemove: {
     padding: 6,
@@ -116,21 +115,21 @@ const styles = StyleSheet.create({
   },
   serviceRemoveIcon: {
     fontSize: 18,
-    color: Color.primary
+    color: Color.primary,
   },
   //package item
   packageItemContainer: {
     width: '100%',
     flexDirection: 'row',
-    backgroundColor: Color.forth,
+    backgroundColor: Color.cover,
     borderRadius: 10,
-    justifyContent: 'space-evenly',
     alignItems: 'center',
-    paddingVertical: 5,
+    paddingHorizontal: 24,
+    paddingVertical: 8,
     marginBottom: 20,
   },
   packageItemTextContainer: {
-    width: '60%',
+    width: '65%',
   },
   packageItemName: {
     fontSize: 18,
@@ -142,8 +141,9 @@ const styles = StyleSheet.create({
     color: Color.primary,
   },
   packageItemImg: {
-    width: 80,
-    height: 80,
+    width: 69,
+    height: 69,
+    marginRight: 20,
   },
   //full name field
   fullNameContainer: {
@@ -156,8 +156,8 @@ const styles = StyleSheet.create({
   },
   fullNameInput: {
     borderRadius: 10,
-    paddingHorizontal: 10,
-    backgroundColor: Color.fifth,
+    padding: 12,
+    backgroundColor: Color.field,
     color: Color.primary,
   },
   //phone field
@@ -171,8 +171,8 @@ const styles = StyleSheet.create({
   },
   phoneInput: {
     borderRadius: 10,
-    paddingHorizontal: 10,
-    backgroundColor: Color.fifth,
+    padding: 12,
+    backgroundColor: Color.field,
     color: Color.primary,
   },
   //description field
@@ -185,10 +185,11 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   descriptionInput: {
-    height: 80,
+    paddingHorizontal: 12,
+    paddingVertical: 18,
     borderRadius: 10,
     paddingHorizontal: 10,
-    backgroundColor: Color.fifth,
+    backgroundColor: Color.field,
     color: Color.primary,
   },
   //media
@@ -210,7 +211,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: Color.fifth,
+    backgroundColor: Color.field,
     marginRight: 5,
     marginBottom: 5,
   },
@@ -235,7 +236,7 @@ const styles = StyleSheet.create({
     right: 5,
   },
   mediaRemoveIcon: {
-    color: Color.third,
+    color: Color.white,
     fontSize: 18,
   },
   //play video button
@@ -262,30 +263,151 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   addressInput: {
-    height: 50,
+    padding: 12,
     borderRadius: 10,
     paddingHorizontal: 10,
-    backgroundColor: Color.fifth,
+    backgroundColor: Color.field,
     color: Color.primary,
+  },
+  //promotion
+  promotionContainer: {
+    marginBottom: 25,
+  },
+  promotionBtnContainer: {
+    padding: 12,
+    flexDirection: 'row',
+    borderRadius: 10,
+    justifyContent: 'space-between',
+    backgroundColor: Color.field,
+    marginBottom: 10,
+  },
+  promotionBtnText: {
+    color: Color.primary,
+  },
+  promotionMain: {
+    flexDirection: 'row',
+  },
+  promotionMainContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 12,
+  },
+  promotionMainText: {
+    color: Color.primary,
+  },
+  promotionCancelBtn: {
+    paddingHorizontal: 12,
+  },
+  promotionCancelText: {
+    color: Color.red,
+    fontWeight: '500',
+  },
+  promotionIcon: {
+    fontSize: 16,
+    color: Color.primary,
+  },
+  //Request Service Item
+  requestServiceItem: {
+    width: '100%',
+    flexDirection: 'row',
+    paddingHorizontal: 16,
+    alignItems: 'center',
+    backgroundColor: Color.field,
+    borderRadius: 10,
+    height: 65,
+    marginBottom: 8,
+  },
+  requestServiceItemImg: {
+    width: 40,
+    height: 40,
+    marginRight: 16,
+  },
+  requestServiceItemName: {
+    width: '80%',
+    fontSize: 18,
+    color: Color.primary,
+  },
+  //error message from api
+  errorView: {
+    marginTop: 100,
+    alignItems: 'center',
+  },
+  errorMsg: {
+    fontSize: 16,
+    color: Color.primary,
+  },
+  errorImg: {
+    marginBottom: 20,
+    width: 100,
+    height: 100,
   },
   //request button
   confirmBtn: {
     width: '100%',
-    height: 45,
+    paddingVertical: 12,
     borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: Color.btn,
+    backgroundColor: Color.primary,
+    marginBottom: 15,
+  },
+  confirmLoadingBtn: {
+    width: '100%',
+    paddingVertical: 8,
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: Color.primary,
     marginBottom: 15,
   },
   confirmBtnText: {
     fontSize: 18,
     fontWeight: '500',
+    color: Color.white,
+  },
+  //promotion item
+  promotionItem: {
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: Color.promotion,
+    marginBottom: 8,
+    borderRadius: 10,
+  },
+  promotionInfo: {
+    width: '60%',
+    padding: 16,
+    borderRightWidth: 1,
+  },
+  promotionItemName: {
+    fontSize: 18,
+    fontWeight: '500',
     color: Color.primary,
+  },
+  promotionItemDescription: {
+    color: Color.primary,
+  },
+  promotionItemDate: {
+    width: '40%',
+    padding: 16,
+  },
+  promotionItemDateText: {
+    paddingVertical: 5,
+    color: Color.primary,
+  },
+  circle: {
+    backgroundColor: Color.white,
+    width: 40,
+    height: 40,
+    borderRadius: 50,
+    position: 'absolute',
+    top: 25,
+    right: -20,
   },
   //error message
   errorMessage: {
-    color: 'red',
+    color: Color.error,
+    marginTop: 5,
   },
 });
 export {styles};

@@ -9,27 +9,38 @@ import {
   actGetAllRequestServiceDetailsByRequestServiceIDRequest,
   actUpdateStatusRequestServiceDetailRequest,
   actGetContractByServiceRequestIDRequest,
+  actGetContractParentByServiceRequestReferenceRequest,
+  actResetContractParent,
+  actRequestUpdateContractRequest,
+  actApproveContractRequest,
 } from '../../../redux/actions/index';
 
 export default function RequestDetailContainer(props) {
   const {navigation} = props;
   //get param from previous page
   const {serviceRequest} = props.route.params;
+  //reduer --- user
+  const user = useSelector(state => state.user);
   //reducer --- requestDetail
   const requestDetail = useSelector(state => state.requestDetail);
   //reduer --- message
   const message = useSelector(state => state.message);
   //reduer --- contractInfo
   const contractInfo = useSelector(state => state.contractInfo);
+  //reduer --- contractParentInfo
+  const contractParentInfo = useSelector(state => state.contractParentInfo);
+  //get token
+  const token = 'Bearer ' + user.token;
 
   //get dispatch
   const dispatch = useDispatch();
   //call api --- get request service details by request service id
   const getAllRequestServiceDetailsByRequestServiceIDRequest =
-    serviceRequestId =>
+    (serviceRequestId, token) =>
       dispatch(
         actGetAllRequestServiceDetailsByRequestServiceIDRequest(
           serviceRequestId,
+          token,
         ),
       );
   //reset request detail
@@ -37,30 +48,53 @@ export default function RequestDetailContainer(props) {
   //reset message
   const resetMessage = () => dispatch(actResetMessage());
   //call api --- cancel request service
-  const cancelServiceRequestRequest = serviceRequestId =>
-    dispatch(actCancelServiceRequestRequest(serviceRequestId));
+  const cancelServiceRequestRequest = (serviceRequestId, token) =>
+    dispatch(actCancelServiceRequestRequest(serviceRequestId, token));
   //call api --- update status request service detail
-  const updateStatusRequestServiceDetail = (requestDetailId, status) =>
+  const updateStatusRequestServiceDetail = (requestDetailId, status, token) =>
     dispatch(
-      actUpdateStatusRequestServiceDetailRequest(requestDetailId, status),
+      actUpdateStatusRequestServiceDetailRequest(requestDetailId, status, token),
     );
   //call api --- get contract
-  const getContractByServiceRequestIDRequest = serviceRequestID =>
-    dispatch(actGetContractByServiceRequestIDRequest(serviceRequestID));
+  const getContractByServiceRequestIDRequest = (serviceRequestID, token) =>
+    dispatch(actGetContractByServiceRequestIDRequest(serviceRequestID, token));
+  //call api --- approve contract
+  const approveContract = (contractId, token) =>
+    dispatch(actApproveContractRequest(contractId, token));
+  //call api --- request update contract
+  const requestUpdateContract = (contractId, token) =>
+    dispatch(actRequestUpdateContractRequest(contractId, token));
+  //call api --- get contract parent information
+  const getContractParentByServiceRequestReference = (serviceRequestReference, token) =>
+    dispatch(
+      actGetContractParentByServiceRequestReferenceRequest(
+        serviceRequestReference,
+        token,
+      ),
+    );
+  //reset contract parent
+  const resetContractParent = () => dispatch(actResetContractParent());
 
   useEffect(() => {
     resetRequestDetail();
     getAllRequestServiceDetailsByRequestServiceIDRequest(
-      serviceRequest.serviceRequestId,
+      serviceRequest.serviceRequestId, token
     );
-    getContractByServiceRequestIDRequest(serviceRequest.serviceRequestId);
+    resetContractParent();
+    if (serviceRequest.serviceRequestReference !== null) {
+      getContractParentByServiceRequestReference(
+        serviceRequest.serviceRequestReference,
+        token,
+      );
+    }
+    getContractByServiceRequestIDRequest(serviceRequest.serviceRequestId, token);
     if (message === 'CANCEL_SERVICE_REQUEST_SUCCESS') {
       Alert.alert('Thông báo', 'Bạn đã hủy yêu cầu thành công', [
         {
           text: 'OK',
           onPress: () => {
             resetMessage();
-            navigation.goBack();
+            navigation.replace('ListRequestServiceContainer');
           },
         },
       ]);
@@ -77,7 +111,36 @@ export default function RequestDetailContainer(props) {
       Alert.alert('Thông báo', 'Đánh giá không thành công');
       resetMessage();
     }
+    if (message === 'APPROVE_CONTRACT_SUCCESS') {
+      Alert.alert('Thông báo', 'Bạn đã chấp thuận thành công');
+      resetMessage();
+    }
+    if (message === 'APPROVE_CONTRACT_FAILURE') {
+      Alert.alert('Thông báo', 'Có lỗi phát sinh, mời bạn thử lại');
+      resetMessage();
+    }
+    if (message === 'REQUEST_UPDATE_CONTRACT_SUCCESS') {
+      Alert.alert('Thông báo', 'Bạn đã yêu cầu sửa chữa thành công');
+      resetMessage();
+    }
+    if (message === 'REQUEST_UPDATE_CONTRACT_FAILURE') {
+      Alert.alert('Thông báo', 'Có lỗi phát sinh, mời bạn thử lại');
+      resetMessage();
+    }
   }, [message]);
+
+  //clear all reducers -> log out -> back to log in page
+  const onLogOut = () => {
+    //clear all reducers
+    clearData();
+    //navigate to home page
+    navigation.dispatch(
+      CommonActions.reset({
+        index: 1,
+        routes: [{name: 'LoginContainer'}],
+      }),
+    );
+  };
 
   //button --- happy service
   const onHappyService = requestDetailId => {
@@ -85,7 +148,7 @@ export default function RequestDetailContainer(props) {
       {
         text: 'Có',
         onPress: () => {
-          updateStatusRequestServiceDetail(requestDetailId, 11);
+          updateStatusRequestServiceDetail(requestDetailId, 11, token);
         },
       },
       {
@@ -100,7 +163,7 @@ export default function RequestDetailContainer(props) {
       {
         text: 'Có',
         onPress: () => {
-          updateStatusRequestServiceDetail(requestDetailId, 12);
+          updateStatusRequestServiceDetail(requestDetailId, 12, token);
         },
       },
       {
@@ -111,13 +174,19 @@ export default function RequestDetailContainer(props) {
 
   //button --- cancel request service
   const onCancelServiceRequest = serviceRequestId => {
-    cancelServiceRequestRequest(serviceRequestId);
+    cancelServiceRequestRequest(serviceRequestId, token);
   };
 
   //button --- show invoice page
-  const onShowInvoice = serviceRequestId => {
+  const onShowInvoice = (
+    serviceRequestId,
+    promotionId,
+    serviceRequestReference,
+  ) => {
     navigation.navigate('InvoiceContainer', {
       serviceRequestId: serviceRequestId,
+      promotionId: promotionId,
+      serviceRequestReference: serviceRequestReference,
     });
   };
 
@@ -140,17 +209,58 @@ export default function RequestDetailContainer(props) {
     });
   };
 
+  //button --- approve contract
+  const onApproveContract = contractId => {
+    approveContract(contractId, token);
+  };
+
+  //button --- request update contract
+  const onRequestUpdateContract = contractId => {
+    requestUpdateContract(contractId, token);
+  };
+
+  //button --- create service request
+  const onCreateServiceRequest = reworkService => {
+    //get list media url
+    const mediaURL = [];
+    serviceRequest.tblMedia.map((item, index) => {
+      mediaURL.push(item.mediaUrl);
+    });
+    const reworkDescription =
+      serviceRequest.serviceRequestDescription + ' (làm lại yêu cầu mới)';
+    //create requestService
+    const serviceRequestRework = {
+      customerId: user.id,
+      customerName: serviceRequest.customerName,
+      customerPhone: serviceRequest.customerPhone,
+      customerAddress: serviceRequest.customerAddress,
+      requestServicePackage: serviceRequest.serviceRequestPackage,
+      serviceList: reworkService,
+      requestServiceDescription: reworkDescription,
+      mediaList: null,
+      promotionID: serviceRequest.promotionId,
+      serviceRequestIDParent: serviceRequest.serviceRequestId,
+    };
+    navigation.navigate('ServiceRequestContainer', {
+      serviceRequestRework: serviceRequestRework,
+    });
+  };
+
   return (
     <RequestDetail
       serviceRequest={serviceRequest}
       requestDetail={requestDetail}
       contractInfo={contractInfo}
+      contractParentInfo={contractParentInfo}
       onCancelServiceRequest={onCancelServiceRequest}
       onHappyService={onHappyService}
       onUnhappyService={onUnhappyService}
       onDownloadContract={onDownloadContract}
       onViewContractDetail={onViewContractDetail}
+      onApproveContract={onApproveContract}
+      onRequestUpdateContract={onRequestUpdateContract}
       onShowInvoice={onShowInvoice}
+      onCreateServiceRequest={onCreateServiceRequest}
     />
   );
 }

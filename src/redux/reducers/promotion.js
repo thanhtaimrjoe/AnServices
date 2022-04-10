@@ -5,7 +5,7 @@ const myReducer = (state = inititalState, action) => {
     case types.CLEAR_DATA:
       state = inititalState;
       return state;
-    case types.GET_ALL_PROMOTION_BY_USER_ID:
+    case types.GET_ALL_PROMOTION_VALID_BY_USER_ID:
       state = action.promotion;
       return state;
     default:

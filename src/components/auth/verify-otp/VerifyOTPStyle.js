@@ -3,16 +3,15 @@ import Color from '../../../style/Color';
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: Color.background1,
+    backgroundColor: Color.background,
     height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 16,
   },
   image: {
-    width: 300,
-    height: 240,
-    marginBottom: 28,
+    width: 305,
+    height: 222,
+    marginBottom: 20,
   },
   bigText: {
     color: Color.primary,
@@ -23,14 +22,13 @@ const styles = StyleSheet.create({
   smallText: {
     color: Color.primary,
     fontSize: 14,
-    width: 262,
     marginBottom: 20,
     textAlign: 'center',
   },
   //resend
   resendContainer: {
     flexDirection: 'row',
-    marginBottom: 25,
+    marginBottom: 20,
   },
   resendText: {
     color: Color.primary,
@@ -41,30 +39,31 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   otpContainer: {
-    width: 270,
+    width: '80%',
     height: 50,
     marginBottom: 20,
   },
   otpField: {
-    width: 40,
-    height: 40,
+    width: 45,
+    height: 45,
     backgroundColor: 'white',
     borderRadius: 10,
+    borderColor: Color.primary,
     color: Color.primary,
   },
   button: {
-    width: 262,
-    height: 48,
-    borderRadius: 30,
+    width: '80%',
+    paddingVertical: 12,
+    borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: Color.btn,
+    backgroundColor: Color.primary,
     marginBottom: 20,
   },
   buttonText: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: Color.primary,
+    color: Color.white,
   },
 });
 export {styles};

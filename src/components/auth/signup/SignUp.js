@@ -34,15 +34,15 @@ export default function SignUp(props) {
     setEmailError('');
     setAddressError('');
     if (fullName.trim().length === 0) {
-      setFullNameError('Họ và tên nhập không đúng');
+      setFullNameError('Bạn chưa nhập họ và tên');
       result = false;
     }
     if (email.trim().length === 0) {
-      setEmailError('Email nhập không đúng');
+      setEmailError('Bạn chưa nhập email');
       result = false;
     }
     if (address.trim().length === 0) {
-      setAddressError('Địa chỉ nhập không đúng');
+      setAddressError('Bạn chưa nhập địa chỉ');
       result = false;
     }
     return result;
@@ -99,11 +99,10 @@ export default function SignUp(props) {
               placeholderTextColor={Color.placeholder}
               onChangeText={text => setInviteCode(text)}
             />
-            <Text style={styles.errorMsg}>{addressError}</Text>
           </View>
           {loading ? (
-            <View style={styles.button} onPress={onCreateCustomerAccount}>
-              <ActivityIndicator size={'large'} color={Color.primary} />
+            <View style={styles.buttonLoading}>
+              <ActivityIndicator size={'large'} color={Color.white} />
             </View>
           ) : (
             <TouchableOpacity

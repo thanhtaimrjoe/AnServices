@@ -4,7 +4,6 @@ import {styles} from '../style/HeaderStyle';
 import Color from '../style/Color';
 import PersonalContainer from '../containers/personal/main/PersonalContainer';
 import ShareToFriendContainer from '../containers/personal/share-to-friend/ShareToFriendContainer';
-import CodeReedemContainer from '../containers/personal/code-reedem/CodeReedemContainer';
 import PromotionManagementContainer from '../containers/personal/promotion-management/PromotionManagementContainer';
 import InviteCodeContainer from '../containers/personal/invite-code/InviteCodeContainer';
 
@@ -12,7 +11,7 @@ const Stack = createNativeStackNavigator();
 export default function PersonalStack() {
   return (
     <Stack.Navigator>
-        <Stack.Screen
+      <Stack.Screen
         name="PersonalContainer"
         component={PersonalContainer}
         options={{headerShown: false}}
@@ -24,7 +23,7 @@ export default function PersonalStack() {
           title: 'Giới thiệu cho bạn bè',
           headerTitleStyle: styles.headerTitle,
           headerTintColor: Color.primary,
-          headerTitleAlign: 'center'
+          headerTitleAlign: 'center',
         }}
       />
       <Stack.Screen
@@ -34,7 +33,7 @@ export default function PersonalStack() {
           title: 'Nhận mã giới thiệu',
           headerTitleStyle: styles.headerTitle,
           headerTintColor: Color.primary,
-          headerTitleAlign: 'center'
+          headerTitleAlign: 'center',
         }}
       />
       <Stack.Screen
@@ -44,7 +43,7 @@ export default function PersonalStack() {
           title: 'Quản lý voucher',
           headerTitleStyle: styles.headerTitle,
           headerTintColor: Color.primary,
-          headerTitleAlign: 'center'
+          headerTitleAlign: 'center',
         }}
       />
     </Stack.Navigator>
