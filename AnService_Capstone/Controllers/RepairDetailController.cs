@@ -1,5 +1,6 @@
 ﻿using AnService_Capstone.Core.Interfaces;
 using AnService_Capstone.Core.Models.Response;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -51,6 +52,7 @@ namespace AnService_Capstone.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("[action]")]
+        [Authorize(Roles = "Staff, Worker")]
         public async Task<IActionResult> GetRepairDetailByServiceRequestID(int requestServiceId)
         {
             if (requestServiceId == 0)

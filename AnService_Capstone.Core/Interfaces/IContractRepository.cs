@@ -12,6 +12,8 @@ namespace AnService_Capstone.Core.Interfaces
     {
         public Task<IEnumerable<TblContract>> GetContractListByUserID(int id);
 
+        public Task<IEnumerable<TblContract>> GetContractList(int quarter, int year);
+
         public Task<bool> UpdateStatusContract(int id, int status);
 
         /*public Task<bool> ApproveContract(int id);*/

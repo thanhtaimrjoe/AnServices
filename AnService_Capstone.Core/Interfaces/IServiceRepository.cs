@@ -79,7 +79,9 @@ namespace AnService_Capstone.Core.Interfaces
 
         /*public Task<IEnumerable<int>> AmountOfSaleList2(int year, int status);*/
 
-        public Task<IEnumerable<Dashboard.AmountOfSalesInYear>> SumRevenueByYear(int year);
+        public Task<IEnumerable<Dashboard.AmountOfSalesInYear>> SumRevenueOfInvoiceByYear(int quarter, int year);
+
+        public Task<IEnumerable<Dashboard.AmountOfSalesInYear>> SumRevenueOfContractByYear(int quarter, int year);
 
         public Task<Dashboard.ServiceStatusStatistic> CountServiceStatus();
 

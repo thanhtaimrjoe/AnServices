@@ -230,5 +230,18 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
                 return res.FirstOrDefault();
             }
         }
+
+        public async Task<IEnumerable<TblContract>> GetContractList(int quarter, int year)
+        {
+            var query = "select * from tblContract where YEAR(ContractCreateDate) = @ContractCreateDate and DATEPART(QUARTER,ContractCreateDate) = @Quarter";
+
+            using (var conn = _context.CreateConnection())
+            {
+                conn.Open();
+                var res = await conn.QueryAsync<TblContract>(query, new { @ContractCreateDate = year, @Quarter = quarter });
+                conn.Close();
+                return res;
+            }
+        }
     }
 }

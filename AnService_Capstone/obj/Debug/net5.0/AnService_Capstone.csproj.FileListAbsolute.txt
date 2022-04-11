@@ -400,8 +400,6 @@ E:\Capstone\Backup_API\AnService_Capstone\bin\Debug\net5.0\ref\AnService_Capston
 E:\Capstone\Backup_API\AnService_Capstone\bin\Debug\net5.0\AnService_Capstone.pdb
 E:\Capstone\Backup_API\AnService_Capstone\bin\Debug\net5.0\AnService_Capstone.xml
 E:\Capstone\Backup_API\AnService_Capstone\bin\Debug\net5.0\Dapper.dll
-E:\Capstone\Backup_API\AnService_Capstone\bin\Debug\net5.0\Firebase.Auth.dll
-E:\Capstone\Backup_API\AnService_Capstone\bin\Debug\net5.0\Firebase.Storage.dll
 E:\Capstone\Backup_API\AnService_Capstone\bin\Debug\net5.0\Humanizer.dll
 E:\Capstone\Backup_API\AnService_Capstone\bin\Debug\net5.0\MailKit.dll
 E:\Capstone\Backup_API\AnService_Capstone\bin\Debug\net5.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
@@ -423,7 +421,6 @@ E:\Capstone\Backup_API\AnService_Capstone\bin\Debug\net5.0\Microsoft.IdentityMod
 E:\Capstone\Backup_API\AnService_Capstone\bin\Debug\net5.0\Microsoft.IdentityModel.Protocols.dll
 E:\Capstone\Backup_API\AnService_Capstone\bin\Debug\net5.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
 E:\Capstone\Backup_API\AnService_Capstone\bin\Debug\net5.0\Microsoft.IdentityModel.Tokens.dll
-E:\Capstone\Backup_API\AnService_Capstone\bin\Debug\net5.0\System.ServiceModel.dll
 E:\Capstone\Backup_API\AnService_Capstone\bin\Debug\net5.0\Microsoft.OpenApi.dll
 E:\Capstone\Backup_API\AnService_Capstone\bin\Debug\net5.0\MimeKit.dll
 E:\Capstone\Backup_API\AnService_Capstone\bin\Debug\net5.0\NCrontab.dll

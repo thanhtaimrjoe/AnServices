@@ -3,7 +3,6 @@ using AnService_Capstone.DataAccess.Dapper.Context;
 using AnService_Capstone.DataAccess.Dapper.Customize;
 using AnService_Capstone.DataAccess.Dapper.Repositories;
 using AnService_Capstone.DataAccess.Dapper.Services.BackgroundService;
-using AnService_Capstone.DataAccess.Dapper.Services.Firebase;
 using AnService_Capstone.DataAccess.Dapper.Services.SendEmail;
 using AnService_Capstone.DataAccess.Dapper.Services.SendSMS;
 using AnService_Capstone.DataAccess.Dapper.TokenGenerator;
@@ -118,7 +117,6 @@ namespace AnService_Capstone
             services.AddScoped<RefreshTokenGenerator>();
             services.AddScoped<UtilHelper>();
             services.AddScoped<TwilioService>();
-            services.AddScoped<FirebaseService>();
 
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IServiceRepository, ServiceRepository>();
@@ -139,7 +137,6 @@ namespace AnService_Capstone
             .Get<EmailConfiguration>();
 
             services.AddSingleton(emailConfig);
-            services.AddControllers();
             services.Configure<FormOptions>(o => {
                 o.ValueLengthLimit = int.MaxValue;
                 o.MultipartBodyLengthLimit = int.MaxValue;
@@ -153,11 +150,10 @@ namespace AnService_Capstone
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "AnService_Capstone v1"));
             }
 
-            app.UseHttpsRedirection();
+            app.UseSwagger();
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "AnService_Capstone v1"));
 
             app.UseCors("MyAllowSpecificOrigins");
 

@@ -3,7 +3,6 @@ using AnService_Capstone.Core.Interfaces;
 using AnService_Capstone.Core.Models.Request;
 using AnService_Capstone.Core.Models.Response;
 using AnService_Capstone.DataAccess.Dapper.Customize;
-using AnService_Capstone.DataAccess.Dapper.Services.Firebase;
 using AnService_Capstone.DataAccess.Dapper.Services.SendSMS;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -23,20 +22,23 @@ namespace AnService_Capstone.Controllers
         private readonly IServiceRepository _serviceRepository;
         private readonly TwilioService _twilioService;
         private readonly IUserRepository _userRepository;
-        private readonly FirebaseService _firebaseService;
         private readonly UtilHelper _utilHelper;
         private readonly IRepairDetail _repariRepository;
         private readonly IPromotionRepository _promotionRepository;
+        private readonly IInvoiceRepository _invoiceRepository;
+        private readonly IContractRepository _contractRepository;
         public ServiceController(IServiceRepository serviceRepository, TwilioService twilioService, IUserRepository userRepository,
-            FirebaseService firebaseService, UtilHelper utilHelper, IRepairDetail repariRepository, IPromotionRepository promotionRepository)
+            UtilHelper utilHelper, IRepairDetail repariRepository, IPromotionRepository promotionRepository, IInvoiceRepository invoiceRepository,
+            IContractRepository contractRepository)
         {
             _serviceRepository = serviceRepository;
             _twilioService = twilioService;
             _userRepository = userRepository;
-            _firebaseService = firebaseService;
             _utilHelper = utilHelper;
             _repariRepository = repariRepository;
             _promotionRepository = promotionRepository;
+            _invoiceRepository = invoiceRepository;
+            _contractRepository = contractRepository;
         }
 
         /// <summary>
@@ -46,6 +48,7 @@ namespace AnService_Capstone.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("[action]")]
+        [Authorize(Roles = "Staff, Customer")]
         public async Task<IActionResult> CreateServiceRequest(CreateService model)
         {
             if (!ModelState.IsValid)
@@ -67,7 +70,7 @@ namespace AnService_Capstone.Controllers
             }
             if (serviceDetail != false && media != false)
             {
-                /*var check = await _serviceRepository.CheckServiceRequestByUserIDOfTheDay(model.CustomerId);
+                var check = await _serviceRepository.CheckServiceRequestByUserIDOfTheDay(model.CustomerId);
                 if (!check)
                 {
                     var user = await _userRepository.GetCustomerByID(model.CustomerId);
@@ -75,8 +78,8 @@ namespace AnService_Capstone.Controllers
                     _twilioService.SendSMS(formatPhone, "Tài khoản của bạn đã bị khóa vì bạn đã gửi hơn 3 yêu cầu dịch vụ. ");
                     _ = _userRepository.UpdateStatusUserByID(model.CustomerId, 10);
                     return BadRequest(new ErrorResponse("Your account has been banned"));
-                    *//*return Ok("Your account has been banned");*//*
-                }*/
+                    /*return Ok("Your account has been banned");*/
+                }
                 if (model.PromotionID != 0)
                 {
                     _ = await _promotionRepository.UpdateStatusPromotion(model.PromotionID, 0);
@@ -93,6 +96,7 @@ namespace AnService_Capstone.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("[action]")]
+        [Authorize(Roles = "Staff")]
         public async Task<IActionResult> AssignWorkerToRequest(AssignJob job)
         {
             if (!ModelState.IsValid)
@@ -131,14 +135,18 @@ namespace AnService_Capstone.Controllers
                 }
             }
 
-            if (res)
+            _ = await _serviceRepository.UpdateStatusServiceRequestDetail(job.RequestDetailId, 6);
+            _ = await _serviceRepository.UpdateStatusServiceRequest(detail.ServiceRequestId, 6);
+            return Ok("Create Successfull");
+
+            /*if (res)
             {
                 _ = await _serviceRepository.UpdateStatusServiceRequestDetail(job.RequestDetailId, 6);
                 _ = await _serviceRepository.UpdateStatusServiceRequest(detail.ServiceRequestId, 6);
                 return Ok("Create Successfull");
                 
-            }
-            return BadRequest(new ErrorResponse("Create Fail"));
+            }*/
+            /*return BadRequest(new ErrorResponse("Create Fail"));*/
         }
 
         /*[HttpPost]
@@ -195,7 +203,7 @@ namespace AnService_Capstone.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("[action]")]
-        /*[Authorize(Roles = "Customer")]*/
+        [Authorize(Roles = "Staff, Customer")]
         public async Task<IActionResult> GetServiceRequestByID(int id)
         {
             if (id == 0)
@@ -219,7 +227,7 @@ namespace AnService_Capstone.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("[action]")]
-        /*[Authorize(Roles = "Customer")]*/
+        [Authorize(Roles = "Staff, Customer")]
         public async Task<IActionResult> GetAllServiceRequestStatusOrDate(int ServiceRequestStatus, string ServiceRequestCreateDate)
         {
             IEnumerable<TblServiceRequest> service;
@@ -289,7 +297,7 @@ namespace AnService_Capstone.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("[action]")]
-        /*[Authorize(Roles = "Customer")]*/
+        [Authorize(Roles = "Customer")]
         public async Task<IActionResult> GetAllServiceRequestByUserID(int id)
         {
             if (id == 0)
@@ -312,7 +320,7 @@ namespace AnService_Capstone.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("[action]")]
-        /*[Authorize(Roles = "Customer")]*/
+        [Authorize(Roles = "Customer")]
         public async Task<IActionResult> GetServiceByName(string name)
         {
             var service = await _serviceRepository.GetServiceByName(name);
@@ -329,7 +337,7 @@ namespace AnService_Capstone.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("[action]")]
-        /*[Authorize(Roles = "Customer")]*/
+        [Authorize(Roles = "Customer")]
         public async Task<IActionResult> GetAllService()
         {
             var service = await _serviceRepository.GetAllService();
@@ -348,6 +356,7 @@ namespace AnService_Capstone.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("[action]")]
+        [Authorize(Roles = "Worker")]
         public async Task<IActionResult> GetAllServiceRequestByWorkerID(int id, int status)
         {
             if (id == 0)
@@ -389,6 +398,7 @@ namespace AnService_Capstone.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("[action]")]
+        [Authorize(Roles = "Staff, Customer, Worker")]
         public async Task<IActionResult> GetAllServiceRequestDetailsByServiceRequestID(int id)
         {
             if (id == 0)
@@ -413,6 +423,7 @@ namespace AnService_Capstone.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("[action]")]
+        [Authorize(Roles = "Worker")]
         public async Task<IActionResult> GetAllServiceRequestDetailsByServiceRequestIDAndWorkerID(int requestID, int workerID)
         {
             if (requestID == 0)
@@ -442,6 +453,7 @@ namespace AnService_Capstone.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("[action]")]
+        [Authorize(Roles = "Customer")]
         public async Task<IActionResult> GetServiceRequestByUserIDAndStatus(int id, int status)
         {
             if (id == 0)
@@ -469,6 +481,7 @@ namespace AnService_Capstone.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("[action]")]
+        [Authorize(Roles = "Staff")]
         public async Task<IActionResult> CountSatisfiedRequestDetail()
         {
             var res = await _serviceRepository.CountRequestServiceDetail(11);
@@ -481,6 +494,7 @@ namespace AnService_Capstone.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("[action]")]
+        [Authorize(Roles = "Staff")]
         public async Task<IActionResult> CountUnsatisfiedRequestDetail()
         {
             var res = await _serviceRepository.CountRequestServiceDetail(12);
@@ -493,6 +507,7 @@ namespace AnService_Capstone.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("[action]")]
+        [Authorize(Roles = "Staff")]
         public async Task<IActionResult> CountReworkRequestDetail()
         {
             var res = await _serviceRepository.CountRequestServiceDetail(16);
@@ -543,10 +558,16 @@ namespace AnService_Capstone.Controllers
             return Ok(res);
         }*/
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="quarter">Quý trong năm</param>
+        /// <param name="year"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route("[action]")]
         /*[Authorize(Roles = "Staff")]*/
-        public async Task<IActionResult> Dashboard(int year)
+        public async Task<IActionResult> Dashboard(int quarter, int year)
         {
             Dashboard dashboard = new Dashboard();
 
@@ -557,41 +578,47 @@ namespace AnService_Capstone.Controllers
 
             var res1 = await _serviceRepository.AmountOfSaleList(year, 0);
             var res2 = await _serviceRepository.CountServiceStatus();
-            var res3 = await _promotionRepository.CountPromotionIsUsed();
+            /*var res3 = await _promotionRepository.CountPromotionIsUsed();*/
             var res4 = await _serviceRepository.CountRequestServiceDetail(11);
             var res5 = await _serviceRepository.CountRequestServiceDetail(12);
-            var res6 = await _serviceRepository.SumRevenueByYear(year);
+            var res6 = await _serviceRepository.SumRevenueOfInvoiceByYear(quarter, year);
             var res7 = await _serviceRepository.CountRequestServiceDetail(16);
             var res8 = await _serviceRepository.AmountOfSaleList(year, 1);
             var res9 = await _serviceRepository.AmountOfSaleList(year, 2);
             var res10 = await _userRepository.GetAllCustomers(null, "", "");
             var res11 = await _userRepository.GetAllCustomers("10", "", "");
-            var res12 = await _userRepository.GetAllNewUsersInMonth(DateTime.Now.Month, 3, 4);
-            var res13 = await _userRepository.GetAllWorker(null, "", "");
-            var res14 = await _userRepository.GetAllNewUsersInMonth(DateTime.Now.Month, 2, 4);
-            var res15 = await _userRepository.GetAllNewUsersInMonth(DateTime.Now.Month, 2, 10);
-            var res16 = await _promotionRepository.CountPromotionIsUsedInMonth(DateTime.Now.Month);
-            var res17 = await _promotionRepository.CountPromotionIsUsedInYear(year);
+            var res12 = await _userRepository.GetAllNewUsersInMonth(quarter, year, 3, 4);
+            /*var res13 = await _userRepository.GetAllWorker(null, "", "");
+            var res14 = await _userRepository.GetAllNewUsersInMonth(DateTime.Now.Month, 2, 4);*/
+            var res15 = await _userRepository.GetAllNewUsersInMonth(quarter, year, 3, 10);
+            /*var res16 = await _promotionRepository.CountPromotionIsUsedInMonth(DateTime.Now.Month);
+            var res17 = await _promotionRepository.CountPromotionIsUsedInYear(year);*/
             var res18 = await _serviceRepository.CountTaskOfWorker();
+            var res19 = await _serviceRepository.SumRevenueOfContractByYear(quarter, year);
+            var res20 = await _invoiceRepository.GetListInfomationInvoiceByServiceRequestID(year, quarter);
+            var res21 = await _contractRepository.GetContractList(quarter, year);
 
             dashboard.ReceivedServiceRequest = res1.FirstOrDefault();
             dashboard.ServiceStatusStatistics = res2;
-            dashboard.PromotionIsUsed = res3;
+            /*dashboard.PromotionIsUsed = res3;*/
             dashboard.SatisfiedRequestDetail = res4;
             dashboard.UnsatisfiedRequestDetail = res5;
-            dashboard.RevenueByYear = res6.FirstOrDefault();
+            dashboard.RevenueOfInvoiceByYear = res6.FirstOrDefault();
             dashboard.ReworkRequestDetail = res7;
             dashboard.CompleteServiceRequest = res8.FirstOrDefault();
             dashboard.CancelServiceRequest = res9.FirstOrDefault();
             dashboard.TotalCustomers = res10.Count();
             dashboard.AmountOfBanCustomers = res11.Count();
             dashboard.AmountOfNewCustomersInMonth = res12.Count();
-            dashboard.TotalWorkers = res13.Count();
-            dashboard.AmountOfNewWorkersInMonth = res14.Count();
+            /*dashboard.TotalWorkers = res13.Count();
+            dashboard.AmountOfNewWorkersInMonth = res14.Count();*/
             dashboard.AmountOfBanCustomersInMonth = res15.Count();
-            dashboard.PromotionIsUsedInMonth = res16;
-            dashboard.PromotionIsUsedInYear = res17;
+            /*dashboard.PromotionIsUsedInMonth = res16;
+            dashboard.PromotionIsUsedInYear = res17;*/
             dashboard.WorkerTasks = res18;
+            dashboard.RevenueOfContractByYear = res19.FirstOrDefault();
+            dashboard.InvoiceList = res20;
+            dashboard.ContractList = res21;
 
             return Ok(dashboard);
         }
@@ -658,6 +685,7 @@ namespace AnService_Capstone.Controllers
         /// <returns></returns>
         [HttpPut]
         [Route("[action]")]
+        [Authorize(Roles = "Customer")]
         public async Task<IActionResult> CancelServiceRequestForCustomer(int id)
         {
             if (id == 0)
@@ -687,6 +715,7 @@ namespace AnService_Capstone.Controllers
         /// <returns></returns>
         [HttpPut]
         [Route("[action]")]
+        [Authorize(Roles = "Staff")]
         public async Task<IActionResult> CancelServiceRequestForStaff(int id)
         {
             if (id == 0)
@@ -711,6 +740,7 @@ namespace AnService_Capstone.Controllers
 
         [HttpPut]
         [Route("[action]")]
+        [Authorize(Roles = "Customer")]
         public async Task<IActionResult> UpdateStatusServiceRequestDetail(int id, int status)
         {
             if (id == 0)
@@ -753,6 +783,7 @@ namespace AnService_Capstone.Controllers
 
         [HttpPut]
         [Route("[action]")]
+        [Authorize(Roles = "Staff")]
         public async Task<IActionResult> CompleteServiceRequest(int serviceRequestID)
         {
             if (serviceRequestID == 0)
@@ -772,11 +803,19 @@ namespace AnService_Capstone.Controllers
 
         [HttpPut]
         [Route("[action]")]
+        [Authorize(Roles = "Staff")]
         public async Task<IActionResult> SurveyingServiceRequest(int serviceRequestID)
         {
             if (serviceRequestID == 0)
             {
                 return BadRequest(new ErrorResponse("Please enter serviceRequestID"));
+            }
+
+            var service = await _serviceRepository.GetServiceRequestByID(serviceRequestID);
+
+            if (service.ServiceRequestStatus != 2)
+            {
+                return BadRequest(new ErrorResponse("Request has been canceled"));
             }
 
             var res = await _serviceRepository.UpdateStatusServiceRequest(serviceRequestID, 15);
@@ -791,6 +830,7 @@ namespace AnService_Capstone.Controllers
 
         [HttpPut]
         [Route("[action]")]
+        [Authorize(Roles = "Staff")]
         public async Task<IActionResult> ReworkRequestDetail(int requestDetailID)
         {
             if (requestDetailID == 0)
@@ -857,6 +897,7 @@ namespace AnService_Capstone.Controllers
 
         [HttpDelete]
         [Route("[action]")]
+        [Authorize(Roles = "Staff")]
         public async Task<IActionResult> RemoveListServiceRequest(IEnumerable<int> requestServiceID)
         {
             bool result = false;
@@ -877,7 +918,7 @@ namespace AnService_Capstone.Controllers
             return Ok("Cancel Successful");
         }
 
-        [HttpGet]
+        /*[HttpGet]
         [Route("[action]")]
         public async Task<IActionResult> Test(int id)
         {
@@ -899,7 +940,7 @@ namespace AnService_Capstone.Controllers
                 return NotFound(new ErrorResponse("No Request Service Availabe"));
             }
             return Ok(result);
-        }
+        }*/
 
         /*[HttpGet]
         [Route("[action]")]

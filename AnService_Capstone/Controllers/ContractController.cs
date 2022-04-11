@@ -2,7 +2,6 @@
 using AnService_Capstone.Core.Interfaces;
 using AnService_Capstone.Core.Models.Request;
 using AnService_Capstone.Core.Models.Response;
-using AnService_Capstone.DataAccess.Dapper.Services.Firebase;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -19,21 +18,19 @@ namespace AnService_Capstone.Controllers
     public class ContractController : ControllerBase
     {
         private readonly IContractRepository _contractRepository;
-        private readonly FirebaseService _firebaseService;
         private readonly IServiceRepository _serviceRepository;
         private readonly IPromotionRepository _promotionRepository;
 
-        public ContractController(IContractRepository contractRepository, FirebaseService firebaseService, IServiceRepository serviceRepository, IPromotionRepository promotionRepository)
+        public ContractController(IContractRepository contractRepository, IServiceRepository serviceRepository, IPromotionRepository promotionRepository)
         {
             _contractRepository = contractRepository;
-            _firebaseService = firebaseService;
             _serviceRepository = serviceRepository;
             _promotionRepository = promotionRepository;
         }
 
         [HttpGet]
         [Route("[action]")]
-        [Authorize(Roles = "Staff")]
+        [Authorize(Roles = "Staff, Customer")]
         public async Task<IActionResult> GetContractListByUserID(int id)
         {
             if (id == 0)

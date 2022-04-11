@@ -2,22 +2,13 @@
 using AnService_Capstone.Core.Models.Request;
 using AnService_Capstone.Core.Models.Response;
 using AnService_Capstone.DataAccess.Dapper.Customize;
-using AnService_Capstone.DataAccess.Dapper.Services.SendEmail;
 using AnService_Capstone.DataAccess.Dapper.Services.SendSMS;
 using AnService_Capstone.DataAccess.Dapper.TokenGenerator;
-using Microsoft.AspNetCore.Cors;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text.Json;
 using System.Threading.Tasks;
-
-using Twilio;
-using Twilio.Clients;
-using Twilio.Rest.Api.V2010.Account;
-using Twilio.Types;
 
 namespace AnService_Capstone.Controllers
 {
@@ -33,12 +24,10 @@ namespace AnService_Capstone.Controllers
         private readonly TwilioService _twilioService;
         private readonly UtilHelper _utilHelper;
         private readonly IInviteCodeRepository _inviteCodeRepository;
-        private readonly IEmailSender _emailSender;
 
         public UserController(IUserRepository userRepository, AccessTokenGenerator accessTokenGenerator, 
             RefreshTokenGenerator refreshTokenGenerator, UtilHelper otpGenerator,
-            IPromotionRepository promotionRepository, TwilioService twilioService, UtilHelper   utilHelper, IInviteCodeRepository inviteCodeRepository, 
-            IEmailSender emailSender)
+            IPromotionRepository promotionRepository, TwilioService twilioService, UtilHelper   utilHelper, IInviteCodeRepository inviteCodeRepository)
         {
             _userRepository = userRepository;
             _accessTokenGenerator = accessTokenGenerator;
@@ -48,7 +37,6 @@ namespace AnService_Capstone.Controllers
             _twilioService = twilioService;
             _utilHelper = utilHelper;
             _inviteCodeRepository = inviteCodeRepository;
-            _emailSender = emailSender;
         }
 
 
@@ -78,16 +66,19 @@ namespace AnService_Capstone.Controllers
             return Ok(token);
         }
 
-        [HttpPost]
+        /*[HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> SendEmail(IFormFileCollection files, int userID)
+        *//*[DisableFormValueModelBinding]*//*
+        public async Task<IActionResult> SendEmailint (int serviceRequestID)
         {
-            /*files = Request.Form.Files.Any() ? Request.Form.Files : new FormFileCollection();*/
+            *//*files = Request.Form.Files.Any() ? Request.Form.Files : new FormFileCollection();*//*
+            var service = await _
             var customer = await _userRepository.GetCustomerByID(userID);
-            var message = new Message(customer.Email, "Hóa đơn cho dịch vụ sửa chữa", "Chào " + customer.FullName + "<br>AnService gửi đến anh/chị hóa đơn dịch vụ sửa chữa", files);
+            var content = "";
+            var message = new Message(customer.Email, "Hóa đơn cho dịch vụ sửa chữa", "Chào " + customer.FullName + "<br>AnService gửi đến anh/chị hóa đơn dịch vụ sửa chữa");
             await _emailSender.SendEmailAsync(message);
             return Ok();
-        }
+        }*/
 
         /// <summary>
         /// login bằng số điện thoại cho customer hoặc worker
@@ -132,6 +123,7 @@ namespace AnService_Capstone.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("[action]")]
+        [Authorize(Roles = "Customer")]
         public IActionResult SendSms([FromBody] SmsMessage model)
         {
             var code = _otpGenerator.GeneratorOTP();
@@ -247,6 +239,7 @@ namespace AnService_Capstone.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("[action]")]
+        [Authorize(Roles = "Staff")]
         //get worker group by job by service id
         public async Task<IActionResult> GetWorkerByServiceID(int id)
         {
@@ -266,6 +259,7 @@ namespace AnService_Capstone.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("[action]")]
+        [Authorize(Roles = "Staff, Worker")]
         public async Task<IActionResult> GetWorkerById(int id)
         {
             if (id == 0)
@@ -306,6 +300,7 @@ namespace AnService_Capstone.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("[action]")]
+        [Authorize(Roles = "Staff")]
         public async Task<IActionResult> GetAllWorker(int typeJobId, string fullName, string phoneNumber)
         {
             IEnumerable<UserViewModel> res;
@@ -358,6 +353,7 @@ namespace AnService_Capstone.Controllers
         /// <returns></returns>
         [HttpPut]
         [Route("[action]")]
+        [Authorize(Roles = "Staff")]
         public async Task<IActionResult> RemoveWorker(int id)
         {
             if (id == 0)
@@ -381,6 +377,7 @@ namespace AnService_Capstone.Controllers
         /// <returns></returns>
         [HttpPut]
         [Route("[action]")]
+        [Authorize(Roles = "Staff")]
         public async Task<IActionResult> UpdateWorker([FromBody]UpdateWorker worker)
         {
             if (!ModelState.IsValid)
@@ -434,6 +431,7 @@ namespace AnService_Capstone.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("[action]")]
+        [Authorize(Roles = "Staff")]
         public async Task<IActionResult> CreateWorkerAccount([FromBody]CreateWorker model)
         {
             if (!ModelState.IsValid)
@@ -479,6 +477,7 @@ namespace AnService_Capstone.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("[action]")]
+        [Authorize(Roles = "Staff")]
         public async Task<IActionResult> GetAllCustomers(int status, string fullname, string phoneNumber)
         {
             IEnumerable<UserViewModel> res;
@@ -527,6 +526,7 @@ namespace AnService_Capstone.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("[action]")]
+        [Authorize(Roles = "Staff, Customer")]
         public async Task<IActionResult> GetCustomerById(int id)
         {
             if (id == 0)
@@ -550,6 +550,7 @@ namespace AnService_Capstone.Controllers
         /// <returns></returns>
         [HttpPut]
         [Route("[action]")]
+        [Authorize(Roles = "Staff")]
         public async Task<IActionResult> BanUserByUserID(int id)
         {
             if (id == 0)
@@ -576,6 +577,7 @@ namespace AnService_Capstone.Controllers
         /// <returns></returns>
         [HttpPut]
         [Route("[action]")]
+        [Authorize(Roles = "Staff")]
         public async Task<IActionResult> UnBanUserByUserID(int id)
         {
             if (id == 0)
@@ -593,6 +595,7 @@ namespace AnService_Capstone.Controllers
 
         [HttpPut]
         [Route("[action]")]
+        [Authorize(Roles = "Customer")]
         public async Task<IActionResult> ChangePhoneNumber(int userID, string phoneNumber)
         {
             if (userID == 0)
@@ -617,6 +620,39 @@ namespace AnService_Capstone.Controllers
                 return BadRequest(new ErrorResponse("Update Fail"));
             }
             return Ok("Update Successful");
+        }
+
+        [HttpPut]
+        [Route("[action]")]
+        [Authorize(Roles = "Customer")]
+        public async Task<IActionResult> UpdateCustomer(UpdateCustomer model)
+        {
+            if (model.Email == null)
+            {
+                model.Email = "";
+            }
+
+            if (model.Address == null)
+            {
+                model.Address = "";
+            }
+
+            if (model.FullName == null)
+            {
+                model.FullName = "";
+            }
+
+            if (model.CustomerId == 0)
+            {
+                return BadRequest(new ErrorResponse("Please enter id"));
+            }
+
+            var res = await _userRepository.UpdateCustomer(model);
+            if (res)
+            {
+                return Ok("Update Successfull");
+            }
+            return BadRequest(new ErrorResponse("Update Fail"));
         }
     }
 }

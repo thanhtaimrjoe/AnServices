@@ -15,5 +15,7 @@ namespace AnService_Capstone.Core.Interfaces
         public Task<TblInvoice> CheckInvoiceExist(int id);
 
         public Task<ContractViewModel> GetInfomationInvoiceByServiceRequestID(int id);
+
+        public Task<IEnumerable<ContractViewModel>> GetListInfomationInvoiceByServiceRequestID(int year, int quarter);
     }
 }

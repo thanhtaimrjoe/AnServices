@@ -445,14 +445,21 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             }
         }
 
-        public async Task<IEnumerable<UserViewModel>> GetAllNewUsersInMonth(int month, int role, int status)
+        public async Task<IEnumerable<UserViewModel>> GetAllNewUsersInMonth(int quarter, int year, int role, int status)
         {
-            var query = "select UserID from tblUsers where Role = @Role and Status = @Status and MONTH(CreateDate) = @CreateDate";
-
-            using(var connections = _context.CreateConnection())
+            string query;
+            if (quarter == 0)
+            {
+                query = "select UserID from tblUsers where Role = @Role and Status = @Status and not DATEPART(QUARTER, CreateDate) = @Quarter and YEAR(CreateDate) = @Year";
+            }
+            else
+            {
+                query = "select UserID from tblUsers where Role = @Role and Status = @Status and DATEPART(QUARTER, CreateDate) = @Quarter and YEAR(CreateDate) = @Year";
+            }
+            using (var connections = _context.CreateConnection())
             {
                 connections.Open();
-                var res = await connections.QueryAsync<UserViewModel>(query, new { @CreateDate = month, @Role = role, @Status = status });
+                var res = await connections.QueryAsync<UserViewModel>(query, new { @Year = year, @Role = role, @Status = status, @Quarter = quarter });
                 connections.Close();
                 return res;
             }
@@ -503,6 +510,24 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
                 connections.Close();
                 return res;
             }
+        }
+
+        public async Task<bool> UpdateCustomer(UpdateCustomer model)
+        {
+            var query = "update tblUsers set FullName = @FullName, Email = @Email, Address = @Address, UpdateDate = @UpdateDate " +
+                "where UserId = @UserId ";
+            using (var connections = _context.CreateConnection())
+            {
+                connections.Open();
+                var res = await connections.ExecuteAsync(query, new { @FullName = model.FullName, @Email = model.Email, @Address = model.Address, @UpdateDate = DateTime.Now, @UserId = model.CustomerId});
+                connections.Close();
+                if (res == 0)
+                {
+                    return false;
+                }
+                return true;
+            }
+
         }
 
         /*public async Task<bool> CreateInviteCode(int userID, string code)

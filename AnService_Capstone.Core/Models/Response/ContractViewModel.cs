@@ -9,6 +9,7 @@ namespace AnService_Capstone.Core.Models.Response
 {
     public class ContractViewModel
     {
+        public int ContractID { get; set; }
         public string CustomerName { get; set; }
         public string CustomerAddress { get; set; }
         public string CustomerPhone { get; set; }
@@ -19,5 +20,7 @@ namespace AnService_Capstone.Core.Models.Response
         public double? ContractTotalPrice { get; set; }
         public int PromotionID { get; set; }
         public List<TblRequestDetail> Details { get; set; }
+        public DateTime ContractCreateDate { get; set; }
+        public DateTime InvoiceDateCreate { get; set; }
     }
 }

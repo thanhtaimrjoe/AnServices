@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AnService_Capstone.Core.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -59,9 +60,12 @@ namespace AnService_Capstone.Core.Models.Response
         public int AmountOfBanCustomers { get; set; }
         public int AmountOfBanCustomersInMonth { get; set; }
         public int AmountOfNewCustomersInMonth { get; set; }
-        public int TotalWorkers { get; set; }
-        public int AmountOfNewWorkersInMonth { get; set; }
-        public AmountOfSalesInYear RevenueByYear { get; set; }
+        /*public int TotalWorkers { get; set; }
+        public int AmountOfNewWorkersInMonth { get; set; }*/
+        public AmountOfSalesInYear RevenueOfInvoiceByYear { get; set; }
+        public AmountOfSalesInYear RevenueOfContractByYear { get; set; }
         public IEnumerable<WorkerTask> WorkerTasks { get; set; }
+        public IEnumerable<ContractViewModel> InvoiceList { get; set; }
+        public IEnumerable<TblContract> ContractList { get; set; }
     }
 }

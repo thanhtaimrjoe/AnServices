@@ -1,0 +1,390 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>AnService_Capstone</name>
+    </assembly>
+    <members>
+        <member name="M:AnService_Capstone.Controllers.ContractController.GetContractByServiceRequestID(System.Int32)">
+            <summary>
+            lấy thông tin HĐ theo request service ID
+            </summary>
+            <param name="requestServiceId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AnService_Capstone.Controllers.ContractController.ApproveContract(System.Int32)">
+            <summary>
+            đồng ý hợp đồng
+            </summary>
+            <param name="id">của contract</param>
+            <returns></returns>
+        </member>
+        <member name="M:AnService_Capstone.Controllers.ContractController.DenyContract(System.Int32)">
+            <summary>
+            từ chối/hủy bỏ hợp đồng
+            </summary>
+            <param name="id">của contract</param>
+            <returns></returns>
+        </member>
+        <member name="M:AnService_Capstone.Controllers.ContractController.RequestUpdateContract(System.Int32)">
+            <summary>
+            yêu cầu sửa lại hợp đồng
+            </summary>
+            <param name="id">của contract</param>
+            <returns></returns>
+        </member>
+        <member name="M:AnService_Capstone.Controllers.ContractController.CreateContract(AnService_Capstone.Core.Models.Request.CreateContract)">
+            <summary>
+            tạo contract
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:AnService_Capstone.Controllers.InvoiceController.CreateInvoice(AnService_Capstone.Core.Models.Request.CreateInvoice)">
+            <summary>
+            tạo hóa đơn theo request service id
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:AnService_Capstone.Controllers.MaterialController.InsertRequestMaterial(AnService_Capstone.Core.Models.Request.RequestMaterial)">
+            <summary>
+            tạo request vật liệu
+            </summary>
+            <param name="model">Cần worker id, request detail id, 1 list vật liệu cần nhập</param>
+            <returns></returns>
+        </member>
+        <member name="M:AnService_Capstone.Controllers.MaterialController.GetAllRequestMaterial">
+            <summary>
+            lấy tất cả request material trong db (tblUsedMaterial)
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:AnService_Capstone.Controllers.MaterialController.GetAllMaterialByRequestDetailID(System.Int32)">
+            <summary>
+            lấy tất cả request material trong db (tblUsedMaterial) dựa theo request detail id
+            </summary>
+            <param name="id">cần request detail id</param>
+            <returns></returns>
+        </member>
+        <member name="M:AnService_Capstone.Controllers.MaterialController.GetAllMaterialByServiceRequestID(System.Int32)">
+            <summary>
+            lấy tất cả request material trong db (tblUsedMaterial) dựa theo request service id
+            </summary>
+            <param name="id">cần request service id</param>
+            <returns></returns>
+        </member>
+        <member name="M:AnService_Capstone.Controllers.MaterialController.GetAllMaterial">
+            <summary>
+            lấy danh sách vật liệu có trong db
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:AnService_Capstone.Controllers.MaterialController.GetRequestMaterialByID(System.Int32)">
+            <summary>
+            lấy request vật liệu theo id
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AnService_Capstone.Controllers.MaterialController.UpdateStatusRequestMaterial(System.Int32,System.Int32)">
+            <summary>
+            update status của request vật liệu, cần chuyền tham số id, status (approve, deny)
+            </summary>
+            <param name="id">id của request vật liệu</param>
+            <param name="status">approve (3) hoặc deny (1)</param>
+            <returns></returns>
+        </member>
+        <member name="M:AnService_Capstone.Controllers.MaterialController.ApproveRequestMaterial(System.Int32)">
+            <summary>
+            update request vật liệu theo id với status approve
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AnService_Capstone.Controllers.MaterialController.DenyRequestMaterial(System.Int32,System.String)">
+            <summary>
+            update request vật liệu theo id với status deny, message với lý do tại sao deny
+            </summary>
+            <param name="id"></param>
+            <param name="message"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AnService_Capstone.Controllers.MaterialController.UpdateRequestMaterial(System.Int32,System.Int32,System.String)">
+            <summary>
+            update số lượng vật liệu của request theo id, message thông báo cập nhật lại số lượng, status approve
+            </summary>
+            <param name="id">usermaterialid</param>
+            <param name="quantityNew">số lượng mới</param>
+            <param name="message"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AnService_Capstone.Controllers.MaterialController.CancelRequestMaterial(System.Int32)">
+            <summary>
+            cancel yêu cầu vật liệu
+            </summary>
+            <param name="id">usermaterialid</param>
+            <returns></returns>
+        </member>
+        <member name="M:AnService_Capstone.Controllers.RepairDetailController.GetRepairDetailByServiceRequestID(System.Int32)">
+            <summary>
+            lấy danh sách việc đã giao cho worker bằng id dịch vụ (request detail) của customer
+            </summary>
+            <param name="requestServiceId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AnService_Capstone.Controllers.ReportController.CreateReport(AnService_Capstone.Core.Models.Request.CreateReport)">
+            <summary>
+            worker tạo report khi sửa xong hoặc có lỗi mới trong quá trình sửa
+            </summary>
+            <param name="model">bao gồm request detail id, worker id, description, img hoặc video url</param>
+            <returns></returns>
+        </member>
+        <member name="M:AnService_Capstone.Controllers.ReportController.GetAllReportByRequestDetailID(System.Int32)">
+            <summary>
+            lấy tất cả report theo worker id
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AnService_Capstone.Controllers.ReportController.GetAllReportByServiceRequestID(System.Int32)">
+            <summary>
+            lấy tất cả report theo request service id
+            </summary>
+            <param name="ServiceRequestId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AnService_Capstone.Controllers.ServiceController.CreateServiceRequest(AnService_Capstone.Core.Models.Request.CreateService)">
+            <summary>
+            customer tạo request service
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AnService_Capstone.Controllers.ServiceController.AssignWorkerToRequest(AnService_Capstone.Core.Models.Request.AssignJob)">
+            <summary>
+            điều phối nhân viên vào service của khách hàng đã đặt
+            </summary>
+            <param name="job"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AnService_Capstone.Controllers.ServiceController.GetServiceRequestByID(System.Int32)">
+            <summary>
+            lấy thông tin request service bằng request service id
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AnService_Capstone.Controllers.ServiceController.GetAllServiceRequestStatusOrDate(System.Int32,System.String)">
+            <summary>
+            lấy danh sách request service (note: hiện chỉ filter từng param)
+            </summary>
+            <param name="ServiceRequestStatus"></param>
+            <param name="ServiceRequestCreateDate">yyyy-mm-dd</param>
+            <returns></returns>
+        </member>
+        <member name="M:AnService_Capstone.Controllers.ServiceController.GetAllServiceRequestByUserID(System.Int32)">
+            <summary>
+            lấy request service của 1 customer thông qua customerid
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AnService_Capstone.Controllers.ServiceController.GetServiceByName(System.String)">
+            <summary>
+            tìm kiếm service by name
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AnService_Capstone.Controllers.ServiceController.GetAllService">
+            <summary>
+            load danh sách service có trong db
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:AnService_Capstone.Controllers.ServiceController.GetAllServiceRequestByWorkerID(System.Int32,System.Int32)">
+            <summary>
+            lấy danh sách request service mà worker được điều phối bằng workerid
+            </summary>
+            <param name="id"></param>
+            <param name="status"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AnService_Capstone.Controllers.ServiceController.GetAllServiceRequestDetailsByServiceRequestID(System.Int32)">
+            <summary>
+            lấy detail của request service bằng request service id
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AnService_Capstone.Controllers.ServiceController.GetAllServiceRequestDetailsByServiceRequestIDAndWorkerID(System.Int32,System.Int32)">
+            <summary>
+            lấy detail của request service bằng request service id và worker id
+            </summary>
+            <param name="requestID"></param>
+            <param name="workerID"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AnService_Capstone.Controllers.ServiceController.GetServiceRequestByUserIDAndStatus(System.Int32,System.Int32)">
+            <summary>
+            lấy request service của 1 customer bằng customerid và status (approve, pending, deny, processing)
+            </summary>
+            <param name="id"></param>
+            <param name="status"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AnService_Capstone.Controllers.ServiceController.CountSatisfiedRequestDetail">
+            <summary>
+            dashboard
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:AnService_Capstone.Controllers.ServiceController.CountUnsatisfiedRequestDetail">
+            <summary>
+            dashboard
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:AnService_Capstone.Controllers.ServiceController.CountReworkRequestDetail">
+            <summary>
+            dashboard
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:AnService_Capstone.Controllers.ServiceController.Dashboard(System.Int32,System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="quarter">Quý trong năm</param>
+            <param name="year"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AnService_Capstone.Controllers.ServiceController.CancelServiceRequestForCustomer(System.Int32)">
+            <summary>
+            Từ chối hoặc hủy bỏ request service
+            </summary>
+            <param name="id">request service</param>
+            <returns></returns>
+        </member>
+        <member name="M:AnService_Capstone.Controllers.ServiceController.CancelServiceRequestForStaff(System.Int32)">
+            <summary>
+            Từ chối hoặc hủy bỏ request service
+            </summary>
+            <param name="id">request service</param>
+            <returns></returns>
+        </member>
+        <member name="M:AnService_Capstone.Controllers.TypeJobController.GetAll">
+            <summary>
+            lấy danh sách nghề của worker
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:AnService_Capstone.Controllers.UserController.LoginStaff(AnService_Capstone.Core.Models.Request.UserLogin)">
+            <summary>
+            login cho staff với username và password
+            </summary>
+            <param name="login"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AnService_Capstone.Controllers.UserController.LoginCustomerOrWorker(System.String)">
+            <summary>
+            login bằng số điện thoại cho customer hoặc worker
+            </summary>
+            <param name="phoneNumber"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AnService_Capstone.Controllers.UserController.SendSms(AnService_Capstone.Core.Models.Request.SmsMessage)">
+            <summary>
+            gửi otp qua tin nhắn
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AnService_Capstone.Controllers.UserController.AddNewOutgoingCallerID(AnService_Capstone.Core.Models.Request.SmsMessage)">
+            <summary>
+            thêm số điện để được gửi otp (chưa dùng đc)
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AnService_Capstone.Controllers.UserController.CreateCustomerAccount(AnService_Capstone.Core.Models.Request.CreateCustomer)">
+            <summary>
+            tạo tài khoản customer
+            </summary>
+            <param name="model">bao gồm tên, số điện thoại, địa chỉ, email</param>
+            <returns></returns>
+        </member>
+        <member name="M:AnService_Capstone.Controllers.UserController.GetWorkerByServiceID(System.Int32)">
+            <summary>
+            lấy danh sách manson theo service id, worker làm cho service nào
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AnService_Capstone.Controllers.UserController.GetWorkerById(System.Int32)">
+            <summary>
+            lấy dữ liệu worker theo id của worker
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AnService_Capstone.Controllers.UserController.GetAllWorker(System.Int32,System.String,System.String)">
+            <summary>
+            lấy danh sách worker (note: hiện chỉ filter từng param)
+            </summary>
+            <param name="typeJobId">của nghề</param>
+            <param name="fullName">full name worker</param>
+            <param name="phoneNumber">số điện thoại worker</param>
+            <returns></returns>
+        </member>
+        <member name="M:AnService_Capstone.Controllers.UserController.RemoveWorker(System.Int32)">
+            <summary>
+            xóa tài khoản của worker
+            </summary>
+            <param name="id">id của worker cần xóa</param>
+            <returns></returns>
+        </member>
+        <member name="M:AnService_Capstone.Controllers.UserController.UpdateWorker(AnService_Capstone.Core.Models.Request.UpdateWorker)">
+            <summary>
+            update worker
+            </summary>
+            <param name="worker"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AnService_Capstone.Controllers.UserController.CreateWorkerAccount(AnService_Capstone.Core.Models.Request.CreateWorker)">
+            <summary>
+            tạo tài khoản worker
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AnService_Capstone.Controllers.UserController.GetAllCustomers(System.Int32,System.String,System.String)">
+            <summary>
+            lấy danh sách customer account
+            </summary>
+            <param name="status">tên khách hàng</param>
+            <param name="fullname">tên khách hàng</param>
+            <param name="phoneNumber">số điện thoại</param>
+            <returns></returns>
+        </member>
+        <member name="M:AnService_Capstone.Controllers.UserController.GetCustomerById(System.Int32)">
+            <summary>
+            lấy thông tin customer qua id
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AnService_Capstone.Controllers.UserController.BanUserByUserID(System.Int32)">
+            <summary>
+            ban customer qua id (status = 10)
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AnService_Capstone.Controllers.UserController.UnBanUserByUserID(System.Int32)">
+            <summary>
+            ban customer qua id (status = 4)
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

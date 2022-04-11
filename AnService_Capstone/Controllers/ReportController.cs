@@ -1,6 +1,7 @@
 ﻿using AnService_Capstone.Core.Interfaces;
 using AnService_Capstone.Core.Models.Request;
 using AnService_Capstone.Core.Models.Response;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -26,6 +27,7 @@ namespace AnService_Capstone.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("[action]")]
+        [Authorize(Roles = "Worker")]
         public async Task<IActionResult> CreateReport([FromBody] CreateReport model)
         {
             if (!ModelState.IsValid)
@@ -60,6 +62,7 @@ namespace AnService_Capstone.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("[action]")]
+        [Authorize(Roles = "Staff, Worker")]
         public async Task<IActionResult> GetAllReportByRequestDetailID(int id)
         {
             if (id == 0)
@@ -83,6 +86,7 @@ namespace AnService_Capstone.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("[action]")]
+        [Authorize(Roles = "Staff, Worker")]
         public async Task<IActionResult> GetAllReportByServiceRequestID(int ServiceRequestId)
         {
             if (ServiceRequestId == 0)

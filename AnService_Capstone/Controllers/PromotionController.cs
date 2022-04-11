@@ -1,6 +1,7 @@
 ﻿using AnService_Capstone.Core.Interfaces;
 using AnService_Capstone.Core.Models.Response;
 using AnService_Capstone.DataAccess.Dapper.Customize;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -36,6 +37,7 @@ namespace AnService_Capstone.Controllers
 
         [HttpGet]
         [Route("[action]")]
+        [Authorize(Roles = "Customer")]
         public async Task<IActionResult> GetAllPromotionByUserID(int userID)
         {
             if (userID == 0)
@@ -53,6 +55,7 @@ namespace AnService_Capstone.Controllers
 
         [HttpGet]
         [Route("[action]")]
+        [Authorize(Roles = "Customer")]
         public async Task<IActionResult> GetAllPromotionValidByUserID(int userID)
         {
             if (userID == 0)
@@ -70,6 +73,7 @@ namespace AnService_Capstone.Controllers
 
         [HttpGet]
         [Route("[action]")]
+        [Authorize(Roles = "Staff, Customer")]
         public async Task<IActionResult> GetInformationPromotionByID(int promotionID)
         {
             if (promotionID == 0)

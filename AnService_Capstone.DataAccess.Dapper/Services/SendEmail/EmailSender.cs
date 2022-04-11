@@ -40,7 +40,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Services.SendEmail
 
             var bodyBuilder = new BodyBuilder { HtmlBody = string.Format("<span style='color:black;'>{0}</span>", message.Content) };
 
-            if (message.Attachments != null && message.Attachments.Any())
+            /*if (message.Attachments != null && message.Attachments.Any())
             {
                 byte[] fileBytes;
                 foreach (var attachment in message.Attachments)
@@ -52,7 +52,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Services.SendEmail
                     }
                     bodyBuilder.Attachments.Add(attachment.FileName, fileBytes, ContentType.Parse(attachment.ContentType));
                 }
-            }
+            }*/
             emailMessage.Body = bodyBuilder.ToMessageBody();
             return emailMessage;
         }

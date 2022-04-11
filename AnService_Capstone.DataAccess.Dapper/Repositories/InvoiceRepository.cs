@@ -112,5 +112,61 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
                 return res.FirstOrDefault();
             }
         }
+
+        public async Task<IEnumerable<ContractViewModel>> GetListInfomationInvoiceByServiceRequestID(int year, int quarter)
+        {
+            string query;
+
+            if (quarter == 0)
+            {
+                query = "select CustomerName, CustomerPhone, CustomerAddress, ServiceRequestDescription, request.PromotionID, InvoiceDateCreate, ct.ContractID, ContractStartDate, ContractEndDate, ContractDeposit, ContractTotalPrice, ContractCreateDate, RequestDetailID, RequestDetailStatus, RequestDetailPrice, ser.ServiceID, ServiceName, ServiceImg " +
+                "from (((tblServiceRequest request join tblContract ct on request.ServiceRequestID = ct.ServiceRequestID) " +
+                "join tblRequestDetails detail on request.ServiceRequestID = detail.ServiceRequestID) " +
+                "join tblServices ser on ser.ServiceID = detail.ServiceID) " +
+                "join tblInvoice invoice on invoice.ServiceRequestID = request.ServiceRequestID " +
+                "where RequestDetailStatus = 11 and YEAR(InvoiceDateCreate) = @InvoiceDateCreate and not DATEPART(QUARTER,InvoiceDateCreate) = @QUARTER";
+            }
+            else
+            {
+                query = "select CustomerName, CustomerPhone, CustomerAddress, ServiceRequestDescription, request.PromotionID, InvoiceDateCreate, ct.ContractID, ContractStartDate, ContractEndDate, ContractDeposit, ContractTotalPrice, ContractCreateDate, RequestDetailID, RequestDetailStatus, RequestDetailPrice, ser.ServiceID, ServiceName, ServiceImg " +
+                "from (((tblServiceRequest request join tblContract ct on request.ServiceRequestID = ct.ServiceRequestID) " +
+                "join tblRequestDetails detail on request.ServiceRequestID = detail.ServiceRequestID) " +
+                "join tblServices ser on ser.ServiceID = detail.ServiceID) " +
+                "join tblInvoice invoice on invoice.ServiceRequestID = request.ServiceRequestID " +
+                "where RequestDetailStatus = 11 and YEAR(InvoiceDateCreate) = @InvoiceDateCreate and DATEPART(QUARTER,InvoiceDateCreate) = @QUARTER";
+            }
+            using (var connection = _context.CreateConnection())
+            {
+                connection.Open();
+                /*var res = await connection.QueryFirstOrDefaultAsync<ContractViewModel>(query, new { @RequestServiceID = id });*/
+                var requestDict = new Dictionary<int, ContractViewModel>();
+                var res = await connection.QueryAsync<ContractViewModel, TblRequestDetail, TblService, ContractViewModel>(query, (model, details, service) =>
+                {
+                    ContractViewModel currentContract;
+                    if (!requestDict.TryGetValue(model.ContractID, out currentContract))
+                    {
+                        currentContract = model;
+                        currentContract.Details = new List<TblRequestDetail>();
+                        requestDict.Add(model.ContractID, currentContract);
+                    }
+
+                    details.Service = service;
+                    currentContract.Details.Add(details);
+
+                    /*currentContract.Details.ForEach(item =>
+                    {
+                        item.Service = service;
+                    });*/
+                    /*currentContract.Details.GetEnumerator().Current.Service = service;*/
+                    return currentContract;
+                }, param: new {@InvoiceDateCreate = year, @QUARTER = quarter }, splitOn: "ContractID, RequestDetailID, ServiceID");
+                connection.Close();
+                if (!res.Any())
+                {
+                    return null;
+                }
+                return res.Distinct();
+            }
+        }
     }
 }

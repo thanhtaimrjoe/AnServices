@@ -249,6 +249,14 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:AnService_Capstone.Controllers.ServiceController.Dashboard(System.Int32,System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="quarter">Quý trong năm</param>
+            <param name="year"></param>
+            <returns></returns>
+        </member>
         <member name="M:AnService_Capstone.Controllers.ServiceController.CancelServiceRequestForCustomer(System.Int32)">
             <summary>
             Từ chối hoặc hủy bỏ request service
