@@ -49,6 +49,7 @@ namespace AnService_Capstone.Core.Models.Response
         public AmountOfSalesInYear ReceivedServiceRequest { get; set; }
         public AmountOfSalesInYear CompleteServiceRequest { get; set; }
         public AmountOfSalesInYear CancelServiceRequest { get; set; }
+        public AmountOfSalesInYear AmountOfInvoice { get; set; }
         public ServiceStatusStatistic ServiceStatusStatistics { get; set; }
         public int PromotionIsUsed { get; set; }
         public int PromotionIsUsedInMonth { get; set; }

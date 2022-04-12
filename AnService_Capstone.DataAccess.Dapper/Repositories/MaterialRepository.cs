@@ -253,7 +253,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
                 parameters.Add("MaterialID", item.Id, DbType.Int32);
                 parameters.Add("RequestDetailID", material.RequestDetailID, DbType.Int32);
                 parameters.Add("WorkerID", material.WorkerID, DbType.Int32);
-                parameters.Add("quantity", item.quantity, DbType.Int32);
+                parameters.Add("quantity", item.quantity, DbType.Double);
                 parameters.Add("Status", 2, DbType.Int32);
                 parameters.Add("Note", item.Note, DbType.String);
 

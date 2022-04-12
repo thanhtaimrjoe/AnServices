@@ -13,8 +13,8 @@ namespace AnService_Capstone.Core.Models.Response
         public TblMaterial Material { get; set; }
         public int? RequestDetailId { get; set; }
         public UserViewModel Worker { get; set; }
-        public int? Quantity { get; set; }
-        public int? QuantityNew { get; set; }
+        public double Quantity { get; set; }
+        public double QuantityNew { get; set; }
         public TblStatus Status { get; set; }
         public string ServiceName { get; set; }
         public string Note { get; set; }

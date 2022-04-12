@@ -16,6 +16,8 @@ namespace AnService_Capstone.Core.Interfaces
 
         public Task<ContractViewModel> GetInfomationInvoiceByServiceRequestID(int id);
 
+        public Task<Dashboard.AmountOfSalesInYear> AmountOfInvoice(int year, int quarter);
+
         public Task<IEnumerable<ContractViewModel>> GetListInfomationInvoiceByServiceRequestID(int year, int quarter);
     }
 }

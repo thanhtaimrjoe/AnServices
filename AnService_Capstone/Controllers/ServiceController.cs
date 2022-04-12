@@ -566,7 +566,7 @@ namespace AnService_Capstone.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("[action]")]
-        /*[Authorize(Roles = "Staff")]*/
+        [Authorize(Roles = "Staff")]
         public async Task<IActionResult> Dashboard(int quarter, int year)
         {
             Dashboard dashboard = new Dashboard();
@@ -597,6 +597,7 @@ namespace AnService_Capstone.Controllers
             var res19 = await _serviceRepository.SumRevenueOfContractByYear(quarter, year);
             var res20 = await _invoiceRepository.GetListInfomationInvoiceByServiceRequestID(year, quarter);
             var res21 = await _contractRepository.GetContractList(quarter, year);
+            var res22 = await _invoiceRepository.AmountOfInvoice(year, quarter);
 
             dashboard.ReceivedServiceRequest = res1.FirstOrDefault();
             dashboard.ServiceStatusStatistics = res2;
@@ -619,6 +620,7 @@ namespace AnService_Capstone.Controllers
             dashboard.RevenueOfContractByYear = res19.FirstOrDefault();
             dashboard.InvoiceList = res20;
             dashboard.ContractList = res21;
+            dashboard.AmountOfInvoice = res22;
 
             return Ok(dashboard);
         }

@@ -14,8 +14,8 @@ namespace AnService_Capstone.Core.Models.Request
             [Required]
             public int Id { get; set; }
             [Required]
-            [Range(1, int.MaxValue, ErrorMessage = "Must be greater then 0")]
-            public int quantity { get; set; }
+            [Range(1, double.MaxValue, ErrorMessage = "Must be greater then 0")]
+            public double quantity { get; set; }
             public string Note { get; set; }
         }
 

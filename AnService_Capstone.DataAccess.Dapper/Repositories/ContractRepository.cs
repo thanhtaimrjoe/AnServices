@@ -233,7 +233,15 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
 
         public async Task<IEnumerable<TblContract>> GetContractList(int quarter, int year)
         {
-            var query = "select * from tblContract where YEAR(ContractCreateDate) = @ContractCreateDate and DATEPART(QUARTER,ContractCreateDate) = @Quarter";
+            string query;
+            if (quarter == 0)
+            {
+                query = "select * from tblContract where YEAR(ContractCreateDate) = @ContractCreateDate and not DATEPART(QUARTER,ContractCreateDate) = @Quarter";
+            }
+            else
+            {
+                query = "select * from tblContract where YEAR(ContractCreateDate) = @ContractCreateDate and DATEPART(QUARTER,ContractCreateDate) = @Quarter";
+            }
 
             using (var conn = _context.CreateConnection())
             {

@@ -45,7 +45,7 @@ namespace AnService_Capstone.DataAccess.Dapper.TokenGenerator
             var token = new JwtSecurityToken(
                     issuer: _configuration["JwtAuth:Issuer"],
                     audience: _configuration["JwtAuth:Audience"],
-                    expires: DateTime.UtcNow.AddMinutes(180),
+                    expires: DateTime.UtcNow.AddMinutes(480),
                     claims: claims,
                     signingCredentials: _signingCredentials
                 );

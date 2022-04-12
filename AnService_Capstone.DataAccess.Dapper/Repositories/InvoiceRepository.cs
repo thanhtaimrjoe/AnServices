@@ -21,6 +21,49 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             _context = context;
         }
 
+        public async Task<Dashboard.AmountOfSalesInYear> AmountOfInvoice(int year, int quarter)
+        {
+            string query;
+            if (quarter == 0)
+            {
+                query = "SELECT * " +
+                "FROM (SELECT " +
+                "DATENAME(MONTH, InvoiceDateCreate) [Month], " +
+                "COUNT(InvoiceID) [Sales Count] " +
+                "FROM tblInvoice " +
+                "where not DATEPART(QUARTER, InvoiceDateCreate) = @Quarter and YEAR(InvoiceDateCreate) = @ServiceRequestCreateDate " +
+                "GROUP BY " +
+                "DATENAME(MONTH, InvoiceDateCreate)) AS MontlySalesData " +
+                "PIVOT( SUM([Sales Count]) " +
+                "FOR Month IN ([January],[February],[March],[April],[May]," +
+                "[June],[July],[August],[September],[October],[November]," +
+                "[December])) AS MNamePivot";
+            }
+            else
+            {
+                query = "SELECT * " +
+                "FROM (SELECT " +
+                "DATENAME(MONTH, InvoiceDateCreate) [Month], " +
+                "COUNT(InvoiceID) [Sales Count] " +
+                "FROM tblInvoice " +
+                "where DATEPART(QUARTER, InvoiceDateCreate) = @Quarter and YEAR(InvoiceDateCreate) = @ServiceRequestCreateDate " +
+                "GROUP BY " +
+                "DATENAME(MONTH, InvoiceDateCreate)) AS MontlySalesData " +
+                "PIVOT( SUM([Sales Count]) " +
+                "FOR Month IN ([January],[February],[March],[April],[May]," +
+                "[June],[July],[August],[September],[October],[November]," +
+                "[December])) AS MNamePivot";
+            }
+
+            using (var conn = _context.CreateConnection())
+            {
+                conn.Open();
+                var res = await conn.QueryAsync<Dashboard.AmountOfSalesInYear>(query, new { @Quarter = quarter, @ServiceRequestCreateDate = year });
+                conn.Close();
+                return res.FirstOrDefault();
+            }
+        }
+
         public async Task<TblInvoice> CheckInvoiceExist(int id)
         {
             var query = "select * " +
@@ -161,10 +204,10 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
                     return currentContract;
                 }, param: new {@InvoiceDateCreate = year, @QUARTER = quarter }, splitOn: "ContractID, RequestDetailID, ServiceID");
                 connection.Close();
-                if (!res.Any())
+                /*if (!res.Any())
                 {
                     return null;
-                }
+                }*/
                 return res.Distinct();
             }
         }
