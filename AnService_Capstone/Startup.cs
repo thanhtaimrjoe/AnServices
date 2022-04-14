@@ -1,7 +1,9 @@
 using AnService_Capstone.Core.Interfaces;
+using AnService_Capstone.Core.Interfaces.Services;
 using AnService_Capstone.DataAccess.Dapper.Context;
 using AnService_Capstone.DataAccess.Dapper.Customize;
 using AnService_Capstone.DataAccess.Dapper.Repositories;
+using AnService_Capstone.DataAccess.Dapper.Services;
 using AnService_Capstone.DataAccess.Dapper.Services.BackgroundService;
 using AnService_Capstone.DataAccess.Dapper.Services.SendEmail;
 using AnService_Capstone.DataAccess.Dapper.Services.SendSMS;
@@ -129,6 +131,10 @@ namespace AnService_Capstone
             services.AddScoped<IContractRepository, ContractRepository>();
             services.AddScoped<IInviteCodeRepository, InviteCodeRepository>();
             services.AddScoped<IEmailSender, EmailSender>();
+
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<ITypeJobService, TypeJobService>();
+            services.AddScoped<IServiceRequestService, ServiceRequestService>();
 
             services.AddSingleton<IHostedService, ScheduledTask>();
 

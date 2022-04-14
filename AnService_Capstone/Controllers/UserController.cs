@@ -1,4 +1,5 @@
 ﻿using AnService_Capstone.Core.Interfaces;
+using AnService_Capstone.Core.Interfaces.Services;
 using AnService_Capstone.Core.Models.Request;
 using AnService_Capstone.Core.Models.Response;
 using AnService_Capstone.DataAccess.Dapper.Customize;
@@ -16,16 +17,17 @@ namespace AnService_Capstone.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly IUserRepository _userRepository;
+        /*private readonly IUserRepository _userRepository;
         private readonly AccessTokenGenerator _accessTokenGenerator;
         private readonly RefreshTokenGenerator _refreshTokenGenerator;
         private readonly UtilHelper _otpGenerator;
-        private readonly IPromotionRepository _promotionRepository;
+        private readonly IPromotionRepository _promotionRepository;*/
         private readonly TwilioService _twilioService;
-        private readonly UtilHelper _utilHelper;
-        private readonly IInviteCodeRepository _inviteCodeRepository;
+        /*private readonly UtilHelper _utilHelper;
+        private readonly IInviteCodeRepository _inviteCodeRepository;*/
+        private readonly IUserService _userService;
 
-        public UserController(IUserRepository userRepository, AccessTokenGenerator accessTokenGenerator, 
+        /*public UserController(IUserService userService, IUserRepository userRepository, AccessTokenGenerator accessTokenGenerator, 
             RefreshTokenGenerator refreshTokenGenerator, UtilHelper otpGenerator,
             IPromotionRepository promotionRepository, TwilioService twilioService, UtilHelper   utilHelper, IInviteCodeRepository inviteCodeRepository)
         {
@@ -37,6 +39,13 @@ namespace AnService_Capstone.Controllers
             _twilioService = twilioService;
             _utilHelper = utilHelper;
             _inviteCodeRepository = inviteCodeRepository;
+            _userService = userService;
+        }*/
+
+        public UserController(IUserService userService, TwilioService twilioService)
+        {
+            _userService = userService;
+            _twilioService = twilioService;
         }
 
 
@@ -49,21 +58,18 @@ namespace AnService_Capstone.Controllers
         [Route("[action]")]
         public async Task<IActionResult> LoginStaff([FromBody] UserLogin login)
         {
-            if (!ModelState.IsValid)
+            /*if (!ModelState.IsValid)
             {
                 return BadRequest();
-            }
+            }*/
 
-            var user = await _userRepository.LoginStaff(login);
+            var user = await _userService.LoginStaff(login);
 
             if (user == null)
             {
                 return NotFound(new ErrorResponse("Username or Password incorrect"));
             }
-
-            var refreshToken = _refreshTokenGenerator.GenerateToken();
-            var token = _accessTokenGenerator.GenerateToken(user, refreshToken);
-            return Ok(token);
+            return Ok(user);
         }
 
         /*[HttpPost]
@@ -89,11 +95,17 @@ namespace AnService_Capstone.Controllers
         [Route("[action]")]
         public async Task<IActionResult> LoginCustomerOrWorker(string phoneNumber)
         {
-            if (!ModelState.IsValid)
+            if(phoneNumber == null)
             {
-                return BadRequest();
+                return BadRequest(new ErrorResponse("Phone number is required"));
             }
+            var user = await _userService.LoginCustomerOrWorker(phoneNumber);
 
+            if (user == null)
+            {
+                return NotFound(new ErrorResponse("Phone number is not exists"));
+            }
+            /*
             if (phoneNumber.Equals(""))
             {
                 return BadRequest(new ErrorResponse("Phone number is required"));
@@ -112,8 +124,8 @@ namespace AnService_Capstone.Controllers
             }
 
             var refreshToken = _refreshTokenGenerator.GenerateToken();
-            var token = _accessTokenGenerator.GenerateToken(user, refreshToken);
-            return Ok(token);
+            var token = _accessTokenGenerator.GenerateToken(user, refreshToken);*/
+            return Ok(user);
         }
         
         /// <summary>
@@ -126,14 +138,14 @@ namespace AnService_Capstone.Controllers
         [Authorize(Roles = "Customer")]
         public IActionResult SendSms([FromBody] SmsMessage model)
         {
-            var code = _otpGenerator.GeneratorOTP();
             /*var message = MessageResource.Create(
                 to: new PhoneNumber(model.To),
                 from: new PhoneNumber("+17752695428"),
                 body: "Your OTP: " + code,
                 client: _client); // pass in the custom client*/
-            _twilioService.SendSMS(model.To, "Your OTP: " + code);
-            return Ok(code);
+            /*var code = _otpGenerator.GeneratorOTP();
+            _twilioService.SendSMS(model.To, "Your OTP: " + code);*/
+            return Ok(_userService.SendSms(model));
         }
 
         /// <summary>
@@ -157,10 +169,10 @@ namespace AnService_Capstone.Controllers
         [Route("[action]")]
         public async Task<IActionResult> CreateCustomerAccount(CreateCustomer model)
         {
-            if (!ModelState.IsValid)
+            /*if (!ModelState.IsValid)
             {
                 return BadRequest();
-            }
+            }*/
             /*var code = _otpGenerator.GeneratorOTP();
             var checkCode = await _userRepository.CheckInviteCodeExist(code);
             if (checkCode)
@@ -175,7 +187,7 @@ namespace AnService_Capstone.Controllers
                 checkCode = await _userRepository.CheckInviteCodeExist(code);
             } while (checkCode);*/
 
-            if (model.Email == null)
+            /*if (model.Email == null)
             {
                 model.Email = "";
             }
@@ -224,12 +236,12 @@ namespace AnService_Capstone.Controllers
                 return BadRequest(new ErrorResponse("Your invite code is valid"));
             }
 
-            _ = await _userRepository.CreateAccountCustomer(model);
+            _ = await _userRepository.CreateAccountCustomer(model);*/
 
             /*var promotion = await _promotionRepository.InsertPromotion(code);
             var promotionDetail = await _promotionRepository.InsertPromotionDetail(user, promotion);*/
             
-            return Ok("Create Successfull");
+            return Ok(await _userService.CreateCustomerAccount(model));
         }
 
         /// <summary>
@@ -243,13 +255,13 @@ namespace AnService_Capstone.Controllers
         //get worker group by job by service id
         public async Task<IActionResult> GetWorkerByServiceID(int id)
         {
-            var worker = await _userRepository.GetWorkerByServiceID(id);
+            /*var worker = await _userRepository.GetWorkerByServiceID(id);*/
 
             /*if (worker == null)
             {
                 return NotFound(new ErrorResponse("No Worker Is Available"));
             }*/
-            return Ok(worker);
+            return Ok(await _userService.GetWorkerByServiceID(id));
         }
 
         /// <summary>
@@ -267,7 +279,7 @@ namespace AnService_Capstone.Controllers
                 return BadRequest(new ErrorResponse("Please enter id"));
             }
 
-            var res = await _userRepository.GetWorkerByID(id);
+            var res = await _userService.GetWorkerById(id);
             if (res == null)
             {
                 return NotFound(new ErrorResponse("No record"));
@@ -303,7 +315,7 @@ namespace AnService_Capstone.Controllers
         [Authorize(Roles = "Staff")]
         public async Task<IActionResult> GetAllWorker(int typeJobId, string fullName, string phoneNumber)
         {
-            IEnumerable<UserViewModel> res;
+            /*IEnumerable<UserViewModel> res;
 
             string typeJobIdString = null;
 
@@ -319,7 +331,7 @@ namespace AnService_Capstone.Controllers
             else
             {
                 res = await _userRepository.GetAllWorker(typeJobIdString, phoneNumber, fullName);
-            }
+            }*/
 
             /*if (typeJobId == 0 && fullName == null && phoneNumber == null)
             {
@@ -343,7 +355,7 @@ namespace AnService_Capstone.Controllers
                 return NotFound(new ErrorResponse("No record"));
             }*/
 
-            return Ok(res);
+            return Ok(await _userService.GetAllWorker(typeJobId, fullName, phoneNumber));
         }
 
         /// <summary>
@@ -356,7 +368,7 @@ namespace AnService_Capstone.Controllers
         [Authorize(Roles = "Staff")]
         public async Task<IActionResult> RemoveWorker(int id)
         {
-            if (id == 0)
+            /*if (id == 0)
             {
                 return BadRequest(new ErrorResponse("Please enter id"));
             }
@@ -367,7 +379,8 @@ namespace AnService_Capstone.Controllers
             {
                 return Ok("Remove Successful");
             }
-            return BadRequest(new ErrorResponse("Remove Fail"));
+            return BadRequest(new ErrorResponse("Remove Fail"));*/
+            return Ok(await _userService.RemoveWorker(id));
         }
 
         /// <summary>
@@ -380,12 +393,12 @@ namespace AnService_Capstone.Controllers
         [Authorize(Roles = "Staff")]
         public async Task<IActionResult> UpdateWorker([FromBody]UpdateWorker worker)
         {
-            if (!ModelState.IsValid)
+            /*if (!ModelState.IsValid)
             {
                 return BadRequest();
-            }
+            }*/
 
-            if (worker.WorkerEmail == null)
+            /*if (worker.WorkerEmail == null)
             {
                 worker.WorkerEmail = "";
             }
@@ -411,7 +424,7 @@ namespace AnService_Capstone.Controllers
 
             if (check.PhoneNumber.Equals(user.PhoneNumber))
             {
-                /*return BadRequest(new ErrorResponse("Phone number is existed"));*/
+                *//*return BadRequest(new ErrorResponse("Phone number is existed"));*//*
                 var res = await _userRepository.UpdateWorker(worker);
 
                 if (res)
@@ -421,7 +434,8 @@ namespace AnService_Capstone.Controllers
                 return BadRequest(new ErrorResponse("Update Fail"));
             }
 
-            return BadRequest(new ErrorResponse("Phone number is existed"));
+            return BadRequest(new ErrorResponse("Phone number is existed"));*/
+            return Ok(await _userService.UpdateWorker(worker));
         }
 
         /// <summary>
@@ -438,14 +452,15 @@ namespace AnService_Capstone.Controllers
             {
                 return BadRequest();
             }
-            
-            var res = await _userRepository.CreateAccountWorker(model);
+
+            /*var res = await _userRepository.CreateAccountWorker(model);
 
             if (res)
             {
                 return Ok("Create Successfull");
             }
-            return BadRequest(new ErrorResponse("Create Fail"));
+            return BadRequest(new ErrorResponse("Create Fail"));*/
+            return Ok(await _userService.CreateWorkerAccount(model));
         }
 
         /*[HttpPost]
@@ -480,7 +495,7 @@ namespace AnService_Capstone.Controllers
         [Authorize(Roles = "Staff")]
         public async Task<IActionResult> GetAllCustomers(int status, string fullname, string phoneNumber)
         {
-            IEnumerable<UserViewModel> res;
+            /*IEnumerable<UserViewModel> res;
 
             string statusIdString = null;
 
@@ -489,7 +504,7 @@ namespace AnService_Capstone.Controllers
                 statusIdString = status.ToString();
             }
 
-            /*IEnumerable<UserViewModel> res;
+            *//*IEnumerable<UserViewModel> res;
 
             if (name == null && phoneNumber == null)
             {
@@ -506,7 +521,7 @@ namespace AnService_Capstone.Controllers
             else
             {
                 res = await _userRepository.GetAllCustomersByPhoneAndName(phoneNumber, name);
-            }*/
+            }*//*
             if (status != 0)
             {
                 res = await _userRepository.GetAllCustomers(statusIdString, fullname, phoneNumber);
@@ -515,8 +530,8 @@ namespace AnService_Capstone.Controllers
             {
                 res = await _userRepository.GetAllCustomers(null, fullname, phoneNumber);
             }
-
-            return Ok(res);
+*/
+            return Ok(await _userService.GetAllCustomers(status,fullname,phoneNumber));
         }
 
         /// <summary>
@@ -534,7 +549,7 @@ namespace AnService_Capstone.Controllers
                 return BadRequest(new ErrorResponse("Please enter id"));
             }
 
-            var res = await _userRepository.GetCustomerByID(id);
+            var res = await _userService.GetCustomerById(id);
             if (res == null)
             {
                 return NotFound(new ErrorResponse("No record"));
@@ -553,7 +568,7 @@ namespace AnService_Capstone.Controllers
         [Authorize(Roles = "Staff")]
         public async Task<IActionResult> BanUserByUserID(int id)
         {
-            if (id == 0)
+            /*if (id == 0)
             {
                 return BadRequest(new ErrorResponse("Please enter id"));
             }
@@ -567,7 +582,8 @@ namespace AnService_Capstone.Controllers
                 return Ok("Update Successful");
             }
 
-            return BadRequest(new ErrorResponse("Update Fail"));
+            return BadRequest(new ErrorResponse("Update Fail"));*/
+            return Ok(await _userService.BanUserByUserID(id));
         }
 
         /// <summary>
@@ -580,7 +596,7 @@ namespace AnService_Capstone.Controllers
         [Authorize(Roles = "Staff")]
         public async Task<IActionResult> UnBanUserByUserID(int id)
         {
-            if (id == 0)
+            /*if (id == 0)
             {
                 return BadRequest(new ErrorResponse("Please enter id"));
             }
@@ -590,15 +606,16 @@ namespace AnService_Capstone.Controllers
             {
                 return BadRequest(new ErrorResponse("Update Fail"));
             }
-            return Ok("Update Successful");
+            return Ok("Update Successful");*/
+            return Ok(await _userService.UnBanUserByUserID(id));
         }
 
         [HttpPut]
         [Route("[action]")]
-        [Authorize(Roles = "Customer")]
+        [Authorize(Roles = "Worker")]
         public async Task<IActionResult> ChangePhoneNumber(int userID, string phoneNumber)
         {
-            if (userID == 0)
+            /*if (userID == 0)
             {
                 return BadRequest(new ErrorResponse("Please enter id"));
             }
@@ -619,7 +636,8 @@ namespace AnService_Capstone.Controllers
             {
                 return BadRequest(new ErrorResponse("Update Fail"));
             }
-            return Ok("Update Successful");
+            return Ok("Update Successful");*/
+            return Ok(await _userService.ChangePhoneNumber(userID, phoneNumber));
         }
 
         [HttpPut]
@@ -627,7 +645,7 @@ namespace AnService_Capstone.Controllers
         [Authorize(Roles = "Customer")]
         public async Task<IActionResult> UpdateCustomer(UpdateCustomer model)
         {
-            if (model.Email == null)
+            /*if (model.Email == null)
             {
                 model.Email = "";
             }
@@ -652,7 +670,8 @@ namespace AnService_Capstone.Controllers
             {
                 return Ok("Update Successfull");
             }
-            return BadRequest(new ErrorResponse("Update Fail"));
+            return BadRequest(new ErrorResponse("Update Fail"));*/
+            return Ok(await _userService.UpdateCustomer(model));
         }
     }
 }

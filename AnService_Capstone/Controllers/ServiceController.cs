@@ -1,5 +1,6 @@
 ﻿using AnService_Capstone.Core.Entities;
 using AnService_Capstone.Core.Interfaces;
+using AnService_Capstone.Core.Interfaces.Services;
 using AnService_Capstone.Core.Models.Request;
 using AnService_Capstone.Core.Models.Response;
 using AnService_Capstone.DataAccess.Dapper.Customize;
@@ -27,7 +28,8 @@ namespace AnService_Capstone.Controllers
         private readonly IPromotionRepository _promotionRepository;
         private readonly IInvoiceRepository _invoiceRepository;
         private readonly IContractRepository _contractRepository;
-        public ServiceController(IServiceRepository serviceRepository, TwilioService twilioService, IUserRepository userRepository,
+        private readonly IServiceRequestService _serviceRequestService;
+        public ServiceController(IServiceRequestService serviceRequestService, IServiceRepository serviceRepository, TwilioService twilioService, IUserRepository userRepository,
             UtilHelper utilHelper, IRepairDetail repariRepository, IPromotionRepository promotionRepository, IInvoiceRepository invoiceRepository,
             IContractRepository contractRepository)
         {
@@ -39,6 +41,7 @@ namespace AnService_Capstone.Controllers
             _promotionRepository = promotionRepository;
             _invoiceRepository = invoiceRepository;
             _contractRepository = contractRepository;
+            _serviceRequestService = serviceRequestService;
         }
 
         /// <summary>
@@ -56,7 +59,7 @@ namespace AnService_Capstone.Controllers
                 return BadRequest();
             }
 
-            bool serviceDetail = false;
+            /*bool serviceDetail = false;
             bool media = false;
 
             var reqService = await _serviceRepository.CreateServiceRequest(model);
@@ -78,7 +81,7 @@ namespace AnService_Capstone.Controllers
                     _twilioService.SendSMS(formatPhone, "Tài khoản của bạn đã bị khóa vì bạn đã gửi hơn 3 yêu cầu dịch vụ. ");
                     _ = _userRepository.UpdateStatusUserByID(model.CustomerId, 10);
                     return BadRequest(new ErrorResponse("Your account has been banned"));
-                    /*return Ok("Your account has been banned");*/
+                    *//*return Ok("Your account has been banned");*//*
                 }
                 if (model.PromotionID != 0)
                 {
@@ -86,7 +89,8 @@ namespace AnService_Capstone.Controllers
                 }
                 return Ok("Create Successfull");
             }
-            return BadRequest(new ErrorResponse("Create Fail"));
+            return BadRequest(new ErrorResponse("Create Fail"));*/
+            return Ok(await _serviceRequestService.CreateServiceRequest(model));
         }
 
         /// <summary>
@@ -110,9 +114,9 @@ namespace AnService_Capstone.Controllers
                 var result = await _serviceRepository.AssignWorkerToRequest(worker);
             }*/
 
-            bool chechExist = false;
+            /*bool chechExist = false;
             bool res = false;
-            /*bool result = false;*/
+            *//*bool result = false;*//*
 
             chechExist = await _repariRepository.CheckRepairDetailExist(job.RequestDetailId, job.MainWorker);
             var detail = await _serviceRepository.GetRequestDetailByID(job.RequestDetailId);
@@ -137,7 +141,8 @@ namespace AnService_Capstone.Controllers
 
             _ = await _serviceRepository.UpdateStatusServiceRequestDetail(job.RequestDetailId, 6);
             _ = await _serviceRepository.UpdateStatusServiceRequest(detail.ServiceRequestId, 6);
-            return Ok("Create Successfull");
+            return Ok("Create Successfull");*/
+            return Ok(await _serviceRequestService.AssignWorkerToRequest(job));
 
             /*if (res)
             {
@@ -211,12 +216,13 @@ namespace AnService_Capstone.Controllers
                 return BadRequest(new ErrorResponse("Please enter id"));
             }
 
-            var service = await _serviceRepository.GetServiceRequestByID(id);
-            /*if (service == null)
+            /*var service = await _serviceRepository.GetServiceRequestByID(id);
+            *//*if (service == null)
             {
                 return NotFound(new ErrorResponse("No Record"));
-            }*/
-            return Ok(service);
+            }*//*
+            return Ok(service);*/
+            return Ok(await _serviceRequestService.GetServiceRequestByID(id));
         }
 
         /// <summary>
@@ -230,7 +236,7 @@ namespace AnService_Capstone.Controllers
         [Authorize(Roles = "Staff, Customer")]
         public async Task<IActionResult> GetAllServiceRequestStatusOrDate(int ServiceRequestStatus, string ServiceRequestCreateDate)
         {
-            IEnumerable<TblServiceRequest> service;
+            /*IEnumerable<TblServiceRequest> service;
 
             if (ServiceRequestCreateDate != null)
             {
@@ -255,11 +261,12 @@ namespace AnService_Capstone.Controllers
                 service = await _serviceRepository.GetAllServiceRequestByDateAndStatus(ServiceRequestCreateDate, ServiceRequestStatus);
             }
 
-            /*if (service == null)
+            *//*if (service == null)
             {
                 return NotFound(new ErrorResponse("No record"));
-            }*/
-            return Ok(service);
+            }*//*
+            return Ok(service);*/
+            return Ok(await _serviceRequestService.GetAllServiceRequestStatusOrDate(ServiceRequestStatus, ServiceRequestCreateDate));
         }
 
         /*[HttpGet]
@@ -305,7 +312,7 @@ namespace AnService_Capstone.Controllers
                 return BadRequest(new ErrorResponse("Please enter id"));
             }
 
-            var service = await _serviceRepository.GetAllServiceRequestByUserID(id);
+            var service = await _serviceRequestService.GetAllServiceRequestByUserID(id);
             if (service == null)
             {
                 return NotFound(new ErrorResponse("No Request Service"));
@@ -323,7 +330,7 @@ namespace AnService_Capstone.Controllers
         [Authorize(Roles = "Customer")]
         public async Task<IActionResult> GetServiceByName(string name)
         {
-            var service = await _serviceRepository.GetServiceByName(name);
+            var service = await _serviceRequestService.GetServiceByName(name);
             if (service == null)
             {
                 return NotFound(new ErrorResponse("No Service"));
@@ -340,10 +347,10 @@ namespace AnService_Capstone.Controllers
         [Authorize(Roles = "Customer")]
         public async Task<IActionResult> GetAllService()
         {
-            var service = await _serviceRepository.GetAllService();
+            var service = await _serviceRequestService.GetAllService();
             if (service == null)
             {
-                return BadRequest();
+                return NotFound(new ErrorResponse("No Service"));
             }
             return Ok(service);
         }
@@ -364,7 +371,7 @@ namespace AnService_Capstone.Controllers
                 return BadRequest(new ErrorResponse("Please enter id"));
             }
 
-            var result = await _serviceRepository.GetAllServiceRequestByWorkerID(id, status);
+            var result = await _serviceRequestService.GetAllServiceRequestByWorkerID(id, status);
 
             if (result == null)
             {
@@ -406,7 +413,7 @@ namespace AnService_Capstone.Controllers
                 return BadRequest(new ErrorResponse("Please enter id"));
             }
 
-            var result = await _serviceRepository.GetAllServiceRequestDetailsByServiceRequestID(id);
+            var result = await _serviceRequestService.GetAllServiceRequestDetailsByServiceRequestID(id);
 
             /*if (result == null)
             {
@@ -436,7 +443,7 @@ namespace AnService_Capstone.Controllers
                 return BadRequest(new ErrorResponse("Please enter worker id"));
             }
 
-            var result = await _serviceRepository.GetAllServiceRequestDetailsByServiceRequestIDAndWorkerID(requestID, workerID);
+            var result = await _serviceRequestService.GetAllServiceRequestDetailsByServiceRequestIDAndWorkerID(requestID, workerID);
 
             if (result == null)
             {
@@ -466,7 +473,7 @@ namespace AnService_Capstone.Controllers
                 return BadRequest(new ErrorResponse("Please enter status"));
             }
 
-            var result = await _serviceRepository.GetServiceRequestByUserIDAndStatus(id, status);
+            var result = await _serviceRequestService.GetServiceRequestByUserIDAndStatus(id, status);
 
             if (result == null)
             {
@@ -484,8 +491,8 @@ namespace AnService_Capstone.Controllers
         [Authorize(Roles = "Staff")]
         public async Task<IActionResult> CountSatisfiedRequestDetail()
         {
-            var res = await _serviceRepository.CountRequestServiceDetail(11);
-            return Ok(res);
+            /*var res = await _serviceRepository.CountRequestServiceDetail(11);*/
+            return Ok(await _serviceRequestService.CountSatisfiedRequestDetail());
         }
 
         /// <summary>
@@ -497,8 +504,9 @@ namespace AnService_Capstone.Controllers
         [Authorize(Roles = "Staff")]
         public async Task<IActionResult> CountUnsatisfiedRequestDetail()
         {
-            var res = await _serviceRepository.CountRequestServiceDetail(12);
-            return Ok(res);
+            /* var res = await _serviceRepository.CountRequestServiceDetail(12);
+             return Ok(res);*/
+            return Ok(await _serviceRequestService.CountUnsatisfiedRequestDetail());
         }
 
         /// <summary>
@@ -510,8 +518,9 @@ namespace AnService_Capstone.Controllers
         [Authorize(Roles = "Staff")]
         public async Task<IActionResult> CountReworkRequestDetail()
         {
-            var res = await _serviceRepository.CountRequestServiceDetail(16);
-            return Ok(res);
+            /*var res = await _serviceRepository.CountRequestServiceDetail(16);
+            return Ok(res);*/
+            return Ok(await _serviceRequestService.CountReworkRequestDetail());
         }
 
         /*/// <summary>
@@ -690,7 +699,7 @@ namespace AnService_Capstone.Controllers
         [Authorize(Roles = "Customer")]
         public async Task<IActionResult> CancelServiceRequestForCustomer(int id)
         {
-            if (id == 0)
+            /*if (id == 0)
             {
                 return BadRequest(new ErrorResponse("Please enter id"));
             }
@@ -707,7 +716,8 @@ namespace AnService_Capstone.Controllers
             {
                 return NotFound(new ErrorResponse("Cancel Fail"));
             }
-            return Ok("Cancel Successful");
+            return Ok("Cancel Successful");*/
+            return Ok(await _serviceRequestService.CancelServiceRequestForCustomer(id));
         }
 
         /// <summary>
@@ -720,7 +730,7 @@ namespace AnService_Capstone.Controllers
         [Authorize(Roles = "Staff")]
         public async Task<IActionResult> CancelServiceRequestForStaff(int id)
         {
-            if (id == 0)
+            /*if (id == 0)
             {
                 return BadRequest(new ErrorResponse("Please enter id"));
             }
@@ -737,7 +747,8 @@ namespace AnService_Capstone.Controllers
             {
                 return NotFound(new ErrorResponse("Cancel Fail"));
             }
-            return Ok("Cancel Successful");
+            return Ok("Cancel Successful");*/
+            return Ok(await _serviceRequestService.CancelServiceRequestForStaff(id));
         }
 
         [HttpPut]
@@ -745,7 +756,7 @@ namespace AnService_Capstone.Controllers
         [Authorize(Roles = "Customer")]
         public async Task<IActionResult> UpdateStatusServiceRequestDetail(int id, int status)
         {
-            if (id == 0)
+            /*if (id == 0)
             {
                 return BadRequest(new ErrorResponse("Please enter id"));
             }
@@ -780,7 +791,8 @@ namespace AnService_Capstone.Controllers
 
                 return Ok("Update Successful");
             }
-            return NotFound(new ErrorResponse("Update Fail"));
+            return NotFound(new ErrorResponse("Update Fail"));*/
+            return Ok(await _serviceRequestService.UpdateStatusServiceRequestDetail(id, status));
         }
 
         [HttpPut]
@@ -788,7 +800,7 @@ namespace AnService_Capstone.Controllers
         [Authorize(Roles = "Staff")]
         public async Task<IActionResult> CompleteServiceRequest(int serviceRequestID)
         {
-            if (serviceRequestID == 0)
+            /*if (serviceRequestID == 0)
             {
                 return BadRequest(new ErrorResponse("Please enter serviceRequestID"));
             }
@@ -800,7 +812,8 @@ namespace AnService_Capstone.Controllers
                 return Ok("Update Successful");
             }
 
-            return BadRequest(new ErrorResponse("Update Fail"));
+            return BadRequest(new ErrorResponse("Update Fail"));*/
+            return Ok(await _serviceRequestService.CompleteServiceRequest(serviceRequestID));
         }
 
         [HttpPut]
@@ -808,7 +821,7 @@ namespace AnService_Capstone.Controllers
         [Authorize(Roles = "Staff")]
         public async Task<IActionResult> SurveyingServiceRequest(int serviceRequestID)
         {
-            if (serviceRequestID == 0)
+            /*if (serviceRequestID == 0)
             {
                 return BadRequest(new ErrorResponse("Please enter serviceRequestID"));
             }
@@ -827,7 +840,8 @@ namespace AnService_Capstone.Controllers
                 return Ok("Update Successful");
             }
 
-            return BadRequest(new ErrorResponse("Update Fail"));
+            return BadRequest(new ErrorResponse("Update Fail"));*/
+            return Ok(await _serviceRequestService.SurveyingServiceRequest(serviceRequestID));
         }
 
         [HttpPut]
@@ -835,7 +849,7 @@ namespace AnService_Capstone.Controllers
         [Authorize(Roles = "Staff")]
         public async Task<IActionResult> ReworkRequestDetail(int requestDetailID)
         {
-            if (requestDetailID == 0)
+            /*if (requestDetailID == 0)
             {
                 return BadRequest(new ErrorResponse("Please enter requestDetailID"));
             }
@@ -864,7 +878,8 @@ namespace AnService_Capstone.Controllers
                 return Ok("Update Successful");
             }
 
-            return BadRequest(new ErrorResponse("Update Fail"));
+            return BadRequest(new ErrorResponse("Update Fail"));*/
+            return Ok(await _serviceRequestService.ReworkRequestDetail(requestDetailID));
         }
 
         /*[HttpPut]
@@ -902,7 +917,7 @@ namespace AnService_Capstone.Controllers
         [Authorize(Roles = "Staff")]
         public async Task<IActionResult> RemoveListServiceRequest(IEnumerable<int> requestServiceID)
         {
-            bool result = false;
+            /*bool result = false;
             if (requestServiceID == null)
             {
                 return BadRequest(new ErrorResponse("Please enter requestServiceID"));
@@ -917,7 +932,8 @@ namespace AnService_Capstone.Controllers
             {
                 return NotFound(new ErrorResponse("Cancel Fail"));
             }
-            return Ok("Cancel Successful");
+            return Ok("Cancel Successful");*/
+            return Ok(await _serviceRequestService.RemoveListServiceRequest(requestServiceID));
         }
 
         /*[HttpGet]

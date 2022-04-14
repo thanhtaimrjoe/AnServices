@@ -1,4 +1,5 @@
 ﻿using AnService_Capstone.Core.Interfaces;
+using AnService_Capstone.Core.Interfaces.Services;
 using AnService_Capstone.Core.Models.Response;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -11,11 +12,17 @@ namespace AnService_Capstone.Controllers
     [ApiController]
     public class TypeJobController : ControllerBase
     {
-        private readonly ITypeJobRepository _typeJobRepository;
+        /*private readonly ITypeJobRepository _typeJobRepository;*/
+        private readonly ITypeJobService _typeJobService;
 
-        public TypeJobController(ITypeJobRepository typeJobRepository)
+        /*public TypeJobController(ITypeJobRepository typeJobRepository)
         {
             _typeJobRepository = typeJobRepository;
+        }*/
+
+        public TypeJobController(ITypeJobService typeJobService)
+        {
+            _typeJobService = typeJobService;
         }
 
         /// <summary>
@@ -27,7 +34,7 @@ namespace AnService_Capstone.Controllers
         [Authorize(Roles = "Staff")]
         public async Task<IActionResult> GetAll()
         {
-            var res = await _typeJobRepository.GetAll();
+            var res = await _typeJobService.GetAll();
             if (res == null)
             {
                 return NotFound(new ErrorResponse("No record"));
