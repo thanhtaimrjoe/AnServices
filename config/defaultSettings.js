@@ -6,9 +6,10 @@ const proSettings = {
   fixedHeader: false,
   fixSiderbar: true,
   colorWeak: false,
-  title: 'AnService',
+  title: 'AnServices',
   pwa: false,
-  iconfontUrl: '',
+  iconfontUrl: 'https://firebasestorage.googleapis.com/v0/b/anservices.appspot.com/o/Icon%2Frepair.png?alt=media&token=41e0bb4b-c2c3-4f00-8aac-46df1b316a7a',
+  logo: "https://firebasestorage.googleapis.com/v0/b/anservices.appspot.com/o/Icon%2Frepair.png?alt=media&token=41e0bb4b-c2c3-4f00-8aac-46df1b316a7a",
 
   // {
   //   "navTheme": "light",

@@ -156,22 +156,22 @@ const Analysis = () => {
         ]);
       }
 
-      if (res.revenueByYear !== null) {
+      if (res.revenueOfContractByYear !== null) {
         revenueByYearArray.splice(0, 12);
         setRevenueByYearArray([
           ...revenueByYearArray,
-          res.revenueByYear.january,
-          res.revenueByYear.february,
-          res.revenueByYear.march,
-          res.revenueByYear.april,
-          res.revenueByYear.may,
-          res.revenueByYear.june,
-          res.revenueByYear.july,
-          res.revenueByYear.august,
-          res.revenueByYear.september,
-          res.revenueByYear.october,
-          res.revenueByYear.november,
-          res.revenueByYear.december,
+          res.revenueOfContractByYear.january,
+          res.revenueOfContractByYear.february,
+          res.revenueOfContractByYear.march,
+          res.revenueOfContractByYear.april,
+          res.revenueOfContractByYear.may,
+          res.revenueOfContractByYear.june,
+          res.revenueOfContractByYear.july,
+          res.revenueOfContractByYear.august,
+          res.revenueOfContractByYear.september,
+          res.revenueOfContractByYear.october,
+          res.revenueOfContractByYear.november,
+          res.revenueOfContractByYear.december,
         ]);
       } else {
         revenueByYearArray.splice(0, 12);
@@ -381,22 +381,22 @@ const Analysis = () => {
         ]);
       }
 
-      if (res.revenueByYear !== null) {
+      if (res.revenueOfContractByYear !== null) {
         revenueByYearArray.splice(0, 12);
         setRevenueByYearArray([
           ...revenueByYearArray,
-          res.revenueByYear.january,
-          res.revenueByYear.february,
-          res.revenueByYear.march,
-          res.revenueByYear.april,
-          res.revenueByYear.may,
-          res.revenueByYear.june,
-          res.revenueByYear.july,
-          res.revenueByYear.august,
-          res.revenueByYear.september,
-          res.revenueByYear.october,
-          res.revenueByYear.november,
-          res.revenueByYear.december,
+          res.revenueOfContractByYear.january,
+          res.revenueOfContractByYear.february,
+          res.revenueOfContractByYear.march,
+          res.revenueOfContractByYear.april,
+          res.revenueOfContractByYear.may,
+          res.revenueOfContractByYear.june,
+          res.revenueOfContractByYear.july,
+          res.revenueOfContractByYear.august,
+          res.revenueOfContractByYear.september,
+          res.revenueOfContractByYear.october,
+          res.revenueOfContractByYear.november,
+          res.revenueOfContractByYear.december,
         ]);
       } else {
         revenueByYearArray.splice(0, 12);
@@ -493,6 +493,7 @@ const Analysis = () => {
             completeServiceRequestData={completeServiceRequestData || [] }
             cancelServiceRequestData={cancelServiceRequestData || []}
             isActive={isActive}
+            // handleQuarterPickerChange={handleYearPickerChange}
             handleYearPickerChange={handleYearPickerChange}
             loading={loading}
             selectYear={selectYear}

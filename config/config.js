@@ -13,7 +13,7 @@ export default defineConfig({
   define: {
     API_URL: 'https://anservice-capstone.conveyor.cloud/api',
     // API_URL: 'https://anservice-capstone-ux2.conveyor.cloud/api',
-    // API_URL: 'https://anservice-capstone-yx3.conveyor.cloud/api',
+    // API_URL: 'https://c2d3-2402-800-6312-5c04-b099-25bc-66a8-db8c.ap.ngrok.io/api',
   },
   history: {
     type: 'browser',

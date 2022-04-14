@@ -41,8 +41,9 @@ const UserLayout = (props) => {
           <div className={styles.top}>
             <div className={styles.header}>
               <Link to="/">
-                {/* <img alt="logo" className={styles.logo} src={logo} /> */}
-                <span className={styles.title}>AnService</span>
+                {/* HÌNH BÊN TRÁI CHỮ ANSERVICES Ở NGOÀI MÀN HÌNH LOGIN */}
+                <img alt="logo" className={styles.logo} src={"https://firebasestorage.googleapis.com/v0/b/anservices.appspot.com/o/Icon%2Frepair.png?alt=media&token=41e0bb4b-c2c3-4f00-8aac-46df1b316a7a"} />
+                <span className={styles.title}>AnServices</span>
               </Link>
               {/* <Link to ="/user/create">
                 <div className={styles.signup}>Sign Up For Business</div>

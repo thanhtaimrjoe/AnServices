@@ -71,6 +71,7 @@ const SalesCard = ({
     <Card
       loading={loading}
       bordered={false}
+      title="Chưa biết để tên gì"
       bodyStyle={{
         padding: 0,
       }}
@@ -89,8 +90,9 @@ const SalesCard = ({
                 defaultValue={moment(thisYear.getFullYear(), 'YYYY')}
                 placeholder="Chọn năm"
                 disabledDate={
-                  (d) => !d || d.isBefore(moment(2021, 'YYYY-MM-DD').startOf('year'))
-                  // || d.isAfter(moment(new Date().getFullYear +1 ,"YYYY-MM-DD" ))
+                  (d) => !d 
+                  || d.isBefore(moment(2021, 'YYYY-MM-DD').startOf('year'))
+                  || d.isAfter(moment(thisYear.getFullYear(),'YYYY-MM-DD').startOf('year'))
                 }
               />
             </div>

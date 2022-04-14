@@ -19,12 +19,12 @@ export const refeshToken = () => {
   return request.get('/users/refresh-token');
 }
 
-export const sendEmail = (account) => {
-  return request.post('/User/SendEmail', 
-  {Headers: { 
-    'Accept': 'application/json',
-    'Content-Type': 'application/json;charset=UTF-8',}}, 
-    {
-          body: JSON.stringify(account),
-  });
-};  
+// export const sendEmail = (account) => {
+//   return request.post('/User/SendEmail', 
+//   {Headers: { 
+//     'Accept': 'application/json',
+//     'Content-Type': 'application/json;charset=UTF-8',}}, 
+//     {
+//           body: JSON.stringify(account),
+//   });
+// };  

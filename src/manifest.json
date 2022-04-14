@@ -1,6 +1,6 @@
 {
-  "name": "AnService",
-  "short_name": "AnService",
+  "name": "AnServices",
+  "short_name": "AnServices",
   "display": "standalone",
   "start_url": "./?utm_source=homescreen",
   "theme_color": "#002140",

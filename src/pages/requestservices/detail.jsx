@@ -72,6 +72,7 @@ import CommonSelect from '@/components/CommonSelect/CommonSelect';
 import { createInvoice, getInfomationInvoiceByServiceRequestID } from '@/services/invoice';
 import { getInformationPromotionByID } from '@/services/promotion';
 import axios from 'axios';
+import { sendEmail } from '@/services/invoice';
 
 const DetailServiceRequest = (props) => {
   const {
@@ -108,7 +109,7 @@ const DetailServiceRequest = (props) => {
   const [sendInvoiceConfirmLoading, setSendInvoiceConfirmLoading] = React.useState(false);
   const [staffCoordinatorConfirmLoading, setStaffCoordinatorConfirmLoading] = React.useState(false);
   const [okConfirmLoading, setOkConfirmLoading] = React.useState(false);
-
+  const [sendInvoiceToCustomerConfirmLoading,setSendInvoiceToCustomerConfirmLoading] = React.useState(false);
   const [isLoad, setIsLoad] = useState(false);
   const [staffCoordinator, setStaffCoordinator] = useState([]);
   const [mainStaffCoordinator, setMainStaffCoordinator] = useState();
@@ -116,28 +117,20 @@ const DetailServiceRequest = (props) => {
   const [visible2, setVisible2] = React.useState(false);
   const [visibleInvoice, setVisibleInvoice] = React.useState(false);
   const [visibleSendInvoiceToCustomer, setVisibleSendInvoiceToCustomer] = React.useState(false);
-
   const [disable, setDisable] = React.useState(true);
   const [disableInvoice, setDisableInvoice] = React.useState(true);
   const [disableStaffCoordinator, setDisableStaffCoordinator] = React.useState(true);
   const [disableRejectServicerRequest, setDisableRejectServicerRequest] = React.useState(true);
   const [disableCompleteServicerRequest, setDisableCompleteServicerRequest] = React.useState(true);
-  const [disableSurveyingServicerRequest, setDisableSurveyingServicerRequest] = React.useState(
-    true,
-  );
+  const [disableSurveyingServicerRequest, setDisableSurveyingServicerRequest] = React.useState(true);
   const [disableCreateContract, setDisableCreateContract] = React.useState(true);
-  const [
-    disableWaitForPayAndCompletedServicerRequest,
-    setDisableWaitForPayAndCompletedServicerRequest,
-  ] = React.useState(false);
-
+  const [disableWaitForPayAndCompletedServicerRequest,setDisableWaitForPayAndCompletedServicerRequest] = React.useState(false);
   const [updatePriceRequestDetailsData, setUpdatePriceRequestDetailsData] = useState([]);
   const { RangePicker } = DatePicker;
   const [totalPrice, setTotalPrice] = useState([]);
   const [invoiceTotalPrice, setInvoiceTotalPrice] = useState([]);
   const [promotionValueRecord, setPromotionValueRecord] = useState();
-
-  //
+  const [newRequestServiceState, setNewRequestServiceState] = useState();
 
   // Invoice
   const [customerAddress, setCustomerAddress] = useState();
@@ -150,17 +143,6 @@ const DetailServiceRequest = (props) => {
   const [contractTotalPrice1, setContractTotalPrice1] = useState();
   const [contractDetails, setContractDetails] = useState([]);
   const [promotionValue, setPromotionValue] = useState([]);
-  const [fileList, setFileList] = useState([
-    {
-      uid: '-xxx',
-      percent: 50,
-      name: 'image.png',
-      status: 'uploading',
-      url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-    },
-  ]);
-
-  // ======================================
 
   // Upload file to Firebase
   const [file, setFile] = useState('');
@@ -191,81 +173,62 @@ const DetailServiceRequest = (props) => {
   const [fileImageName, setFileImageName] = useState();
 
   const saveImageInvoice = (e) => {
-    console.log('lưu hình ', e.file.originFileObj);
+    let validate = true;
 
-    setFileImageInvoice(e.file.originFileObj);
-    setFileImageName(e.file.originFileObj.name);
+    const isJpgOrPng =
+      e.file.originFileObj.type === 'image/jpeg' || e.file.originFileObj.type === 'image/png';
+    if (!isJpgOrPng) {
+      message.error('Chỉ có thể chọn hình với đuôi .JPG/PNG! Vui lòng chọn hình khác');
+      validate = false;
+    }
+    const isLt2M = e.file.originFileObj.size / 1024 / 1024 < 2;
+    if (!isLt2M) {
+      message.error('Hình phải nhỏ hơn 2MB! Vui lòng chọn hình khác');
+      validate = false;
+    }
+
+    if (e.file.originFileObj == null) {
+      message.error('Vui lòng chọn hình');
+      validate = false;
+    }
+
+    if (validate) {
+      message.success('Hình hợp lệ');
+      setFileImageInvoice(e.file.originFileObj);
+      setFileImageName(e.file.originFileObj.name);
+    }
   };
 
   const uploadImageInvoice = async (e) => {
-    console.log('đẩy hình', fileImageInvoice);
+    setSendInvoiceToCustomerConfirmLoading(true);
+    setTimeout(() => {
+      setSendInvoiceToCustomerConfirmLoading(false);
+    }, 2000);
 
-    const config = {     
-      headers: { 'content-type': 'multipart/form-data' }
-    }
+    const config = {
+      headers: { 'content-type': 'multipart/form-data' },
+    };
     let formImageData = new FormData();
-    formImageData.append('UserID', 113);
-    // formImageData.append('files', fileImageInvoice);
-    console.log('formImageData', formImageData)
+    // formImageData.append('UserID', updateRequestServiceState.customer.userId);
+    formImageData.append('UserID', 90);
+    formImageData.append('files', fileImageInvoice);
     try {
-      await axios.post(
-        'https://anservice-capstone.conveyor.cloud/api/User/SendEmail',
-        formImageData,
-        config,
-      ).then((res) => {
-        console.log('formImageDatares', res)
-      });
-    } catch (error) {
-      console.log('error', error);
-    }
-    
-  };
-
-  const onSendInvoiceToCusomer = async () => {
-    // setSendContractConfirmLoading(true);
-    // setTimeout(() => {
-    //   setSendContractConfirmLoading(false);
-    // }, 2000);
-    let validate = true;
-
-    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
-    if (!isJpgOrPng) {
-      message.error('Chỉ có thể chọn hình với đuôi .JPG/PNG!');
-      validate = false;
-    }
-    const isLt2M = file.size / 1024 / 1024 < 2;
-    if (!isLt2M) {
-      message.error('Hình phải nhỏ hơn 2MB!');
-      validate = false;
-    }
-
-    if (file == null) {
-      message.error('Vui lòng chọn tệp');
-      validate = false;
-    }
-
-    if (!validate) {
-      message.error('Không gửi được');
-    }
-
-    const returnUrl = await upload();
-    if (returnUrl) {
-      message.success('Gửi được');
-      const sendInvoiceToCustomer = {
-        userId: userID,
-        contractUrl: returnUrl,
-      };
-      const createContractData = normalizeReportForm(sendInvoiceToCustomer);
-      return createContract(createContractData)
+      await axios
+        .post(
+          `https://anservice-capstone.conveyor.cloud/api/User/SendEmail?userID=${updateRequestServiceState.customer.userId}`,
+          formImageData,
+          config,
+        )
         .then((res) => {
-          console.log('contract12', createContractData);
-          setConfirmLoading(true);
-          // window.location.reload(true);
-        })
-        .catch((info) => {
-          console.log('Xác thực không thành công:', info);
-        })
-        .finally();
+          if (res.status === 200) {
+            message.success('Đã gửi hoá đơn cho khách thành công');
+            setTimeout(() => {
+              window.location.reload();
+            }, 2000);
+          }
+        });
+    } catch (error) {
+      message.error('Gửi hoá đơn cho khách không thành công');
     }
   };
 
@@ -314,6 +277,7 @@ const DetailServiceRequest = (props) => {
   useEffect(() => {
     // form.setFieldsValue(updateRequestServiceState);
     getServiceRequestByID(updateRequestServiceState.serviceRequestId).then((res) => {
+      setNewRequestServiceState(res);
       console.log('record01', updateRequestServiceState);
       console.log('recorde01', res);
       setCustomerName(res.customerName);
@@ -346,7 +310,6 @@ const DetailServiceRequest = (props) => {
             if (respones.status === 404) {
               message.warning('Yêu cầu này chưa có hoá đơn');
             } else {
-              console.log('record07', respones);
               setCustomerAddress(respones.customerAddress);
               setCustomerPhone(respones.customerPhone);
               setContractStartDate(moment(respones.contractStartDate).format('DD/MM/YYYY'));
@@ -422,8 +385,6 @@ const DetailServiceRequest = (props) => {
         setPromotionValueRecord(record.promotionValue);
       });
     }
-
-    
   }, []);
 
   const [requestMaterialRecord, setRequestMaterialRecord] = useState([]);
@@ -456,10 +417,6 @@ const DetailServiceRequest = (props) => {
         setContractRecord(record);
 
         record.map((item) => {
-          if (item.serviceRequestId === updateRequestServiceState.serviceRequestReference) {
-            console.log('showrecord', item.serviceRequestId);
-          }
-
           if (item.serviceRequestId === updateRequestServiceState.serviceRequestId) {
             setContractIDRecord(item.contractId);
             if (item.contractStatus === 3) {
@@ -498,6 +455,7 @@ const DetailServiceRequest = (props) => {
           setContractDepositData1(record.contractDeposit);
           setContractTotalPriceData1(record.contractTotalPrice);
 
+          setContractDepositData(record.contractDeposit);
           setContractStartDateData(record.contractStartDate);
           setContractEndDateData(record.contractEndDate);
         }
@@ -505,22 +463,16 @@ const DetailServiceRequest = (props) => {
     } else console.log('Lỗi');
 
     // load worker by service id
-    console.log('requestServiceRecord', requestServiceRecord);
     if (requestServiceRecord.length > 0) {
       const requestServiceRecordTmp = requestServiceRecord;
       requestServiceRecordTmp.map((item) => {
-        console.log('requestServiceRecorditem', item);
-
         const items = item;
         getWorkerByServiceID(item.serviceId).then((record) => {
-          console.log('workerer', record);
           items.worker = record;
         });
       });
-      console.log('requestServiceRecordTmpzz', requestServiceRecordTmp);
       setRequestServiceDetail(requestServiceRecordTmp);
     }
-
   }, [isLoad]);
 
   // ===========================================
@@ -560,7 +512,7 @@ const DetailServiceRequest = (props) => {
     return cancelServiceRequest(updateRequestServiceState.serviceRequestId).then(
       () => history.replace('/requestservices/list'),
       message.success(
-        `Yêu cầu ${updateRequestServiceState.serviceRequestDescription} đã được từ chối thành công`,
+        `Yêu cầu '${updateRequestServiceState.serviceRequestDescription}' đã được từ chối thành công`,
       ),
     );
   };
@@ -578,7 +530,7 @@ const DetailServiceRequest = (props) => {
     return surveyingServiceRequest(updateRequestServiceState.serviceRequestId).then(
       () => history.replace('/requestservices/list'),
       message.success(
-        `Yêu cầu ${updateRequestServiceState.serviceRequestDescription} đã được goi khảo sát thành công`,
+        `Yêu cầu '${updateRequestServiceState.serviceRequestDescription}' đã được goi khảo sát thành công`,
       ),
     );
   };
@@ -587,7 +539,7 @@ const DetailServiceRequest = (props) => {
     // const update = normalizeReportForm(formData);
     return completeServiceRequest(updateRequestServiceState.serviceRequestId).then(
       () => history.replace('/requestservices/list'),
-      message.success(`Yêu cầu ${updateRequestServiceState.serviceRequestDescription} hoàn thành`),
+      message.success(`Yêu cầu '${updateRequestServiceState.serviceRequestDescription}' hoàn thành`),
     );
   };
 
@@ -595,7 +547,8 @@ const DetailServiceRequest = (props) => {
     history.replace('/requestservices/list');
   };
 
-  const onStaffCoordinator = (values) => {
+  const onStaffCoordinator = (values, updateWorkerState) => {
+    console.log('firstvalues', updateWorkerState)
     let validate = true;
     if (!mainStaffCoordinator || mainStaffCoordinator === 'undefined') {
       validate = false;
@@ -608,7 +561,8 @@ const DetailServiceRequest = (props) => {
     if (staffCoordinator.length === 0) {
       validate = false;
       message.warning('Chưa chọn thợ phụ');
-    } else {
+    }
+    if(validate) {
       setStaffCoordinatorConfirmLoading(true);
       setTimeout(() => {
         setStaffCoordinatorConfirmLoading(false);
@@ -624,6 +578,10 @@ const DetailServiceRequest = (props) => {
       return assignWorkerToRequest(assignWorker)
         .then(() => {
           // requestServiceRecord.resetFields();
+          message.success(`Điều phối thợ cho yêu cầu '${updateWorkerState.service.serviceName}' thành công`)
+          setPriorityData(null);
+          setMainStaffCoordinator(null);
+          setStaffCoordinator([]);
         })
         .catch((info) => {
           console.log('Xác thực không thành công:', info);
@@ -637,7 +595,6 @@ const DetailServiceRequest = (props) => {
   function onChange(value, requestDetailId, index) {
     if (updatePriceRequestDetailsData[index]) {
       updatePriceRequestDetailsData[index].requestDetailPrice = value;
-      // value - value * promotionValueRecord;
       setUpdatePriceRequestDetailsData([...updatePriceRequestDetailsData]);
     } else {
       setUpdatePriceRequestDetailsData([
@@ -645,7 +602,6 @@ const DetailServiceRequest = (props) => {
         {
           requestDetailID: requestDetailId,
           requestDetailPrice: value,
-          // requestDetailPrice: value - value * promotionValueRecord,
         },
       ]);
     }
@@ -717,7 +673,8 @@ const DetailServiceRequest = (props) => {
     setStaffCoordinator([...value]);
   }
 
-  const onAcceptRequestMaterial = (values) => {
+  const onAcceptRequestMaterial = (values, updateRequestMaterialState) => {
+    console.log('updateRequestMaterialState', updateRequestMaterialState);
     setOkConfirmLoading(true);
     setTimeout(() => {
       setOkConfirmLoading(false);
@@ -725,6 +682,7 @@ const DetailServiceRequest = (props) => {
 
     const update = normalizeReportForm(formData);
     return approveStatusRequestMaterial(values, update).then(() => {
+      message.success(`Đã đồng ý yêu cầu vật tư '' thành công `)
       window.location.reload(true);
     });
   };
@@ -764,6 +722,8 @@ const DetailServiceRequest = (props) => {
           form.resetFields();
           setConfirmLoading(false);
           setVisible1(false);
+          message.success(`Đã từ chối yêu cầu vật tư '' thành công `)
+
           window.location.reload(true);
         })
         .catch((info) => {
@@ -781,6 +741,7 @@ const DetailServiceRequest = (props) => {
           form.resetFields();
           setConfirmLoading(false);
           setVisible1(false);
+          message.success(`Đã từ chối yêu cầu vật tư '' thành công `)
           window.location.reload(true);
         })
         .catch((info) => {
@@ -806,6 +767,7 @@ const DetailServiceRequest = (props) => {
           form.resetFields();
           setConfirmLoading(false);
           setVisible(false);
+          message.success(`Đã điều chỉnh yêu cầu vật tư '' thành công `)
           window.location.reload(true);
         })
         .catch((info) => {
@@ -827,6 +789,7 @@ const DetailServiceRequest = (props) => {
           form.resetFields();
           setConfirmLoading(false);
           setVisible(false);
+          message.success(`Đã điều chỉnh yêu cầu vật tư '' thành công `)
           window.location.reload(true);
         })
         .catch((info) => {
@@ -881,34 +844,37 @@ const DetailServiceRequest = (props) => {
       validate = false;
       message.warning('Chưa chọn ngày kết thúc thi công');
     }
-    if (!validate) {
-      message.error('Không gửi được');
-    }
-    const returnUrl = await upload();
-    if (returnUrl) {
-      message.success('Gửi được');
-      const createContractValues = {
-        userId: userID,
-        username: customerName,
-        contractUrl: returnUrl,
-        requestId: updateRequestServiceState.serviceRequestId,
-        contractStartDate: contractStartDateData,
-        contractEndDate: contractEndDateData,
-        contractDeposit: contractDepositData,
-        contractTotalPrice: result,
-        updatePriceRequestDetails: updatePriceRequestDetailsData,
-      };
-      const createContractData = normalizeReportForm(createContractValues);
-      return createContract(createContractData)
-        .then((res) => {
-          console.log('contract12', createContractData);
-          setConfirmLoading(true);
-          // window.location.reload(true);
-        })
-        .catch((info) => {
-          console.log('Xác thực không thành công:', info);
-        })
-        .finally();
+    // if (!validate) {
+    //   message.error('Không gửi được');
+    // } 
+    if(validate) {
+      const returnUrl = await upload();
+      if (returnUrl) {
+        const createContractValues = {
+          userId: userID,
+          username: customerName,
+          contractUrl: returnUrl,
+          requestId: updateRequestServiceState.serviceRequestId,
+          contractStartDate: contractStartDateData,
+          contractEndDate: contractEndDateData,
+          contractDeposit: contractDepositData,
+          contractTotalPrice: result,
+          updatePriceRequestDetails: updatePriceRequestDetailsData,
+        };
+        const createContractData = normalizeReportForm(createContractValues);
+        return createContract(createContractData)
+          .then((res) => {
+            setConfirmLoading(true);
+            message.success('Gửi hợp đồng thành công');
+            setTimeout(() => {
+              window.location.reload();
+            }, 2000);
+          })
+          .catch((info) => {
+            console.log('Xác thực không thành công:', info);
+          })
+          .finally();
+      }
     }
   };
 
@@ -925,10 +891,10 @@ const DetailServiceRequest = (props) => {
     };
     return createInvoice(createInvoiceData).then((res) => {
       if (res.status === 400) {
-        message.error('Hoá đơn này đã được gửi');
+        message.error('Hoá đơn này gửi thất bại, vui lòng thử lại');
       } else {
         message.success(
-          `Hoá đơn cho yêu cầu ${updateRequestServiceState.serviceRequestDescription} đã được gửi`,
+          `Hoá đơn cho yêu cầu '${updateRequestServiceState.serviceRequestDescription}' đã được gửi`,
         );
         setDisableInvoice(true);
         onBackList();
@@ -943,6 +909,38 @@ const DetailServiceRequest = (props) => {
   const enableContractForm = () => {
     setDisable(false);
     setContractTotalPriceData1(null);
+  };
+
+  const onSendInvoiceToCustomer = () => {
+    setSendInvoiceToCustomerConfirmLoading(true);
+    setTimeout(() => {
+      setSendInvoiceToCustomerConfirmLoading(false);
+    }, 2000);
+    // try {
+    //   sendEmail(newRequestServiceState.serviceRequestId).then((res) => {
+    //     console.log('resstatus', res);
+    //     if (res.status === 200 || res.status === 204) {
+    //       message.success('Đã gửi hoá đơn cho khách thành công');
+    //       setTimeout(() => {
+    //         window.location.reload();
+    //       }, 2000);
+    //     }
+    //   });
+    // } catch (error) {
+    //   message.error('Gửi hoá đơn cho khách không thành công');
+    // }
+
+    sendEmail(updateRequestServiceState.serviceRequestId).then((res) => {
+      console.log('resstatus', res)
+      if (res.status === 400) {
+        message.error('Gửi hoá đơn cho khách không thành công. Vui lòng thử lại');
+      } else {
+        message.success(`Đã gửi hoá đơn cho khách '${customerName}' thành công`);
+        setTimeout(() => {
+          window.location.reload()
+          }, 2000);
+      }
+    })
   };
 
   // const getWorkerByServiceId = (serviceId) => {
@@ -1086,6 +1084,7 @@ const DetailServiceRequest = (props) => {
     },
   ];
 
+  // ĐIỀU PHỐI THỢ
   const REQUESTSERVICEDETAIL2 = [
     {
       title: 'STT',
@@ -1155,7 +1154,7 @@ const DetailServiceRequest = (props) => {
                   <Option key={option.userId}>{option.fullName}</Option>
                 ))}
             </Select>
-            {/* {record.serviceRequestId === updateRequestServiceState.serviceRequestId && (
+            {/* {record.serviceRequestId === newRequestServiceState.serviceRequestId && (
               <Button
               loading={staffCoordinatorConfirmLoading}
               disabled={disableStaffCoordinator}
@@ -1173,7 +1172,7 @@ const DetailServiceRequest = (props) => {
               <Button
                 // loading={staffCoordinatorConfirmLoading}
                 disabled={disableStaffCoordinator}
-                onClick={() => onStaffCoordinator(updateWorkerState.requestDetailId)}
+                onClick={() => onStaffCoordinator(updateWorkerState.requestDetailId, updateWorkerState)}
                 onChange={handleChange && handleChangeMainWorker}
                 state={updateWorkerState}
                 type="primary"
@@ -1239,23 +1238,26 @@ const DetailServiceRequest = (props) => {
       render: (text, record) => {
         const updateRequestSMaterialState = { ...record };
         setContractUrl(record.contractUrl);
-        console.log('recorde01', updateRequestSMaterialState);
         return (
           <Space size="middle">
             <a onClick={onOpenNewWindown}>Xem hợp đồng</a>
             <a onClick={onOpenNewWindown}>Tải xuống & in</a>
-            {record.serviceRequestId === updateRequestServiceState.serviceRequestId &&
-              updateRequestServiceState.serviceRequestStatus === 15 && (
+            {record.serviceRequestId === newRequestServiceState.serviceRequestId &&
+              newRequestServiceState.serviceRequestStatus === 15 && (
                 <a onClick={enableContractForm}>Sửa hợp đồng</a>
               )}
-            {record.serviceRequestId !== updateRequestServiceState.serviceRequestId &&
-              record.serviceRequestId !== updateRequestServiceState.serviceRequestReference && (
+            {record.serviceRequestId !== newRequestServiceState.serviceRequestId &&
+              record.serviceRequestId !== newRequestServiceState.serviceRequestReference && (
                 <div>Hợp đồng của yêu cầu khác</div>
               )}
 
-            {record.serviceRequestId === updateRequestServiceState.serviceRequestReference && (
+            {record.serviceRequestId === newRequestServiceState.serviceRequestReference && (
               <div style={{ color: 'red' }}>Hợp đồng của yêu cầu làm lại</div>
             )}
+            {/* {(record.serviceRequestId === newRequestServiceState.serviceRequestReference &&
+            newRequestServiceState.serviceRequestStatus === 15) && (
+              <a onClick={enableContractForm}>Lập hợp đồng mới</a>
+            )} */}
           </Space>
         );
       },
@@ -1351,7 +1353,7 @@ const DetailServiceRequest = (props) => {
                 <Button
                   type="primary"
                   // loading={okConfirmLoading}
-                  onClick={() => onAcceptRequestMaterial(updateRequestMaterialState.usedMaterialId)}
+                  onClick={() => onAcceptRequestMaterial(updateRequestMaterialState.usedMaterialId, updateRequestMaterialState)}
                 >
                   Đồng ý
                 </Button>
@@ -1885,9 +1887,10 @@ const DetailServiceRequest = (props) => {
           {/* <Divider style={{ marginBottom: 32 }} /> */}
 
           <Row style={{ justifyContent: 'space-evenly' }}>
+
             {/* XEM HOÁ ĐƠN */}
-            {(updateRequestServiceState.serviceRequestStatus === 13 ||
-              updateRequestServiceState.serviceRequestStatus === 14) && (
+            {newRequestServiceState && (newRequestServiceState.serviceRequestStatus === 13 ||
+              newRequestServiceState.serviceRequestStatus === 14) && (
               <Row className={styles.invoice}>
                 <Button
                   type="primary"
@@ -1900,8 +1903,7 @@ const DetailServiceRequest = (props) => {
             )}
 
             {/* GỬI HOÁ ĐƠN CHO KHÁCH */}
-            {(updateRequestServiceState.serviceRequestStatus === 13 ||
-              updateRequestServiceState.serviceRequestStatus === 14) && (
+            {/* {(newRequestServiceState.serviceRequestStatus === 14) && (
               <Row className={styles.invoice}>
                 <Button
                   type="primary"
@@ -1909,12 +1911,11 @@ const DetailServiceRequest = (props) => {
                   onClick={() => showModalSendInvoiceToCustomer()}
                 >
                   <Tooltip title="Gửi hoá đơn qua email cho khách">
-                    {/* <InfoCircleOutlined /> */}
                     Gửi hoá đơn cho khách
                   </Tooltip>
                 </Button>
               </Row>
-            )}
+            )} */}
           </Row>
 
           {/* XEM HOÁ ĐƠN */}
@@ -2026,15 +2027,24 @@ const DetailServiceRequest = (props) => {
               <Descriptions.Item
                 span={6}
                 label="Thành tiền"
-                labelStyle={{ fontWeight: 'bold', color: 'red' }}
+                labelStyle={{ marginTop: 5, fontWeight: 'bold', color: 'red' }}
               >
                 <b style={{ color: 'red' }}>{officialPriceFormat} VNĐ</b>
+                <Button
+                  loading={sendInvoiceToCustomerConfirmLoading}
+                  type="primary"
+                  style={{ marginLeft: 100 }}
+                  onClick={onSendInvoiceToCustomer}
+                >
+                  Gửi hoá đơn cho khách
+                </Button>
               </Descriptions.Item>
             </Descriptions>
           </Modal>
 
           {/* GỬI HOÁ ĐƠN CHO KHÁCH */}
-          <Modal
+          {/* <Modal
+            confirmLoading={sendInvoiceToCustomerConfirmLoading}
             title="Gửi hoá đơn cho khách"
             visible={visibleSendInvoiceToCustomer}
             onOk={uploadImageInvoice}
@@ -2091,16 +2101,17 @@ const DetailServiceRequest = (props) => {
             >
               {<PlusOutlined />} Chọn hình
             </Upload>
-          </Modal>
-          <Modal
-              visible={previewVisible}
-              title={previewTitle}
-              footer={null}
-              onCancel={handleCancelpreviewImage}
-            >
-              <img alt="example" style={{ width: '100%' }} src={previewImage} />
-            </Modal>
+          </Modal> */}
 
+          {/* XEM HÌNH HOÁ ĐƠN SAU KHI UPLOAD  */}
+          {/* <Modal
+            visible={previewVisible}
+            title={previewTitle}
+            footer={null}
+            onCancel={handleCancelpreviewImage}
+          >
+            <img alt="example" style={{ width: '100%' }} src={previewImage} />
+          </Modal> */}
 
           {/* LÊN ĐẦU TRANG */}
           <BackTop type="primary">
@@ -2108,15 +2119,15 @@ const DetailServiceRequest = (props) => {
           </BackTop>
 
           {/* LOAD LẠI TRANG */}
-          <Button
+          {/* <Button
             type="primary"
-            className={styles.style}
             onClick={() => {
               window.location.reload(false);
             }}
           >
-            Tải lại trang
-          </Button>
+            <div className={styles.style}>Tải lại trang</div>
+          </Button> */}
+
           {/* XEM ẢNH & VIDEO */}
           <Modal
             title="Hình ảnh & video"

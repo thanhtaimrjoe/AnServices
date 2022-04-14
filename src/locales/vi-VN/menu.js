@@ -12,8 +12,8 @@ export default {
   'menu.exception.500': '500',
 
   // dashboard
-  'menu.dashboard': 'DASHBOARD',
-  'menu.dashboard.analysis': 'ANALYSIS',
+  'menu.dashboard': 'BẢNG ĐIỀU KHIỂN',
+  'menu.dashboard.analysis': 'PHÂN TÍCH',
 
   // accounts
   'menu.accounts': 'QUẢN LÝ KHÁCH',
