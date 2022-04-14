@@ -184,7 +184,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingHorizontal: 16,
     alignItems: 'center',
-    backgroundColor: Color.field,
+    backgroundColor: Color.cover,
     borderRadius: 10,
     marginBottom: 10,
   },
@@ -222,6 +222,23 @@ const styles = StyleSheet.create({
     color: Color.primary,
     fontSize: 16,
     fontWeight: '500',
+  },
+  //loading dialog
+  loadingDialogBackground: {
+    backgroundColor: Color.white,
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1,
+  },
+  loadingView: {
+    width: '50%',
+    padding: 16,
+    alignItems: 'center',
+    backgroundColor: Color.white,
+  },
+  loadingText: {
+    color: Color.primary,
+    marginTop: 15,
   },
 });
 export {styles};

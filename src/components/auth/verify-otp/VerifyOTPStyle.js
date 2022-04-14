@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   resendBtn: {
-    color: Color.second,
+    color: Color.resend,
     fontSize: 14,
   },
   otpContainer: {

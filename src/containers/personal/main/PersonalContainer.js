@@ -1,28 +1,47 @@
 import {CommonActions} from '@react-navigation/native';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import Personal from '../../../components/personal/main/Personal';
-import {actClearData} from '../../../redux/actions/index';
+import {
+  actClearData,
+  actGetUserInformationRequest,
+} from '../../../redux/actions/index';
 
 export default function PersonalContainer(props) {
   const {navigation} = props;
   //reducer --- user
   const user = useSelector(state => state.user);
+  //reduer --- userInfo
+  const userInfo = useSelector(state => state.userInfo);
+  //get token
+  const token = 'Bearer ' + user.token;
 
   //get dispatch
   const dispatch = useDispatch();
+  //call api --- get user information
+  const getUserInformation = (userID, token) =>
+    dispatch(actGetUserInformationRequest(userID, token));
   //clear all reducer before log out
   const clearData = () => dispatch(actClearData());
 
+  useEffect(() => {
+    getUserInformation(user.id, token);
+  }, []);
+
   //button --- show share to friend page
   const onShowShareToFriendPage = () => {
-    navigation.navigate('ShareToFriendContainer')
-  }
+    navigation.navigate('ShareToFriendContainer');
+  };
 
   //button --- show promotion management page
   const onShowPromotionManagementPage = () => {
-    navigation.navigate('PromotionManagementContainer')
-  }
+    navigation.navigate('PromotionManagementContainer');
+  };
+
+  //button --- show personal information page
+  const onShowPersonalInformation = () => {
+    navigation.navigate('PersonalInformationContainer');
+  };
 
   //clear all reducers -> log out -> back to log in page
   const onLogOut = () => {
@@ -37,5 +56,13 @@ export default function PersonalContainer(props) {
     );
   };
 
-  return <Personal user={user} onShowShareToFriendPage={onShowShareToFriendPage} onShowPromotionManagementPage={onShowPromotionManagementPage} onLogOut={onLogOut} />;
+  return (
+    <Personal
+      userInfo={userInfo}
+      onShowPersonalInformation={onShowPersonalInformation}
+      onShowShareToFriendPage={onShowShareToFriendPage}
+      onShowPromotionManagementPage={onShowPromotionManagementPage}
+      onLogOut={onLogOut}
+    />
+  );
 }

@@ -2,6 +2,7 @@ import {combineReducers} from 'redux';
 import services from './services';
 import message from './message';
 import user from './user';
+import userInfo from './userInfo';
 import serviceRequest from './serviceRequest';
 import otp from './otp';
 import requestDetail from './requestDetail';
@@ -15,6 +16,7 @@ const myReducer = combineReducers({
   services,
   message,
   user,
+  userInfo,
   serviceRequest,
   otp,
   requestDetail,

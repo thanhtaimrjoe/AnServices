@@ -4,7 +4,12 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import {styles} from './PersonalStyle';
 
 export default function Personal(props) {
-  const {user} = props;
+  const {userInfo} = props;
+
+  //button --- show change information
+  const onShowPersonalInformation = () => {
+    props.onShowPersonalInformation();
+  };
 
   //button --- show share to friend page
   const onShowShareToFriendPage = () => {
@@ -27,9 +32,16 @@ export default function Personal(props) {
         <View style={styles.avtContainer}>
           <Icon name="user-alt" style={styles.avtIcon} />
         </View>
-        <Text style={styles.profileName}>{user.fullName}</Text>
+        <Text style={styles.profileName}>{userInfo.fullName}</Text>
       </View>
       <View style={styles.settingContainer}>
+        <TouchableOpacity
+          style={styles.settingItemContainer}
+          onPress={onShowPersonalInformation}>
+          <Icon name="user-edit" style={styles.settingItemIcon} />
+          <Text style={styles.settingItemName}>Thay đổi thông tin</Text>
+          <Icon name="chevron-right" style={styles.settingItemBack} />
+        </TouchableOpacity>
         <TouchableOpacity
           style={styles.settingItemContainer}
           onPress={onShowShareToFriendPage}>

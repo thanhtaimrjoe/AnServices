@@ -34,7 +34,7 @@ export default function ServiceRequestContainer(props) {
   const resetMessage = () => dispatch(actResetMessage());
   //call api --- create request service
   const createServiceRequest = (requestService, token) =>
-    dispatch(actCreateServiceRequestRequest(requestService,token));
+    dispatch(actCreateServiceRequestRequest(requestService, token));
   //clear all reducer before log out
   const clearData = () => dispatch(actClearData());
   //call api --- get all promotion valid by user id
@@ -44,6 +44,7 @@ export default function ServiceRequestContainer(props) {
   useEffect(() => {
     getAllPromotionValidByUserID(user.id, token);
     if (message === 'CREATE_SERVICE_REQUEST_SUCCESS') {
+      setUploading(false);
       Alert.alert(
         'Gửi yêu cầu thành công',
         'Yêu cầu của bạn sẽ được chúng tôi phản hồi trong thời gian sớm nhất',
@@ -51,7 +52,6 @@ export default function ServiceRequestContainer(props) {
           {
             text: 'OK',
             onPress: () => {
-              setUploading(false);
               resetMessage();
               navigation.goBack();
             },
@@ -60,6 +60,7 @@ export default function ServiceRequestContainer(props) {
       );
     }
     if (message === 'CREATE_SERVICE_REQUEST_FAILURE') {
+      setUploading(false);
       Alert.alert(
         'Gửi yêu cầu thất bại',
         'Xin lỗi vì sự bất tiện này, mời bạn thử lại',
@@ -67,14 +68,14 @@ export default function ServiceRequestContainer(props) {
           {
             text: 'OK',
             onPress: () => {
-              setUploading(false);
               resetMessage();
             },
           },
         ],
       );
     }
-    if (message === 'CREATE_SERVICE_REQUEST_BANNED') {
+    if (message === 'ACCOUNT_HAVE_BEEN_BANNED') {
+      setUploading(false);
       Alert.alert(
         'Gửi yêu cầu thất bại',
         'Tài khoản của bạn đã bị khóa do gửi yêu cầu quá 3 lần trong 1 ngày',
@@ -82,7 +83,6 @@ export default function ServiceRequestContainer(props) {
           {
             text: 'OK',
             onPress: () => {
-              setUploading(false);
               resetMessage();
               onLogOut();
             },
@@ -119,9 +119,7 @@ export default function ServiceRequestContainer(props) {
       if (url) {
         return url;
       }
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 
   //create service request

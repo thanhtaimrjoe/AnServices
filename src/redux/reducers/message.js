@@ -8,6 +8,9 @@ const myReducer = (state = inititalState, action) => {
     case types.RESET_MESSAGE:
       state = inititalState;
       return state;
+    case types.SYSTEM_ERROR:
+      state = 'SYSTEM_ERROR';
+      return state;
     case types.INVALID_INVITE_CODE:
       state = 'INVALID_INVITE_CODE';
       return state;
@@ -17,8 +20,8 @@ const myReducer = (state = inititalState, action) => {
     case types.CREATE_SERVICE_REQUEST_FAILURE:
       state = 'CREATE_SERVICE_REQUEST_FAILURE';
       return state;
-    case types.CREATE_SERVICE_REQUEST_BANNED:
-      state = 'CREATE_SERVICE_REQUEST_BANNED';
+    case types.ACCOUNT_HAVE_BEEN_BANNED:
+      state = 'ACCOUNT_HAVE_BEEN_BANNED';
       return state;
     case types.CREATE_CUSTOMER_ACCOUNT_SUCCESS:
       state = 'CREATE_CUSTOMER_ACCOUNT_SUCCESS';
@@ -49,6 +52,12 @@ const myReducer = (state = inititalState, action) => {
       return state;
     case types.UPDATE_STATUS_REQUEST_SERVICE_DETAIL_FAILURE:
       state = 'UPDATE_STATUS_REQUEST_SERVICE_DETAIL_FAILURE';
+      return state;
+    case types.UPDATE_INFORMATION_SUCCESS:
+      state = 'UPDATE_INFORMATION_SUCCESS';
+      return state;
+    case types.UPDATE_INFORMATION_FAILURE:
+      state = 'UPDATE_INFORMATION_FAILURE';
       return state;
     default:
       return state;

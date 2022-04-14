@@ -203,12 +203,7 @@ export default function ServiceRequest(props) {
       result = false;
     }
     //check phone number 10 digit
-    if (phoneNumber.trim().length < 10 || phoneNumber.trim().length > 10) {
-      setPhoneNumberError('Số điện thoại phải là 10 chữ số');
-      result = false;
-    }
-    //validate phone
-    if (phoneNumber.trim().length === 0) {
+    if (!phoneNumber.match(/(0[3|5|7|8|9])+([0-9]{8})\b/)) {
       setPhoneNumberError('Số điện thoại nhập không đúng');
       result = false;
     }
@@ -474,7 +469,6 @@ export default function ServiceRequest(props) {
           ]}
           placeholder="Nhập họ và tên"
           placeholderTextColor={Color.placeholder}
-          erro
         />
         <Text style={styles.errorMessage}>{fullNameError}</Text>
       </View>
@@ -678,39 +672,48 @@ export default function ServiceRequest(props) {
               !promotion.errorsMsg &&
               promotion.map((item, index) => {
                 return (
-                  <TouchableOpacity key={index} style={styles.promotionItem} onPress={() => onSelectPromotion(item)}>
-              <View style={styles.promotionInfo}>
-                <Text style={styles.promotionItemName}>
-                  Giảm {item.promotionValue * 100}%
-                </Text>
-                <Text style={styles.promotionItemDescription}>
-                  {item.promotionDescription}
-                </Text>
-              </View>
-              <View style={styles.promotionItemDate}>
-                <Text style={styles.promotionItemDateText}>Ngày hết hạn</Text>
-                <Text style={styles.promotionItemDateText}>
-                  {moment(item.promotionDateExpired).format('Do MMMM YYYY')}
-                </Text>
-              </View>
-              <View style={styles.circle}></View>
-            </TouchableOpacity>
+                  <TouchableOpacity
+                    key={index}
+                    style={styles.promotionItem}
+                    onPress={() => onSelectPromotion(item)}>
+                    <View style={styles.promotionInfo}>
+                      <Text style={styles.promotionItemName}>
+                        Giảm {item.promotionValue * 100}%
+                      </Text>
+                      <Text style={styles.promotionItemDescription}>
+                        {item.promotionDescription}
+                      </Text>
+                    </View>
+                    <View style={styles.promotionItemDate}>
+                      <Text style={styles.promotionItemDateText}>
+                        Ngày hết hạn
+                      </Text>
+                      <Text style={styles.promotionItemDateText}>
+                        {moment(item.promotionDateExpired).format(
+                          'Do MMMM YYYY',
+                        )}
+                      </Text>
+                    </View>
+                    <View style={styles.circle}></View>
+                  </TouchableOpacity>
                 );
               })}
           </ScrollView>
         </View>
       </Modal>
-      {uploading ? (
-        <View style={styles.confirmLoadingBtn}>
-          <ActivityIndicator color={Color.white} size={'large'} />
+      <TouchableOpacity
+        style={styles.confirmBtn}
+        onPress={onCreateServiceRequest}>
+        <Text style={styles.confirmBtnText}>Xác nhận</Text>
+      </TouchableOpacity>
+      <Modal transparent={true} visible={uploading}>
+        <View style={styles.dialogBackground}>
+          <View style={styles.loadingView}>
+            <ActivityIndicator size={'large'} color={Color.primary} />
+            <Text style={styles.loadingText}>Đang gửi yêu cầu</Text>
+          </View>
         </View>
-      ) : (
-        <TouchableOpacity
-          style={styles.confirmBtn}
-          onPress={onCreateServiceRequest}>
-          <Text style={styles.confirmBtnText}>Xác nhận</Text>
-        </TouchableOpacity>
-      )}
+      </Modal>
     </ScrollView>
   );
 }

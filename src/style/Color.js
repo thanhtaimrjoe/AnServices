@@ -7,6 +7,7 @@ export default {
   error: '#FF0000',
   cover: '#F2F0E0',
   //-------------Button--------------
+  resend: '#B74E4E',
   request: '#D7E6F9',
   request1: '#C8D4E2',
   contract: '#FFF5DD',

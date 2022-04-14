@@ -21,6 +21,7 @@ export default function BottomTab() {
           tabBarInactiveTintColor: Color.second,
           tabBarLabel: 'Trang chủ',
           tabBarLabelStyle: {fontSize: 14},
+          tabBarHideOnKeyboard: true,
         }}
       />
       <Stack.Screen
@@ -35,6 +36,7 @@ export default function BottomTab() {
           tabBarInactiveTintColor: Color.second,
           tabBarLabel: 'Xem yêu cầu',
           tabBarLabelStyle: {fontSize: 14},
+          tabBarHideOnKeyboard: true,
         }}
       />
       <Stack.Screen
@@ -49,6 +51,7 @@ export default function BottomTab() {
           tabBarInactiveTintColor: Color.second,
           tabBarLabel: 'Cá nhân',
           tabBarLabelStyle: {fontSize: 14},
+          tabBarHideOnKeyboard: true,
         }}
       />
     </Stack.Navigator>

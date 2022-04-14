@@ -17,6 +17,8 @@ export default function SignUpContainer(props) {
   const [loading, setLoading] = useState(false);
   //reducer --- message
   const message = useSelector(state => state.message);
+  //reducer --- user
+  const user = useSelector(state => state.user);
 
   //get dispatch
   const dispatch = useDispatch();
@@ -33,6 +35,8 @@ export default function SignUpContainer(props) {
     if (message === 'CREATE_CUSTOMER_ACCOUNT_SUCCESS') {
       //check user exist or not
       loginCustomerOrWorkerRequest(phoneNumber);
+    }
+    if (user.userRole === 'Customer') {
       resetMessage();
       setLoading(false);
       //navigate to home page
@@ -48,7 +52,18 @@ export default function SignUpContainer(props) {
       resetMessage();
       setLoading(false);
     }
-  }, [message]);
+    if (message === 'CREATE_CUSTOMER_ACCOUNT_FAILURE') {
+      Alert.alert('Thông báo', 'Đăng ký không thành công, mời bạn thử lại', [
+        {
+          text: 'OK',
+          onPress: () => {
+            resetMessage();
+            setLoading(false);
+          },
+        },
+      ]);
+    }
+  }, [message, user]);
 
   //button --- create customer account
   const onCreateCustomerAccount = (fullName, email, address, inviteCode) => {

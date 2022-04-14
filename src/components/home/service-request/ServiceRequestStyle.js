@@ -351,15 +351,6 @@ const styles = StyleSheet.create({
     backgroundColor: Color.primary,
     marginBottom: 15,
   },
-  confirmLoadingBtn: {
-    width: '100%',
-    paddingVertical: 8,
-    borderRadius: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: Color.primary,
-    marginBottom: 15,
-  },
   confirmBtnText: {
     fontSize: 18,
     fontWeight: '500',
@@ -408,6 +399,17 @@ const styles = StyleSheet.create({
   errorMessage: {
     color: Color.error,
     marginTop: 5,
+  },
+  //loading dialog
+  loadingView: {
+    width: '50%',
+    padding: 16,
+    alignItems: 'center',
+    backgroundColor: Color.white,
+  },
+  loadingText: {
+    color: Color.primary,
+    marginTop: 15,
   },
 });
 export {styles};

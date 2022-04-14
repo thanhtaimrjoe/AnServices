@@ -25,17 +25,20 @@ const styles = StyleSheet.create({
     width: '80%',
     marginBottom: 15,
   },
+  inputTitle: {
+    color: Color.primary,
+    fontSize: 16,
+    marginBottom: 3,
+  },
   inputField: {
-    paddingHorizontal: 16,
-    paddingVertical: 14,
+    padding: 12,
     borderRadius: 10,
     backgroundColor: Color.field,
     color: Color.primary,
   },
   errorMsg: {
-    paddingLeft: 16,
     color: Color.error,
-    marginTop: 15,
+    marginTop: 3,
   },
   button: {
     width: '80%',
@@ -46,19 +49,27 @@ const styles = StyleSheet.create({
     backgroundColor: Color.primary,
     marginTop: 20,
   },
-  buttonLoading: {
-    width: '80%',
-    paddingVertical: 8,
-    borderRadius: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: Color.primary,
-    marginTop: 20,
-  },
   buttonText: {
     fontSize: 18,
     fontWeight: 'bold',
     color: Color.white,
+  },
+  //dialog
+  dialogBackground: {
+    backgroundColor: '#000000aa',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1,
+  },
+  loadingView: {
+    width: '50%',
+    padding: 16,
+    alignItems: 'center',
+    backgroundColor: Color.white,
+  },
+  loadingText: {
+    color: Color.primary,
+    marginTop: 15,
   },
 });
 export {styles};

@@ -190,6 +190,14 @@ export default function RequestDetail(props) {
 
   return (
     <ScrollView style={styles.container}>
+      <Modal
+        transparent={true}
+        visible={requestDetail.length > 0 ? false : true}>
+        <View style={styles.loadingDialogBackground}>
+          <ActivityIndicator size={'large'} color={Color.primary} />
+          <Text style={styles.loadingText}>Đang tải</Text>
+        </View>
+      </Modal>
       <View style={styles.packageContainer}>
         <Text style={styles.packageTitle}>Gói yêu cầu đã chọn</Text>
         {packages.map((item, index) => {
@@ -513,7 +521,8 @@ export default function RequestDetail(props) {
           </TouchableOpacity>
         </View>
       )}
-      {serviceRequest.serviceRequestStatus === 2 && (
+      {(serviceRequest.serviceRequestStatus === 2 ||
+        serviceRequest.serviceRequestStatus === 15) && (
         <TouchableOpacity
           style={styles.cancelBtn}
           onPress={onCancelServiceRequest}>

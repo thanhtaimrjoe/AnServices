@@ -1,9 +1,18 @@
-import {View, Text, Image, ScrollView, TouchableOpacity} from 'react-native';
-import React, {useState} from 'react';
+import {
+  View,
+  Text,
+  Image,
+  ScrollView,
+  TouchableOpacity,
+  Modal,
+  ActivityIndicator,
+} from 'react-native';
+import React from 'react';
 import {styles} from './InvoiceStyle';
 import IconURL from '../../../style/IconURL';
 import moment from 'moment';
 import 'moment/locale/vi';
+import Color from '../../../style/Color';
 
 export default function Invoice(props) {
   const {invoice, promotionInfo, serviceRequestReference} = props;
@@ -38,6 +47,12 @@ export default function Invoice(props) {
 
   return (
     <ScrollView style={styles.container}>
+      <Modal transparent={true} visible={invoice.customerName ? false : true}>
+        <View style={styles.loadingDialogBackground}>
+          <ActivityIndicator size={'large'} color={Color.primary} />
+          <Text style={styles.loadingText}>Đang tải</Text>
+        </View>
+      </Modal>
       <View style={styles.fullNameContainer}>
         <Text style={styles.fullNameTitle}>Họ và tên chủ công trình</Text>
         <View style={styles.fullNameView}>

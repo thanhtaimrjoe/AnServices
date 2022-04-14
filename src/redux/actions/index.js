@@ -6,6 +6,12 @@ export const actClearData = () => {
     type: types.CLEAR_DATA,
   };
 };
+//------------SYSTEM ERROR---------
+export const actSystemError = () => {
+  return {
+    type: types.SYSTEM_ERROR,
+  };
+};
 //------------MESSAGE-------------
 //reset message
 export const actResetMessage = () => {
@@ -33,7 +39,7 @@ export const actLoginCustomerOrWorkerRequest = phoneNumber => {
         dispatch(actGetUserInfo(json));
       }
     } catch (error) {
-      console.error(error);
+      dispatch(actSystemError());
     }
   };
 };
@@ -98,7 +104,6 @@ export const actCreateCustomerAccount = account => {
       }
     } catch (error) {
       dispatch(actCreateCustomerAccountFailure());
-      console.error(error);
     }
   };
 };
@@ -127,7 +132,78 @@ export const actGetUserInfo = user => {
     user,
   };
 };
-
+//account have been BANNED
+export const accountBanned = () => {
+  return {
+    type: types.ACCOUNT_HAVE_BEEN_BANNED,
+  };
+};
+//call api
+export const actGetUserInformationRequest = (userID, token) => {
+  return async dispatch => {
+    try {
+      const response = await fetch(API + 'User/GetCustomerById?id=' + userID, {
+        method: 'GET',
+        headers: {
+          Authorization: token,
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+      });
+      const json = await response.json();
+      if (json) {
+        dispatch(actGetUserInformation(json));
+      }
+    } catch (error) {}
+  };
+};
+//get user information
+export const actGetUserInformation = userInfo => {
+  return {
+    type: types.GET_USER_INFORMATION,
+    userInfo,
+  };
+};
+//call api
+export const actUpdateInformationRequest = (userUpdateInfo, token) => {
+  return async dispatch => {
+    try {
+      const response = await fetch(API + 'User/UpdateCustomer', {
+        method: 'PUT',
+        headers: {
+          Authorization: token,
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          customerId: userUpdateInfo.customerId,
+          fullName: userUpdateInfo.fullName,
+          email: userUpdateInfo.email,
+          address: userUpdateInfo.address,
+        }),
+      });
+      if (response.status === 200) {
+        dispatch(actUpdateInformationSuccess());
+      } else {
+        dispatch(actUpdateInformationFailure());
+      }
+    } catch (error) {
+      dispatch(actUpdateInformationFailure());
+    }
+  };
+};
+//update information success
+export const actUpdateInformationSuccess = () => {
+  return {
+    type: types.UPDATE_INFORMATION_SUCCESS,
+  };
+};
+//update information failure
+export const actUpdateInformationFailure = () => {
+  return {
+    type: types.UPDATE_INFORMATION_FAILURE,
+  };
+};
 //------------SERVICE----------------
 //call api --- authen
 export const actGetAllServiceRequest = token => {
@@ -145,9 +221,7 @@ export const actGetAllServiceRequest = token => {
       if (json) {
         dispatch(actGetAllService(json));
       }
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 };
 //fetch services
@@ -189,13 +263,12 @@ export const actCreateServiceRequestRequest = (requestService, token) => {
           json.errorsMsg &&
           json.errorsMsg[0] === 'Your account has been banned'
         ) {
-          dispatch(createRequestBanned());
+          dispatch(accountBanned());
         } else {
           dispatch(createRequestFailure());
         }
       }
     } catch (error) {
-      console.error(error);
       dispatch(createRequestFailure());
     }
   };
@@ -210,12 +283,6 @@ export const createRequestSuccess = () => {
 export const createRequestFailure = () => {
   return {
     type: types.CREATE_SERVICE_REQUEST_FAILURE,
-  };
-};
-//create request service BANNED
-export const createRequestBanned = () => {
-  return {
-    type: types.CREATE_SERVICE_REQUEST_BANNED,
   };
 };
 //call api*** --- authen
@@ -242,9 +309,7 @@ export const actGetAllRequestServiceDetailsByRequestServiceIDRequest = (
       if (json) {
         dispatch(actGetAllRequestServiceDetailsByRequestServiceID(json));
       }
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 };
 //fetch request detail
@@ -282,9 +347,7 @@ export const actGetServiceRequestByUserIDAndStatusRequest = (
       if (json) {
         dispatch(actGetServiceRequestByUserIDAndStatus(json));
       }
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 };
 //fetch service request
@@ -328,7 +391,6 @@ export const actCancelServiceRequestRequest = (serviceRequestId, token) => {
       }
     } catch (error) {
       dispatch(actCancelServiceRequestFailure());
-      console.error(error);
     }
   };
 };
@@ -374,7 +436,6 @@ export const actUpdateStatusRequestServiceDetailRequest = (
       }
     } catch (error) {
       dispatch(actUpdateStatusRequestServiceDetailFailure());
-      console.error(error);
     }
   };
 };
@@ -412,7 +473,6 @@ export const actApproveContractRequest = (contractId, token) => {
         dispatch(actApproveContractFailure());
       }
     } catch (error) {
-      console.error(error);
       dispatch(actApproveContractFailure());
     }
   };
@@ -450,7 +510,6 @@ export const actRequestUpdateContractRequest = (contractId, token) => {
         dispatch(actRequestUpdateContractFailure());
       }
     } catch (error) {
-      console.error(error);
       dispatch(actRequestUpdateContractFailure());
     }
   };
@@ -491,9 +550,7 @@ export const actGetContractByServiceRequestIDRequest = (
       if (json) {
         dispatch(actGetContractByServiceRequestID(json));
       }
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 };
 //get contract by service request id
@@ -527,9 +584,7 @@ export const actGetContractParentByServiceRequestReferenceRequest = (
       if (json) {
         dispatch(actGetContractParentByServiceRequestReference(json));
       }
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 };
 //get contract parent by service request reference
@@ -571,9 +626,7 @@ export const actGetInfomationInvoiceByRequestServiceIDRequest = (
       if (json) {
         dispatch(actGetInfomationInvoiceByRequestServiceID(json));
       }
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 };
 //get information invoice by request service id
@@ -609,9 +662,7 @@ export const actGetAllPromotionValidByUserIDRequest = (userID, token) => {
       if (json) {
         dispatch(actGetAllPromotionValidByUserID(json));
       }
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 };
 //fetch all promotion valid by user id
@@ -642,9 +693,7 @@ export const actGetInformationPromotionByIDRequest = (promotionID, token) => {
       if (json) {
         dispatch(actGetInformationPromotionByID(json));
       }
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 };
 //get information promotion by id
@@ -674,9 +723,7 @@ export const actCreateInviteCodeRequest = (userID, token) => {
       if (json) {
         dispatch(actCreateInviteCode(json));
       }
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 };
 //fetch invite code

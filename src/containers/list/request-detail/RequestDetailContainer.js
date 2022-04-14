@@ -35,14 +35,16 @@ export default function RequestDetailContainer(props) {
   //get dispatch
   const dispatch = useDispatch();
   //call api --- get request service details by request service id
-  const getAllRequestServiceDetailsByRequestServiceIDRequest =
-    (serviceRequestId, token) =>
-      dispatch(
-        actGetAllRequestServiceDetailsByRequestServiceIDRequest(
-          serviceRequestId,
-          token,
-        ),
-      );
+  const getAllRequestServiceDetailsByRequestServiceIDRequest = (
+    serviceRequestId,
+    token,
+  ) =>
+    dispatch(
+      actGetAllRequestServiceDetailsByRequestServiceIDRequest(
+        serviceRequestId,
+        token,
+      ),
+    );
   //reset request detail
   const resetRequestDetail = () => dispatch(actResetRequestDetail());
   //reset message
@@ -53,7 +55,11 @@ export default function RequestDetailContainer(props) {
   //call api --- update status request service detail
   const updateStatusRequestServiceDetail = (requestDetailId, status, token) =>
     dispatch(
-      actUpdateStatusRequestServiceDetailRequest(requestDetailId, status, token),
+      actUpdateStatusRequestServiceDetailRequest(
+        requestDetailId,
+        status,
+        token,
+      ),
     );
   //call api --- get contract
   const getContractByServiceRequestIDRequest = (serviceRequestID, token) =>
@@ -65,7 +71,10 @@ export default function RequestDetailContainer(props) {
   const requestUpdateContract = (contractId, token) =>
     dispatch(actRequestUpdateContractRequest(contractId, token));
   //call api --- get contract parent information
-  const getContractParentByServiceRequestReference = (serviceRequestReference, token) =>
+  const getContractParentByServiceRequestReference = (
+    serviceRequestReference,
+    token,
+  ) =>
     dispatch(
       actGetContractParentByServiceRequestReferenceRequest(
         serviceRequestReference,
@@ -78,7 +87,8 @@ export default function RequestDetailContainer(props) {
   useEffect(() => {
     resetRequestDetail();
     getAllRequestServiceDetailsByRequestServiceIDRequest(
-      serviceRequest.serviceRequestId, token
+      serviceRequest.serviceRequestId,
+      token,
     );
     resetContractParent();
     if (serviceRequest.serviceRequestReference !== null) {
@@ -87,7 +97,10 @@ export default function RequestDetailContainer(props) {
         token,
       );
     }
-    getContractByServiceRequestIDRequest(serviceRequest.serviceRequestId, token);
+    getContractByServiceRequestIDRequest(
+      serviceRequest.serviceRequestId,
+      token,
+    );
     if (message === 'CANCEL_SERVICE_REQUEST_SUCCESS') {
       Alert.alert('Thông báo', 'Bạn đã hủy yêu cầu thành công', [
         {
@@ -128,19 +141,6 @@ export default function RequestDetailContainer(props) {
       resetMessage();
     }
   }, [message]);
-
-  //clear all reducers -> log out -> back to log in page
-  const onLogOut = () => {
-    //clear all reducers
-    clearData();
-    //navigate to home page
-    navigation.dispatch(
-      CommonActions.reset({
-        index: 1,
-        routes: [{name: 'LoginContainer'}],
-      }),
-    );
-  };
 
   //button --- happy service
   const onHappyService = requestDetailId => {

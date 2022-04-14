@@ -45,19 +45,27 @@ const styles = StyleSheet.create({
     backgroundColor: Color.primary,
     marginBottom: 20,
   },
-  loadingBtn: {
-    width: '80%',
-    paddingVertical: 8,
-    borderRadius: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: Color.primary,
-    marginBottom: 20,
-  },
   btnText: {
     fontSize: 18,
     fontWeight: 'bold',
     color: Color.white,
+  },
+  //dialog
+  dialogBackground: {
+    backgroundColor: '#000000aa',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1,
+  },
+  loadingView: {
+    width: '50%',
+    padding: 16,
+    alignItems: 'center',
+    backgroundColor: Color.white,
+  },
+  loadingText: {
+    color: Color.primary,
+    marginTop: 15,
   },
 });
 export {styles};

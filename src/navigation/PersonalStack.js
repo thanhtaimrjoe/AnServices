@@ -3,6 +3,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {styles} from '../style/HeaderStyle';
 import Color from '../style/Color';
 import PersonalContainer from '../containers/personal/main/PersonalContainer';
+import PersonalInformationContainer from '../containers/personal/personal-information/PersonalInformationContainer';
 import ShareToFriendContainer from '../containers/personal/share-to-friend/ShareToFriendContainer';
 import PromotionManagementContainer from '../containers/personal/promotion-management/PromotionManagementContainer';
 import InviteCodeContainer from '../containers/personal/invite-code/InviteCodeContainer';
@@ -15,6 +16,16 @@ export default function PersonalStack() {
         name="PersonalContainer"
         component={PersonalContainer}
         options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="PersonalInformationContainer"
+        component={PersonalInformationContainer}
+        options={{
+          title: 'Thay đổi thông tin',
+          headerTitleStyle: styles.headerTitle,
+          headerTintColor: Color.primary,
+          headerTitleAlign: 'center',
+        }}
       />
       <Stack.Screen
         name="ShareToFriendContainer"

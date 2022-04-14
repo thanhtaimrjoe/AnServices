@@ -320,7 +320,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingHorizontal: 16,
     alignItems: 'center',
-    backgroundColor: Color.field,
+    backgroundColor: Color.cover,
     borderRadius: 10,
     height: 65,
   },
@@ -331,7 +331,7 @@ const styles = StyleSheet.create({
   },
   contractItemName: {
     width: '55%',
-    fontSize: 18,
+    fontSize: 16,
     color: Color.primary,
   },
   contractItemStatus: {
@@ -361,7 +361,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingHorizontal: 16,
     alignItems: 'center',
-    backgroundColor: Color.field,
+    backgroundColor: Color.cover,
     borderRadius: 10,
     height: 65,
   },
@@ -372,7 +372,7 @@ const styles = StyleSheet.create({
   },
   invoiceItemName: {
     width: '55%',
-    fontSize: 18,
+    fontSize: 16,
     color: Color.primary,
   },
   //dialog
@@ -385,19 +385,22 @@ const styles = StyleSheet.create({
   dialogContainer: {
     width: '90%',
     borderRadius: 10,
-    padding: 16,
+    paddingHorizontal: 15,
+    paddingTop: 15,
     backgroundColor: Color.background,
   },
   dialogHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 16,
+    alignItems: 'center',
+    marginBottom: 15,
   },
   dialogTitle: {
-    fontSize: 18,
+    fontSize: 20,
     color: Color.primary,
   },
   exitIcon: {
+    padding: 6,
     fontSize: 24,
     color: Color.primary,
   },
@@ -429,6 +432,23 @@ const styles = StyleSheet.create({
   btnText: {
     fontSize: 16,
     color: Color.white,
+  },
+  //loading dialog
+  loadingDialogBackground: {
+    backgroundColor: Color.white,
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1,
+  },
+  loadingView: {
+    width: '50%',
+    padding: 16,
+    alignItems: 'center',
+    backgroundColor: Color.white,
+  },
+  loadingText: {
+    color: Color.primary,
+    marginTop: 15,
   },
 });
 export {styles};

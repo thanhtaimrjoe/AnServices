@@ -8,6 +8,7 @@ import {
   TextInput,
   TouchableOpacity,
   ActivityIndicator,
+  Modal,
 } from 'react-native';
 import {styles} from './SignUpStyle';
 import Color from '../../../style/Color';
@@ -65,6 +66,7 @@ export default function SignUp(props) {
             Chỉ còn một bước nữa là hoàn tất quá trình đăng ký.
           </Text>
           <View style={styles.inputContainer}>
+            <Text style={styles.inputTitle}>Họ và tên</Text>
             <TextInput
               style={styles.inputField}
               placeholder="Nhập họ và tên"
@@ -74,6 +76,7 @@ export default function SignUp(props) {
             <Text style={styles.errorMsg}>{fullNameError}</Text>
           </View>
           <View style={styles.inputContainer}>
+            <Text style={styles.inputTitle}>Email</Text>
             <TextInput
               style={styles.inputField}
               placeholder="Nhập email"
@@ -84,6 +87,7 @@ export default function SignUp(props) {
             <Text style={styles.errorMsg}>{emailError}</Text>
           </View>
           <View style={styles.inputContainer}>
+            <Text style={styles.inputTitle}>Địa chỉ</Text>
             <TextInput
               style={styles.inputField}
               placeholder="Nhập địa chỉ"
@@ -93,24 +97,27 @@ export default function SignUp(props) {
             <Text style={styles.errorMsg}>{addressError}</Text>
           </View>
           <View style={styles.inputContainer}>
+            <Text style={styles.inputTitle}>Nhập mã giới thiệu (nếu có)</Text>
             <TextInput
               style={styles.inputField}
-              placeholder="Nhập mã giới thiệu (nếu có)"
+              placeholder="Nhập mã giới thiệu"
               placeholderTextColor={Color.placeholder}
               onChangeText={text => setInviteCode(text)}
             />
           </View>
-          {loading ? (
-            <View style={styles.buttonLoading}>
-              <ActivityIndicator size={'large'} color={Color.white} />
+          <TouchableOpacity
+            style={styles.button}
+            onPress={onCreateCustomerAccount}>
+            <Text style={styles.buttonText}>Đăng ký</Text>
+          </TouchableOpacity>
+          <Modal transparent={true} visible={loading}>
+            <View style={styles.dialogBackground}>
+              <View style={styles.loadingView}>
+                <ActivityIndicator size={'large'} color={Color.primary} />
+                <Text style={styles.loadingText}>Đang tải</Text>
+              </View>
             </View>
-          ) : (
-            <TouchableOpacity
-              style={styles.button}
-              onPress={onCreateCustomerAccount}>
-              <Text style={styles.buttonText}>Hoàn thành</Text>
-            </TouchableOpacity>
-          )}
+          </Modal>
         </View>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
