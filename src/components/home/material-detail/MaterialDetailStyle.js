@@ -97,15 +97,16 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
   },
   materialIcon: {
-    width: 30,
-    height: 30,
+    width: 25,
+    height: 25,
   },
   materialOtherContainer: {
     flexDirection: 'row',
   },
   materialButtonContainer: {
-    padding: 6,
-    marginLeft: 2,
+    paddingLeft: 10,
+    paddingVertical: 6,
+    marginLeft: 4,
   },
   messageContainer: {
     flexDirection: 'row',
@@ -238,12 +239,12 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   reportProblemItemImg: {
-    width: 30,
-    height: 30,
+    width: 40,
+    height: 40,
     marginRight: 16,
   },
   reportProblemItemName: {
-    width: '60%',
+    width: '80%',
     fontSize: 18,
     color: Color.primary,
   },

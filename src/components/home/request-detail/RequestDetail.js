@@ -6,12 +6,10 @@ import {
   Image,
   TouchableWithoutFeedback,
   Modal,
-  ActivityIndicator,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {styles} from './RequestDetailStyle';
 import Video from 'react-native-video';
-import Color from '../../../style/Color';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import IconURL from '../../../style/IconURL';
 import moment from 'moment';

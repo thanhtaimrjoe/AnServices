@@ -8,8 +8,8 @@ const myReducer = (state = inititalState, action) => {
     case types.RESET_MESSAGE:
       state = inititalState;
       return state;
-    case types.ERROR_CONNECT_API:
-      state = 'ERROR_CONNECT_API';
+    case types.SYSTEM_ERROR:
+      state = 'SYSTEM_ERROR';
       return state;
     case types.PHONE_NUMBER_WAS_EXIST:
       state = 'PHONE_NUMBER_WAS_EXIST';

@@ -251,17 +251,19 @@ export default function ReportProblem(props) {
           </TouchableWithoutFeedback>
         </Modal>
       )}
-      {uploading ? (
-        <View style={styles.confirmLoadingBtn}>
-          <ActivityIndicator color={Color.white} size={'large'} />
+      <TouchableOpacity
+        style={styles.confirmBtn}
+        onPress={onCreateReportProblem}>
+        <Text style={styles.confirmBtnText}>Gửi báo cáo</Text>
+      </TouchableOpacity>
+      <Modal transparent={true} visible={uploading}>
+        <View style={styles.dialogBackground}>
+          <View style={styles.loadingView}>
+            <ActivityIndicator size={'large'} color={Color.primary} />
+            <Text style={styles.loadingText}>Đang gửi báo cáo</Text>
+          </View>
         </View>
-      ) : (
-        <TouchableOpacity
-          style={styles.confirmBtn}
-          onPress={onCreateReportProblem}>
-          <Text style={styles.confirmBtnText}>Gửi báo cáo</Text>
-        </TouchableOpacity>
-      )}
+      </Modal>
     </ScrollView>
   );
 }

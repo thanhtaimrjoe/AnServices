@@ -10,6 +10,7 @@ import {
   Keyboard,
   Alert,
   ActivityIndicator,
+  Modal,
 } from 'react-native';
 import {styles} from './LoginStyle';
 import Color from '../../../style/Color';
@@ -20,11 +21,11 @@ export default function Login(props) {
   //state --- phone number
   const [phoneNumber, setPhoneNumber] = useState('');
 
-  //validation
+  //check phone number validate
   const validateValue = () => {
     var result = true;
-    //not equal 10 digit
-    if (phoneNumber.length != 10) {
+    //check valid phone number
+    if (!phoneNumber.match(/(0[3|5|7|8|9])+([0-9]{8})\b/)) {
       Alert.alert('Thông báo', 'Số điện thoại bạn nhập không đúng');
       result = false;
     }
@@ -51,20 +52,23 @@ export default function Login(props) {
           </Text>
           <TextInput
             style={styles.inputField}
+            maxLength={10}
             placeholder="Nhập số điện thoại"
             placeholderTextColor={Color.placeholder}
-            keyboardType="number-pad"
+            keyboardType="numeric"
             onChangeText={text => setPhoneNumber(text)}
           />
-          {loading ? (
-            <View style={styles.buttonLoading}>
-              <ActivityIndicator color={Color.white} size={'large'} />
+          <TouchableOpacity style={styles.button} onPress={onSendOTP}>
+            <Text style={styles.buttonText}>Tiếp tục</Text>
+          </TouchableOpacity>
+          <Modal transparent={true} visible={loading}>
+            <View style={styles.dialogBackground}>
+              <View style={styles.loadingView}>
+                <ActivityIndicator size={'large'} color={Color.primary} />
+                <Text style={styles.loadingText}>Đang tải</Text>
+              </View>
             </View>
-          ) : (
-            <TouchableOpacity style={styles.button} onPress={onSendOTP}>
-              <Text style={styles.buttonText}>Gửi OTP</Text>
-            </TouchableOpacity>
-          )}
+          </Modal>
         </View>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>

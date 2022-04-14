@@ -7,6 +7,7 @@ import {
   Alert,
   ScrollView,
   ActivityIndicator,
+  Modal,
 } from 'react-native';
 import React, {useState} from 'react';
 import {styles} from './RequestMaterialStyle';
@@ -55,7 +56,7 @@ export default function RequestMaterial(props) {
   //handle quantity
   const onHandleQuantity = (text, index) => {
     if (text.length > 0) {
-      materialList[index].quantity = parseInt(text);
+      materialList[index].quantity = parseFloat(text);
     } else {
       materialList[index].quantity = '';
     }
@@ -173,9 +174,9 @@ export default function RequestMaterial(props) {
             <View style={styles.materialInfoContainer}>
               <Text style={styles.materialQuantityTitle}>Số lượng:</Text>
               <TextInput
+                maxLength={8}
                 keyboardType="numeric"
                 style={styles.materialQuantity}
-                value={materialList[index].quantity + ''}
                 onChangeText={text => onHandleQuantity(text, index)}
               />
               {item.id !== 55 && (
@@ -206,17 +207,19 @@ export default function RequestMaterial(props) {
       <TouchableOpacity style={styles.btnAdd} onPress={onAddMaterial}>
         <Text style={styles.btnAddText}>+</Text>
       </TouchableOpacity>
-      {uploading ? (
-        <View style={styles.confirmLoadingBtn}>
-          <ActivityIndicator size={'large'} color={Color.white} />
+      <TouchableOpacity
+        style={styles.confirmBtn}
+        onPress={onInsertRequestMaterial}>
+        <Text style={styles.confirmBtnText}>Yêu cầu</Text>
+      </TouchableOpacity>
+      <Modal transparent={true} visible={uploading}>
+        <View style={styles.dialogBackground}>
+          <View style={styles.loadingView}>
+            <ActivityIndicator size={'large'} color={Color.primary} />
+            <Text style={styles.loadingText}>Đang gửi yêu cầu</Text>
+          </View>
         </View>
-      ) : (
-        <TouchableOpacity
-          style={styles.confirmBtn}
-          onPress={onInsertRequestMaterial}>
-          <Text style={styles.confirmBtnText}>Yêu cầu</Text>
-        </TouchableOpacity>
-      )}
+      </Modal>
     </ScrollView>
   );
 }

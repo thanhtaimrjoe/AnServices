@@ -18,6 +18,7 @@ export default function BottomTab() {
           tabBarInactiveTintColor: Color.second,
           tabBarLabel: 'Trang chủ',
           tabBarLabelStyle: {fontSize: 14},
+          tabBarHideOnKeyboard: true,
         }}
       />
       <Tab.Screen
@@ -32,6 +33,7 @@ export default function BottomTab() {
           tabBarInactiveTintColor: Color.second,
           tabBarLabel: 'Cá nhân',
           tabBarLabelStyle: {fontSize: 14},
+          tabBarHideOnKeyboard: true,
         }}
       />
     </Tab.Navigator>

@@ -9,12 +9,11 @@ const styles = StyleSheet.create({
   },
   //service
   serviceContainer: {
-    marginVertical: 20,
+    marginVertical: 15,
   },
   serviceTitle: {
     fontSize: 18,
     color: Color.primary,
-    marginTop: 15,
     marginBottom: 10,
   },
   //service item
@@ -193,15 +192,6 @@ const styles = StyleSheet.create({
     backgroundColor: Color.primary,
     marginBottom: 20,
   },
-  confirmLoadingBtn: {
-    width: '100%',
-    paddingVertical: 8,
-    borderRadius: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: Color.primary,
-    marginBottom: 20,
-  },
   confirmBtnText: {
     fontSize: 18,
     fontWeight: '500',
@@ -211,6 +201,23 @@ const styles = StyleSheet.create({
   errorMessage: {
     color: 'red',
     marginTop: 5,
+  },
+  //loading dialog
+  dialogBackground: {
+    backgroundColor: '#000000aa',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1,
+  },
+  loadingView: {
+    width: '50%',
+    padding: 16,
+    alignItems: 'center',
+    backgroundColor: Color.white,
+  },
+  loadingText: {
+    color: Color.primary,
+    marginTop: 15,
   },
 });
 export {styles};

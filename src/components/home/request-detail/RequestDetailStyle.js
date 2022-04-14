@@ -3,12 +3,12 @@ import Color from '../../../style/Color';
 const styles = StyleSheet.create({
   container: {
     backgroundColor: Color.background1,
-    padding: 15,
+    paddingHorizontal: 15,
     flex: 1,
   },
   //package
   packageContainer: {
-    marginBottom: 20,
+    marginVertical: 15,
   },
   packageTitle: {
     fontSize: 18,

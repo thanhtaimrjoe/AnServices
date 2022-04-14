@@ -1,8 +1,9 @@
 //-------------CLEAR DATA--------------
 export const CLEAR_DATA = 'CLEAR_DATA';
+//------------SYSTEM ERROR-------------
+export const SYSTEM_ERROR = 'SYSTEM_ERROR';
 //-------------MESSAGE--------------
 export const RESET_MESSAGE = 'RESET_MESSAGE';
-export const ERROR_CONNECT_API = 'ERROR_CONNECT_API';
 export const INSERT_REQUEST_MATERIAL_SUCCESS =
   'INSERT_REQUEST_MATERIAL_SUCCESS';
 export const INSERT_REQUEST_MATERIAL_FAILURE =

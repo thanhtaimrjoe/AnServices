@@ -59,19 +59,27 @@ const styles = StyleSheet.create({
     backgroundColor: Color.primary,
     marginBottom: 15,
   },
-  confirmLoadingBtn: {
-    width: '100%',
-    paddingVertical: 8,
-    borderRadius: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: Color.primary,
-    marginBottom: 15,
-  },
   confirmBtnText: {
     fontSize: 18,
     fontWeight: '500',
     color: Color.white,
+  },
+  //loading dialog
+  dialogBackground: {
+    backgroundColor: '#000000aa',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1,
+  },
+  loadingView: {
+    width: '60%',
+    padding: 16,
+    alignItems: 'center',
+    backgroundColor: Color.white,
+  },
+  loadingText: {
+    color: Color.primary,
+    marginTop: 15,
   },
 });
 export {styles};

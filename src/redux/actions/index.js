@@ -12,9 +12,9 @@ export const actResetMessage = () => {
     type: types.RESET_MESSAGE,
   };
 };
-export const actGetErrorConnectAPIMessage = () => {
+export const actSystemError = () => {
   return {
-    type: types.ERROR_CONNECT_API,
+    type: types.SYSTEM_ERROR,
   };
 };
 //------------USER----------------
@@ -37,7 +37,7 @@ export const actLoginCustomerOrWorkerRequest = phoneNumber => {
         dispatch(actGetUserInfo(json));
       }
     } catch (error) {
-      actGetErrorConnectAPIMessage();
+      dispatch(actSystemError());
     }
   };
 };
@@ -95,9 +95,7 @@ export const actGetWorkerByIDRequest = (userID, token) => {
       if (json) {
         dispatch(actGetWorkerInfo(json));
       }
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 };
 //get worker info
@@ -169,7 +167,9 @@ export const actChangePhoneNumberRequest = (userID, newPhoneNumber) => {
       } else {
         dispatch(actChangePhoneNumberFailure());
       }
-    } catch (error) {}
+    } catch (error) {
+      dispatch(actChangePhoneNumberFailure());
+    }
   };
 };
 //change phone number success
@@ -212,9 +212,7 @@ export const actGetAllServiceRequestByWorkerIDRequest = (
       if (json) {
         dispatch(actGetAllRequestServiceByWorkerID(json));
       }
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 };
 //fetch requestService
@@ -262,9 +260,7 @@ export const actGetAllRequestServiceDetailsByRequestServiceIDAndWorkerIDRequest 
             actGetRequestServiceDetailsByRequestServiceIDAndWorkerID(json),
           );
         }
-      } catch (error) {
-        console.error(error);
-      }
+      } catch (error) {}
     };
   };
 //reset requestDetail
@@ -295,9 +291,7 @@ export const actGetAllMaterialByRequestDetailIDRequest = (id, token) => {
       if (json) {
         dispatch(actGetAllMaterialByRequestDetailID(json));
       }
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 };
 //fetch usedMaterial
@@ -329,9 +323,7 @@ export const actGetAllMaterialRequest = token => {
       if (json) {
         dispatch(actGetAllMaterial(json));
       }
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 };
 //fetch material
@@ -363,7 +355,6 @@ export const actInsertRequestMaterialRequest = (requestMaterial, token) => {
       }
     } catch (error) {
       dispatch(actInsertRequestMaterialFailure());
-      console.error(error);
     }
   };
 };
@@ -401,7 +392,6 @@ export const actCancelRequestMaterialRequest = (usedMaterialId, token) => {
       }
     } catch (error) {
       dispatch(actCancelRequestMaterialFailure());
-      console.error(error);
     }
   };
 };
@@ -443,7 +433,6 @@ export const actCreateReportRequest = (reportItem, token) => {
         dispatch(actCreateReportFailure());
       }
     } catch (error) {
-      console.error(error);
       dispatch(actCreateReportFailure());
     }
   };
@@ -482,9 +471,7 @@ export const actGetAllReportByRequestDetailIDRequest = (
       if (json) {
         dispatch(actGetAllReportByRequestDetailID(json));
       }
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 };
 //fetch report

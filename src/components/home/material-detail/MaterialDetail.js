@@ -73,7 +73,11 @@ export default function MaterialDetail(props) {
 
   //handle quantity
   const onHandleQuantity = text => {
-    materialNewItem.quantity = parseInt(text);
+    if (text.length > 0) {
+      materialNewItem.quantity = parseFloat(text);
+    } else {
+      materialNewItem.quantity = '';
+    }
     setMaterialNewItem(materialNewItem);
   };
 
@@ -193,7 +197,7 @@ export default function MaterialDetail(props) {
                       <Text style={styles.materialQuantityTitle}>
                         Số lượng:
                       </Text>
-                      {item.quantityNew ? (
+                      {item.quantityNew !== 0 ? (
                         <Text style={styles.materialQuantityDeny}>
                           {item.quantity}
                         </Text>
@@ -202,7 +206,7 @@ export default function MaterialDetail(props) {
                           {item.quantity}
                         </Text>
                       )}
-                      {item.quantityNew && (
+                      {item.quantityNew !== 0 && (
                         <Text style={styles.materialQuantity}>
                           {item.quantityNew}
                         </Text>
@@ -300,6 +304,7 @@ export default function MaterialDetail(props) {
                 <View style={styles.materialInfoContainer1}>
                   <Text style={styles.materialQuantityTitle1}>Số lượng:</Text>
                   <TextInput
+                    maxLength={8}
                     keyboardType="numeric"
                     style={styles.materialQuantity1}
                     onChangeText={text => onHandleQuantity(text)}
@@ -365,12 +370,12 @@ export default function MaterialDetail(props) {
               onPress={() => onShowReportDetail(item)}>
               {item.reportTitle === 'Báo cáo vấn đề' ? (
                 <Image
-                  source={{uri: IconURL.problemColorImg}}
+                  source={{uri: IconURL.problemImg}}
                   style={styles.reportProblemItemImg}
                 />
               ) : (
                 <Image
-                  source={{uri: IconURL.completeColorImg}}
+                  source={{uri: IconURL.completeImg}}
                   style={styles.reportProblemItemImg}
                 />
               )}

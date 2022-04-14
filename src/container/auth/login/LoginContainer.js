@@ -41,10 +41,16 @@ export default function LoginContainer(props) {
       setLoading(false);
     }
     //if connect api failed
-    if (message === 'ERROR_CONNECT_API') {
-      Alert.alert('Thông báo', 'Lỗi hệ thống, vui lòng thử lại');
-      setLoading(false);
-      resetMessage();
+    if (message === 'SYSTEM_ERROR') {
+      Alert.alert('Thông báo', 'Lỗi hệ thống, vui lòng thử lại', [
+        {
+          text: 'OK',
+          onPress: () => {
+            setLoading(false);
+            resetMessage();
+          },
+        },
+      ]);
     }
   }, [user, message]);
 

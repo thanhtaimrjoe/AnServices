@@ -9,7 +9,7 @@ const styles = StyleSheet.create({
   },
   //service
   serviceContainer: {
-    marginVertical: 20,
+    marginVertical: 15,
   },
   serviceTitle: {
     fontSize: 18,
@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
   },
   //request
   requestContainer: {
-    marginBottom: 20,
+    marginBottom: 15,
   },
   requestTitle: {
     fontSize: 18,
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
   },
   //description field
   descriptionContainer: {
-    marginBottom: 10,
+    marginBottom: 15,
   },
   descriptionTitle: {
     fontSize: 18,
@@ -186,16 +186,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: Color.primary,
-    marginBottom: 20,
-  },
-  confirmLoadingBtn: {
-    width: '100%',
-    paddingVertical: 8,
-    borderRadius: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: Color.primary,
-    marginBottom: 20,
+    marginBottom: 15,
   },
   confirmBtnText: {
     fontSize: 18,
@@ -206,6 +197,17 @@ const styles = StyleSheet.create({
   errorMessage: {
     color: 'red',
     marginTop: 5,
+  },
+  //loading dialog
+  loadingView: {
+    width: '50%',
+    padding: 16,
+    alignItems: 'center',
+    backgroundColor: Color.white,
+  },
+  loadingText: {
+    color: Color.primary,
+    marginTop: 15,
   },
 });
 export {styles};

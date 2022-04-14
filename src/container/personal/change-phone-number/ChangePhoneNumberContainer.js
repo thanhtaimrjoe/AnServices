@@ -55,7 +55,7 @@ export default function ChangePhoneNumberContainer(props) {
     setLoading(false);
     resetMessage();
     const convertedPhoneNumber = convertPhoneNumber(phoneNumber);
-    sendSmsByPhoneNumber(convertedPhoneNumber, token);
+    //sendSmsByPhoneNumber(convertedPhoneNumber, token);
     navigation.navigate('VerifyPhoneNumberContainer', {
       newPhoneNumber: phoneNumber,
       convertedPhoneNumber: convertedPhoneNumber,

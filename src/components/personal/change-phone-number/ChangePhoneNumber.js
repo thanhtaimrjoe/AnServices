@@ -8,6 +8,7 @@ import {
   KeyboardAvoidingView,
   ActivityIndicator,
   Alert,
+  Modal,
 } from 'react-native';
 import React, {useState} from 'react';
 import {styles} from './ChangePhoneNumberStyle';
@@ -30,13 +31,13 @@ export default function ChangePhoneNumber(props) {
     setOldPhoneNumberError('');
     setNewPhoneNumberError('');
     //validate old phone number
-    if (oldPhoneNumber.trim().length === 0) {
-      setOldPhoneNumberError('Bạn chưa nhập số điện thoại cũ');
+    if (!oldPhoneNumber.match(/(0[3|5|7|8|9])+([0-9]{8})\b/)) {
+      setOldPhoneNumberError('Số điện thoại cũ không đúng');
       result = false;
     }
     //validate new phone number
-    if (newPhoneNumber.trim().length === 0) {
-      setNewPhoneNumberError('Bạn chưa nhập số điện thoại mới');
+    if (!newPhoneNumber.match(/(0[3|5|7|8|9])+([0-9]{8})\b/)) {
+      setNewPhoneNumberError('Số điện thoại mới không đúng');
       result = false;
     }
     return result;
@@ -46,11 +47,10 @@ export default function ChangePhoneNumber(props) {
   const onSendOTP = () => {
     const validation = validateValue();
     if (validation) {
-      if (
-        newPhoneNumber.trim().length < 10 ||
-        newPhoneNumber.trim().length > 10
-      ) {
-        Alert.alert('Thông báo', 'Số điện thoại mới không hợp lệ');
+      if (newPhoneNumber.trim().length != 10) {
+        Alert.alert('Thông báo', 'Số điện thoại mới bạn nhập không đủ 10 số');
+      } else if (!newPhoneNumber.match(/(0[3|5|7|8|9])+([0-9]{8})\b/)) {
+        Alert.alert('Thông báo', 'Số điện thoại mới bạn nhập không đúng');
       } else {
         props.onSendOTP(oldPhoneNumber, newPhoneNumber);
       }
@@ -64,6 +64,7 @@ export default function ChangePhoneNumber(props) {
           <View style={styles.phoneNumberContainer}>
             <Text style={styles.phoneNumberTitle}>Số điện thoại cũ</Text>
             <TextInput
+              maxLength={10}
               onChangeText={text => setOldPhoneNumber(text)}
               placeholder="Nhập số điện thoại cũ"
               placeholderTextColor={Color.placeholder}
@@ -75,6 +76,7 @@ export default function ChangePhoneNumber(props) {
           <View style={styles.phoneNumberContainer}>
             <Text style={styles.phoneNumberTitle}>Số điện thoại mới</Text>
             <TextInput
+              maxLength={10}
               onChangeText={text => setNewPhoneNumber(text)}
               placeholder="Nhập số điện thoại mới"
               placeholderTextColor={Color.placeholder}
@@ -83,15 +85,17 @@ export default function ChangePhoneNumber(props) {
             />
             <Text style={styles.errorMessage}>{newPhoneNumberError}</Text>
           </View>
-          {loading ? (
-            <View style={styles.confirmLoadingBtn}>
-              <ActivityIndicator color={Color.white} size={'large'} />
+          <TouchableOpacity style={styles.confirmBtn} onPress={onSendOTP}>
+            <Text style={styles.confirmBtnText}>Xác nhận</Text>
+          </TouchableOpacity>
+          <Modal transparent={true} visible={loading}>
+            <View style={styles.dialogBackground}>
+              <View style={styles.loadingView}>
+                <ActivityIndicator size={'large'} color={Color.primary} />
+                <Text style={styles.loadingText}>Đang tải</Text>
+              </View>
             </View>
-          ) : (
-            <TouchableOpacity style={styles.confirmBtn} onPress={onSendOTP}>
-              <Text style={styles.confirmBtnText}>Xác nhận</Text>
-            </TouchableOpacity>
-          )}
+          </Modal>
         </View>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>

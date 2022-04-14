@@ -31,11 +31,11 @@ export default function ReportProblemContainer(props) {
 
   useEffect(() => {
     if (message === 'CREATE_REPORT_SUCCESS') {
+      setUploading(false);
       Alert.alert('Thông báo', 'Báo cáo của bạn đã được gửi về cho chúng tôi', [
         {
           text: 'OK',
           onPress: () => {
-            setUploading(false);
             resetMessage();
             navigation.goBack();
           },
@@ -58,9 +58,7 @@ export default function ReportProblemContainer(props) {
       if (url) {
         return url;
       }
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 
   //button --- create report problem

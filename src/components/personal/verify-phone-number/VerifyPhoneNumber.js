@@ -7,10 +7,12 @@ import {
   ActivityIndicator,
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
+  Modal,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {styles} from './VerifyPhoneNumberStyle';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
+import Color from '../../../style/Color';
 
 export default function VerifyPhoneNumber(props) {
   const {loading, newPhoneNumber} = props;
@@ -89,15 +91,19 @@ export default function VerifyPhoneNumber(props) {
               </TouchableOpacity>
             )}
           </View>
-          {loading ? (
-            <View style={styles.confirmLoadingBtn}>
-              <ActivityIndicator color={Color.white} size={'large'} />
+          <TouchableOpacity style={styles.confirmBtn} onPress={onVerifyOTP}>
+            <Text style={styles.confirmBtnText}>Xác nhận</Text>
+          </TouchableOpacity>
+          <Modal transparent={true} visible={loading}>
+            <View style={styles.dialogBackground}>
+              <View style={styles.loadingView}>
+                <ActivityIndicator size={'large'} color={Color.primary} />
+                <Text style={styles.loadingText}>
+                  Đang thay đổi số điện thoại
+                </Text>
+              </View>
             </View>
-          ) : (
-            <TouchableOpacity style={styles.confirmBtn} onPress={onVerifyOTP}>
-              <Text style={styles.confirmBtnText}>Xác nhận</Text>
-            </TouchableOpacity>
-          )}
+          </Modal>
         </View>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
