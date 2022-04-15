@@ -1,4 +1,5 @@
 ﻿using AnService_Capstone.Core.Interfaces;
+using AnService_Capstone.Core.Interfaces.Services;
 using AnService_Capstone.Core.Models.Request;
 using AnService_Capstone.Core.Models.Response;
 using Microsoft.AspNetCore.Authorization;
@@ -12,11 +13,12 @@ namespace AnService_Capstone.Controllers
     [ApiController]
     public class MaterialController : ControllerBase
     {
-        private readonly IMaterialRepository _materialReposiory;
+        /*private readonly IMaterialRepository _materialReposiory;*/
+        private readonly IMaterialService _materialService;
 
-        public MaterialController(IMaterialRepository materialReposiory)
+        public MaterialController(IMaterialService materialService)
         {
-            _materialReposiory = materialReposiory;
+            _materialService = materialService;
         }
         
         /// <summary>
@@ -33,13 +35,13 @@ namespace AnService_Capstone.Controllers
             {
                 return BadRequest();
             }
-
-            var result = await _materialReposiory.InsertMaterial(model);
+            return Ok(await _materialService.InsertRequestMaterial(model));
+            /*var result = await _materialReposiory.InsertMaterial(model);
             if (result)
             {
                 return Ok("Request Successful");
             }
-            return BadRequest(new ErrorResponse("Create Fail"));
+            return BadRequest(new ErrorResponse("Create Fail"));*/
         }
 
         /// <summary>
@@ -51,7 +53,7 @@ namespace AnService_Capstone.Controllers
         [Authorize(Roles = "Worker, Staff")]
         public async Task<IActionResult> GetAllRequestMaterial()
         {
-            var result = await _materialReposiory.GetAllRequestMaterial();
+            var result = await _materialService.GetAllRequestMaterial();
             if (result != null)
             {
                 return Ok(result);
@@ -74,7 +76,7 @@ namespace AnService_Capstone.Controllers
                 return BadRequest(new ErrorResponse("Please enter id"));
             }
 
-            var result = await _materialReposiory.GetAllMaterialByRequestDetailID(id);
+            var result = await _materialService.GetAllMaterialByRequestDetailID(id);
             if (result != null)
             {
                 return Ok(result);
@@ -98,13 +100,14 @@ namespace AnService_Capstone.Controllers
                 return BadRequest(new ErrorResponse("Please enter id"));
             }
 
-            var result = await _materialReposiory.GetAllMaterialByServiceRequestID(id);
-            /*if (result != null)
+            return Ok(await _materialService.GetAllMaterialByServiceRequestID(id));
+            /*var result = await _materialReposiory.GetAllMaterialByServiceRequestID(id);
+            *//*if (result != null)
             {
                 return Ok(result);
             }
-            return NotFound(new ErrorResponse("No Record"));*/
-            return Ok(result);
+            return NotFound(new ErrorResponse("No Record"));*//*
+            return Ok(result);*/
         }
 
         /// <summary>
@@ -116,7 +119,7 @@ namespace AnService_Capstone.Controllers
         [Authorize(Roles = "Worker")]
         public async Task<IActionResult> GetAllMaterial()
         {
-            var rs = await _materialReposiory.GetAllMaterial();
+            var rs = await _materialService.GetAllMaterial();
             if (rs == null)
             {
                 return NotFound();
@@ -139,7 +142,7 @@ namespace AnService_Capstone.Controllers
                 return BadRequest(new ErrorResponse("Please enter id"));
             }
 
-            var res = await _materialReposiory.GetRequestMaterialByID(id);
+            var res = await _materialService.GetRequestMaterialByID(id);
             if (res == null)
             {
                 return NotFound(new ErrorResponse("No record"));
@@ -152,7 +155,7 @@ namespace AnService_Capstone.Controllers
         [Authorize(Roles = "Worker")]
         public async Task<IActionResult> GetUnitList()
         {
-            var res = await _materialReposiory.GetListUnit();
+            var res = await _materialService.GetUnitList();
 
             if (res == null)
             {
@@ -172,7 +175,7 @@ namespace AnService_Capstone.Controllers
         [Authorize(Roles = "Staff")]
         public async Task<IActionResult> UpdateStatusRequestMaterial(int id, int status)
         {
-            if (id == 0)
+            /*if (id == 0)
             {
                 return BadRequest(new ErrorResponse("Please enter id"));
             }
@@ -187,7 +190,8 @@ namespace AnService_Capstone.Controllers
             {
                 return Ok("Update Successfull");
             }
-            return BadRequest(new ErrorResponse("Update Fail"));
+            return BadRequest(new ErrorResponse("Update Fail"));*/
+            return Ok(await _materialService.UpdateStatusRequestMaterial(id, status));
         }
         
         /// <summary>
@@ -200,7 +204,7 @@ namespace AnService_Capstone.Controllers
         [Authorize(Roles = "Staff")]
         public async Task<IActionResult> ApproveRequestMaterial(int id)
         {
-            if (id == 0)
+            /*if (id == 0)
             {
                 return BadRequest(new ErrorResponse("Please enter id"));
             }
@@ -210,7 +214,8 @@ namespace AnService_Capstone.Controllers
             {
                 return Ok("Update Successfull");
             }
-            return BadRequest(new ErrorResponse("Update Fail"));
+            return BadRequest(new ErrorResponse("Update Fail"));*/
+            return Ok(await _materialService.ApproveRequestMaterial(id));
         }
 
         /// <summary>
@@ -224,7 +229,7 @@ namespace AnService_Capstone.Controllers
         [Authorize(Roles = "Staff")]
         public async Task<IActionResult> DenyRequestMaterial(int id, string message)
         {
-            if (id == 0)
+            /*if (id == 0)
             {
                 return BadRequest(new ErrorResponse("Please enter id"));
             }
@@ -239,7 +244,8 @@ namespace AnService_Capstone.Controllers
             {
                 return Ok("Update Successfull");
             }
-            return BadRequest(new ErrorResponse("Update Fail"));
+            return BadRequest(new ErrorResponse("Update Fail"));*/
+            return Ok(await _materialService.DenyRequestMaterial(id, message));
         }
 
         /// <summary>
@@ -254,7 +260,7 @@ namespace AnService_Capstone.Controllers
         [Authorize(Roles = "Staff")]
         public async Task<IActionResult> UpdateRequestMaterial(int id, int quantityNew, string message)
         {
-            if (id == 0)
+            /*if (id == 0)
             {
                 return BadRequest(new ErrorResponse("Please enter id"));
             }
@@ -274,7 +280,8 @@ namespace AnService_Capstone.Controllers
             {
                 return Ok("Update Successfull");
             }
-            return BadRequest(new ErrorResponse("Update Fail"));
+            return BadRequest(new ErrorResponse("Update Fail"));*/
+            return Ok(await _materialService.UpdateRequestMaterial(id,quantityNew,message));
         }
 
         /// <summary>
@@ -287,7 +294,7 @@ namespace AnService_Capstone.Controllers
         [Authorize(Roles = "Worker")]
         public async Task<IActionResult> CancelRequestMaterial(int id)
         {
-            if (id == 0)
+            /*if (id == 0)
             {
                 return BadRequest(new ErrorResponse("Please enter id"));
             }
@@ -297,7 +304,8 @@ namespace AnService_Capstone.Controllers
             {
                 return Ok("Cancel Successfull");
             }
-            return BadRequest(new ErrorResponse("Cancel Fail"));
+            return BadRequest(new ErrorResponse("Cancel Fail"));*/
+            return Ok(await _materialService.CancelRequestMaterial(id));
         }
 
     }

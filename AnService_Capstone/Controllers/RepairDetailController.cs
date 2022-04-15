@@ -1,4 +1,5 @@
 ﻿using AnService_Capstone.Core.Interfaces;
+using AnService_Capstone.Core.Interfaces.Services;
 using AnService_Capstone.Core.Models.Response;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -11,11 +12,12 @@ namespace AnService_Capstone.Controllers
     [ApiController]
     public class RepairDetailController : ControllerBase
     {
-        private readonly IRepairDetail _repairDetail;
+        /*private readonly IRepairDetail _repairDetail;*/
+        private readonly IRepairDetailService _repairDetailService;
 
-        public RepairDetailController(IRepairDetail repairDetail)
+        public RepairDetailController(IRepairDetailService repairDetailService)
         {
-            _repairDetail = repairDetail;
+            _repairDetailService = repairDetailService;
         }
 
         /*/// <summary>
@@ -59,7 +61,7 @@ namespace AnService_Capstone.Controllers
             {
                 return BadRequest(new ErrorResponse("Please enter requestServiceId"));
             }
-            var res = await _repairDetail.GetRepairDetailByServiceRequestID(requestServiceId);
+            var res = await _repairDetailService.GetRepairDetailByServiceRequestID(requestServiceId);
             /*if (res == null)
             {
                 return NotFound(new ErrorResponse("No Record"));

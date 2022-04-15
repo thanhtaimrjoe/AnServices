@@ -1,4 +1,5 @@
 ﻿using AnService_Capstone.Core.Interfaces;
+using AnService_Capstone.Core.Interfaces.Services;
 using AnService_Capstone.Core.Models.Request;
 using AnService_Capstone.Core.Models.Response;
 using Microsoft.AspNetCore.Authorization;
@@ -12,12 +13,18 @@ namespace AnService_Capstone.Controllers
     [ApiController]
     public class ReportController : ControllerBase
     {
-        private readonly IReport _report;
-        private readonly IServiceRepository _serviceRepository;
-        public ReportController(IReport report, IServiceRepository serviceRepository)
+        /*private readonly IReport _report;
+        private readonly IServiceRepository _serviceRepository;*/
+        private readonly IReportService _reportService;
+        /*public ReportController(IReport report, IServiceRepository serviceRepository, IReportService reportService)
         {
             _report = report;
             _serviceRepository = serviceRepository;
+            _reportService = reportService;
+        }*/
+        public ReportController(IReportService reportService)
+        {
+            _reportService = reportService;
         }
 
         /// <summary>
@@ -35,7 +42,8 @@ namespace AnService_Capstone.Controllers
                 return BadRequest();
             }
 
-            bool media = false;
+            return Ok(await _reportService.CreateReport(model));
+            /*bool media = false;
 
             var reqService = await _report.CreateReport(model);
             
@@ -52,7 +60,7 @@ namespace AnService_Capstone.Controllers
                 }
                 return Ok("Create Successfull");
             }
-            return BadRequest(new ErrorResponse("Create Fail"));
+            return BadRequest(new ErrorResponse("Create Fail"));*/
         }
 
         /// <summary>
@@ -70,7 +78,7 @@ namespace AnService_Capstone.Controllers
                 return BadRequest(new ErrorResponse("Please enter id"));
             }
 
-            var res = await _report.GetAllReportByRequestDetailID(id);
+            var res = await _reportService.GetAllReportByRequestDetailID(id);
 
             if(res != null)
             {
@@ -94,7 +102,7 @@ namespace AnService_Capstone.Controllers
                 return BadRequest(new ErrorResponse("Please enter ServiceRequestId"));
             }
 
-            var res = await _report.GetAllReportByServiceRequestID(ServiceRequestId);
+            var res = await _reportService.GetAllReportByServiceRequestID(ServiceRequestId);
             return Ok(res);
         }
     }

@@ -1,4 +1,5 @@
 ﻿using AnService_Capstone.Core.Interfaces;
+using AnService_Capstone.Core.Interfaces.Services;
 using AnService_Capstone.Core.Models.Response;
 using AnService_Capstone.DataAccess.Dapper.Customize;
 using Microsoft.AspNetCore.Authorization;
@@ -12,13 +13,18 @@ namespace AnService_Capstone.Controllers
     [ApiController]
     public class InviteCodeController : ControllerBase
     {
-        private readonly IInviteCodeRepository _inviteCodeRepository;
-        private readonly UtilHelper _utilHelper;
+        /*private readonly IInviteCodeRepository _inviteCodeRepository;
+        private readonly UtilHelper _utilHelper;*/
+        private readonly IInviteCodeService _inviteCodeService;
 
-        public InviteCodeController(IInviteCodeRepository inviteCodeRepository, UtilHelper utilHelper)
+        /*public InviteCodeController(IInviteCodeRepository inviteCodeRepository, UtilHelper utilHelper)
         {
             _inviteCodeRepository = inviteCodeRepository;
             _utilHelper = utilHelper;
+        }*/
+        public InviteCodeController(IInviteCodeService inviteCodeService)
+        {
+            _inviteCodeService = inviteCodeService;
         }
 
         [HttpPost]
@@ -30,12 +36,12 @@ namespace AnService_Capstone.Controllers
             {
                 return BadRequest(new ErrorResponse("Please enter userID"));
             }
-
-            var inviteCode = _utilHelper.RandomString(10);
+            return Ok(await _inviteCodeService.CreateInviteCode(userID));
+            /*var inviteCode = _utilHelper.RandomString(10);
 
             var res = await _inviteCodeRepository.CreateInviteCode(userID, inviteCode);
 
-            return Ok(inviteCode);
+            return Ok(inviteCode);*/
         }
     }
 }

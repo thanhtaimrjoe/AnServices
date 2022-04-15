@@ -135,6 +135,13 @@ namespace AnService_Capstone
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<ITypeJobService, TypeJobService>();
             services.AddScoped<IServiceRequestService, ServiceRequestService>();
+            services.AddScoped<IReportService, ReportService>();
+            services.AddScoped<IRepairDetailService, RepairDetailService>();
+            services.AddScoped<IPromotionService, PromotionService>();
+            services.AddScoped<IMaterialService, MaterialService>();
+            services.AddScoped<IInvoiceService, InvoiceService>();
+            services.AddScoped<IInviteCodeService, InviteCodeService>();
+            services.AddScoped<IContractService, ContractService>();
 
             services.AddSingleton<IHostedService, ScheduledTask>();
 

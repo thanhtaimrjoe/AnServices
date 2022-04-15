@@ -1,32 +1,27 @@
-﻿using AnService_Capstone.Core.Entities;
-using AnService_Capstone.Core.Interfaces;
+﻿using AnService_Capstone.Core.Interfaces;
 using AnService_Capstone.Core.Interfaces.Services;
 using AnService_Capstone.Core.Models.Request;
 using AnService_Capstone.Core.Models.Response;
 using AnService_Capstone.DataAccess.Dapper.Services.SendEmail;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
-namespace AnService_Capstone.Controllers
+namespace AnService_Capstone.DataAccess.Dapper.Services
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class InvoiceController : ControllerBase
+    public class InvoiceService : IInvoiceService
     {
-        /*private readonly IInvoiceRepository _invoice;
+        private readonly IInvoiceRepository _invoice;
         private readonly IServiceRepository _serviceRepository;
         private readonly IContractRepository _contactRepository;
         private readonly IPromotionRepository _promotionRepository;
         private readonly IEmailSender _emailSender;
-        private readonly IUserRepository _userRepository;*/
-        private readonly IInvoiceService _invoiceService;
+        private readonly IUserRepository _userRepository;
 
-        /*public InvoiceController(IInvoiceRepository invoice, IServiceRepository serviceRepository, IContractRepository contactRepository, IPromotionRepository promotionRepository,
-            IEmailSender emailSender, IUserRepository userRepository, IInvoiceService invoiceService)
+        public InvoiceService(IInvoiceRepository invoice, IServiceRepository serviceRepository, IContractRepository contactRepository, IPromotionRepository promotionRepository,
+            IEmailSender emailSender, IUserRepository userRepository)
         {
             _invoice = invoice;
             _serviceRepository = serviceRepository;
@@ -34,50 +29,17 @@ namespace AnService_Capstone.Controllers
             _promotionRepository = promotionRepository;
             _emailSender = emailSender;
             _userRepository = userRepository;
-            _invoiceService = invoiceService;
-        }*/
-
-        public InvoiceController(IInvoiceService invoiceService)
-        {
-            _invoiceService = invoiceService;
         }
 
-        /// <summary>
-        /// tạo hóa đơn theo request service id
-        /// </summary>
-        /// <returns></returns>
-        [HttpPost]
-        [Route("[action]")]
-        [Authorize(Roles = "Staff")]
-        public async Task<IActionResult> CreateInvoice(CreateInvoice invoice)
+        public async Task<ErrorResponse> CreateInvoice(CreateInvoice invoice)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest();
-            }
-            return Ok(await _invoiceService.CreateInvoice(invoice));
-            /*if (serviceRequestID == 0)
-            {
-                return BadRequest(new ErrorResponse("Please enter serviceRequestID"));
-            }
-
-            if (contractID == 0)
-            {
-                return BadRequest(new ErrorResponse("Please enter contractID"));
-            }*/
-
-            /*if (totalPrice == 0)
-            {
-                return BadRequest(new ErrorResponse("Please enter totalPrice"));
-            }*/
-
-            /*double totalPrice = 0;
+            double totalPrice = 0;
 
             var check = await _invoice.CheckInvoiceExist(invoice.ContractID);
 
-            if(check != null)
+            if (check != null)
             {
-                return BadRequest("Duplicate Invoice");
+                return new ErrorResponse("Duplicate Invoice");
             }
 
             var detail = await _serviceRepository.GetAllServiceRequestDetailsByServiceRequestID(invoice.ServiceRequestID);
@@ -103,27 +65,48 @@ namespace AnService_Capstone.Controllers
 
             totalPrice = totalPrice - deposit + vat;
 
-            *//*foreach (var price in invoice.RequestDetails)
+            /*foreach (var price in invoice.RequestDetails)
             {
                 totalPrice += price.Price;
-            }*//*
+            }*/
 
             var res = await _invoice.CreateInvoice(invoice.ServiceRequestID, invoice.ContractID, invoice.PromotionID, totalPrice);
             if (res)
             {
                 _ = await _serviceRepository.UpdateStatusServiceRequest(invoice.ServiceRequestID, 14);
-                return Ok("Create Successful");
+                return new ErrorResponse("Create Successful");
             }
-            return BadRequest("Create Fail");*/
+            return new ErrorResponse("Create Fail");
         }
 
-        [HttpPost]
-        [Route("[action]")]
-        [Authorize(Roles = "Staff")]
-        public async Task<IActionResult> SendEmail(int serviceRequestID)
+        public async Task<ContractViewModel> GetInfomationInvoiceByServiceRequestID(int serviceRequestID)
         {
-            return Ok(await _invoiceService.SendEmail(serviceRequestID));
-            /*var service = await _serviceRepository.GetServiceRequestByID(serviceRequestID);
+            var res = await _invoice.GetInfomationInvoiceByServiceRequestID(serviceRequestID);
+            return res;
+        }
+
+        public async Task<List<ContractViewModel>> GetInfomationInvoiceByServiceRequestIDForStaff(int serviceRequestID)
+        {
+            List<ContractViewModel> list = new List<ContractViewModel>();
+            ContractViewModel invoice;
+
+            invoice = await _invoice.GetInfomationInvoiceByServiceRequestID(serviceRequestID);
+            var serviceRequest = await _serviceRepository.GetServiceRequestByID(serviceRequestID);
+            list.Add(invoice);
+            if (serviceRequest.ServiceRequestReference == null)
+            {
+                return list;
+            }
+
+            var serviceRequestReference = await _serviceRepository.GetServiceRequestByID(serviceRequest.ServiceRequestId);
+            invoice = await _invoice.GetInfomationInvoiceByServiceRequestID((int)serviceRequestReference.ServiceRequestReference);
+            list.Add(invoice);
+            return list;
+        }
+
+        public async Task<ErrorResponse> SendEmail(int serviceRequestID)
+        {
+            var service = await _serviceRepository.GetServiceRequestByID(serviceRequestID);
             var customer = await _userRepository.GetCustomerByID(service.CustomerId);
             var contract = await _contactRepository.GetContractByServiceRequestID(serviceRequestID);
             var invoice = await _invoice.GetInfomationInvoiceByServiceRequestID(serviceRequestID);
@@ -204,14 +187,14 @@ namespace AnService_Capstone.Controllers
                 "</tr>" +
                 "</thead>" +
                 "<tbody>" + row +
-                *//*"<tr>" +
+                /*"<tr>" +
                 "<td style='padding: 15px'>Hệ thống nước âm tường</td>" +
                 "<td style='padding: 15px'>5.000.000 VNĐ</td>" +
                 "</tr>" +
                 "<tr>" +
                 "<td style='padding: 15px'>Thi công sơn</td>" +
                 "<td style='padding: 15px'>1.300.000 VNĐ</td>" +
-                "</tr>" +*//*
+                "</tr>" +*/
                 "</tbody>" +
                 "</table>" +
                 "<p>Tổng tiền hợp đồng ban đầu: " + invoice.ContractTotalPrice + " VNĐ</p>" +
@@ -240,74 +223,7 @@ namespace AnService_Capstone.Controllers
                 "</div>";
             var message = new Message(customer.Email, "Hóa đơn cho dịch vụ sửa chữa", content);
             await _emailSender.SendEmailAsync(message);
-            return Ok();*/
-        }
-
-        [HttpGet]
-        [Route("[action]")]
-        [Authorize(Roles = "Staff, Customer")]
-        public async Task<IActionResult> GetInfomationInvoiceByServiceRequestID(int serviceRequestID)
-        {
-            if (serviceRequestID == 0)
-            {
-                return BadRequest(new ErrorResponse("Please enter serviceRequestID"));
-            }
-
-            var res = await _invoiceService.GetInfomationInvoiceByServiceRequestID(serviceRequestID);
-            if (res == null)
-            {
-                return NotFound("No record");
-            }
-            return Ok(res);
-        }
-
-        /*[HttpGet]
-        [Route("[action]")]
-        *//*[Authorize(Roles = "Staff, Customer")]*//*
-        public async Task<IActionResult> Test()
-        {
-            *//*if (serviceRequestID == 0)
-            {
-                return BadRequest(new ErrorResponse("Please enter serviceRequestID"));
-            }*//*
-
-            var res = await _invoice.GetListInfomationInvoiceByServiceRequestID();
-            if (res == null)
-            {
-                return NotFound("No record");
-            }
-            return Ok(res);
-        }*/
-
-        [HttpGet]
-        [Route("[action]")]
-        [Authorize(Roles = "Staff, Customer")]
-        public async Task<IActionResult> GetInfomationInvoiceByServiceRequestIDForStaff(int serviceRequestID)
-        {
-            /*List<ContractViewModel> list = new List<ContractViewModel>();
-            ContractViewModel invoice;*/
-
-            if (serviceRequestID == 0)
-            {
-                return BadRequest(new ErrorResponse("Please enter serviceRequestID"));
-            }
-
-            return Ok(await _invoiceService.GetInfomationInvoiceByServiceRequestIDForStaff(serviceRequestID));
-            /*invoice = await _invoice.GetInfomationInvoiceByServiceRequestID(serviceRequestID);
-            var serviceRequest = await _serviceRepository.GetServiceRequestByID(serviceRequestID);
-
-            if (serviceRequest.ServiceRequestReference == null)
-            {
-                return Ok(invoice);
-            }
-
-            list.Add(invoice);
-
-            var serviceRequestReference = await _serviceRepository.GetServiceRequestByID(serviceRequest.ServiceRequestId);
-            invoice = await _invoice.GetInfomationInvoiceByServiceRequestID((int)serviceRequestReference.ServiceRequestReference);
-            list.Add(invoice);*/
-
-            /*return Ok(list);*/
+            return new ErrorResponse("Create Successful");
         }
     }
 }

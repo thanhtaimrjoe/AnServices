@@ -1,4 +1,5 @@
 ﻿using AnService_Capstone.Core.Interfaces;
+using AnService_Capstone.Core.Interfaces.Services;
 using AnService_Capstone.Core.Models.Response;
 using AnService_Capstone.DataAccess.Dapper.Customize;
 using Microsoft.AspNetCore.Authorization;
@@ -12,15 +13,20 @@ namespace AnService_Capstone.Controllers
     [ApiController]
     public class PromotionController : ControllerBase
     {
-        private readonly IUserRepository _userRepository;
+        /*private readonly IUserRepository _userRepository;
         private readonly IPromotionRepository _promotionRepository;
-        private readonly UtilHelper _helper;
+        private readonly UtilHelper _helper;*/
+        private readonly IPromotionService _promotionService;
 
-        public PromotionController(IUserRepository userRepository, IPromotionRepository promotionRepository, UtilHelper helper)
+        /*public PromotionController(IUserRepository userRepository, IPromotionRepository promotionRepository, UtilHelper helper)
         {
             _userRepository = userRepository;
             _promotionRepository = promotionRepository;
             _helper = helper;
+        }*/
+        public PromotionController(IPromotionService promotionService)
+        {
+            _promotionService = promotionService;
         }
 
         /*[HttpPost]
@@ -45,7 +51,7 @@ namespace AnService_Capstone.Controllers
                 return BadRequest(new ErrorResponse("Please enter userID"));
             }
 
-            var res = await _promotionRepository.GetAllPromotionByUserID(userID);
+            var res = await _promotionService.GetAllPromotionByUserID(userID);
             if (res == null)
             {
                 return NotFound(new ErrorResponse("No record"));
@@ -63,7 +69,7 @@ namespace AnService_Capstone.Controllers
                 return BadRequest(new ErrorResponse("Please enter userID"));
             }
 
-            var res = await _promotionRepository.GetAllPromotionValidByUserID(userID);
+            var res = await _promotionService.GetAllPromotionValidByUserID(userID);
             if (res == null)
             {
                 return NotFound(new ErrorResponse("No record"));
@@ -81,7 +87,7 @@ namespace AnService_Capstone.Controllers
                 return BadRequest(new ErrorResponse("Please enter promotionID"));
             }
 
-            var res = await _promotionRepository.GetInformationPromotionByID(promotionID);
+            var res = await _promotionService.GetInformationPromotionByID(promotionID);
             if (res == null)
             {
                 return NotFound(new ErrorResponse("No record"));

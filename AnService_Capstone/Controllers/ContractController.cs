@@ -1,5 +1,6 @@
 ﻿using AnService_Capstone.Core.Entities;
 using AnService_Capstone.Core.Interfaces;
+using AnService_Capstone.Core.Interfaces.Services;
 using AnService_Capstone.Core.Models.Request;
 using AnService_Capstone.Core.Models.Response;
 using Microsoft.AspNetCore.Authorization;
@@ -20,12 +21,15 @@ namespace AnService_Capstone.Controllers
         private readonly IContractRepository _contractRepository;
         private readonly IServiceRepository _serviceRepository;
         private readonly IPromotionRepository _promotionRepository;
+        private readonly IContractService _contractService;
 
-        public ContractController(IContractRepository contractRepository, IServiceRepository serviceRepository, IPromotionRepository promotionRepository)
+        public ContractController(IContractRepository contractRepository, IServiceRepository serviceRepository, IPromotionRepository promotionRepository,
+            IContractService contractService)
         {
             _contractRepository = contractRepository;
             _serviceRepository = serviceRepository;
             _promotionRepository = promotionRepository;
+            _contractService = contractService;
         }
 
         [HttpGet]
@@ -38,7 +42,7 @@ namespace AnService_Capstone.Controllers
                 return BadRequest(new ErrorResponse("Please enter id"));
             }
 
-            var res = await _contractRepository.GetContractListByUserID(id);
+            var res = await _contractService.GetContractListByUserID(id);
 
             /*if (res == null)
             {
@@ -57,13 +61,13 @@ namespace AnService_Capstone.Controllers
         [Authorize(Roles = "Staff, Customer")]
         public async Task<IActionResult> GetContractByServiceRequestID(int requestServiceId)
         {
-            IEnumerable<TblContract> contract = new List<TblContract>();
+            /*IEnumerable<TblContract> contract = new List<TblContract>();*/
             if (requestServiceId == 0)
             {
                 return BadRequest(new ErrorResponse("Please enter requestServiceId"));
             }
 
-            var res = await _contractRepository.GetContractByServiceRequestID(requestServiceId);
+            var res = await _contractService.GetContractByServiceRequestID(requestServiceId);
             if (res == null)
             {
                 return Ok(new ErrorResponse("No record"));
@@ -109,7 +113,8 @@ namespace AnService_Capstone.Controllers
         [Authorize(Roles = "Customer")]
         public async Task<IActionResult> ApproveContract(int id)
         {
-            if (id == 0)
+            return Ok(await _contractService.ApproveContract(id));
+            /*if (id == 0)
             {
                 return BadRequest(new ErrorResponse("Please enter id"));
             }
@@ -120,10 +125,10 @@ namespace AnService_Capstone.Controllers
                 var contract = await _contractRepository.GetContractByID(id);
                 var service = await _serviceRepository.GetServiceRequestByID(contract.ServiceRequestId);
                 _ = await _serviceRepository.UpdateStatusServiceRequest(contract.ServiceRequestId, 3);
-                /*_ = await _promotionRepository.UpdateStatusPromotion((int)service.PromotionId);*/
+                *//*_ = await _promotionRepository.UpdateStatusPromotion((int)service.PromotionId);*//*
                 return Ok("Update successfull");
             }
-            return BadRequest(new ErrorResponse("Update fail"));
+            return BadRequest(new ErrorResponse("Update fail"));*/
         }
 
         /// <summary>
@@ -136,7 +141,8 @@ namespace AnService_Capstone.Controllers
         [Authorize(Roles = "Customer")]
         public async Task<IActionResult> DenyContract(int id)
         {
-            if (id == 0)
+            return Ok(await _contractService.DenyContract(id));
+            /*if (id == 0)
             {
                 return BadRequest(new ErrorResponse("Please enter id"));
             }
@@ -146,7 +152,7 @@ namespace AnService_Capstone.Controllers
             {
                 return Ok("Update successfull");
             }
-            return BadRequest(new ErrorResponse("Update fail"));
+            return BadRequest(new ErrorResponse("Update fail"));*/
         }
 
         /// <summary>
@@ -159,7 +165,8 @@ namespace AnService_Capstone.Controllers
         [Authorize(Roles = "Customer")]
         public async Task<IActionResult> RequestUpdateContract(int id)
         {
-            if (id == 0)
+            return Ok(await _contractService.RequestUpdateContract(id));
+            /*if (id == 0)
             {
                 return BadRequest(new ErrorResponse("Please enter id"));
             }
@@ -169,7 +176,7 @@ namespace AnService_Capstone.Controllers
             {
                 return Ok("Update successfull");
             }
-            return BadRequest(new ErrorResponse("Update fail"));
+            return BadRequest(new ErrorResponse("Update fail"));*/
         }
 
         /// <summary>
@@ -185,8 +192,8 @@ namespace AnService_Capstone.Controllers
             {
                 return BadRequest();
             }
-
-            foreach (var updateDetail in contract.updatePriceRequestDetails)
+            return Ok(await _contractService.CreateContract(contract));
+            /*foreach (var updateDetail in contract.updatePriceRequestDetails)
             {
                 _ = await _serviceRepository.UpdatePriceServiceRequestDetail(updateDetail.RequestDetailID, updateDetail.RequestDetailPrice);
             }
@@ -197,10 +204,10 @@ namespace AnService_Capstone.Controllers
             {
                 var res2 = await _contractRepository.UpdateContract(contract, check.ContractId);
                 _ = await _contractRepository.UpdateStatusContract(check.ContractId, 2);
-                /*foreach (var updateDetail in contract.updatePriceRequestDetails)
+                *//*foreach (var updateDetail in contract.updatePriceRequestDetails)
                 {
                     _ = await _serviceRepository.UpdatePriceServiceRequestDetail(updateDetail.RequestDetailID, updateDetail.RequestDetailPrice);
-                }*/
+                }*//*
                 if (res2)
                 {
                     return Ok("Create successfull");
@@ -209,16 +216,16 @@ namespace AnService_Capstone.Controllers
             }
 
             var res = await _contractRepository.CreateContract(contract);
-            /*foreach (var updateDetail in contract.updatePriceRequestDetails)
+            *//*foreach (var updateDetail in contract.updatePriceRequestDetails)
             {
                 _ = await _serviceRepository.UpdatePriceServiceRequestDetail(updateDetail.RequestDetailID, updateDetail.RequestDetailPrice);
-            }*/
+            }*//*
 
             if (res)
             {
                 return Ok("Create successfull");
             }
-            return BadRequest(new ErrorResponse("Create fail"));
+            return BadRequest(new ErrorResponse("Create fail"));*/
             /*else
             {
                 res = await _contractRepository.CreateContract(contract);
