@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "E:\\Capstone\\Backup_API\\AnService_Capstone.Core\\AnService_Capstone.Core.csproj": {}
+    "E:\\Capstone\\Api_Backup\\AnService_Capstone.Core\\AnService_Capstone.Core.csproj": {}
   },
   "projects": {
-    "E:\\Capstone\\Backup_API\\AnService_Capstone.Core\\AnService_Capstone.Core.csproj": {
+    "E:\\Capstone\\Api_Backup\\AnService_Capstone.Core\\AnService_Capstone.Core.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\Capstone\\Backup_API\\AnService_Capstone.Core\\AnService_Capstone.Core.csproj",
+        "projectUniqueName": "E:\\Capstone\\Api_Backup\\AnService_Capstone.Core\\AnService_Capstone.Core.csproj",
         "projectName": "AnService_Capstone.Core",
-        "projectPath": "E:\\Capstone\\Backup_API\\AnService_Capstone.Core\\AnService_Capstone.Core.csproj",
+        "projectPath": "E:\\Capstone\\Api_Backup\\AnService_Capstone.Core\\AnService_Capstone.Core.csproj",
         "packagesPath": "C:\\Users\\ADMIN\\.nuget\\packages\\",
-        "outputPath": "E:\\Capstone\\Backup_API\\AnService_Capstone.Core\\obj\\",
+        "outputPath": "E:\\Capstone\\Api_Backup\\AnService_Capstone.Core\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

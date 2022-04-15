@@ -123,7 +123,7 @@ namespace AnService_Capstone.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("[action]")]
-        [Authorize(Roles = "Customer")]
+        [Authorize(Roles = "Customer, Worker")]
         public IActionResult SendSms([FromBody] SmsMessage model)
         {
             var code = _otpGenerator.GeneratorOTP();
@@ -595,7 +595,7 @@ namespace AnService_Capstone.Controllers
 
         [HttpPut]
         [Route("[action]")]
-        [Authorize(Roles = "Customer")]
+        [Authorize(Roles = "Worker")]
         public async Task<IActionResult> ChangePhoneNumber(int userID, string phoneNumber)
         {
             if (userID == 0)
