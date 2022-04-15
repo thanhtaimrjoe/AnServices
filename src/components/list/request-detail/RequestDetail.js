@@ -410,7 +410,7 @@ export default function RequestDetail(props) {
           </TouchableWithoutFeedback>
         </Modal>
       )}
-      {!contractInfo.errorsMsg && (
+      {contractInfo.contractTitle && !contractInfo.errorsMsg && (
         <View style={styles.contractContainer}>
           <Text style={styles.contractTitle}>Hợp đồng</Text>
           <TouchableOpacity

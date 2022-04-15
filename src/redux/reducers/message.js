@@ -8,9 +8,6 @@ const myReducer = (state = inititalState, action) => {
     case types.RESET_MESSAGE:
       state = inititalState;
       return state;
-    case types.SYSTEM_ERROR:
-      state = 'SYSTEM_ERROR';
-      return state;
     case types.INVALID_INVITE_CODE:
       state = 'INVALID_INVITE_CODE';
       return state;

@@ -1,7 +1,10 @@
 import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import Home from '../../../components/home/main/Home';
-import {actGetAllServiceRequest} from '../../../redux/actions/index';
+import {
+  actGetAllServiceRequest,
+  actGetUserInformationRequest,
+} from '../../../redux/actions/index';
 
 export default function HomeContainer(props) {
   const {navigation} = props;
@@ -17,9 +20,13 @@ export default function HomeContainer(props) {
   //call api --- get all service request
   const getAllServiceRequest = token =>
     dispatch(actGetAllServiceRequest(token));
+  //call api --- get user information
+  const getUserInformation = (userID, token) =>
+    dispatch(actGetUserInformationRequest(userID, token));
 
   useEffect(() => {
     getAllServiceRequest(token);
+    getUserInformation(user.id, token);
   }, []);
 
   //button --- navigate to service request page

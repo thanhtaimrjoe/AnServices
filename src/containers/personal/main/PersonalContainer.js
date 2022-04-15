@@ -2,10 +2,7 @@ import {CommonActions} from '@react-navigation/native';
 import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import Personal from '../../../components/personal/main/Personal';
-import {
-  actClearData,
-  actGetUserInformationRequest,
-} from '../../../redux/actions/index';
+import {actClearData} from '../../../redux/actions/index';
 
 export default function PersonalContainer(props) {
   const {navigation} = props;
@@ -18,15 +15,8 @@ export default function PersonalContainer(props) {
 
   //get dispatch
   const dispatch = useDispatch();
-  //call api --- get user information
-  const getUserInformation = (userID, token) =>
-    dispatch(actGetUserInformationRequest(userID, token));
   //clear all reducer before log out
   const clearData = () => dispatch(actClearData());
-
-  useEffect(() => {
-    getUserInformation(user.id, token);
-  }, []);
 
   //button --- show share to friend page
   const onShowShareToFriendPage = () => {

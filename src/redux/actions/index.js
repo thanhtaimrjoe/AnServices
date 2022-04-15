@@ -6,12 +6,6 @@ export const actClearData = () => {
     type: types.CLEAR_DATA,
   };
 };
-//------------SYSTEM ERROR---------
-export const actSystemError = () => {
-  return {
-    type: types.SYSTEM_ERROR,
-  };
-};
 //------------MESSAGE-------------
 //reset message
 export const actResetMessage = () => {
@@ -39,8 +33,14 @@ export const actLoginCustomerOrWorkerRequest = phoneNumber => {
         dispatch(actGetUserInfo(json));
       }
     } catch (error) {
-      dispatch(actSystemError());
+      dispatch(actGetUserInfo('SYSTEM_ERROR'));
     }
+  };
+};
+//reset user message
+export const actResetUserMessage = () => {
+  return {
+    type: types.RESET_USER_MESSAGE,
   };
 };
 //call api --- authen

@@ -5,6 +5,9 @@ const myReducer = (state = inititalState, action) => {
     case types.CLEAR_DATA:
       state = inititalState;
       return state;
+    case types.RESET_USER_MESSAGE:
+      state = inititalState;
+      return state;
     case types.GET_USER:
       state = action.user;
       return state;

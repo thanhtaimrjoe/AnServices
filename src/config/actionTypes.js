@@ -1,7 +1,5 @@
 //------------CLEAR REDUCER----------
 export const CLEAR_DATA = 'CLEAR_DATA';
-//------------SYSTEM ERROR-----------
-export const SYSTEM_ERROR = 'SYSTEM_ERROR';
 //------------MESSAGE----------------
 export const RESET_MESSAGE = 'RESET_MESSAGE';
 export const CREATE_SERVICE_REQUEST_SUCCESS = 'CREATE_SERVICE_REQUEST_SUCCESS';
@@ -24,6 +22,7 @@ export const CANCEL_REQUEST_SERVICE = 'CANCEL_REQUEST_SERVICE';
 //------------USER----------------
 export const GET_OTP = 'GET_OTP';
 export const GET_USER = 'GET_USER';
+export const RESET_USER_MESSAGE = 'RESET_USER_MESSAGE';
 export const ACCOUNT_HAVE_BEEN_BANNED = 'ACCOUNT_HAVE_BEEN_BANNED';
 export const GET_USER_INFORMATION = 'GET_USER_INFORMATION';
 export const UPDATE_INFORMATION_SUCCESS = 'UPDATE_INFORMATION_SUCCESS';

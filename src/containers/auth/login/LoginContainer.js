@@ -5,6 +5,7 @@ import Login from '../../../components/auth/login/Login';
 import {
   actLoginCustomerOrWorkerRequest,
   actResetMessage,
+  actResetUserMessage,
   actSendSmsByPhoneNumberRequest,
 } from '../../../redux/actions/index';
 export default function LoginContainer(props) {
@@ -33,7 +34,7 @@ export default function LoginContainer(props) {
     return (phoneNumber = phoneNumber.replace(0, '+84'));
   };
   //reset message
-  const resetMessage = () => dispatch(actResetMessage());
+  const resetUserMessage = () => dispatch(actResetUserMessage());
 
   useEffect(() => {
     if (user.userRole === 'Worker') {
@@ -56,18 +57,18 @@ export default function LoginContainer(props) {
       setLoading(false);
       Alert.alert('Thông báo', 'Rất tiếc, tài khoản này đã bị chặn');
     }
-    if (message === 'SYSTEM_ERROR') {
+    if (user === 'SYSTEM_ERROR') {
       Alert.alert('Thông báo', 'Lỗi hệ thống, mời bạn thử lại', [
         {
           text: 'OK',
           onPress: () => {
+            resetUserMessage();
             setLoading(false);
-            resetMessage();
           },
         },
       ]);
     }
-  }, [user, message]);
+  }, [user]);
 
   //navigate to verify otp
   const navigateToVerifyOTP = () => {
