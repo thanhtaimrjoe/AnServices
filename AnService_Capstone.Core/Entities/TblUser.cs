@@ -30,7 +30,6 @@ namespace AnService_Capstone.Core.Entities
         public int? Status { get; set; }
 
         public virtual TblRole RoleNavigation { get; set; }
-        public virtual TblStatus StatusNavigation { get; set; }
         public virtual TblTypeJob TypeJobNavigation { get; set; }
         public virtual ICollection<TblInviteCode> TblInviteCodes { get; set; }
         public virtual ICollection<TblPromotion> TblPromotions { get; set; }

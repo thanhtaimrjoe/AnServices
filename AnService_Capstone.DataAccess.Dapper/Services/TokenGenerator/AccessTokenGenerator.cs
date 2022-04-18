@@ -58,6 +58,7 @@ namespace AnService_Capstone.DataAccess.Dapper.TokenGenerator
                 Token = new JwtSecurityTokenHandler().WriteToken(token),
                 RefreshToken = refreshToken,
                 UserRole = user.RoleName,
+                Status = user.Status,
                 Expired = token.ValidTo
 
             };

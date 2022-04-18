@@ -153,7 +153,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
 
         public async Task<UserViewModel> GetWorkerByID(int id)
         {
-            var query = "select UserID, FullName, PhoneNumber, Address, Email, CreateDate, Status, TypeJobID, TypeJobName " +
+            var query = "select UserID, FullName, PhoneNumber, Address, Email, CreateDate, Status, TypeJobID as 'TypeJobID', TypeJobID, TypeJobName " +
                 "from tblUsers u join tblTypeJobs job on u.TypeJob = job.TypeJobID " +
                 "where Role = 2 and UserID = @UserID";
             using (var connections = _context.CreateConnection())
@@ -203,7 +203,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             parameters.Add("PhoneNumber", worker.WorkerPhoneNumber, DbType.String);
             parameters.Add("Address", worker.WorkerAddress, DbType.String);
             parameters.Add("Email", worker.WorkerEmail, DbType.String);
-            parameters.Add("TypeJob", worker.TypeJob.TypeJobId, DbType.Int32);
+            parameters.Add("TypeJob", worker.TypeJobId, DbType.Int32);
             parameters.Add("UpdateDate", DateTime.Now, DbType.DateTime);
             parameters.Add("UserID", worker.WorkerId, DbType.Int32);
 
@@ -425,7 +425,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
 
         public async Task<IEnumerable<UserViewModel>> GetAllWorker(string id, string phone, string name)
         {
-            var query = "select UserID, FullName, PhoneNumber, Address, Email, CreateDate, Status, TypeJobID, TypeJobName " +
+            var query = "select UserID, FullName, PhoneNumber, Address, Email, CreateDate, Status, TypeJobID as 'TypeJobID', TypeJobID, TypeJobName " +
                 "from tblUsers u join tblTypeJobs job on u.TypeJob = job.TypeJobID " +
                 "where Role = 2 and Status = 4 and PhoneNumber like @PhoneNumber and FullName like @FullName and TypeJobID = COALESCE(@TypeJobID, TypeJobID) ";
             using (var connections = _context.CreateConnection())

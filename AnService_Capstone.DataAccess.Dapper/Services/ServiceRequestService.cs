@@ -198,7 +198,16 @@ namespace AnService_Capstone.DataAccess.Dapper.Services
 
         public async Task<IEnumerable<TblRequestDetail>> GetAllServiceRequestDetailsByServiceRequestID(int id)
         {
-            var result = await _serviceRepository.GetAllServiceRequestDetailsByServiceRequestID(id); 
+            /*var result = await _serviceRepository.GetAllServiceRequestDetailsByServiceRequestID(id); 
+            return result;*/
+            IEnumerable<TblRequestDetail> result;
+
+            result = await _serviceRepository.GetAllInformationServiceRequestDetailsByServiceRequestID(id);
+
+            if (result == null)
+            {
+                result = await _serviceRepository.GetAllServiceRequestDetailsByServiceRequestID(id);
+            }
             return result;
         }
 

@@ -20,7 +20,6 @@ namespace AnService_Capstone.Core.Entities
         public int? RequestDetailStatus { get; set; }
         public decimal? RequestDetailPrice { get; set; }
 
-        public virtual TblStatus RequestDetailStatusNavigation { get; set; }
         public virtual TblService Service { get; set; }
         public virtual TblServiceRequest ServiceRequest { get; set; }
         public virtual ICollection<TblRepairDetail> TblRepairDetails { get; set; }

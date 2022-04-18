@@ -5,6 +5,7 @@ using AnService_Capstone.Core.Models.Response;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace AnService_Capstone.Controllers
@@ -35,7 +36,15 @@ namespace AnService_Capstone.Controllers
             {
                 return BadRequest();
             }
-            return Ok(await _materialService.InsertRequestMaterial(model));
+            var res = await _materialService.InsertRequestMaterial(model);
+            if (res.ErrorsMsg.First().Equals("Request Successful"))
+            {
+                return Ok(res.ErrorsMsg);
+            }
+            else
+            {
+                return BadRequest(res.ErrorsMsg);
+            }
             /*var result = await _materialReposiory.InsertMaterial(model);
             if (result)
             {
@@ -122,7 +131,7 @@ namespace AnService_Capstone.Controllers
             var rs = await _materialService.GetAllMaterial();
             if (rs == null)
             {
-                return NotFound();
+                return NotFound(new ErrorResponse("No Record"));
             }
             return Ok(rs);
         }
@@ -191,7 +200,15 @@ namespace AnService_Capstone.Controllers
                 return Ok("Update Successfull");
             }
             return BadRequest(new ErrorResponse("Update Fail"));*/
-            return Ok(await _materialService.UpdateStatusRequestMaterial(id, status));
+            var res = await _materialService.UpdateStatusRequestMaterial(id, status);
+            if (res.ErrorsMsg.First().Equals("Update Successfull"))
+            {
+                return Ok(res.ErrorsMsg);
+            }
+            else
+            {
+                return BadRequest(res.ErrorsMsg);
+            }
         }
         
         /// <summary>
@@ -215,7 +232,15 @@ namespace AnService_Capstone.Controllers
                 return Ok("Update Successfull");
             }
             return BadRequest(new ErrorResponse("Update Fail"));*/
-            return Ok(await _materialService.ApproveRequestMaterial(id));
+            var res = await _materialService.ApproveRequestMaterial(id);
+            if (res.ErrorsMsg.First().Equals("Update Successfull"))
+            {
+                return Ok(res.ErrorsMsg);
+            }
+            else
+            {
+                return BadRequest(res.ErrorsMsg);
+            }
         }
 
         /// <summary>
@@ -245,7 +270,15 @@ namespace AnService_Capstone.Controllers
                 return Ok("Update Successfull");
             }
             return BadRequest(new ErrorResponse("Update Fail"));*/
-            return Ok(await _materialService.DenyRequestMaterial(id, message));
+            var res = await _materialService.DenyRequestMaterial(id, message);
+            if (res.ErrorsMsg.First().Equals("Update Successfull"))
+            {
+                return Ok(res.ErrorsMsg);
+            }
+            else
+            {
+                return BadRequest(res.ErrorsMsg);
+            }
         }
 
         /// <summary>
@@ -281,7 +314,15 @@ namespace AnService_Capstone.Controllers
                 return Ok("Update Successfull");
             }
             return BadRequest(new ErrorResponse("Update Fail"));*/
-            return Ok(await _materialService.UpdateRequestMaterial(id,quantityNew,message));
+            var res = await _materialService.UpdateRequestMaterial(id, quantityNew, message);
+            if (res.ErrorsMsg.First().Equals("Update Successfull"))
+            {
+                return Ok(res.ErrorsMsg);
+            }
+            else
+            {
+                return BadRequest(res.ErrorsMsg);
+            }
         }
 
         /// <summary>
@@ -305,7 +346,15 @@ namespace AnService_Capstone.Controllers
                 return Ok("Cancel Successfull");
             }
             return BadRequest(new ErrorResponse("Cancel Fail"));*/
-            return Ok(await _materialService.CancelRequestMaterial(id));
+            var res = await _materialService.CancelRequestMaterial(id);
+            if (res.ErrorsMsg.First().Equals("Cancel Successfull"))
+            {
+                return Ok(res.ErrorsMsg);
+            }
+            else
+            {
+                return BadRequest(res.ErrorsMsg);
+            }
         }
 
     }

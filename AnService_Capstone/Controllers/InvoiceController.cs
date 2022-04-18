@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace AnService_Capstone.Controllers
@@ -55,7 +56,15 @@ namespace AnService_Capstone.Controllers
             {
                 return BadRequest();
             }
-            return Ok(await _invoiceService.CreateInvoice(invoice));
+            var res = await _invoiceService.CreateInvoice(invoice);
+            if (res.ErrorsMsg.First().Equals("Create Successful"))
+            {
+                return Ok(res.ErrorsMsg);
+            }
+            else
+            {
+                return BadRequest(res.ErrorsMsg);
+            }
             /*if (serviceRequestID == 0)
             {
                 return BadRequest(new ErrorResponse("Please enter serviceRequestID"));
@@ -256,7 +265,7 @@ namespace AnService_Capstone.Controllers
             var res = await _invoiceService.GetInfomationInvoiceByServiceRequestID(serviceRequestID);
             if (res == null)
             {
-                return NotFound("No record");
+                return NotFound(new ErrorResponse("No record"));
             }
             return Ok(res);
         }

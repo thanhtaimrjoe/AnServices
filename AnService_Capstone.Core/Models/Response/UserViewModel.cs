@@ -17,6 +17,7 @@ namespace AnService_Capstone.Core.Models.Response
         public string Email { get; set; }
         /*public string InviteCode { get; set; }*/
         public string RoleName { get; set; }
+        public int TypeJobID { get; set; }
         public TblTypeJob TypeJob { get; set; }
         public DateTime CreateDate { get; set; }
         public int Status { get; set; }

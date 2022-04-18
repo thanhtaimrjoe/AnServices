@@ -29,7 +29,6 @@ namespace AnService_Capstone.Core.Entities
         public virtual DbSet<TblRole> TblRoles { get; set; }
         public virtual DbSet<TblService> TblServices { get; set; }
         public virtual DbSet<TblServiceRequest> TblServiceRequests { get; set; }
-        public virtual DbSet<TblStatus> TblStatuses { get; set; }
         public virtual DbSet<TblTypeJob> TblTypeJobs { get; set; }
         public virtual DbSet<TblTypeService> TblTypeServices { get; set; }
         public virtual DbSet<TblUsedMaterial> TblUsedMaterials { get; set; }
@@ -75,12 +74,6 @@ namespace AnService_Capstone.Core.Entities
                 entity.Property(e => e.CustomerId).HasColumnName("CustomerID");
 
                 entity.Property(e => e.ServiceRequestId).HasColumnName("ServiceRequestID");
-
-                entity.HasOne(d => d.ContractStatusNavigation)
-                    .WithMany(p => p.TblContracts)
-                    .HasForeignKey(d => d.ContractStatus)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_tblContract_tblStatus");
 
                 entity.HasOne(d => d.ServiceRequest)
                     .WithMany(p => p.TblContracts)
@@ -286,11 +279,6 @@ namespace AnService_Capstone.Core.Entities
 
                 entity.Property(e => e.ServiceRequestId).HasColumnName("ServiceRequestID");
 
-                entity.HasOne(d => d.RequestDetailStatusNavigation)
-                    .WithMany(p => p.TblRequestDetails)
-                    .HasForeignKey(d => d.RequestDetailStatus)
-                    .HasConstraintName("FK_tblRequestDetails_tblStatus");
-
                 entity.HasOne(d => d.Service)
                     .WithMany(p => p.TblRequestDetails)
                     .HasForeignKey(d => d.ServiceId)
@@ -372,22 +360,6 @@ namespace AnService_Capstone.Core.Entities
                     .WithMany(p => p.InverseServiceRequestReferenceNavigation)
                     .HasForeignKey(d => d.ServiceRequestReference)
                     .HasConstraintName("FK_tblServiceRequest_tblServiceRequest");
-
-                entity.HasOne(d => d.ServiceRequestStatusNavigation)
-                    .WithMany(p => p.TblServiceRequests)
-                    .HasForeignKey(d => d.ServiceRequestStatus)
-                    .HasConstraintName("FK_tblRequestServices_tblStatus");
-            });
-
-            modelBuilder.Entity<TblStatus>(entity =>
-            {
-                entity.HasKey(e => e.StatusId);
-
-                entity.ToTable("tblStatus");
-
-                entity.Property(e => e.StatusId).HasColumnName("StatusID");
-
-                entity.Property(e => e.StatusName).HasMaxLength(50);
             });
 
             modelBuilder.Entity<TblTypeJob>(entity =>
@@ -427,6 +399,10 @@ namespace AnService_Capstone.Core.Entities
 
                 entity.Property(e => e.Note).HasMaxLength(50);
 
+                entity.Property(e => e.Quantity).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.QuantityNew).HasColumnType("decimal(18, 2)");
+
                 entity.Property(e => e.RequestDetailId).HasColumnName("RequestDetailID");
 
                 entity.Property(e => e.WorkerId).HasColumnName("WorkerID");
@@ -440,11 +416,6 @@ namespace AnService_Capstone.Core.Entities
                     .WithMany(p => p.TblUsedMaterials)
                     .HasForeignKey(d => d.RequestDetailId)
                     .HasConstraintName("FK_tblUsedMaterial_tblRequestDetails");
-
-                entity.HasOne(d => d.StatusNavigation)
-                    .WithMany(p => p.TblUsedMaterials)
-                    .HasForeignKey(d => d.Status)
-                    .HasConstraintName("FK_tblUsedMaterial_tblStatus");
             });
 
             modelBuilder.Entity<TblUser>(entity =>
@@ -488,11 +459,6 @@ namespace AnService_Capstone.Core.Entities
                     .HasForeignKey(d => d.Role)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_tblUsers_tblRoles");
-
-                entity.HasOne(d => d.StatusNavigation)
-                    .WithMany(p => p.TblUsers)
-                    .HasForeignKey(d => d.Status)
-                    .HasConstraintName("FK_tblUsers_tblStatus");
 
                 entity.HasOne(d => d.TypeJobNavigation)
                     .WithMany(p => p.TblUsers)

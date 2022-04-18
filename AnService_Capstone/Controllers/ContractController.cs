@@ -70,7 +70,7 @@ namespace AnService_Capstone.Controllers
             var res = await _contractService.GetContractByServiceRequestID(requestServiceId);
             if (res == null)
             {
-                return Ok(new ErrorResponse("No record"));
+                return NotFound(new ErrorResponse("No record"));
             }
             return Ok(res);
         }
@@ -113,7 +113,15 @@ namespace AnService_Capstone.Controllers
         [Authorize(Roles = "Customer")]
         public async Task<IActionResult> ApproveContract(int id)
         {
-            return Ok(await _contractService.ApproveContract(id));
+            var res = await _contractService.ApproveContract(id);
+            if (res.ErrorsMsg.First().Equals("Update successfull"))
+            {
+                return Ok(res.ErrorsMsg);
+            }
+            else
+            {
+                return BadRequest(res.ErrorsMsg);
+            }
             /*if (id == 0)
             {
                 return BadRequest(new ErrorResponse("Please enter id"));
@@ -141,7 +149,15 @@ namespace AnService_Capstone.Controllers
         [Authorize(Roles = "Customer")]
         public async Task<IActionResult> DenyContract(int id)
         {
-            return Ok(await _contractService.DenyContract(id));
+            var res = await _contractService.DenyContract(id);
+            if (res.ErrorsMsg.First().Equals("Update successfull"))
+            {
+                return Ok(res.ErrorsMsg);
+            }
+            else
+            {
+                return BadRequest(res.ErrorsMsg);
+            }
             /*if (id == 0)
             {
                 return BadRequest(new ErrorResponse("Please enter id"));
@@ -165,7 +181,15 @@ namespace AnService_Capstone.Controllers
         [Authorize(Roles = "Customer")]
         public async Task<IActionResult> RequestUpdateContract(int id)
         {
-            return Ok(await _contractService.RequestUpdateContract(id));
+            var res = await _contractService.RequestUpdateContract(id);
+            if (res.ErrorsMsg.First().Equals("Update successfull"))
+            {
+                return Ok(res.ErrorsMsg);
+            }
+            else
+            {
+                return BadRequest(res.ErrorsMsg);
+            }
             /*if (id == 0)
             {
                 return BadRequest(new ErrorResponse("Please enter id"));
@@ -192,7 +216,15 @@ namespace AnService_Capstone.Controllers
             {
                 return BadRequest();
             }
-            return Ok(await _contractService.CreateContract(contract));
+            var res = await _contractService.CreateContract(contract);
+            if (res.ErrorsMsg.First().Equals("Create successfull"))
+            {
+                return Ok(res.ErrorsMsg);
+            }
+            else
+            {
+                return BadRequest(res.ErrorsMsg);
+            }
             /*foreach (var updateDetail in contract.updatePriceRequestDetails)
             {
                 _ = await _serviceRepository.UpdatePriceServiceRequestDetail(updateDetail.RequestDetailID, updateDetail.RequestDetailPrice);

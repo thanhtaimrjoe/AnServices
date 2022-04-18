@@ -90,7 +90,15 @@ namespace AnService_Capstone.Controllers
                 return Ok("Create Successfull");
             }
             return BadRequest(new ErrorResponse("Create Fail"));*/
-            return Ok(await _serviceRequestService.CreateServiceRequest(model));
+            var res = await _serviceRequestService.CreateServiceRequest(model);
+            if (res.ErrorsMsg.First().Equals("Create Successfull") || res.ErrorsMsg.First().Equals("Your account has been banned"))
+            {
+                return Ok(res.ErrorsMsg);
+            }
+            else
+            {
+                return BadRequest(res.ErrorsMsg);
+            }
         }
 
         /// <summary>
@@ -350,7 +358,7 @@ namespace AnService_Capstone.Controllers
             var service = await _serviceRequestService.GetAllService();
             if (service == null)
             {
-                return NotFound(new ErrorResponse("No Service"));
+                return BadRequest(new ErrorResponse("No Service"));
             }
             return Ok(service);
         }
@@ -586,7 +594,7 @@ namespace AnService_Capstone.Controllers
             }
 
             var res1 = await _serviceRepository.AmountOfSaleList(year, 0);
-            var res2 = await _serviceRepository.CountServiceStatus();
+            /*var res2 = await _serviceRepository.CountServiceStatus();*/
             /*var res3 = await _promotionRepository.CountPromotionIsUsed();*/
             var res4 = await _serviceRepository.CountRequestServiceDetail(11);
             var res5 = await _serviceRepository.CountRequestServiceDetail(12);
@@ -609,7 +617,7 @@ namespace AnService_Capstone.Controllers
             var res22 = await _invoiceRepository.AmountOfInvoice(year, quarter);
 
             dashboard.ReceivedServiceRequest = res1.FirstOrDefault();
-            dashboard.ServiceStatusStatistics = res2;
+            /*dashboard.ServiceStatusStatistics = res2;*/
             /*dashboard.PromotionIsUsed = res3;*/
             dashboard.SatisfiedRequestDetail = res4;
             dashboard.UnsatisfiedRequestDetail = res5;
@@ -717,7 +725,15 @@ namespace AnService_Capstone.Controllers
                 return NotFound(new ErrorResponse("Cancel Fail"));
             }
             return Ok("Cancel Successful");*/
-            return Ok(await _serviceRequestService.CancelServiceRequestForCustomer(id));
+            var res = await _serviceRequestService.CancelServiceRequestForCustomer(id);
+            if (res.ErrorsMsg.First().Equals("Cancel Successful"))
+            {
+                return Ok(res.ErrorsMsg);
+            }
+            else
+            {
+                return BadRequest(res.ErrorsMsg);
+            }
         }
 
         /// <summary>
@@ -748,7 +764,15 @@ namespace AnService_Capstone.Controllers
                 return NotFound(new ErrorResponse("Cancel Fail"));
             }
             return Ok("Cancel Successful");*/
-            return Ok(await _serviceRequestService.CancelServiceRequestForStaff(id));
+            var res = await _serviceRequestService.CancelServiceRequestForStaff(id);
+            if (res.ErrorsMsg.First().Equals("Cancel Successful"))
+            {
+                return Ok(res.ErrorsMsg);
+            }
+            else
+            {
+                return BadRequest(res.ErrorsMsg);
+            }
         }
 
         [HttpPut]
@@ -792,7 +816,15 @@ namespace AnService_Capstone.Controllers
                 return Ok("Update Successful");
             }
             return NotFound(new ErrorResponse("Update Fail"));*/
-            return Ok(await _serviceRequestService.UpdateStatusServiceRequestDetail(id, status));
+            var res = await _serviceRequestService.UpdateStatusServiceRequestDetail(id, status);
+            if (res.ErrorsMsg.First().Equals("Update Successful"))
+            {
+                return Ok(res.ErrorsMsg);
+            }
+            else
+            {
+                return BadRequest(res.ErrorsMsg);
+            }
         }
 
         [HttpPut]
@@ -813,7 +845,15 @@ namespace AnService_Capstone.Controllers
             }
 
             return BadRequest(new ErrorResponse("Update Fail"));*/
-            return Ok(await _serviceRequestService.CompleteServiceRequest(serviceRequestID));
+            var res = await _serviceRequestService.CompleteServiceRequest(serviceRequestID);
+            if (res.ErrorsMsg.First().Equals("Update Successful"))
+            {
+                return Ok(res.ErrorsMsg);
+            }
+            else
+            {
+                return BadRequest(res.ErrorsMsg);
+            }
         }
 
         [HttpPut]
@@ -841,7 +881,15 @@ namespace AnService_Capstone.Controllers
             }
 
             return BadRequest(new ErrorResponse("Update Fail"));*/
-            return Ok(await _serviceRequestService.SurveyingServiceRequest(serviceRequestID));
+            var res = await _serviceRequestService.SurveyingServiceRequest(serviceRequestID);
+            if (res.ErrorsMsg.First().Equals("Update Successful"))
+            {
+                return Ok(res.ErrorsMsg);
+            }
+            else
+            {
+                return BadRequest(res.ErrorsMsg);
+            }
         }
 
         [HttpPut]
@@ -879,7 +927,15 @@ namespace AnService_Capstone.Controllers
             }
 
             return BadRequest(new ErrorResponse("Update Fail"));*/
-            return Ok(await _serviceRequestService.ReworkRequestDetail(requestDetailID));
+            var res = await _serviceRequestService.ReworkRequestDetail(requestDetailID);
+            if (res.ErrorsMsg.First().Equals("Update Successful"))
+            {
+                return Ok(res.ErrorsMsg);
+            }
+            else
+            {
+                return BadRequest(res.ErrorsMsg);
+            }
         }
 
         /*[HttpPut]
@@ -933,7 +989,15 @@ namespace AnService_Capstone.Controllers
                 return NotFound(new ErrorResponse("Cancel Fail"));
             }
             return Ok("Cancel Successful");*/
-            return Ok(await _serviceRequestService.RemoveListServiceRequest(requestServiceID));
+            var res = await _serviceRequestService.RemoveListServiceRequest(requestServiceID);
+            if (res.ErrorsMsg.First().Equals("Cancel Successful"))
+            {
+                return Ok(res.ErrorsMsg);
+            }
+            else
+            {
+                return BadRequest(res.ErrorsMsg);
+            }
         }
 
         /*[HttpGet]

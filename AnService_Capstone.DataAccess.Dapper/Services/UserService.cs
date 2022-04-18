@@ -127,7 +127,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Services
                     }
                     return new ErrorResponse("Your invite code is expired");
                 }
-                return new ErrorResponse("Your invite code is valid");
+                return new ErrorResponse("Your invite code is invalid");
             }
 
             _ = await _userRepository.CreateAccountCustomer(model);

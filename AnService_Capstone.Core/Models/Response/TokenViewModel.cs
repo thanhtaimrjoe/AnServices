@@ -13,6 +13,7 @@ namespace AnService_Capstone.Core.Models.Response
         public string RefreshToken { get; set; }
         public string FullName { get; set; }
         public string UserRole { get; set; }
+        public int Status { get; set; }
         public DateTime Expired { get; set; }
     }
 }

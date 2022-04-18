@@ -5,6 +5,7 @@ using AnService_Capstone.Core.Models.Response;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace AnService_Capstone.Controllers
@@ -41,8 +42,15 @@ namespace AnService_Capstone.Controllers
             {
                 return BadRequest();
             }
-
-            return Ok(await _reportService.CreateReport(model));
+            var res = await _reportService.CreateReport(model);
+            if (res.ErrorsMsg.First().Equals("Create Successfull"))
+            {
+                return Ok(res.ErrorsMsg);
+            }
+            else
+            {
+                return BadRequest(res.ErrorsMsg);
+            }
             /*bool media = false;
 
             var reqService = await _report.CreateReport(model);

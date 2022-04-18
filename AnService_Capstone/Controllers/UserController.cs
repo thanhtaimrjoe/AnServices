@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace AnService_Capstone.Controllers
@@ -105,6 +106,11 @@ namespace AnService_Capstone.Controllers
             {
                 return NotFound(new ErrorResponse("Phone number is not exists"));
             }
+
+            if (user.Status == 10)
+            {
+                return BadRequest(new ErrorResponse("Your account have been banned"));
+            }
             /*
             if (phoneNumber.Equals(""))
             {
@@ -135,7 +141,6 @@ namespace AnService_Capstone.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("[action]")]
-        [Authorize(Roles = "Customer")]
         public IActionResult SendSms([FromBody] SmsMessage model)
         {
             /*var message = MessageResource.Create(
@@ -169,10 +174,19 @@ namespace AnService_Capstone.Controllers
         [Route("[action]")]
         public async Task<IActionResult> CreateCustomerAccount(CreateCustomer model)
         {
-            /*if (!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return BadRequest();
-            }*/
+            }
+            var user = await _userService.CreateCustomerAccount(model);
+            if (user.ErrorsMsg.First().Equals("Create Successfull"))
+            {
+                return Ok(user);
+            }
+            else
+            {
+                return BadRequest(user);
+            }
             /*var code = _otpGenerator.GeneratorOTP();
             var checkCode = await _userRepository.CheckInviteCodeExist(code);
             if (checkCode)
@@ -240,8 +254,8 @@ namespace AnService_Capstone.Controllers
 
             /*var promotion = await _promotionRepository.InsertPromotion(code);
             var promotionDetail = await _promotionRepository.InsertPromotionDetail(user, promotion);*/
-            
-            return Ok(await _userService.CreateCustomerAccount(model));
+
+            /*return Ok(await _userService.CreateCustomerAccount(model));*/
         }
 
         /// <summary>
@@ -251,7 +265,7 @@ namespace AnService_Capstone.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("[action]")]
-        [Authorize(Roles = "Staff")]
+        /*[Authorize(Roles = "Staff")]*/
         //get worker group by job by service id
         public async Task<IActionResult> GetWorkerByServiceID(int id)
         {
@@ -372,7 +386,7 @@ namespace AnService_Capstone.Controllers
             {
                 return BadRequest(new ErrorResponse("Please enter id"));
             }
-
+            
             var res = await _userRepository.RemoveWorker(id);
 
             if (res)
@@ -380,7 +394,15 @@ namespace AnService_Capstone.Controllers
                 return Ok("Remove Successful");
             }
             return BadRequest(new ErrorResponse("Remove Fail"));*/
-            return Ok(await _userService.RemoveWorker(id));
+            var res = await _userService.RemoveWorker(id);
+            if (res.ErrorsMsg.First().Equals("Remove Successful"))
+            {
+                return Ok(res.ErrorsMsg);
+            }
+            else
+            {
+                return BadRequest(res.ErrorsMsg);
+            }
         }
 
         /// <summary>
@@ -435,7 +457,15 @@ namespace AnService_Capstone.Controllers
             }
 
             return BadRequest(new ErrorResponse("Phone number is existed"));*/
-            return Ok(await _userService.UpdateWorker(worker));
+            var res = await _userService.UpdateWorker(worker);
+            if (res.ErrorsMsg.First().Equals("Update Successful"))
+            {
+                return Ok(res.ErrorsMsg);
+            }
+            else
+            {
+                return BadRequest(res.ErrorsMsg);
+            }
         }
 
         /// <summary>
@@ -460,7 +490,15 @@ namespace AnService_Capstone.Controllers
                 return Ok("Create Successfull");
             }
             return BadRequest(new ErrorResponse("Create Fail"));*/
-            return Ok(await _userService.CreateWorkerAccount(model));
+            var res = await _userService.CreateWorkerAccount(model);
+            if (res.ErrorsMsg.First().Equals("Create Successfull"))
+            {
+                return Ok(res.ErrorsMsg);
+            }
+            else
+            {
+                return BadRequest(res.ErrorsMsg);
+            }
         }
 
         /*[HttpPost]
@@ -583,7 +621,15 @@ namespace AnService_Capstone.Controllers
             }
 
             return BadRequest(new ErrorResponse("Update Fail"));*/
-            return Ok(await _userService.BanUserByUserID(id));
+            var res = await _userService.BanUserByUserID(id);
+            if (res.ErrorsMsg.First().Equals("Update Successful"))
+            {
+                return Ok(res.ErrorsMsg);
+            }
+            else
+            {
+                return BadRequest(res.ErrorsMsg);
+            }
         }
 
         /// <summary>
@@ -607,7 +653,15 @@ namespace AnService_Capstone.Controllers
                 return BadRequest(new ErrorResponse("Update Fail"));
             }
             return Ok("Update Successful");*/
-            return Ok(await _userService.UnBanUserByUserID(id));
+            var res = await _userService.UnBanUserByUserID(id);
+            if (res.ErrorsMsg.First().Equals("Update Successful"))
+            {
+                return Ok(res.ErrorsMsg);
+            }
+            else
+            {
+                return BadRequest(res.ErrorsMsg);
+            }
         }
 
         [HttpPut]
@@ -637,7 +691,15 @@ namespace AnService_Capstone.Controllers
                 return BadRequest(new ErrorResponse("Update Fail"));
             }
             return Ok("Update Successful");*/
-            return Ok(await _userService.ChangePhoneNumber(userID, phoneNumber));
+            var res = await _userService.ChangePhoneNumber(userID, phoneNumber);
+            if (res.ErrorsMsg.First().Equals("Update Successful"))
+            {
+                return Ok(res.ErrorsMsg);
+            }
+            else
+            {
+                return BadRequest(res.ErrorsMsg);
+            }
         }
 
         [HttpPut]
@@ -671,7 +733,15 @@ namespace AnService_Capstone.Controllers
                 return Ok("Update Successfull");
             }
             return BadRequest(new ErrorResponse("Update Fail"));*/
-            return Ok(await _userService.UpdateCustomer(model));
+            var res = await _userService.UpdateCustomer(model);
+            if (res.ErrorsMsg.First().Equals("Update Successfull"))
+            {
+                return Ok(res.ErrorsMsg);
+            }
+            else
+            {
+                return BadRequest(res.ErrorsMsg);
+            }
         }
     }
 }

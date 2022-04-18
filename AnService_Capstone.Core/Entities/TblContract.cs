@@ -20,7 +20,6 @@ namespace AnService_Capstone.Core.Entities
         public DateTime? ContractCreateDate { get; set; }
         public DateTime? ContractUpdateDate { get; set; }
 
-        public virtual TblStatus ContractStatusNavigation { get; set; }
         public virtual TblServiceRequest ServiceRequest { get; set; }
         public virtual TblInvoice TblInvoice { get; set; }
     }

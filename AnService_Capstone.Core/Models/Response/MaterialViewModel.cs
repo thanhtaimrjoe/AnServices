@@ -15,7 +15,7 @@ namespace AnService_Capstone.Core.Models.Response
         public UserViewModel Worker { get; set; }
         public double Quantity { get; set; }
         public double QuantityNew { get; set; }
-        public TblStatus Status { get; set; }
+        public int Status { get; set; }
         public string ServiceName { get; set; }
         public string Note { get; set; }
         public string Message { get; set; }
