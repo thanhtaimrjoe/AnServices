@@ -18,6 +18,8 @@ export default function LoginContainer(props) {
   const user = useSelector(state => state.user);
   //reducer --- message
   const message = useSelector(state => state.message);
+  //get token
+  const token = 'Bearer ' + user.token;
 
   useEffect(() => {
     //user role = worker
@@ -62,11 +64,14 @@ export default function LoginContainer(props) {
   const loginCustomerOrWorkerRequest = phoneNumber =>
     dispatch(actLoginCustomerOrWorkerRequest(phoneNumber));
   //call api --- send sms to phone number
-  const sendSmsByPhoneNumber = phoneNumber =>
-    dispatch(actSendSmsByPhoneNumberRequest(phoneNumber));
+  const sendSmsByPhoneNumber = (phoneNumber, token) =>
+    dispatch(actSendSmsByPhoneNumberRequest(phoneNumber, token));
   //conver 0123... to (+84)123
   const convertPhoneNumber = phoneNumber => {
-    return (phoneNumber = phoneNumber.replace(0, '+84'));
+    if (phoneNumber) {
+      phoneNumber = phoneNumber.replace(0, '+84');
+    }
+    return phoneNumber;
   };
 
   //button --- send otp
@@ -79,7 +84,7 @@ export default function LoginContainer(props) {
   //convert phone number and navigate to verify otp page
   const navigateToVerifyOTP = () => {
     const convertedPhoneNumber = convertPhoneNumber(phoneNumber);
-    //sendSmsByPhoneNumber(convertedPhoneNumber);
+    //sendSmsByPhoneNumber(convertedPhoneNumber, token);
     setLoading(false);
     navigation.navigate('VerifyOTPContainer', {
       phoneNumber: phoneNumber,

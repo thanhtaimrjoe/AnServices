@@ -145,7 +145,7 @@ export const actPhoneNumberNotExist = () => {
   };
 };
 //call api
-export const actChangePhoneNumberRequest = (userID, newPhoneNumber) => {
+export const actChangePhoneNumberRequest = (userID, newPhoneNumber, token) => {
   return async dispatch => {
     try {
       const response = await fetch(
@@ -157,6 +157,7 @@ export const actChangePhoneNumberRequest = (userID, newPhoneNumber) => {
         {
           method: 'PUT',
           headers: {
+            Authorization: token,
             Accept: 'application/json',
             'Content-Type': 'application/json',
           },
@@ -208,9 +209,16 @@ export const actGetAllServiceRequestByWorkerIDRequest = (
           },
         },
       );
-      const json = await response.json();
-      if (json) {
-        dispatch(actGetAllRequestServiceByWorkerID(json));
+      if (response.status === 200) {
+        const json = await response.json();
+        if (json) {
+          dispatch(actGetAllRequestServiceByWorkerID(json));
+        }
+      } else {
+        const json = await response.json();
+        if (json.errorsMsg[0] === 'No Request Service Availabe') {
+          dispatch(actGetAllRequestServiceByWorkerID(json));
+        }
       }
     } catch (error) {}
   };
@@ -254,11 +262,13 @@ export const actGetAllRequestServiceDetailsByRequestServiceIDAndWorkerIDRequest 
             },
           },
         );
-        const json = await response.json();
-        if (json) {
-          dispatch(
-            actGetRequestServiceDetailsByRequestServiceIDAndWorkerID(json),
-          );
+        if (response.status === 200) {
+          const json = await response.json();
+          if (json) {
+            dispatch(
+              actGetRequestServiceDetailsByRequestServiceIDAndWorkerID(json),
+            );
+          }
         }
       } catch (error) {}
     };
@@ -287,9 +297,16 @@ export const actGetAllMaterialByRequestDetailIDRequest = (id, token) => {
           },
         },
       );
-      const json = await response.json();
-      if (json) {
-        dispatch(actGetAllMaterialByRequestDetailID(json));
+      if (response.status === 200) {
+        const json = await response.json();
+        if (json) {
+          dispatch(actGetAllMaterialByRequestDetailID(json));
+        }
+      } else {
+        const json = await response.json();
+        if (json.errorsMsg[0] === 'No Record') {
+          dispatch(actGetAllMaterialByRequestDetailID(json));
+        }
       }
     } catch (error) {}
   };
@@ -319,9 +336,11 @@ export const actGetAllMaterialRequest = token => {
           'Content-Type': 'application/json',
         },
       });
-      const json = await response.json();
-      if (json) {
-        dispatch(actGetAllMaterial(json));
+      if (response.status === 200) {
+        const json = await response.json();
+        if (json) {
+          dispatch(actGetAllMaterial(json));
+        }
       }
     } catch (error) {}
   };
@@ -352,6 +371,8 @@ export const actInsertRequestMaterialRequest = (requestMaterial, token) => {
       });
       if (response.status === 200) {
         dispatch(actInsertRequestMaterialSuccess());
+      } else {
+        dispatch(actInsertRequestMaterialFailure());
       }
     } catch (error) {
       dispatch(actInsertRequestMaterialFailure());
@@ -467,9 +488,16 @@ export const actGetAllReportByRequestDetailIDRequest = (
           },
         },
       );
-      const json = await response.json();
-      if (json) {
-        dispatch(actGetAllReportByRequestDetailID(json));
+      if (response.status === 200) {
+        const json = await response.json();
+        if (json) {
+          dispatch(actGetAllReportByRequestDetailID(json));
+        }
+      } else {
+        const json = await response.json();
+        if (json.errorsMsg[0] === 'No record') {
+          dispatch(actGetAllReportByRequestDetailID(json));
+        }
       }
     } catch (error) {}
   };

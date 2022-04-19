@@ -19,11 +19,13 @@ export default function VerifyPhoneNumberContainer(props) {
   const otp = useSelector(state => state.otp);
   //reducer --- message
   const message = useSelector(state => state.message);
+  //get token
+  const token = 'Bearer ' + user.token;
 
   //get dispatch
   const dispatch = useDispatch();
-  const changePhoneNumber = (userID, newPhoneNumber) =>
-    dispatch(actChangePhoneNumberRequest(userID, newPhoneNumber));
+  const changePhoneNumber = (userID, newPhoneNumber, token) =>
+    dispatch(actChangePhoneNumberRequest(userID, newPhoneNumber, token));
   //call api --- send sms to new phone number
   const sendSmsByPhoneNumber = phoneNumber =>
     dispatch(actSendSmsByPhoneNumberRequest(phoneNumber));
@@ -61,7 +63,7 @@ export default function VerifyPhoneNumberContainer(props) {
   const onVerifyOTP = code => {
     setLoading(true);
     // if (otp === code) {
-    changePhoneNumber(user.id, newPhoneNumber);
+    changePhoneNumber(user.id, newPhoneNumber, token);
     // } else {
     //   Alert.alert(
     //     'Thông báo',

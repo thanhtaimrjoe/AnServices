@@ -47,7 +47,10 @@ export default function ChangePhoneNumberContainer(props) {
 
   //conver 0123... to (+84)123
   const convertPhoneNumber = phoneNumber => {
-    return (phoneNumber = phoneNumber.replace(0, '+84'));
+    if (phoneNumber) {
+      phoneNumber = phoneNumber.replace(0, '+84');
+    }
+    return phoneNumber;
   };
 
   //convert phone number and navigate to verify phone number page
