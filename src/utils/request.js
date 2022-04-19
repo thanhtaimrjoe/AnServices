@@ -34,15 +34,13 @@ const errorHandler = (error) => {
     const { status, url, ...params } = response;
     console.log('RES ERR', params);
     notification.error({
-      // message: `Request Error ${status}: ${url}`,
-      message: `Yêu cầu lỗi ${url}`,
-
+      message: `Yêu cầu lỗi ${status}: ${url}`,
       description: errorText,
     });
   } else if (!response) {
     notification.error({
-      description: 'Mạng của bạn không bình thường và không thể kết nối với máy chủ',
-      message: 'Mạng bất thường',
+      description: 'Mạng của bạn không ổn định và không thể kết nối với máy chủ',
+      message: 'Kiểm tra lại kết nối mạng',
     });
   }
 
@@ -59,9 +57,7 @@ request.interceptors.request.use((url, options) => {
   const jwtToken = localStorage.getItem('USER_TOKEN');
   Object.assign(options.headers, {
     Authorization: `Bearer ${jwtToken}`,
-
   });
-
   return { url, options };
 });
 
@@ -104,6 +100,13 @@ request.interceptors.response.use((response, options) => {
         description: `Yêu cầu của bạn tới ${response.url} đã bị cấm`,
       });
       break;
+    case 404:
+      if (method !== 'GET')
+        notification.error({
+          message: response.statusText,
+          description: codeMessage[404],
+        });
+      break;
     case 405:
       notification.error({
         message: response.statusText,
@@ -113,7 +116,6 @@ request.interceptors.response.use((response, options) => {
     default:
       break;
   }
-
   return response;
 });
 

@@ -85,7 +85,7 @@ const ServiceRequestList = ({ history }) => {
               resource="Service/GetAllServiceRequestStatusOrDate?ServiceRequestStatus=2"
             />
           </TabPane>
-          <TabPane tab="Yêu cầu đang kháo sát" key="3">
+          <TabPane tab="Yêu cầu đã kháo sát" key="3">
             <ResoTable
               toolBarRender={false}
               search={false}

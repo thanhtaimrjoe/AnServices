@@ -210,7 +210,7 @@ const Analysis = () => {
       y: pending,
     },
     {
-      x: 'DV đang khảo sát',
+      x: 'DV đã khảo sát',
       y: surveying,
     },
     {

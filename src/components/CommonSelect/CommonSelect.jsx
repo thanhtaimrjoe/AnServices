@@ -220,7 +220,7 @@ const SelectRequestServiceStatus = (props) => {
         },
         {
           value: '15',
-          label: 'Đang khảo sát',
+          label: 'Đã khảo sát',
         },
         {
           value: '3',

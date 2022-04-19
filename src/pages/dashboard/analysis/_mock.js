@@ -50,7 +50,7 @@ const requestServiceTypeData = [
     y: 4544,
   },
   {
-    x: 'Dịch vụ đang khảo sát',
+    x: 'Dịch vụ đã khảo sát',
     y: 3321,
   },
   {

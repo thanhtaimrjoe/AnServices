@@ -5,22 +5,11 @@ import { Col, Descriptions, Input, Row } from 'antd';
 import React from 'react';
 
 
-const BasicStep = ({ customerName, userID, fullName, phoneNumber, address, 
-  serviceName, serviceDescription, servicePrice, 
-  requestServiceCreateDate, serviceRequestReference
-}) => {
+const BasicStep = ({ customerName, customerPhone, customerAddress, fullName, phoneNumber, address, 
+  serviceRequestDescription, serviceRequestPackage, requestServiceCreateDate, serviceRequestReference }) => {
   return (
     <div bordered={false} style={{ width: '200%', marginBottom: '4em' }}>
       <div bordered={false} style={{ width: '100%', marginBottom: '2em' }}>
-        {/* <Row gutter={16}>
-          <Col span={12}>
-            <ProForm.Item 
-              name="requestServiceId" 
-              label="Mã dịch vụ">
-              <Input readOnly placeholder='Không có'/>
-            </ProForm.Item>
-          </Col>
-        </Row> */}
         <Row gutter={16}>
           <Col span={12}>
             <ProForm.Item 
@@ -53,7 +42,8 @@ const BasicStep = ({ customerName, userID, fullName, phoneNumber, address,
           </Col>
           <Col span={12}>
               <ProForm.Item 
-              name="customerPhone"
+              name={customerPhone}
+              initialValue={customerPhone}
               label="SĐT chủ công trình" 
               >
               <Input readOnly placeholder='Không có'/>
@@ -72,7 +62,8 @@ const BasicStep = ({ customerName, userID, fullName, phoneNumber, address,
           </Col>
           <Col span={12}>
             <ProForm.Item 
-              name="customerAddress"
+              name={customerAddress}
+              initialValue={customerAddress}
               label="Địa chỉ chủ công trình" 
             >
               <Input readOnly placeholder='Không có'/>
@@ -82,7 +73,8 @@ const BasicStep = ({ customerName, userID, fullName, phoneNumber, address,
         <Row gutter={16}>
           <Col span={12}>
             <ProForm.Item
-              name="serviceRequestDescription"
+              name={serviceRequestDescription}
+              initialValue={serviceRequestDescription}
               label="Mô tả yêu cầu"
             >
               <Input.TextArea rows={1} readOnly placeholder='Không có'/>
@@ -90,7 +82,6 @@ const BasicStep = ({ customerName, userID, fullName, phoneNumber, address,
           </Col>
           <Col span={12}>
             <ProForm.Item 
-              // name="requestServiceCreateDate" 
               name={requestServiceCreateDate}
               initialValue={requestServiceCreateDate}
               label="Ngày nhận yêu cầu"
@@ -103,10 +94,12 @@ const BasicStep = ({ customerName, userID, fullName, phoneNumber, address,
         <Row gutter={16}>
           <Col span={12}>
             <ProForm.Item 
-              name="serviceRequestPackage" 
+              // name={serviceRequestPackage}
+              // initialValue={serviceRequestPackage}
               label="Gói"
             >
-              <CommonSelect.SelectRequestServicePackage disabled />
+              {/* <CommonSelect.SelectRequestServicePackage disabled /> */}
+              {serviceRequestPackage === 1 ? (<Input placeholder='Không có' readOnly value={"Gói 1: Chỉ thuê nhân công, vật tư có sẵn"} />) : (<Input placeholder='Không có' readOnly value={"Gói 2: Thuê cả nhân công và vật tư"} />)}
             </ProForm.Item>
           </Col>
         </Row>

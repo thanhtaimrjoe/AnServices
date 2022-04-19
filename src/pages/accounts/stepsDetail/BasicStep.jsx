@@ -12,22 +12,12 @@ const BasicStep = ({ createDate, status }) => {
       <Row gutter={16}>
         <Col span={12}>
           <ProForm.Item
-            name="userName"
-            label="Tên người dùng"
-          >
-            <Input readOnly placeholder='Không có'/>
-          </ProForm.Item>
-        </Col>
-        <Col span={12}>
-          <ProForm.Item
             name="fullName"
             label="Tên khách hàng"
           >
             <Input readOnly placeholder='Không có'/>
           </ProForm.Item>
         </Col>
-      </Row>
-      <Row gutter={16}>
         <Col span={12}>
           <ProForm.Item
             name="phoneNumber"
@@ -36,6 +26,8 @@ const BasicStep = ({ createDate, status }) => {
             <Input readOnly placeholder='Không có'/>
           </ProForm.Item>
         </Col>
+      </Row>
+      <Row gutter={16}>
         <Col span={12}>
           <ProForm.Item
             name="address"
@@ -44,20 +36,10 @@ const BasicStep = ({ createDate, status }) => {
             <Input readOnly placeholder='Không có'/>
           </ProForm.Item>
         </Col>
-      </Row>
-      <Row gutter={16}>
         <Col span={12}>
           <ProForm.Item
             name="email"
             label="Email"
-          >
-            <Input readOnly placeholder='Không có'/>
-          </ProForm.Item>
-        </Col>
-        <Col span={12}>
-          <ProForm.Item
-            name="inviteCode"
-            label="Mã mời"
           >
             <Input readOnly placeholder='Không có'/>
           </ProForm.Item>
@@ -75,11 +57,12 @@ const BasicStep = ({ createDate, status }) => {
         </Col>
         <Col span={12}>
           <ProForm.Item
-            name={status}
-            initialValue={status}
+            // name={status}
+            // initialValue={status}
             label="Trạng thái tài khoản"
           >
-            <CommonSelect.SelectStatusOfCustomer disabled />
+            {/* <CommonSelect.SelectStatusOfCustomer disabled /> */}
+            {status === 4 ? (<Input readOnly value={"Đang hoạt động"} placeholder='Không có' />) : (<Input readOnly value={"Đã bị chặn"} placeholder='Không có' />)}
           </ProForm.Item>
         </Col>
       </Row>

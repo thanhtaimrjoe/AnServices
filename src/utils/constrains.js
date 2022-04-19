@@ -241,7 +241,7 @@ export const SERVICEREQUEST = [
         status: 'Default',
       },
       15: {
-        text: 'Đang khảo sát',
+        text: 'Đã khảo sát',
         color: 'geekblue',
       },
       3: {

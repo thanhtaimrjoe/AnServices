@@ -22,6 +22,7 @@ const DetailWorker = (props) => {
   const [form] = Form.useForm();
   const history = useHistory();
   const [formData, setFormData] = useState(updateCustomerState);
+  const [getCustomerByIdState, setGetCustomerByIdState] = useState([]);
   const [currentStep, setCurrentStep] = useState(0);
   const [customerCreateDate, setCustomerCreateDate] = useState();
   const [statusRecordData, setStatusRecordData] = useState();
@@ -38,6 +39,14 @@ const DetailWorker = (props) => {
   useEffect(() => {
     // form.setFieldsValue(updateWorkerState);
     getCustomerById(updateCustomerState.userID).then((res) => {
+      if(res.createDate == null) {
+        setCustomerCreateDate()
+      }
+      if(res.status == null) {
+        setStatusRecordData()
+      }
+      
+      setGetCustomerByIdState(res);
       setCustomerCreateDate(res.createDate.split('T', 1));
       setCustomerCreateDate(moment(res.createDate).format('DD/MM/YYYY'));
       setStatusRecordData(res.status);
@@ -48,7 +57,7 @@ const DetailWorker = (props) => {
         setDisableUnban(false);
       }
     });
-  }, []);
+  }, [getCustomerByIdState]);
 
   if (updateCustomerState == null) {
     return (
@@ -69,10 +78,11 @@ const DetailWorker = (props) => {
         message.success('Chặn người dùng thành công')
       } else {
         message.error('Chặn người dùng không thành công')
-        setTimeout(() => {
-          window.location.reload()
-        }, 2000);
+        // setTimeout(() => {
+        //   window.location.reload()
+        // }, 2000);
       }
+      setDisableBan(true)
     });
   };
 
@@ -84,6 +94,7 @@ const DetailWorker = (props) => {
         onBackList()
         message.success('Gỡ chặn người dùng thành công')
       }
+      setDisableUnban(true);
     });
   };
 

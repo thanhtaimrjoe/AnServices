@@ -256,11 +256,11 @@ const WorkerList = ({ history }) => {
             </Descriptions>
           </Col>
         </Row>
-        <Row style={{marginBottom: 24, justifyContent: 'space-evenly'}}>
+        {/* <Row style={{marginBottom: 24, justifyContent: 'space-evenly'}}>
           <Col>
             <Button type='primary' >Cập nhật thông tin</Button>
           </Col>
-        </Row>
+        </Row> */}
       </Drawer>
     </PageContainer>
   );

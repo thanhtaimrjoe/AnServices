@@ -20,20 +20,12 @@ export const getCustomerById = (id) => {
   });
 };
 
-export const banUserByUserID = (id, prod) => {
-  return request.put(`/User/BanUserByUserID?id=${id}`, {
-    params: {
-      prod,
-    },
-  });
+export const banUserByUserID = (id) => {
+  return request.put(`/User/BanUserByUserID?id=${id}`);
 };
 
-export const unbanUserByUserID = (id, prod) => {
-  return request.put(`/User/UnBanUserByUserID?id=${id}`, {
-    params: {
-      prod,
-    },
-  });
+export const unbanUserByUserID = (id) => {
+  return request.put(`/User/UnBanUserByUserID?id=${id}`);
 };
 
 // export const deleteAccount = (accountId) => {
