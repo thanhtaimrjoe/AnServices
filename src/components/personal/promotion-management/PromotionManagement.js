@@ -45,7 +45,7 @@ export default function PromotionManagement(props) {
               <View style={styles.promotionItemDate}>
                 <Text style={styles.promotionItemDateText}>Ngày hết hạn</Text>
                 <Text style={styles.promotionItemDateText}>
-                  {moment(item.promotionDateExpired).format('Do MMMM YYYY')}
+                  {moment(item.promotionDateExpired).format('DD/MM/YYYY')}
                 </Text>
               </View>
               <View style={styles.circle}></View>

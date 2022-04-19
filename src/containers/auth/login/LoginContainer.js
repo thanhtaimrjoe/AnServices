@@ -7,6 +7,7 @@ import {
   actResetUserMessage,
   actSendSmsByPhoneNumberRequest,
 } from '../../../redux/actions/index';
+import NetInfo from '@react-native-community/netinfo';
 export default function LoginContainer(props) {
   const {navigation} = props;
   //state --- uploading
@@ -66,6 +67,17 @@ export default function LoginContainer(props) {
         },
       ]);
     }
+    //check internet connection
+    const unsubscribe = NetInfo.addEventListener(state => {
+      if (!state.isConnected) {
+        Alert.alert(
+          'Thông báo',
+          'Bạn đã bị mất kết nối. Vui lòng kiểm tra đường truyền.',
+        );
+      }
+    });
+    //unsubscribe
+    return () => unsubscribe();
   }, [user]);
 
   //navigate to verify otp

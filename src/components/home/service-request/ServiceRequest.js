@@ -690,9 +690,7 @@ export default function ServiceRequest(props) {
                         Ngày hết hạn
                       </Text>
                       <Text style={styles.promotionItemDateText}>
-                        {moment(item.promotionDateExpired).format(
-                          'Do MMMM YYYY',
-                        )}
+                        {moment(item.promotionDateExpired).format('DD/MM/YYYY')}
                       </Text>
                     </View>
                     <View style={styles.circle}></View>
