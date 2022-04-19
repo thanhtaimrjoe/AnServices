@@ -29,7 +29,7 @@ export default function ListRequestServiceContainer(props) {
     },
     {
       statusID: 15,
-      statusName: 'Chờ khảo sát',
+      statusName: 'Đã khảo sát',
     },
     {
       statusID: 3,
@@ -65,7 +65,9 @@ export default function ListRequestServiceContainer(props) {
   const dispatch = useDispatch();
   //call api --- get service request by user id and status
   const getServiceRequestByUserIDAndStatusRequest = (userID, statusID, token) =>
-    dispatch(actGetServiceRequestByUserIDAndStatusRequest(userID, statusID, token));
+    dispatch(
+      actGetServiceRequestByUserIDAndStatusRequest(userID, statusID, token),
+    );
   //reset service request
   const resetServiceRequest = () => dispatch(actResetServiceRequest());
 
