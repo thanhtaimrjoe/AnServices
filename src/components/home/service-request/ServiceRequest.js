@@ -475,6 +475,7 @@ export default function ServiceRequest(props) {
       <View style={styles.phoneContainer}>
         <Text style={styles.phoneTitle}>Số điện thoại chủ công trình</Text>
         <TextInput
+          maxLength={10}
           value={phoneNumber}
           onFocus={() => setIsFocusedPhoneNumber(true)}
           onBlur={() => setIsFocusedPhoneNumber(false)}

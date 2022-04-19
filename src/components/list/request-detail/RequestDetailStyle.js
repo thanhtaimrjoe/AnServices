@@ -382,57 +382,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flex: 1,
   },
-  dialogContainer: {
-    width: '90%',
-    borderRadius: 10,
-    paddingHorizontal: 15,
-    paddingTop: 15,
-    backgroundColor: Color.background,
-  },
-  dialogHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 15,
-  },
-  dialogTitle: {
-    fontSize: 20,
-    color: Color.primary,
-  },
-  exitIcon: {
-    padding: 6,
-    fontSize: 24,
-    color: Color.primary,
-  },
-  btnDownload: {
-    padding: 10,
-    borderRadius: 10,
-    backgroundColor: Color.primary,
-    alignItems: 'center',
-    marginBottom: 16,
-  },
-  btnContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  btnApprove: {
-    width: '45%',
-    padding: 10,
-    alignItems: 'center',
-    borderRadius: 10,
-    backgroundColor: Color.approve,
-  },
-  btnRequestUpdate: {
-    width: '45%',
-    padding: 10,
-    alignItems: 'center',
-    borderRadius: 10,
-    backgroundColor: Color.requestUpdate,
-  },
-  btnText: {
-    fontSize: 16,
-    color: Color.white,
-  },
   //loading dialog
   loadingDialogBackground: {
     backgroundColor: Color.white,

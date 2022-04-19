@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {Alert, Linking} from 'react-native';
+import {Alert} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import RequestDetail from '../../../components/list/request-detail/RequestDetail';
 import {
@@ -11,8 +11,6 @@ import {
   actGetContractByServiceRequestIDRequest,
   actGetContractParentByServiceRequestReferenceRequest,
   actResetContractParent,
-  actRequestUpdateContractRequest,
-  actApproveContractRequest,
 } from '../../../redux/actions/index';
 
 export default function RequestDetailContainer(props) {
@@ -64,12 +62,6 @@ export default function RequestDetailContainer(props) {
   //call api --- get contract
   const getContractByServiceRequestIDRequest = (serviceRequestID, token) =>
     dispatch(actGetContractByServiceRequestIDRequest(serviceRequestID, token));
-  //call api --- approve contract
-  const approveContract = (contractId, token) =>
-    dispatch(actApproveContractRequest(contractId, token));
-  //call api --- request update contract
-  const requestUpdateContract = (contractId, token) =>
-    dispatch(actRequestUpdateContractRequest(contractId, token));
   //call api --- get contract parent information
   const getContractParentByServiceRequestReference = (
     serviceRequestReference,
@@ -113,8 +105,14 @@ export default function RequestDetailContainer(props) {
       ]);
     }
     if (message === 'CANCEL_SERVICE_REQUEST_FAILURE') {
-      Alert.alert('Thông báo', 'Hủy yêu cầu không thành công');
-      resetMessage();
+      Alert.alert('Thông báo', 'Hủy yêu cầu không thành công', [
+        {
+          text: 'OK',
+          onPress: () => {
+            resetMessage();
+          },
+        },
+      ]);
     }
     if (message === 'UPDATE_STATUS_REQUEST_SERVICE_DETAIL_SUCCESS') {
       Alert.alert('Thông báo', 'Cám ơn bạn đã đánh giá dịch vụ');
@@ -122,22 +120,6 @@ export default function RequestDetailContainer(props) {
     }
     if (message === 'UPDATE_STATUS_REQUEST_SERVICE_DETAIL_FAILURE') {
       Alert.alert('Thông báo', 'Đánh giá không thành công');
-      resetMessage();
-    }
-    if (message === 'APPROVE_CONTRACT_SUCCESS') {
-      Alert.alert('Thông báo', 'Bạn đã chấp thuận thành công');
-      resetMessage();
-    }
-    if (message === 'APPROVE_CONTRACT_FAILURE') {
-      Alert.alert('Thông báo', 'Có lỗi phát sinh, mời bạn thử lại');
-      resetMessage();
-    }
-    if (message === 'REQUEST_UPDATE_CONTRACT_SUCCESS') {
-      Alert.alert('Thông báo', 'Bạn đã yêu cầu sửa chữa thành công');
-      resetMessage();
-    }
-    if (message === 'REQUEST_UPDATE_CONTRACT_FAILURE') {
-      Alert.alert('Thông báo', 'Có lỗi phát sinh, mời bạn thử lại');
       resetMessage();
     }
   }, [message]);
@@ -190,33 +172,11 @@ export default function RequestDetailContainer(props) {
     });
   };
 
-  //button --- download contract
-  const onDownloadContract = async contractUrl => {
-    //check if the link is supported
-    const supported = await Linking.canOpenURL(contractUrl);
-    if (supported) {
-      //Open the link, if the URL scheme is "http" the web link should be opened by browser
-      await Linking.openURL(contractUrl);
-    } else {
-      Alert.alert(`Không thể mở URL này: ${contractUrl}`);
-    }
-  };
-
   //button --- view contract detail
-  const onViewContractDetail = contractUrl => {
-    navigation.navigate('ContractViewer', {
-      contractUrl: contractUrl,
+  const onViewContractDetail = contractItem => {
+    navigation.navigate('ContractContainer', {
+      contractItem: contractItem,
     });
-  };
-
-  //button --- approve contract
-  const onApproveContract = contractId => {
-    approveContract(contractId, token);
-  };
-
-  //button --- request update contract
-  const onRequestUpdateContract = contractId => {
-    requestUpdateContract(contractId, token);
   };
 
   //button --- create service request
@@ -255,10 +215,7 @@ export default function RequestDetailContainer(props) {
       onCancelServiceRequest={onCancelServiceRequest}
       onHappyService={onHappyService}
       onUnhappyService={onUnhappyService}
-      onDownloadContract={onDownloadContract}
       onViewContractDetail={onViewContractDetail}
-      onApproveContract={onApproveContract}
-      onRequestUpdateContract={onRequestUpdateContract}
       onShowInvoice={onShowInvoice}
       onCreateServiceRequest={onCreateServiceRequest}
     />

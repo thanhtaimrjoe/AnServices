@@ -14,8 +14,9 @@ export default {
   promotion: '#AFDF80',
   happyBtn: '#ACEFB2',
   unhappyBtn: '#FFB9B9',
-  approve: '#24784a',
-  requestUpdate: '#A9AB3E',
+  approve: '#007D50',
+  requestUpdate: '#87A60C',
+  disable: '#DDDDDD',
   //------Request Detail status------
   pending: '#A07D00',
   inProgress: '#C024E7',

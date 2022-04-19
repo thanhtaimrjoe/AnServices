@@ -23,19 +23,19 @@ export default function VerifyOTPContainer(props) {
   //button --- check inputted code with otp -> navigate to home page
   const onVerifyOTP = code => {
     //if inputed code correct
-    // if (code === otp) {
-      if (user.id) {
-        //navigate to home page
-        navigation.dispatch(
-          CommonActions.reset({
-            index: 1,
-            routes: [{name: 'BottomTab'}],
-          }),
-        );
-      } else {
-        //navigate to sign up page
-        navigation.replace('SignUpContainer', {phoneNumber: phoneNumber});
-      }
+    //if (code === otp) {
+    if (user.id) {
+      //navigate to home page
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 1,
+          routes: [{name: 'BottomTab'}],
+        }),
+      );
+    } else {
+      //navigate to sign up page
+      navigation.replace('SignUpContainer', {phoneNumber: phoneNumber});
+    }
     // } else {
     //   Alert.alert(
     //     'Thông báo',

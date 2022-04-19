@@ -42,6 +42,12 @@ export default function SignUp(props) {
       setEmailError('Bạn chưa nhập email');
       result = false;
     }
+    if (email.trim().length > 0) {
+      if (!email.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/)) {
+        setEmailError('Email nhập không đúng định dạng');
+        result = false;
+      }
+    }
     if (address.trim().length === 0) {
       setAddressError('Bạn chưa nhập địa chỉ');
       result = false;

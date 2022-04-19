@@ -48,17 +48,23 @@ export default function PersonalInformation(props) {
     setAddressError('');
     //validate full name
     if (fullName.trim().length === 0) {
-      setFullNameError('Họ và tên nhập không đúng');
+      setFullNameError('Bạn chưa nhập họ và tên');
       result = false;
     }
     //validate email
     if (email.trim().length === 0) {
-      setEmailError('Email nhập không đúng');
+      setEmailError('Bạn chưa nhập email');
       result = false;
+    }
+    if (email.trim().length > 0) {
+      if (!email.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/)) {
+        setEmailError('Email nhập không đúng định dạng');
+        result = false;
+      }
     }
     //validate address
     if (address.trim().length === 0) {
-      setAddressError('Địa chỉ nhập không đúng');
+      setAddressError('Bạn chưa nhập địa chỉ');
       result = false;
     }
     return result;
@@ -113,6 +119,7 @@ export default function PersonalInformation(props) {
               {borderWidth: isFocusedEmail ? 1.5 : 1},
             ]}
             placeholder="Nhập email"
+            keyboardType="email-address"
             placeholderTextColor={Color.placeholder}
           />
           <Text style={styles.errorMessage}>{emailError}</Text>

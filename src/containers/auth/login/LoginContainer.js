@@ -4,7 +4,6 @@ import {useDispatch, useSelector} from 'react-redux';
 import Login from '../../../components/auth/login/Login';
 import {
   actLoginCustomerOrWorkerRequest,
-  actResetMessage,
   actResetUserMessage,
   actSendSmsByPhoneNumberRequest,
 } from '../../../redux/actions/index';
@@ -16,10 +15,6 @@ export default function LoginContainer(props) {
   const [phoneNumber, setPhoneNumber] = useState();
   //reducer --- user
   const user = useSelector(state => state.user);
-  //reducer --- message
-  const message = useSelector(state => state.message);
-  //get token
-  const token = 'Bearer ' + user.token;
 
   //get dispatch
   const dispatch = useDispatch();
@@ -27,13 +22,16 @@ export default function LoginContainer(props) {
   const loginCustomerOrWorkerRequest = phoneNumber =>
     dispatch(actLoginCustomerOrWorkerRequest(phoneNumber));
   //call api --- send sms to phone number
-  const sendSmsByPhoneNumber = (phoneNumber, token) =>
-    dispatch(actSendSmsByPhoneNumberRequest(phoneNumber, token));
+  const sendSmsByPhoneNumber = phoneNumber =>
+    dispatch(actSendSmsByPhoneNumberRequest(phoneNumber));
   //conver 0123... to (+84)123
   const convertPhoneNumber = phoneNumber => {
-    return (phoneNumber = phoneNumber.replace(0, '+84'));
+    if (phoneNumber) {
+      phoneNumber = phoneNumber.replace(0, '+84');
+    }
+    return phoneNumber;
   };
-  //reset message
+  //reset msg
   const resetUserMessage = () => dispatch(actResetUserMessage());
 
   useEffect(() => {
@@ -58,7 +56,7 @@ export default function LoginContainer(props) {
       Alert.alert('Thông báo', 'Rất tiếc, tài khoản này đã bị chặn');
     }
     if (user === 'SYSTEM_ERROR') {
-      Alert.alert('Thông báo', 'Lỗi hệ thống, mời bạn thử lại', [
+      Alert.alert('Thông báo', 'Có lỗi xảy ra, mời bạn thử lại', [
         {
           text: 'OK',
           onPress: () => {
@@ -73,7 +71,7 @@ export default function LoginContainer(props) {
   //navigate to verify otp
   const navigateToVerifyOTP = () => {
     const convertedPhoneNumber = convertPhoneNumber(phoneNumber);
-    //sendSmsByPhoneNumber(convertedPhoneNumber, token);
+    //sendSmsByPhoneNumber(convertedPhoneNumber);
     setLoading(false);
     //navigate to verify otp page
     navigation.navigate('VerifyOTPContainer', {

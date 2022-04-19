@@ -134,58 +134,10 @@ export default function RequestDetail(props) {
     props.onShowInvoice(serviceRequestId, promotionId, serviceRequestReference);
   };
 
-  //show dialog
-  const onShowDialog = contractInfo => {
-    setContractItem(contractInfo);
-    setShowContractDialog(true);
-  };
-
-  //exit dialog
-  const onExitDialog = () => {
-    setShowContractDialog(false);
-  };
-
-  //btn --- download contract
-  const onDownloadContract = contractUrl => {
-    props.onDownloadContract(contractUrl);
-  };
-
   //btn --- view contract detail
-  const onViewContractDetail = contractUrl => {
+  const onViewContractDetail = contractItem => {
     setShowContractDialog(false);
-    props.onViewContractDetail(contractUrl);
-  };
-
-  //btn --- approve contract
-  const onApproveContract = contractId => {
-    Alert.alert('Thông báo', 'Bạn có chắc với lựa chọn này?', [
-      {
-        text: 'Có',
-        onPress: () => {
-          setShowContractDialog(false);
-          props.onApproveContract(contractId);
-        },
-      },
-      {
-        text: 'Không',
-      },
-    ]);
-  };
-
-  //btn --- request update contract
-  const onRequestUpdateContract = contractId => {
-    Alert.alert('Thông báo', 'Bạn có chắc với lựa chọn này?', [
-      {
-        text: 'Có',
-        onPress: () => {
-          setShowContractDialog(false);
-          props.onRequestUpdateContract(contractId);
-        },
-      },
-      {
-        text: 'Không',
-      },
-    ]);
+    props.onViewContractDetail(contractItem);
   };
 
   return (
@@ -415,7 +367,7 @@ export default function RequestDetail(props) {
           <Text style={styles.contractTitle}>Hợp đồng</Text>
           <TouchableOpacity
             style={styles.contractItemContainer}
-            onPress={() => onShowDialog(contractInfo)}>
+            onPress={() => onViewContractDetail(contractInfo)}>
             <Image
               source={{uri: IconURL.contractImg}}
               style={styles.contractItemImg}
@@ -438,7 +390,7 @@ export default function RequestDetail(props) {
           <Text style={styles.contractTitle}>Hợp đồng của yêu cầu trước</Text>
           <TouchableOpacity
             style={styles.contractItemContainer}
-            onPress={() => onShowDialog(contractParentInfo)}>
+            onPress={() => onViewContractDetail(contractParentInfo)}>
             <Image
               source={{uri: IconURL.contractImg}}
               style={styles.contractItemImg}
@@ -455,51 +407,6 @@ export default function RequestDetail(props) {
             </View>
           </TouchableOpacity>
         </View>
-      )}
-      {contractItem && (
-        <Modal transparent={true} visible={showContractDialog}>
-          <View style={styles.dialogBackground}>
-            <View style={styles.dialogContainer}>
-              <View style={styles.dialogHeader}>
-                <Text style={styles.dialogTitle}>
-                  {contractItem.contractTitle}
-                </Text>
-                <TouchableOpacity onPress={onExitDialog}>
-                  <Icon name="times" style={styles.exitIcon} />
-                </TouchableOpacity>
-              </View>
-              <TouchableOpacity
-                style={styles.btnDownload}
-                onPress={() => onViewContractDetail(contractItem.contractUrl)}>
-                <Text style={styles.btnText}>Xem chi tiết</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.btnDownload}
-                onPress={() => onDownloadContract(contractItem.contractUrl)}>
-                <Text style={styles.btnText}>Tải về</Text>
-              </TouchableOpacity>
-              {contractItem.contractStatus !== 3 &&
-                contractItem.contractStatus !== 7 && (
-                  <View style={styles.btnContainer}>
-                    <TouchableOpacity
-                      style={styles.btnApprove}
-                      onPress={() =>
-                        onApproveContract(contractItem.contractId)
-                      }>
-                      <Text style={styles.btnText}>Chấp thuận</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      style={styles.btnRequestUpdate}
-                      onPress={() =>
-                        onRequestUpdateContract(contractItem.contractId)
-                      }>
-                      <Text style={styles.btnText}>Yêu cầu sửa</Text>
-                    </TouchableOpacity>
-                  </View>
-                )}
-            </View>
-          </View>
-        </Modal>
       )}
       {serviceRequest.serviceRequestStatus === 13 && (
         <View style={styles.invoiceContainer}>

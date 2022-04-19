@@ -48,9 +48,26 @@ export default function SignUpContainer(props) {
       );
     }
     if (message === 'INVALID_INVITE_CODE') {
-      Alert.alert('Thông báo', 'Mã giới thiệu bạn nhập không đúng');
-      resetMessage();
-      setLoading(false);
+      Alert.alert('Thông báo', 'Mã giới thiệu bạn nhập không đúng', [
+        {
+          text: 'OK',
+          onPress: () => {
+            resetMessage();
+            setLoading(false);
+          },
+        },
+      ]);
+    }
+    if (message === 'EXPIRED_INVITE_CODE') {
+      Alert.alert('Thông báo', 'Mã giới thiệu bạn nhập đã hết hạn', [
+        {
+          text: 'OK',
+          onPress: () => {
+            resetMessage();
+            setLoading(false);
+          },
+        },
+      ]);
     }
     if (message === 'CREATE_CUSTOMER_ACCOUNT_FAILURE') {
       Alert.alert('Thông báo', 'Đăng ký không thành công, mời bạn thử lại', [

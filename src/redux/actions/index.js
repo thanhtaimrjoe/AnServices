@@ -28,9 +28,27 @@ export const actLoginCustomerOrWorkerRequest = phoneNumber => {
           },
         },
       );
-      const json = await response.json();
-      if (json) {
-        dispatch(actGetUserInfo(json));
+      if (response.status === 200) {
+        const json = await response.json();
+        if (json) {
+          dispatch(actGetUserInfo(json));
+        }
+      } else if (response.status === 404) {
+        const json = await response.json();
+        if (json.errorsMsg[0] === 'Phone number is not exists') {
+          dispatch(actGetUserInfo(json));
+        } else {
+          dispatch(actGetUserInfo('SYSTEM_ERROR'));
+        }
+      } else if (response.status === 400) {
+        const json = await response.json();
+        if (json.errorsMsg[0] === 'Your account have been banned') {
+          dispatch(actGetUserInfo(json));
+        } else {
+          dispatch(actGetUserInfo('SYSTEM_ERROR'));
+        }
+      } else {
+        dispatch(actGetUserInfo('SYSTEM_ERROR'));
       }
     } catch (error) {
       dispatch(actGetUserInfo('SYSTEM_ERROR'));
@@ -44,13 +62,12 @@ export const actResetUserMessage = () => {
   };
 };
 //call api --- authen
-export const actSendSmsByPhoneNumberRequest = (phoneNumber, token) => {
+export const actSendSmsByPhoneNumberRequest = phoneNumber => {
   return async dispatch => {
     try {
       const response = await fetch(API + 'User/SendSms', {
         method: 'POST',
         headers: {
-          Authorization: token,
           Accept: 'application/json',
           'Content-Type': 'application/json',
         },
@@ -58,13 +75,13 @@ export const actSendSmsByPhoneNumberRequest = (phoneNumber, token) => {
           to: phoneNumber,
         }),
       });
-      const json = await response.json();
-      if (json) {
-        dispatch(actGetOTP(json));
+      if (response.status === 200) {
+        const json = await response.json();
+        if (json) {
+          dispatch(actGetOTP(json));
+        }
       }
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 };
 //fetch otp
@@ -94,13 +111,17 @@ export const actCreateCustomerAccount = account => {
       });
       if (response.status === 200) {
         dispatch(actCreateCustomerAccountSuccess());
-      } else {
+      } else if (response.status === 400) {
         const json = await response.json();
-        if (json.errorsMsg[0] === 'Your invite code is valid') {
+        if (json.errorsMsg[0] === 'Your invite code is invalid') {
           dispatch(actInvalidInviteCode());
+        } else if (json.errorsMsg[0] === 'Your invite code is expired') {
+          dispatch(actExpiredInviteCode());
         } else {
           dispatch(actCreateCustomerAccountFailure());
         }
+      } else {
+        dispatch(actCreateCustomerAccountFailure());
       }
     } catch (error) {
       dispatch(actCreateCustomerAccountFailure());
@@ -125,6 +146,12 @@ export const actInvalidInviteCode = () => {
     type: types.INVALID_INVITE_CODE,
   };
 };
+//expiried invite code
+export const actExpiredInviteCode = () => {
+  return {
+    type: types.EXPIRED_INVITE_CODE,
+  };
+};
 //fetch user
 export const actGetUserInfo = user => {
   return {
@@ -133,7 +160,7 @@ export const actGetUserInfo = user => {
   };
 };
 //account have been BANNED
-export const accountBanned = () => {
+export const actAccountBanned = () => {
   return {
     type: types.ACCOUNT_HAVE_BEEN_BANNED,
   };
@@ -150,9 +177,11 @@ export const actGetUserInformationRequest = (userID, token) => {
           'Content-Type': 'application/json',
         },
       });
-      const json = await response.json();
-      if (json) {
-        dispatch(actGetUserInformation(json));
+      if (response.status === 200) {
+        const json = await response.json();
+        if (json) {
+          dispatch(actGetUserInformation(json));
+        }
       }
     } catch (error) {}
   };
@@ -217,9 +246,11 @@ export const actGetAllServiceRequest = token => {
           'Content-Type': 'application/json',
         },
       });
-      const json = await response.json();
-      if (json) {
-        dispatch(actGetAllService(json));
+      if (response.status === 200) {
+        const json = await response.json();
+        if (json) {
+          dispatch(actGetAllService(json));
+        }
       }
     } catch (error) {}
   };
@@ -256,17 +287,14 @@ export const actCreateServiceRequestRequest = (requestService, token) => {
         }),
       });
       if (response.status === 200) {
-        dispatch(createRequestSuccess());
-      } else {
         const json = await response.json();
-        if (
-          json.errorsMsg &&
-          json.errorsMsg[0] === 'Your account has been banned'
-        ) {
-          dispatch(accountBanned());
+        if (json[0] === 'Your account has been banned') {
+          dispatch(actAccountBanned());
         } else {
-          dispatch(createRequestFailure());
+          dispatch(createRequestSuccess());
         }
+      } else {
+        dispatch(createRequestFailure());
       }
     } catch (error) {
       dispatch(createRequestFailure());
@@ -305,9 +333,11 @@ export const actGetAllRequestServiceDetailsByRequestServiceIDRequest = (
           },
         },
       );
-      const json = await response.json();
-      if (json) {
-        dispatch(actGetAllRequestServiceDetailsByRequestServiceID(json));
+      if (response.status === 200) {
+        const json = await response.json();
+        if (json) {
+          dispatch(actGetAllRequestServiceDetailsByRequestServiceID(json));
+        }
       }
     } catch (error) {}
   };
@@ -343,9 +373,16 @@ export const actGetServiceRequestByUserIDAndStatusRequest = (
           },
         },
       );
-      const json = await response.json();
-      if (json) {
-        dispatch(actGetServiceRequestByUserIDAndStatus(json));
+      if (response.status === 200) {
+        const json = await response.json();
+        if (json) {
+          dispatch(actGetServiceRequestByUserIDAndStatus(json));
+        }
+      } else {
+        const json = await response.json();
+        if (json.errorsMsg[0] === 'No Request Service Availabe') {
+          dispatch(actGetServiceRequestByUserIDAndStatus(json));
+        }
       }
     } catch (error) {}
   };
@@ -546,9 +583,11 @@ export const actGetContractByServiceRequestIDRequest = (
           },
         },
       );
-      const json = await response.json();
-      if (json) {
-        dispatch(actGetContractByServiceRequestID(json));
+      if (response.status === 200) {
+        const json = await response.json();
+        if (json) {
+          dispatch(actGetContractByServiceRequestID(json));
+        }
       }
     } catch (error) {}
   };
@@ -622,9 +661,11 @@ export const actGetInfomationInvoiceByRequestServiceIDRequest = (
           },
         },
       );
-      const json = await response.json();
-      if (json) {
-        dispatch(actGetInfomationInvoiceByRequestServiceID(json));
+      if (response.status === 200) {
+        const json = await response.json();
+        if (json) {
+          dispatch(actGetInfomationInvoiceByRequestServiceID(json));
+        }
       }
     } catch (error) {}
   };
@@ -719,9 +760,11 @@ export const actCreateInviteCodeRequest = (userID, token) => {
           },
         },
       );
-      const json = await response.json();
-      if (json) {
-        dispatch(actCreateInviteCode(json));
+      if (response.status === 200) {
+        const json = await response.json();
+        if (json) {
+          dispatch(actCreateInviteCode(json));
+        }
       }
     } catch (error) {}
   };

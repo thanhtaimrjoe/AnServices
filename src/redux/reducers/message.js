@@ -11,6 +11,9 @@ const myReducer = (state = inititalState, action) => {
     case types.INVALID_INVITE_CODE:
       state = 'INVALID_INVITE_CODE';
       return state;
+    case types.EXPIRED_INVITE_CODE:
+      state = 'EXPIRED_INVITE_CODE';
+      return state;
     case types.CREATE_SERVICE_REQUEST_SUCCESS:
       state = 'CREATE_SERVICE_REQUEST_SUCCESS';
       return state;
