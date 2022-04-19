@@ -21,6 +21,8 @@ namespace AnService_Capstone.Core.Interfaces
 
         public Task<IEnumerable<TblUser>> GetWorkerByServiceID(int id);
 
+        public Task<IEnumerable<TblUser>> GetAllInformationWorkerByServiceID(int id);
+
         /*public Task<IEnumerable<UserViewModel>> GetAllWorker();*/
 
         /*public Task<IEnumerable<UserViewModel>> GetAllWorkerByTypeJob(int id);

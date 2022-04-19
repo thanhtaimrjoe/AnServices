@@ -265,7 +265,7 @@ namespace AnService_Capstone.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("[action]")]
-        /*[Authorize(Roles = "Staff")]*/
+        [Authorize(Roles = "Staff")]
         //get worker group by job by service id
         public async Task<IActionResult> GetWorkerByServiceID(int id)
         {

@@ -110,13 +110,46 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             }
         }*/
 
+        public async Task<IEnumerable<TblUser>> GetAllInformationWorkerByServiceID(int id)
+        {
+            var query = "select UserID, FullName, PhoneNumber, Status, RepairDetailID " +
+                "from (tblUsers u join tblTypeJobs t on u.TypeJob = t.TypeJobID) join tblServices s on s.TypeWorkerJob = t.TypeJobID " +
+                "join tblRepairDetail repair on u.UserID = repair.WorkerID " +
+                "join tblRequestDetails detail on detail.RequestDetailID = repair.RequestDetailID " +
+                "where s.ServiceID = @ServiceID and Status = 4 and RequestDetailStatus = 6";
+
+            using(var connection = _context.CreateConnection())
+            {
+                connection.Open();
+                var userDict = new Dictionary<int, TblUser>();
+                var res = await connection.QueryAsync<TblUser, TblRepairDetail , TblUser>(query, (user, repair) =>
+                {
+                    TblUser currentUser;
+                    if (!userDict.TryGetValue(user.UserId, out currentUser))
+                    {
+                        currentUser = user;
+                        currentUser.TblRepairDetails = new List<TblRepairDetail>();
+                        userDict.Add(currentUser.UserId, currentUser);
+                    }
+                    currentUser.TblRepairDetails.Add(repair);
+                    return currentUser;
+                }, param: new { @ServiceID = id}, splitOn: "RepairDetailID");
+                connection.Close();
+                /*if (user.Count() == 0)
+                {
+                    return null;
+                }*/
+                return res.Distinct().ToList();
+            }
+        }
+
         public async Task<IEnumerable<TblUser>> GetWorkerByServiceID(int id)
         {
             var query = "select UserID, FullName, PhoneNumber, Status " +
                 "from (tblUsers u join tblTypeJobs t on u.TypeJob = t.TypeJobID) join tblServices s on s.TypeWorkerJob = t.TypeJobID " +
                 "where s.ServiceID = @ServiceID and Status = 4";
 
-            using(var connection = _context.CreateConnection())
+            using (var connection = _context.CreateConnection())
             {
                 connection.Open();
                 var user = await connection.QueryAsync<TblUser>(query, new { @ServiceID = id });
@@ -427,7 +460,8 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
         {
             var query = "select UserID, FullName, PhoneNumber, Address, Email, CreateDate, Status, TypeJobID as 'TypeJobID', TypeJobID, TypeJobName " +
                 "from tblUsers u join tblTypeJobs job on u.TypeJob = job.TypeJobID " +
-                "where Role = 2 and Status = 4 and PhoneNumber like @PhoneNumber and FullName like @FullName and TypeJobID = COALESCE(@TypeJobID, TypeJobID) ";
+                "where Role = 2 and Status = 4 and PhoneNumber like @PhoneNumber and FullName like @FullName and TypeJobID = COALESCE(@TypeJobID, TypeJobID) " +
+                "order by TypeJob";
             using (var connections = _context.CreateConnection())
             {
                 connections.Open();

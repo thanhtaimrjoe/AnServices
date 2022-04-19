@@ -212,7 +212,33 @@ namespace AnService_Capstone.DataAccess.Dapper.Services
 
         public async Task<IEnumerable<TblUser>> GetWorkerByServiceID(int id)
         {
-            var worker = await _userRepository.GetWorkerByServiceID(id);
+            List<TblUser> worker = (List<TblUser>) await _userRepository.GetAllInformationWorkerByServiceID(id);
+            List<TblUser> worker2 = (List<TblUser>)await _userRepository.GetWorkerByServiceID(id);
+            List<TblUser> worker3 = new List<TblUser>();
+
+            if (worker.Count() == 0)
+            {
+                return worker2;
+            }
+            else if (worker.Count() < worker2.Count())
+            {
+                foreach(var item in worker)
+                {
+                    worker3.Add(item);
+                    foreach (var item2 in worker2)
+                    {
+                        if (item.UserId != item2.UserId)
+                        {
+                            worker3.Add(item2);
+                        }
+                    }
+                    if (worker3.Count() == worker2.Count())
+                    {
+                        return worker3;
+                    }
+                }
+                
+            }
             return worker;
         }
 
