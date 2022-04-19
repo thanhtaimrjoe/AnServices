@@ -15,7 +15,7 @@ import {
 } from './utils';
 
 import { getAllRequestService, getAllService, getAllServiceRequestStatusOrDate } from '@/services/requestservices';
-import { getAllWorkers } from '@/services/workers';
+import { getAllWorkers, getWorkerById } from '@/services/workers';
 import { getAllTypeJob } from '@/services/typejobs';
 
 const { Option } = Select;
@@ -163,7 +163,7 @@ const SelectWorkerTypeJob = (props) => {
       placeholder="Vui lòng chọn nghề của thợ"
       fetchOnFirst
       buildOptions={buildWorkerTypeJobOption}
-      onSearch={getAllWorkers}
+      onSearch={getAllTypeJob}
       {...props}
     />
   );
@@ -296,7 +296,7 @@ const SelectRequestServiceDate = (props) => {
 const SelectRequestServicePriority = (props) => {
   return (
     <CommonSelect
-      placeholder="Chọn độ ưu tiên cho công trình"
+      placeholder="Chọn độ ưu tiên"
       fetchOnFirst
       options={[
         {

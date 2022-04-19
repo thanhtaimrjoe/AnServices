@@ -5,6 +5,7 @@ import pwa from './vi-VN/pwa';
 import settingDrawer from './vi-VN/settingDrawer';
 import settings from './vi-VN/settings';
 import pages from './vi-VN/pages';
+
 export default {
   'navBar.lang': 'Ngôn ngữ',
   'layout.user.link.help': 'Trợ giúp',

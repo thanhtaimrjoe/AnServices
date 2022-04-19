@@ -109,7 +109,8 @@ const BasicLayout = (props) => {
       {...props}
       {...settings}
       onCollapse={handleMenuCollapse}
-      onMenuHeaderClick={() => history.push('/welcome')}
+      // onMenuHeaderClick={() => history.push('/welcome')}
+      onMenuHeaderClick={() => history.push('/dashboard/analysis')}
       menuItemRender={(menuItemProps, defaultDom) => {
         if (
           menuItemProps.isUrl ||
@@ -134,7 +135,8 @@ const BasicLayout = (props) => {
         const first = routes.indexOf(route) === 0;
         return first ? (
           // <Link to={paths.join('/')}>{route.breadcrumbName}</Link>
-          <Link to={('/welcome')}>{route.breadcrumbName}</Link>
+          // <Link to={('/welcome')}>{route.breadcrumbName}</Link>
+          <Link to={('/dashboard/analysis')}>{route.breadcrumbName}</Link>
 
         ) : (
           <span>{route.breadcrumbName}</span>

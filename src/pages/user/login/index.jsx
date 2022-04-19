@@ -60,7 +60,8 @@ const Login = ({ history, ...props }) => {
           localStorage.setItem('EXPIRED', res.expired);
           localStorage.setItem('ACCOUNT_ROLE', res.userRole);
           localStorage.setItem('USERNAME', res.fullName);
-          history.push('/welcome');
+          // history.push('/welcome');
+          history.push('/dashboard/analysis');
         } 
       } 
       else {

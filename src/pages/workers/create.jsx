@@ -33,6 +33,10 @@ const CreateWorker = (props) => {
       // setCreatedWorker({ ...values, userID : res });
     
     return createWorker(createWorkerData).then((res) => {
+      // if(res.errorsMsg !== "Create Successfull"){
+      //   console.log('record02', res.errorsMsg)
+      // }
+
       if(res.status === 500) {
         message.error("Số điện thoại đã tồn tại");
       } else {

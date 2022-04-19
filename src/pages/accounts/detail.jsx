@@ -69,6 +69,9 @@ const DetailWorker = (props) => {
         message.success('Chặn người dùng thành công')
       } else {
         message.error('Chặn người dùng không thành công')
+        setTimeout(() => {
+          window.location.reload()
+        }, 2000);
       }
     });
   };

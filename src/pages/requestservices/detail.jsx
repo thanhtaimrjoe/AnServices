@@ -132,6 +132,9 @@ const DetailServiceRequest = (props) => {
   const [promotionValueRecord, setPromotionValueRecord] = useState();
   const [newRequestServiceState, setNewRequestServiceState] = useState();
 
+  const [getAllWorkerByTypeJob, setGetAllWorkerByTypeJob] = useState([]);
+
+
   // Invoice
   const [customerAddress, setCustomerAddress] = useState();
   const [customerPhone, setCustomerPhone] = useState();
@@ -444,21 +447,40 @@ const DetailServiceRequest = (props) => {
     // Dữ liệu hợp đồng (trong chi tiết yêu cầu dịch vụ)
     if (isLoad && updateRequestServiceState) {
       getContractByServiceRequestID(updateRequestServiceState.serviceRequestId).then((record) => {
-        if (record.length === 0) {
-          setContractStartDateData1(null);
-          setContractEndDateData1(null);
-          setContractDepositData1(null);
-          setContractTotalPriceData1(null);
-        } else {
-          setContractStartDateData1(record.contractStartDate);
-          setContractEndDateData1(record.contractEndDate);
-          setContractDepositData1(record.contractDeposit);
-          setContractTotalPriceData1(record.contractTotalPrice);
-
-          setContractDepositData(record.contractDeposit);
-          setContractStartDateData(record.contractStartDate);
-          setContractEndDateData(record.contractEndDate);
+        if(record.status === 404) {
+          console.log('firstrecord404')
         }
+        // const json = record.json().then(jsons => {
+        //   if (jsons.errorsMsg[0] === "No record") {
+        //     console.log('firstrecord1')
+        //     setContractStartDateData1(null);
+        //     setContractEndDateData1(null);
+        //     setContractDepositData1(null);
+        //     setContractTotalPriceData1(null);
+        //   } else {
+        //     console.log('firstrecordelse')
+        //     // mới sửa
+        //     // setContractStartDateData1(record.contractStartDate.split('T', 1));
+        //     // setContractEndDateData1(record.contractEndDate.split('T', 1));
+        //     // setContractStartDateData(record.contractStartDate.split('T', 1));
+        //     // setContractEndDateData(record.contractEndDate.split('T', 1));
+  
+        //     // setContractStartDateData1(moment(record.contractStartDate).format('DD/MM/YYYY'));
+        //     // setContractEndDateData1(moment(record.contractEndDate).format('DD/MM/YYYY'));
+        //     // setContractStartDateData(moment(record.contractStartDate).format('DD/MM/YYYY'));
+        //     // setContractEndDateData(moment(record.contractEndDate).format('DD/MM/YYYY'));
+  
+        //     // setContractStartDateData1(record.contractStartDate);
+        //     // setContractEndDateData1(record.contractEndDate);
+        //     // setContractDepositData1(record.contractDeposit);
+        //     // setContractTotalPriceData1(record.contractTotalPrice);
+        //     // setContractDepositData(record.contractDeposit);
+        //     // setContractStartDateData(record.contractStartDate);
+        //     // setContractEndDateData(record.contractEndDate);
+        //   }
+        // });
+        // if (record.length === 0) {
+        
       });
     } else console.log('Lỗi');
 
@@ -471,6 +493,11 @@ const DetailServiceRequest = (props) => {
           items.worker = record;
         });
       });
+
+      // requestServiceRecordTmp.map((e) => {
+      //   console.log('record0050', e)
+      //   // getAllWorkerByTypeJob.push(e.userId)
+      // })
       setRequestServiceDetail(requestServiceRecordTmp);
     }
   }, [isLoad]);
@@ -558,10 +585,10 @@ const DetailServiceRequest = (props) => {
       validate = false;
       message.warning('Chưa chọn độ ưu tiên');
     }
-    if (staffCoordinator.length === 0) {
-      validate = false;
-      message.warning('Chưa chọn thợ phụ');
-    }
+    // if (staffCoordinator.length === 0) {
+    //   validate = false;
+    //   message.warning('Chưa chọn thợ phụ');
+    // }
     if(validate) {
       setStaffCoordinatorConfirmLoading(true);
       setTimeout(() => {
@@ -644,7 +671,9 @@ const DetailServiceRequest = (props) => {
     setContractEndDateData(date[1]);
   }
 
+  // mới sửa
   function onChangeStartDate(value, date) {
+    console.log('firstdate', date)
     setContractStartDateData(date);
   }
 
@@ -672,6 +701,8 @@ const DetailServiceRequest = (props) => {
   function handleChange(value) {
     setStaffCoordinator([...value]);
   }
+
+
 
   const onAcceptRequestMaterial = (values, updateRequestMaterialState) => {
     console.log('updateRequestMaterialState', updateRequestMaterialState);
@@ -1112,7 +1143,7 @@ const DetailServiceRequest = (props) => {
         // record.tblRepairDetails.map((e) => console.log('record04', e));
         return (
           <CommonSelect.SelectRequestServicePriority
-            style={{ width: 160 }}
+            style={{ width: "100%" }}
             onChange={onChangePriority}
           />
         );
@@ -1126,6 +1157,9 @@ const DetailServiceRequest = (props) => {
       search: false,
       render: (text, record) => {
         const updateWorkerState = { ...record };
+        // const filteredOptions = getAllWorkerByTypeJob.filter(o => !staffCoordinator.includes(o));
+        console.log('staffCoordinator1', getAllWorkerByTypeJob)
+        console.log('staffCoordinator', staffCoordinator)
         // getWorkerByServiceId(updateWorkerState.serviceId);
         return (
           <Space size="middle">
@@ -1139,7 +1173,7 @@ const DetailServiceRequest = (props) => {
               {record.worker &&
                 record.worker.map((option) => (
                   <Option key={option.userId}>{option.fullName}</Option>
-                ))}
+                ))} 
             </Select>
             <Select
               mode="tags"
@@ -1151,7 +1185,7 @@ const DetailServiceRequest = (props) => {
               {/* Lấy tất cả thợ */}
               {record.worker &&
                 record.worker.map((option) => (
-                  <Option key={option.userId}>{option.fullName}</Option>
+                  <Option value={option.userId} key={option.userId}>{option.fullName}</Option>
                 ))}
             </Select>
             {/* {record.serviceRequestId === newRequestServiceState.serviceRequestId && (
@@ -1604,16 +1638,17 @@ const DetailServiceRequest = (props) => {
                 <ProForm.Item
                   name={contractStartDateData1}
                   label="Ngày bắt đầu thi công"
-                  initialValue={moment(contractStartDateData1, 'YYYY-MM-DD')}
+                  // initialValue={moment(contractStartDateData1, 'DD/MM/YYYY')}
+                  initialValue={moment(contractStartDateData1, 'YYYY/MM/DD')}
                 >
                   <DatePicker
                     disabled={disable}
-                    defaultValue={moment(contractStartDateData1, 'YYYY-MM-DD')}
+                    defaultValue={moment(contractStartDateData1, 'YYYY/MM/DD')}
                     // value={moment(contractStartDateData1, 'YYYY-MM-DD')}
                     onChange={onChangeStartDate}
                     disabledDate={(d) => !d || d.isBefore(moment().startOf('day'))}
-                    style={{ width: 470 }}
-                    format="YYYY-MM-DD"
+                    style={{ width: '100%' }}
+                    format="YYYY/MM/DD"
                     placeholder={['Chọn ngày kết thúc']}
                   />
                 </ProForm.Item>
@@ -1623,14 +1658,14 @@ const DetailServiceRequest = (props) => {
                     disabled={disable}
                     onChange={onChangeStartDate}
                     disabledDate={(d) => !d || d.isBefore(moment().startOf('day'))}
-                    style={{ width: 470 }}
+                    style={{ width: '100%' }}
                     format="YYYY-MM-DD"
                     placeholder={['Chọn ngày bắt đầu']}
                   />
                 </ProForm.Item>
               )}
             </Col>
-            <Col span={10}>
+            <Col span={12}>
               {contractEndDateData1 ? (
                 <ProForm.Item
                   name={contractEndDateData1}
@@ -1644,7 +1679,7 @@ const DetailServiceRequest = (props) => {
                     disabledDate={(d) =>
                       !d || d.isBefore(moment(contractStartDateData, 'YYYY-MM-DD').startOf('day'))
                     }
-                    style={{ width: 470 }}
+                    style={{ width: '100%' }}
                     format="YYYY-MM-DD"
                     placeholder={['Chọn ngày kết thúc']}
                   />
@@ -1657,7 +1692,7 @@ const DetailServiceRequest = (props) => {
                     disabledDate={(d) =>
                       !d || d.isBefore(moment(contractStartDateData, 'YYYY-MM-DD').startOf('day'))
                     }
-                    style={{ width: 470 }}
+                    style={{ width: '100%' }}
                     format="YYYY-MM-DD"
                     placeholder={['Chọn ngày kết thúc']}
                   />
@@ -1743,7 +1778,7 @@ const DetailServiceRequest = (props) => {
                 >
                   <InputNumber
                     disabled={disable}
-                    style={{ width: 470 }}
+                    style={{ width: "100%" }}
                     min={0}
                     formatter={(value) => `${value} VND`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                     parser={(value) => value.replace(/\s\VND?|(,*)/g, '')}
@@ -1760,7 +1795,7 @@ const DetailServiceRequest = (props) => {
                 >
                   <InputNumber
                     disabled={disable}
-                    style={{ width: 470 }}
+                    style={{ width: "100%" }}
                     // value={result}
                     min={0}
                     formatter={(value) => `${value} VND`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}

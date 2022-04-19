@@ -71,7 +71,7 @@ const SalesCard = ({
     <Card
       loading={loading}
       bordered={false}
-      title="Chưa biết để tên gì"
+      title="Thống kê số liệu hệ thống"
       bodyStyle={{
         padding: 0,
       }}

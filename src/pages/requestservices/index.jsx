@@ -1,13 +1,12 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/jsx-key */
-import { PlusOutlined } from '@ant-design/icons';
-import { Button, Card, Table, Tabs } from 'antd';
-import React, { useRef, useState } from 'react';
+import { Card, Table, Tabs } from 'antd';
+import React, { useRef, useState, useEffect } from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
 import AsyncButton from '@/components/AsyncButton';
 import ResoTable from '@/components/ResoTable/ResoTable';
 import { SERVICEREQUEST } from '@/utils/constrains';
-import { cancelServiceRequest, removeListServiceRequest } from '@/services/requestservices';
+import { removeListServiceRequest, getAllServiceRequestStatusOrDate } from '@/services/requestservices';
 import TabPane from '@ant-design/pro-card/lib/components/TabPane';
 
 const ServiceRequestList = ({ history }) => {
@@ -18,11 +17,14 @@ const ServiceRequestList = ({ history }) => {
     onChange: setSelectedRows,
     type: 'select',
   };
+  // const [getAllServiceRequestStatusOrDateData, setGetAllServiceRequestStatusOrDateData] = useState([]);
 
-  const addServiceRequest = () => {
-    // history.push(`/requeservices/create`);
-    history.push(`/requestservices/list`);
-  };
+
+  // useEffect(() => {
+  //   getAllServiceRequestStatusOrDate().then((res) => {
+  //     setGetAllServiceRequestStatusOrDateData(res)
+  //   })
+  // }, [getAllServiceRequestStatusOrDateData])
 
   const deleteServiceRequestHandler = () => {
     return removeListServiceRequest(selectedRows).then(() => ref.current?.reload());
@@ -54,6 +56,8 @@ const ServiceRequestList = ({ history }) => {
               rowKey="serviceRequestId"
               columns={SERVICEREQUEST}
               resource="Service/GetAllServiceRequestStatusOrDate"
+              // dataSource={getAllServiceRequestStatusOrDateData}
+
             />
           </TabPane>
           <TabPane tab="Yêu cầu chưa xử lý" key="2">
@@ -78,7 +82,7 @@ const ServiceRequestList = ({ history }) => {
               actionRef={ref}
               rowKey="serviceRequestId"
               columns={SERVICEREQUEST}
-              resource="Service/GetAllServiceRequestStatusOrDate?serviceRequestStatus=2"
+              resource="Service/GetAllServiceRequestStatusOrDate?ServiceRequestStatus=2"
             />
           </TabPane>
           <TabPane tab="Yêu cầu đang kháo sát" key="3">

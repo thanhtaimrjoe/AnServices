@@ -1,8 +1,8 @@
-// import React from 'react';
+import React from 'react';
 import CommonSelect from '@/components/CommonSelect/CommonSelect';
 import ProForm from '@ant-design/pro-form';
 import { Col, Input, Row } from 'antd';
-import React from 'react';
+
 
 const BasicStep = ({ typeJobId }) => {
   return (
@@ -61,8 +61,9 @@ const BasicStep = ({ typeJobId }) => {
       <Row gutter={16}>
         <Col span={12}>
           <ProForm.Item
-            name={typeJobId}
-            initialValue={typeJobId}
+            // name={typeJobId}
+            name="typeJobId"
+            // initialValue={typeJobId}
             label="Nhóm thợ"
             rules={[
               {

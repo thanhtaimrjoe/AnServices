@@ -1,5 +1,5 @@
 import { SelectRequestServiceStatus } from '@/components/CommonSelect/CommonSelect';
-import { Button, Space,  } from 'antd';
+import { Button, Space } from 'antd';
 import moment, { updateLocale } from 'moment';
 import { Link } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
@@ -235,13 +235,43 @@ export const SERVICEREQUEST = [
     title: 'Trạng thái',
     dataIndex: 'serviceRequestStatus',
     key: 'serviceRequestStatus',
-    // valueType: 'select',
-    // render: (_, { status }) => (
-    //   <Tag color={status ? 'green'  : 'blue' }>{status ? 'InChange' : 'Applying' }</Tag>
-    // ),
-    render: (text, record) => {
-      console.log('record', record);
-      return <div>{record.serviceRequestStatusNavigation.statusName}</div>;
+    valueEnum: {
+      2: {
+        text: 'Chưa xử lý',
+        status: 'Default',
+      },
+      15: {
+        text: 'Đang khảo sát',
+        color: 'geekblue',
+      },
+      3: {
+        text: 'Đã đồng ý',
+        color: 'lime',
+      },
+      6: {
+        text: 'Đang xử lý',
+        status: 'Processing',
+      },
+      17: {
+        text: 'Chờ gửi hoá đơn',
+        color: 'yellow',
+      },
+      14: {
+        text: 'Chờ thanh toán',
+        status: 'Warning',
+      },
+      13: {
+        text: 'Đã hoàn thành',
+        status: 'Success',
+      },
+      1: {
+        text: 'Đã từ chối',
+        status: 'Error',
+      },
+      8: {
+        text: 'KH đã huỷ',
+        status: 'Error',
+      },
     },
     renderFormItem: (item, props) => {
       return <SelectRequestServiceStatus {...props} />;

@@ -29,7 +29,7 @@ const ProportionSales = ({
           <Radio.Group value={salesType} onChange={handleChangeSalesType}>
             <Radio.Button value="requestService">Yêu cầu</Radio.Button>
             <Radio.Button value="rating">Đánh giá</Radio.Button>
-            <Radio.Button value="account">Tài khoản</Radio.Button>
+            {/* <Radio.Button value="account">Tài khoản</Radio.Button> */}
           </Radio.Group>
         </div>
       </div>

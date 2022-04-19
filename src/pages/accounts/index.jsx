@@ -1,15 +1,14 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/jsx-key */
-import { PlusOutlined } from '@ant-design/icons';
-import { Button, Card } from 'antd';
-import React, { useRef, useState } from 'react';
+import { Card, message } from 'antd';
+import React, { useRef, useState, useEffect } from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
 import AsyncButton from '@/components/AsyncButton';
 import ResoTable from '@/components/ResoTable/ResoTable';
-import { banUserByUserID, deleteAccount } from '@/services/accounts';
+import { banUserByUserID, getAllCustomers } from '@/services/accounts';
 import { ACCOUNTS } from '@/utils/constrains';
 
-const AccountList = ({ history }) => {
+const AccountList = () => {
   const ref = useRef();
   const [selectedRows, setSelectedRows] = useState([]);
   const rowSelection = {
@@ -17,12 +16,23 @@ const AccountList = ({ history }) => {
     onChange: setSelectedRows,
     type: 'radio',
   };
-  const addAccount = () => {
-    history.push(`/accounts/create`);
-  };
+  // const [getAllCustomersData, setGetAllCustomersData] = useState([]);
+
+  // useEffect(() => {
+  //   getAllCustomers().then((res) => {
+  //     setGetAllCustomersData(res)
+  //   })
+  // }, [getAllCustomersData])
 
   const banAccountHandler = () => {
-    return banUserByUserID(selectedRows[0]).then(() => ref.current?.reload());
+    return banUserByUserID(selectedRows[0]).then((res) => {
+      if(res.status === 500) {
+        message.error("Chặn người dùng thất bại")
+      } else {
+        message.success("Chặn người dùng thành công")
+        ref.current?.reload()
+      }
+    });
   };
 
   return (
@@ -43,18 +53,12 @@ const AccountList = ({ history }) => {
               title={`Chặn khách hàng này`}
             />,
           ]}
-          toolBarRender={() => [
-            <Button type="primary" onClick={addAccount} icon={<PlusOutlined />}>
-              Tạo tài khoản mới cho khách
-            </Button>,
-          ]}
           rowSelection={rowSelection}
           actionRef={ref}
           rowKey="userID"
-          // rowKey={(record) => record.userID}
-
           columns={ACCOUNTS}
           resource="User/GetAllCustomers"
+          // dataSource={getAllCustomersData}
         />
       </Card>
     </PageContainer>

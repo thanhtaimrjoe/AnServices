@@ -428,7 +428,9 @@ const Analysis = () => {
   if (salesType === 'requestService') {
     salesPieData = requestServiceTypeData;
   } else {
-    salesPieData = salesType === 'rating' ? ratingTypeData : accountTypeData;
+    // salesPieData = salesType === 'rating' ? ratingTypeData : accountTypeData;
+    salesPieData = salesType === 'rating' ? ratingTypeData : requestServiceTypeData;
+
   }
 
   // DỊCH VỤ ĐÃ NHẬN

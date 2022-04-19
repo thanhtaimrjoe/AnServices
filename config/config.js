@@ -2,6 +2,7 @@ import { defineConfig } from 'umi';
 import defaultSettings from './defaultSettings';
 import proxy from './proxy';
 import routes from './routes';
+
 const { REACT_APP_ENV } = process.env;
 
 export default defineConfig({
@@ -13,13 +14,13 @@ export default defineConfig({
   define: {
     API_URL: 'https://anservice-capstone.conveyor.cloud/api',
     // API_URL: 'https://anservice-capstone-ux2.conveyor.cloud/api',
-    // API_URL: 'https://c2d3-2402-800-6312-5c04-b099-25bc-66a8-db8c.ap.ngrok.io/api',
+    // API_URL: 'https://f511-171-252-154-181.ap.ngrok.io/api',
   },
   history: {
     type: 'browser',
   },
   locale: {
-    default: 'vi-VN',
+    default: '@/locales/vi-VN',
     antd: true,
     baseNavigator: true,
   },

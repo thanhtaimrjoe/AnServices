@@ -35,13 +35,22 @@ export default [
         Routes: ['src/pages/Authorized'],
         authority: ['admin', 'user'],
         routes: [
-          {
-            name: 'DASHBOARD',
-            path: '/welcome',
-            hideInMenu: true,
-            component: './welcome',
-            // authority: ['admin'],
-          },
+          // {
+          //   name: 'DASHBOARD',
+          //   path: '/welcome',
+          //   hideInMenu: true,
+          //   component: './welcome',
+          //   // authority: ['admin'],
+          // },
+
+          // {
+          //   name: 'dashboard',
+          //   path: '/dashboard',
+          //   hideInMenu: true,
+          //   component: './dashboard/analysis',
+          //   // authority: ['admin'],
+          // },
+          
           {
             path: '/',
             redirect: '/user/login',
@@ -50,6 +59,7 @@ export default [
           // // DASHBOARD
           {
             path: '/dashboard',
+            hideInMenu: true,
             name: 'dashboard',
             icon: 'dashboard',
             routes: [

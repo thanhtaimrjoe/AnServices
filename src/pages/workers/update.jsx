@@ -26,6 +26,8 @@ const UpdateReportAttribute = (props) => {
   const [typeJobName, setTypeJobName] = useState();
   const [typeJobIdRecord, setTypeJobIdRecord] = useState();
   const [typeJobId, setTypeJobId] = useState();
+  const [userIdRecord, setUserIdRecord] = useState();
+
   const [currentStep, setCurrentStep] = useState(0);
 
   const steps = [
@@ -36,6 +38,8 @@ const UpdateReportAttribute = (props) => {
           createDate={requestMaterialCreateDate}
           typeJobName={typeJobName}
           typeJobId={typeJobId}
+          typeJobRecord={typeJobId}
+          userID={userIdRecord}
         />
       ),
     },
@@ -45,6 +49,7 @@ const UpdateReportAttribute = (props) => {
     // form.setFieldsValue(updateWorkerState);
     getWorkerById(updateWorkerState.userID).then((res) => {
       setFormData(res);
+      setUserIdRecord(res.userID);
       setTypeJobName(res.typeJob.typeJobName);
       setTypeJobIdRecord(res.typeJob.typeJobId);
       setTypeJobId(res.typeJob.typeJobId);
@@ -61,6 +66,10 @@ const UpdateReportAttribute = (props) => {
     );
   }
 
+  const onBackList = () => {
+    history.replace('/workers/list');
+  };
+
   const onUpdateWorker = () => {
     const update = normalizeReportForm(formData);
 
@@ -76,6 +85,13 @@ const UpdateReportAttribute = (props) => {
     if(!update.update.phoneNumber.match(/(0[3|5|7|8|9])+([0-9]{8})\b/)) {
       validate = false;
     }
+    // if(!update.update.typeJobId || update.update.typeJobId === undefined) {
+    //   validate = false;
+    //   message.warning("Vui lòng chọn nhóm thợ")
+    // }
+    if(!validate) {
+      message.error("Vui lòng điền đầy đủ thông tin cần thiết")
+    }
     if(validate === true) {
       const createContractValues = {
         workerId: update.update.userID,
@@ -83,26 +99,25 @@ const UpdateReportAttribute = (props) => {
         workerPhoneNumber: update.update.phoneNumber,
         workerAddress: update.update.address,
         workerEmail: update.update.email,
-        // typeJob: update.update.typeJobId,
-        typeJob: {typeJobId},
-
+        // typeJobId: {typeJobId},
+        typeJobId: update.update.typeJobId,
       };
       return updateWorker(createContractValues).then((res) => {
+        console.log('firstres', res)
+        console.log('firstres1', createContractValues)
+        console.log('firstres2', update)
         if(res.status === 400) {
-          message.error("Số điện thoại đã tồn tại vui lòng kiểm tra lại")
+          message.error("Số điện thoại đã tồn tại hoặc email sai định dạng vui lòng kiểm tra lại")
+        }
+        if(res.status === 500) {
+          message.error("Vui lòng kiểm tra lại thông tin đã gửi")
         }
         else {
-          // setTypeJobId(updateWorkerState.typeJob.typeJobId)
-          console.log('record03', createContractValues)
-          history.replace('/workers/list');
+          message.success("Cập nhật thông tin thợ thành công")
+          onBackList();
         }
       });
     }
-
-  };
-
-  const onBackList = () => {
-    history.replace('/workers/list');
   };
   return (
     <PageContainer>
