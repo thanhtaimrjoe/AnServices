@@ -84,7 +84,6 @@ E:\Capstone\Backup_API\AnService_Capstone\obj\Release\net5.0\ref\AnService_Capst
 E:\Capstone\Backup_API\AnService_Capstone\obj\Release\net5.0\AnService_Capstone.xml
 E:\Capstone\Backup_API\AnService_Capstone\obj\Release\net5.0\AnService_Capstone.pdb
 E:\Capstone\Backup_API\AnService_Capstone\obj\Release\net5.0\AnService_Capstone.genruntimeconfig.cache
-E:\Capstone\AnService_API\AnService_Capstone\bin\Release\net5.0\runtimes\unix\lib\netcoreapp2.1\System.Data.SqlClient.dll
 E:\Capstone\AnService_API\AnService_Capstone\bin\Release\net5.0\appsettings.Development.json
 E:\Capstone\AnService_API\AnService_Capstone\bin\Release\net5.0\appsettings.json
 E:\Capstone\AnService_API\AnService_Capstone\bin\Release\net5.0\AnService_Capstone.exe
@@ -147,6 +146,7 @@ E:\Capstone\AnService_API\AnService_Capstone\bin\Release\net5.0\runtimes\win-x86
 E:\Capstone\AnService_API\AnService_Capstone\bin\Release\net5.0\runtimes\win-arm64\native\sni.dll
 E:\Capstone\AnService_API\AnService_Capstone\bin\Release\net5.0\runtimes\win-x64\native\sni.dll
 E:\Capstone\AnService_API\AnService_Capstone\bin\Release\net5.0\runtimes\win-x86\native\sni.dll
+E:\Capstone\AnService_API\AnService_Capstone\bin\Release\net5.0\runtimes\unix\lib\netcoreapp2.1\System.Data.SqlClient.dll
 E:\Capstone\AnService_API\AnService_Capstone\bin\Release\net5.0\runtimes\win\lib\netcoreapp2.1\System.Data.SqlClient.dll
 E:\Capstone\AnService_API\AnService_Capstone\bin\Release\net5.0\runtimes\win\lib\netstandard2.0\System.Runtime.Caching.dll
 E:\Capstone\AnService_API\AnService_Capstone\bin\Release\net5.0\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll

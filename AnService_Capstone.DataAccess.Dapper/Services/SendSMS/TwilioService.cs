@@ -41,11 +41,19 @@ namespace AnService_Capstone.DataAccess.Dapper.Services.SendSMS
 
         public void SendSMS(string phone, string msg)
         {
+            string accountSid = _config["Twilio:AccountSid"];
+            string apiKey = _config["Twilio:ApiKeySid"];
+            string apiSecret = _config["Twilio:ApiKeySecret"];
+
+            TwilioClient.Init(
+                username: apiKey,
+                password: apiSecret,
+                accountSid: accountSid);
+
             var message = MessageResource.Create(
                 to: new PhoneNumber(phone),
                 from: new PhoneNumber("+17752695428"),
-                body: msg,
-                client: _innerClient);
+                body: msg);
         }
 
         public Response Request(Request request) => _innerClient.Request(request);
