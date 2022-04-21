@@ -214,25 +214,25 @@ export default function MaterialDetail(props) {
                     </View>
                   </View>
                   <View style={styles.materialIconContainer}>
-                    {item.status.statusId === 3 && (
+                    {item.status === 3 && (
                       <Image
                         source={{uri: IconURL.materialApprove}}
                         style={styles.materialIcon}
                       />
                     )}
-                    {item.status.statusId === 1 && (
+                    {item.status === 1 && (
                       <Image
                         source={{uri: IconURL.materialDeny}}
                         style={styles.materialIcon}
                       />
                     )}
-                    {item.status.statusId === 2 && (
+                    {item.status === 2 && (
                       <Image
                         source={{uri: IconURL.materialPending}}
                         style={styles.materialIcon}
                       />
                     )}
-                    {item.status.statusId === 8 && (
+                    {item.status === 8 && (
                       <Image
                         source={{uri: IconURL.materialDeny}}
                         style={styles.materialIcon}
@@ -249,9 +249,9 @@ export default function MaterialDetail(props) {
                             style={styles.materialIcon}
                           />
                         </TouchableOpacity>
-                        {item.status.statusId === 3 ||
-                        item.status.statusId === 1 ||
-                        item.status.statusId === 8 ? (
+                        {item.status === 3 ||
+                        item.status === 1 ||
+                        item.status === 8 ? (
                           <View style={styles.materialButtonContainer}>
                             <Image
                               source={{uri: IconURL.cancelDisalbe}}
