@@ -220,6 +220,7 @@ export default function ServiceRequest(props) {
     //validate selectedService
     if (selectedService.length === 0) {
       setSelectedServiceError('Bạn chưa chọn dịch vụ');
+      result = false;
     }
     //validate selectedPackageError
     if (!selectedPackage) {
