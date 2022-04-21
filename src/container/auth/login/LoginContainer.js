@@ -7,6 +7,7 @@ import {
   actLoginCustomerOrWorkerRequest,
   actSendSmsByPhoneNumberRequest,
 } from '../../../redux/actions/index';
+import NetInfo from '@react-native-community/netinfo';
 
 export default function LoginContainer(props) {
   const {navigation} = props;
@@ -30,7 +31,7 @@ export default function LoginContainer(props) {
     if (user.userRole === 'Customer') {
       Alert.alert(
         'Thông báo',
-        'Số điện thoại này hiện chưa được đăng ký trong hệ thống',
+        'Số điện thoại này đã được đăng ký bởi khách hàng',
       );
       setLoading(false);
     }
@@ -54,6 +55,17 @@ export default function LoginContainer(props) {
         },
       ]);
     }
+    //check internet connection
+    const unsubscribe = NetInfo.addEventListener(state => {
+      if (!state.isConnected) {
+        Alert.alert(
+          'Thông báo',
+          'Bạn đã bị mất kết nối. Vui lòng kiểm tra lại đường truyền.',
+        );
+      }
+    });
+    //unsubscribe
+    return () => unsubscribe();
   }, [user, message]);
 
   //get dispatch
@@ -64,8 +76,8 @@ export default function LoginContainer(props) {
   const loginCustomerOrWorkerRequest = phoneNumber =>
     dispatch(actLoginCustomerOrWorkerRequest(phoneNumber));
   //call api --- send sms to phone number
-  const sendSmsByPhoneNumber = (phoneNumber, token) =>
-    dispatch(actSendSmsByPhoneNumberRequest(phoneNumber, token));
+  const sendSmsByPhoneNumber = phoneNumber =>
+    dispatch(actSendSmsByPhoneNumberRequest(phoneNumber));
   //conver 0123... to (+84)123
   const convertPhoneNumber = phoneNumber => {
     if (phoneNumber) {
@@ -84,7 +96,7 @@ export default function LoginContainer(props) {
   //convert phone number and navigate to verify otp page
   const navigateToVerifyOTP = () => {
     const convertedPhoneNumber = convertPhoneNumber(phoneNumber);
-    //sendSmsByPhoneNumber(convertedPhoneNumber, token);
+    //sendSmsByPhoneNumber(convertedPhoneNumber);
     setLoading(false);
     navigation.navigate('VerifyOTPContainer', {
       phoneNumber: phoneNumber,

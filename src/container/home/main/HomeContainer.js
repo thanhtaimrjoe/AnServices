@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import {Alert} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import Home from '../../../components/home/main/Home';
 import {
@@ -6,6 +7,7 @@ import {
   actGetWorkerByIDRequest,
   actResetServiceRequest,
 } from '../../../redux/actions/index';
+import NetInfo from '@react-native-community/netinfo';
 
 export default function HomeContainer(props) {
   const {navigation} = props;
@@ -34,6 +36,17 @@ export default function HomeContainer(props) {
   useEffect(() => {
     getWorkerByIDRequest(user.id, token);
     getAllServiceRequestByWorkerID(user.id, 0, token);
+    //check internet connection
+    const unsubscribe = NetInfo.addEventListener(state => {
+      if (!state.isConnected) {
+        Alert.alert(
+          'Thông báo',
+          'Bạn đã bị mất kết nối. Vui lòng kiểm tra lại đường truyền.',
+        );
+      }
+    });
+    //unsubscribe
+    return () => unsubscribe();
   }, []);
 
   //list filter

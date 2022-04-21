@@ -49,13 +49,12 @@ export const actGetUserInfo = user => {
   };
 };
 //call api --- authen
-export const actSendSmsByPhoneNumberRequest = (phoneNumber, token) => {
+export const actSendSmsByPhoneNumberRequest = phoneNumber => {
   return async dispatch => {
     try {
       const response = await fetch(API + 'User/SendSms', {
         method: 'POST',
         headers: {
-          Authorization: token,
           Accept: 'application/json',
           'Content-Type': 'application/json',
         },
