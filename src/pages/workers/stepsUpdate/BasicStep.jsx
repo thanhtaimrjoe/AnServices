@@ -62,11 +62,12 @@ const BasicStep = ({ typeJobId }) => {
         <Col span={12}>
           <ProForm.Item
             // name={typeJobId}
-            name="typeJobId"
+            name="typeJobID"
             // initialValue={typeJobId}
             label="Nhóm thợ"
             rules={[
               {
+                required: true,
                 pattern: /^[0-9]*$/,
                 type: 'integer',
                 message: "Chỉ được chọn trên thanh chọn"

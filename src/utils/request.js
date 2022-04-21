@@ -33,10 +33,10 @@ const errorHandler = (error) => {
     const errorText = codeMessage[response.status] || response.statusText;
     const { status, url, ...params } = response;
     console.log('RES ERR', params);
-    notification.error({
-      message: `Yêu cầu lỗi ${status}: ${url}`,
-      description: errorText,
-    });
+    // notification.error({
+    //   message: `Yêu cầu lỗi ${status}: ${url}`,
+    //   description: errorText,
+    // });
   } else if (!response) {
     notification.error({
       description: 'Mạng của bạn không ổn định và không thể kết nối với máy chủ',

@@ -100,7 +100,7 @@ const UpdateReportAttribute = (props) => {
         workerAddress: update.update.address,
         workerEmail: update.update.email,
         // typeJobId: {typeJobId},
-        typeJobId: update.update.typeJobId,
+        typeJobId: update.update.typeJobID,
       };
       return updateWorker(createContractValues).then((res) => {
         console.log('firstres', res)

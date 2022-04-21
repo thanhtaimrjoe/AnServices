@@ -12,15 +12,15 @@ export default defineConfig({
     hmr: true,
   },
   define: {
-    // API_URL: 'https://anservice-capstone.conveyor.cloud/api',
+    API_URL: 'https://anservice-capstone.conveyor.cloud/api',
     // API_URL: 'https://anservice-capstone-ux2.conveyor.cloud/api',
-    API_URL: 'https://13af-171-252-154-205.ap.ngrok.io/api',
+    // API_URL: 'https://d8f0-171-252-154-229.ap.ngrok.io/api',
   },
   history: {
     type: 'browser',
   },
   locale: {
-    default: '@/locales/vi-VN',
+    default: 'en-US',
     antd: true,
     baseNavigator: true,
   },
