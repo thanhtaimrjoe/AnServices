@@ -136,6 +136,12 @@ namespace AnService_Capstone.DataAccess.Dapper.Services
 
         public async Task<ErrorResponse> CreateWorkerAccount(CreateWorker model)
         {
+            var check = await _userRepository.CheckPhoneNumberExist(model.PhoneNumber);
+
+            if (check.PhoneNumber.Equals(model.PhoneNumber))
+            {
+                return new ErrorResponse("Phone number is existed");
+            }
             var res = await _userRepository.CreateAccountWorker(model);
 
             if (res)
@@ -358,13 +364,33 @@ namespace AnService_Capstone.DataAccess.Dapper.Services
                 }
             }
 
+            if (worker.WorkerPhoneNumber == null)
+            {
+                return new ErrorResponse("Phone can not null");
+            }
+
+            //lay thong tin worker
             var user = await _userRepository.GetWorkerByID(worker.WorkerId);
 
+            //kiem tra so dien thoai co trong he thong
             var check = await _userRepository.CheckPhoneNumberExist(worker.WorkerPhoneNumber);
 
-            if (check.PhoneNumber.Equals(user.PhoneNumber))
+            if (check != null)
             {
-                /*return BadRequest(new ErrorResponse("Phone number is existed"));*/
+                if (check.PhoneNumber.Equals(user.PhoneNumber))
+                {
+                    /*return BadRequest(new ErrorResponse("Phone number is existed"));*/
+                    var res = await _userRepository.UpdateWorker(worker);
+
+                    if (res)
+                    {
+                        return new ErrorResponse("Update Successful");
+                    }
+                    return new ErrorResponse("Update Fail");
+                }
+            }
+            else if (check == null)
+            {
                 var res = await _userRepository.UpdateWorker(worker);
 
                 if (res)
