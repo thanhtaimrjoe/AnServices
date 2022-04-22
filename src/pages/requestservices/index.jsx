@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/jsx-key */
-import { Card, Table, Tabs } from 'antd';
+import { Card, message, Table, Tabs } from 'antd';
 import React, { useRef, useState, useEffect } from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
 import AsyncButton from '@/components/AsyncButton';
@@ -17,6 +17,7 @@ const ServiceRequestList = ({ history }) => {
     onChange: setSelectedRows,
     type: 'select',
   };
+  console.log('selectedRows', selectedRows)
   // const [getAllServiceRequestStatusOrDateData, setGetAllServiceRequestStatusOrDateData] = useState([]);
 
 
@@ -27,7 +28,7 @@ const ServiceRequestList = ({ history }) => {
   // }, [getAllServiceRequestStatusOrDateData])
 
   const deleteServiceRequestHandler = () => {
-    return removeListServiceRequest(selectedRows).then(() => ref.current?.reload());
+    return removeListServiceRequest(selectedRows).then(() => {ref.current?.reload(); message.success("Đã xoá yêu cầu thành công")});
   };
 
   return (

@@ -360,6 +360,19 @@ const DetailServiceRequest = (props) => {
     getAllServiceRequestDetailsByServiceRequestID(updateRequestServiceState.serviceRequestId)
       // getTest(updateRequestServiceState.serviceRequestId)
       .then((record) => {
+        if(record.length > 0) {
+          const requestServiceRecordTmp = record;
+        requestServiceRecordTmp.map((item) => {
+          const items = item;
+          getWorkerByServiceID(item.serviceId).then((record1) => {
+            items.worker = record1;
+            record1.map((item1, index) => {
+              items.worker[index].task = item1.tblRepairDetails.length;
+            });
+          });
+        });
+        setRequestServiceDetail(requestServiceRecordTmp);
+        }
         setRequestServiceDetail(record);
         setIsLoad(true);
         let result = 0;
@@ -403,8 +416,9 @@ const DetailServiceRequest = (props) => {
         setPromotionValueRecord(record.promotionValue);
       });
     }
-  }, []);
+  }, [isLoad]);
 
+  console.log('firsttime02', requestServiceRecord)
   const [requestMaterialRecord, setRequestMaterialRecord] = useState([]);
   const [contractRecord, setContractRecord] = useState([]);
   const [imgReportRecord, setImgReportRecord] = useState([]);
@@ -426,6 +440,7 @@ const DetailServiceRequest = (props) => {
     // Data cho danh sách thợ và hợp đồng
     if (isLoad && updateRequestServiceState) {
       getContractListByUserID(updateRequestServiceState.customer.userId).then((record) => {
+        setIsLoad(true);
         setContractRecord(record);
         record.map((item) => {
           if (item.serviceRequestId === updateRequestServiceState.serviceRequestId) {
@@ -484,20 +499,13 @@ const DetailServiceRequest = (props) => {
     }
 
     // load thợ theo service id
-    if (requestServiceRecord.length > 0) {
-      const requestServiceRecordTmp = requestServiceRecord;
+    if(isLoad && updateRequestServiceState) {
 
-      requestServiceRecordTmp.map((item) => {
-        const items = item;
-        getWorkerByServiceID(item.serviceId).then((record) => {
-          items.worker = record;
-          record.map((item1, index) => {
-            items.worker[index].task = item1.tblRepairDetails.length;
-          });
-        });
-      });
-      setRequestServiceDetail(requestServiceRecordTmp);
+      if (requestServiceRecord.length > 0) {
+        
+      }
     }
+    
 
     // set service price to requestServiceRecord
     requestServiceRecord.map((item, index) => {
@@ -1679,8 +1687,6 @@ const DetailServiceRequest = (props) => {
     },
   ];
 
-  console.log('newRequestServiceState', newRequestServiceState)
-
   return (
     <PageContainer title="">
       <Form
@@ -2420,6 +2426,12 @@ const DetailServiceRequest = (props) => {
 
             <AsyncButton
               title="Từ chối"
+              isNeedConfirm={{
+                title: 'Xác nhận từ chối',
+                content: 'Bạn có muốn từ chối yêu cầu này không?',
+                okText: 'Xác nhận',
+                cancelText: 'Huỷ',
+              }}
               btnProps={{
                 type: 'danger',
                 icon: <CloseOutlined />,

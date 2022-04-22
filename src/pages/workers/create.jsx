@@ -36,7 +36,9 @@ const CreateWorker = (props) => {
       // if(res.errorsMsg !== "Create Successfull"){
       //   console.log('record02', res.errorsMsg)
       // }
-
+      if(res.status === 400) {
+        message.error("Email sai định dạng");
+      }
       if(res.status === 500) {
         message.error("Số điện thoại đã tồn tại");
       } else {

@@ -32,7 +32,7 @@ const BasicStep = () => {
               {
                 required: true,
                 pattern: /(0[3|5|7|8|9])+([0-9]{8})\b/,
-                message: "Nhập số điện thoại 10 số"
+                message: "Vui lòng nhập số điện thoại 10 số"
               }
             ]}
           >
@@ -45,6 +45,13 @@ const BasicStep = () => {
           <ProForm.Item
             name="email"
             label="Email"
+            rules={[
+              {
+                // required: true,
+                pattern: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                message: "Email sai định dạng"
+              }
+            ]}
           >
             <Input placeholder="Nhập email" defaultValue="@gmail.com"/>
           </ProForm.Item>

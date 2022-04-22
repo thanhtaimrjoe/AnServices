@@ -118,42 +118,18 @@ const SelectStatusOfCustomer = (props) => {
 // WORKER
 const SelectWorkerByTypeJob = (props) => {
   return (
-    <CommonSelect
+    <Select
       placeholder="Vui lòng chọn nghề của thợ"
-      fetchOnFirst
-      // onSearch={getAllWorkers}
-      options={[
-        {
-          value: 1,
-          label: 'Thợ nhôm - kính',
-        },
-        {
-          value: 2,
-          label: 'Thợ cơ khí',
-        },
-        {
-          value: 3,
-          label: 'Thợ sơn',
-        },
-        {
-          value: 4,
-          label: 'Thợ xây',
-        },
-        {
-          value: 5,
-          label: 'Thợ điện nước',
-        },
-        {
-          value: 6,
-          label: 'Thợ điện lạnh',
-        },
-        {
-          value: 7,
-          label: 'Thợ thạch cao',
-        },
-      ]}
       {...props}
-    />
+    >
+      <Option value={1}>Thợ nhôm - kính</Option>
+      <Option value={2}>Thợ cơ khí</Option>
+      <Option value={3}>Thợ sơn</Option>
+      <Option value={4}>Thợ xây</Option>
+      <Option value={5}>Thợ điện nước</Option>
+      <Option value={6}>Thợ điện lạnh</Option>
+      <Option value={7}>Thợ thạch cao</Option>
+    </Select>
   );
 };
 

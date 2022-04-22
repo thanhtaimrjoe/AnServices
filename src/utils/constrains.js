@@ -1,11 +1,10 @@
 import { SelectRequestServiceStatus } from '@/components/CommonSelect/CommonSelect';
-import { Button, Space } from 'antd';
+import { Button, Input, Space } from 'antd';
 import moment, { updateLocale } from 'moment';
 import { Link } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 import { SelectWorkerByTypeJob } from '@/components/CommonSelect/CommonSelect';
 import { SelectRequestServiceDate } from '@/components/CommonSelect/CommonSelect';
-
 
 // ACCOUNTS
 export const ACCOUNTS = [
@@ -21,12 +20,6 @@ export const ACCOUNTS = [
   {
     title: 'Mã khách hàng',
     dataIndex: 'userID',
-    show: false,
-    search: false,
-  },
-  {
-    title: 'Tên tài khoản',
-    dataIndex: 'userName',
     show: false,
     search: false,
   },
@@ -127,12 +120,13 @@ export const WORKERS = [
     title: 'Nhóm Thợ',
     key: 'typeJobId',
     dataIndex: 'typeJobId',
-    render: (text, record) => {
-      return <div>{record.typeJob.typeJobName}</div>
-    },
+    // render: (text, record) => {
+    //   return <div>{record.typeJob.typeJobName}</div>
+    // },
     valueEnum: {
       1: {
         text: 'Thợ nhôm - kính',
+        status: 'success',
       },
       2: {
         text: 'Thợ cơ khí',
@@ -155,9 +149,9 @@ export const WORKERS = [
     },
     valueType: 'select',
 
-    renderFormItem: (item, props) => {
-      return <SelectWorkerByTypeJob name="" {...props} />;
-    },
+  //   renderFormItem: (item, props) => {
+  //     return <SelectWorkerByTypeJob name="" {...props} />;
+  //   },
   },
   {
     title: 'Hành động',
@@ -418,3 +412,6 @@ export const INVOICE = [
     ),
   },
 ];
+
+
+

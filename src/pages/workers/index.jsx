@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/jsx-key */
 import { PlusOutlined } from '@ant-design/icons';
-import { Button, Card, Col, Descriptions, Drawer, Row, Space } from 'antd';
+import { Button, Card, Col, Descriptions, Drawer, message, Row, Space } from 'antd';
 import React, { useRef, useState, useEffect } from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
 import AsyncButton from '@/components/AsyncButton';
@@ -105,11 +105,8 @@ const WorkerList = ({ history }) => {
     },
     {
       title: 'Nhóm Thợ',
-      key: 'typeJobId',
-      dataIndex: 'typeJobId',
-      render: (text, record) => {
-        return <div>{record.typeJob.typeJobName}</div>;
-      },
+      key: 'typeJobID',
+      dataIndex: 'typeJobID',
       valueEnum: {
         1: {
           text: 'Thợ nhôm - kính',
@@ -163,6 +160,7 @@ const WorkerList = ({ history }) => {
 
   const deleteWorkerHandler = () => {
     return removeWorker(selectedRows[0]).then((res) => {
+      message.success("Xoá thợ thành công");
       ref.current?.reload();
     });
   };
