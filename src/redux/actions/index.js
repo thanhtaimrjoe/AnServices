@@ -588,6 +588,11 @@ export const actGetContractByServiceRequestIDRequest = (
         if (json) {
           dispatch(actGetContractByServiceRequestID(json));
         }
+      } else {
+        const json = await response.json();
+        if (json.errorsMsg[0] === 'No record') {
+          dispatch(actGetContractByServiceRequestID(json));
+        }
       }
     } catch (error) {}
   };
