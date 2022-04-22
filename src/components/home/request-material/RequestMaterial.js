@@ -26,7 +26,7 @@ export default function RequestMaterial(props) {
     setMaterialList([
       ...materialList,
       {
-        id: '',
+        id: 0,
         quantity: '',
         note: '',
         unit: '',
@@ -85,7 +85,11 @@ export default function RequestMaterial(props) {
       result = false;
     } else {
       materialList.map((item, index) => {
-        if (item.id === 0 || item.quantity.length === 0) {
+        if (
+          item.id === 0 ||
+          item.quantity.length === 0 ||
+          item.quantity === 0
+        ) {
           errorMsg = 'Vật liệu hay số lượng bạn nhập vào không đúng';
           result = false;
         }

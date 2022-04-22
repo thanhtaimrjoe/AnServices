@@ -73,6 +73,11 @@ const styles = StyleSheet.create({
     color: Color.placeholder,
     marginBottom: 5,
   },
+  materialNoNote: {
+    color: Color.placeholder,
+    marginBottom: 5,
+    color: Color.cover,
+  },
   materialQuantityContainer: {
     flexDirection: 'row',
   },

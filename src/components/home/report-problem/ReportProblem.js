@@ -120,6 +120,7 @@ export default function ReportProblem(props) {
     }
     if (media.length === 0) {
       setMediaError('Bạn chưa chọn ảnh hoặc video');
+      result = false;
     }
     return result;
   };

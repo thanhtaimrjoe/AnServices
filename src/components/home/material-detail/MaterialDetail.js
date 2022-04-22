@@ -190,8 +190,10 @@ export default function MaterialDetail(props) {
                     <Text style={styles.materialName}>
                       {item.material.materialName}
                     </Text>
-                    {item.note && (
+                    {item.note !== '' ? (
                       <Text style={styles.materialNote}>{item.note}</Text>
+                    ) : (
+                      <Text style={styles.materialNoNote}>""</Text>
                     )}
                     <View style={styles.materialQuantityContainer}>
                       <Text style={styles.materialQuantityTitle}>
