@@ -136,9 +136,29 @@ namespace AnService_Capstone.DataAccess.Dapper.Services
 
         public async Task<ErrorResponse> CreateWorkerAccount(CreateWorker model)
         {
+            if (model.Email == null)
+            {
+                model.Email = "";
+            }
+
+            if (model.Address == null)
+            {
+                model.Address = "";
+            }
+
+            if (!model.Email.Equals(""))
+            {
+                var validEmail = _utilHelper.IsValidEmail(model.Email);
+
+                if (!validEmail)
+                {
+                    return new ErrorResponse("Email is not valid");
+                }
+            }
+
             var check = await _userRepository.CheckPhoneNumberExist(model.PhoneNumber);
 
-            if (check.PhoneNumber.Equals(model.PhoneNumber))
+            if (check != null)
             {
                 return new ErrorResponse("Phone number is existed");
             }

@@ -223,7 +223,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Services
 
             if (ServiceRequestCreateDate != null)
             {
-                ServiceRequestCreateDate = DateTime.ParseExact(ServiceRequestCreateDate, "yyyy-MM-dd hh:mm:ss",
+                ServiceRequestCreateDate = DateTime.ParseExact(ServiceRequestCreateDate, "yyyy-MM-dd",
                                            System.Globalization.CultureInfo.InvariantCulture).ToString("yyyy-MM-dd");
             }
 

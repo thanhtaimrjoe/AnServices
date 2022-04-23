@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -31,7 +32,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Customize
 
         public bool IsValidEmail(string email)
         {
-            var trimmedEmail = email.Trim();
+            /*var trimmedEmail = email.Trim();
 
             if (trimmedEmail.EndsWith("."))
             {
@@ -45,6 +46,16 @@ namespace AnService_Capstone.DataAccess.Dapper.Customize
             catch
             {
                 return false;
+            }*/
+            var mail = new MailAddress(email);
+            bool isValidEmail = mail.Host.Contains(".");
+            if (!isValidEmail)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
             }
         }
     }
