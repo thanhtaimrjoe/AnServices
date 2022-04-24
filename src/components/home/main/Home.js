@@ -91,9 +91,7 @@ export default function Home(props) {
               source={{uri: IconURL.notFoundImg}}
               style={styles.errorImg}
             />
-            <Text style={styles.errorMsg}>
-              Hiện tại bạn chưa được nhận bất kỳ dịch vụ nào
-            </Text>
+            <Text style={styles.errorMsg}>Chưa có yêu cầu nào</Text>
           </View>
         ) : (
           requestService.map((item, index) => {

@@ -8,6 +8,7 @@ import {
   TouchableWithoutFeedback,
   ScrollView,
   ActivityIndicator,
+  Alert,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {styles} from './CompletedReportStyle';
@@ -68,6 +69,7 @@ export default function CompletedReport(props) {
     launchCamera(option, response => {
       if (response.assets) {
         response.assets.map(item => {
+          setMediaError('');
           setMedia([...media, item]);
         });
       }
@@ -85,6 +87,7 @@ export default function CompletedReport(props) {
     launchCamera(option, response => {
       if (response.assets) {
         response.assets.map(item => {
+          setMediaError('');
           setMedia([...media, item]);
         });
       }
@@ -102,10 +105,23 @@ export default function CompletedReport(props) {
     launchImageLibrary(option, response => {
       if (response.assets) {
         response.assets.map(item => {
+          setMediaError('');
           setMedia(media => [...media, item]);
         });
       }
     });
+  };
+
+  //check size of video and image
+  const checkMediaSize = () => {
+    var result = 0;
+    media.map(item => {
+      result += item.fileSize;
+    });
+    if (result / 1000000 > 30) {
+      return false;
+    }
+    return true;
   };
 
   //validation
@@ -127,10 +143,14 @@ export default function CompletedReport(props) {
 
   //button --- create report problem
   const onCreateReportProblem = () => {
-    //check validate
-    const validation = validateValue();
-    if (validation) {
-      props.onCreateReportProblem(description, media);
+    if (checkMediaSize()) {
+      //check validate
+      const validation = validateValue();
+      if (validation) {
+        props.onCreateReportProblem(description, media);
+      }
+    } else {
+      Alert.alert('Thông báo', 'Ảnh hoặc video của bạn đã vượt quá 30Mb');
     }
   };
 
@@ -170,7 +190,10 @@ export default function CompletedReport(props) {
         <TextInput
           onFocus={() => setIsFocusedDescription(true)}
           onBlur={() => setIsFocusedDescription(false)}
-          onChangeText={text => setDescription(text)}
+          onChangeText={text => {
+            setDescriptionError('');
+            setDescription(text);
+          }}
           multiline={true}
           style={[
             styles.descriptionInput,
@@ -193,18 +216,37 @@ export default function CompletedReport(props) {
             <Text style={styles.mediaBtnIcon}>+</Text>
           </TouchableOpacity>
           {media.map((item, index) => {
-            return (
-              <View key={index} style={styles.mediaViewContainer}>
-                <TouchableOpacity onPress={() => onViewMedia(item)}>
-                  <Image style={styles.mediaView} source={{uri: item.uri}} />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.mediaRemoveBtn}
-                  onPress={() => onRemoveMediaItem(index)}>
-                  <Icon name="times" style={styles.mediaRemoveIcon} />
-                </TouchableOpacity>
-              </View>
-            );
+            if (item.type !== 'video/mp4') {
+              return (
+                <View key={index} style={styles.mediaViewContainer}>
+                  <TouchableOpacity onPress={() => onViewMedia(item)}>
+                    <Image style={styles.mediaView} source={{uri: item.uri}} />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.mediaRemoveBtn}
+                    onPress={() => onRemoveMediaItem(index)}>
+                    <Icon name="times" style={styles.mediaRemoveIcon} />
+                  </TouchableOpacity>
+                </View>
+              );
+            } else {
+              return (
+                <View key={index} style={styles.mediaViewContainer}>
+                  <TouchableOpacity onPress={() => onViewMedia(item)}>
+                    <Image style={styles.mediaView} source={{uri: item.uri}} />
+                    <Image
+                      source={{uri: IconURL.playVideoImg}}
+                      style={styles.playImg}
+                    />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.mediaRemoveBtn}
+                    onPress={() => onRemoveMediaItem(index)}>
+                    <Icon name="times" style={styles.mediaRemoveIcon} />
+                  </TouchableOpacity>
+                </View>
+              );
+            }
           })}
         </View>
         <Text style={styles.errorMessage}>{mediaError}</Text>
@@ -245,7 +287,6 @@ export default function CompletedReport(props) {
                   }}
                   resizeMode="cover"
                   style={styles.mediaFull}
-                  controls={true}
                 />
               )}
             </View>

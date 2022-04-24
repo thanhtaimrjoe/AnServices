@@ -146,6 +146,14 @@ const styles = StyleSheet.create({
     color: Color.white,
     fontSize: 18,
   },
+  //play video button
+  playImg: {
+    width: 40,
+    height: 40,
+    position: 'absolute',
+    top: 30,
+    right: 35,
+  },
   //dialog
   dialogBackground: {
     backgroundColor: '#000000aa',
