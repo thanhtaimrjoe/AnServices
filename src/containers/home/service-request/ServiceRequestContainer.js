@@ -77,7 +77,7 @@ export default function ServiceRequestContainer(props) {
     if (message === 'ACCOUNT_HAVE_BEEN_BANNED') {
       setUploading(false);
       Alert.alert(
-        'Gửi yêu cầu thất bại',
+        'Thông báo',
         'Tài khoản của bạn đã bị khóa do gửi yêu cầu quá 3 lần trong 1 ngày',
         [
           {

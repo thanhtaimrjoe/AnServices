@@ -44,8 +44,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
   },
   requestBtn: {
-    width: '30%',
+    width: '40%',
     paddingVertical: 12,
+    paddingHorizontal: 18,
     borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',

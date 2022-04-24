@@ -46,13 +46,13 @@ const styles = StyleSheet.create({
   dialogContainer: {
     width: '100%',
     borderRadius: 10,
-    paddingHorizontal: 16,
+    paddingHorizontal: 15,
     backgroundColor: Color.background,
   },
   dialogHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginVertical: 16,
+    marginVertical: 15,
   },
   dialogTitle: {
     fontSize: 18,
@@ -126,7 +126,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 24,
     paddingVertical: 8,
-    marginBottom: 20,
+  },
+  packageItemModalContainer: {
+    width: '100%',
+    flexDirection: 'row',
+    backgroundColor: Color.cover,
+    borderRadius: 10,
+    alignItems: 'center',
+    paddingHorizontal: 24,
+    paddingVertical: 8,
+    marginBottom: 15,
   },
   packageItemTextContainer: {
     width: '65%',
@@ -234,9 +243,11 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 0,
     right: 5,
+    backgroundColor: Color.field,
+    borderTopRightRadius: 10,
   },
   mediaRemoveIcon: {
-    color: Color.white,
+    color: Color.primary,
     fontSize: 18,
   },
   //play video button

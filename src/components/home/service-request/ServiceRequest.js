@@ -130,6 +130,8 @@ export default function ServiceRequest(props) {
 
   //choose service item
   const onChooseServiceItem = item => {
+    //remove validate msg (if have)
+    setSelectedServiceError('');
     if (!selectedService.includes(item)) {
       setSelectedService([...selectedService, item]);
     }
@@ -150,6 +152,8 @@ export default function ServiceRequest(props) {
 
   //choose package item
   const onChoosePackageItem = item => {
+    //remove validate msg (if have)
+    setSelectedPackageError('');
     setSelectedPackage(item);
     setShowPackageDialog(false);
   };
@@ -266,7 +270,7 @@ export default function ServiceRequest(props) {
         );
       }
     } else {
-      Alert.alert('Thông báo', 'Ảnh hoặc video của bạn đã vượt quá 4Mb');
+      Alert.alert('Thông báo', 'Ảnh hoặc video của bạn đã vượt quá 30Mb');
     }
   };
 
@@ -281,6 +285,7 @@ export default function ServiceRequest(props) {
     launchCamera(option, response => {
       if (response.assets) {
         response.assets.map(item => {
+          setMediaError('');
           setMedia([...media, item]);
         });
       }
@@ -298,6 +303,7 @@ export default function ServiceRequest(props) {
     launchCamera(option, response => {
       if (response.assets) {
         response.assets.map(item => {
+          setMediaError('');
           setMedia([...media, item]);
         });
       }
@@ -315,6 +321,7 @@ export default function ServiceRequest(props) {
     launchImageLibrary(option, response => {
       if (response.assets) {
         response.assets.map(item => {
+          setMediaError('');
           setMedia(media => [...media, item]);
         });
       }
@@ -339,9 +346,14 @@ export default function ServiceRequest(props) {
                 {selectedPackage.packageDescription}
               </Text>
             </View>
+            <TouchableOpacity
+              style={styles.serviceRemove}
+              onPress={onShowPackageDialog}>
+              <Icon name="edit" style={styles.serviceRemoveIcon} />
+            </TouchableOpacity>
           </View>
         )}
-        {!serviceRequestRework && (
+        {!serviceRequestRework && !selectedPackage && (
           <TouchableOpacity style={styles.addBtn} onPress={onShowPackageDialog}>
             <Text style={styles.addBtnIcon}>+</Text>
           </TouchableOpacity>
@@ -365,7 +377,7 @@ export default function ServiceRequest(props) {
               return (
                 <TouchableOpacity
                   key={index}
-                  style={styles.packageItemContainer}
+                  style={styles.packageItemModalContainer}
                   onPress={() => onChoosePackageItem(item)}>
                   <Image
                     source={{uri: item.packageImg}}
@@ -458,7 +470,10 @@ export default function ServiceRequest(props) {
           value={fullName}
           onFocus={() => setIsFocusedFullName(true)}
           onBlur={() => setIsFocusedFullName(false)}
-          onChangeText={text => setFullName(text)}
+          onChangeText={text => {
+            setFullNameError('');
+            setFullName(text);
+          }}
           style={[
             styles.fullNameInput,
             {
@@ -480,7 +495,10 @@ export default function ServiceRequest(props) {
           value={phoneNumber}
           onFocus={() => setIsFocusedPhoneNumber(true)}
           onBlur={() => setIsFocusedPhoneNumber(false)}
-          onChangeText={text => setPhoneNumber(text)}
+          onChangeText={text => {
+            setPhoneNumberError('');
+            setPhoneNumber(text);
+          }}
           style={[
             styles.phoneInput,
             {
@@ -502,7 +520,10 @@ export default function ServiceRequest(props) {
           value={address}
           onFocus={() => setIsFocusedAddress(true)}
           onBlur={() => setIsFocusedAddress(false)}
-          onChangeText={text => setAddress(text)}
+          onChangeText={text => {
+            setAddressError('');
+            setAddress(text);
+          }}
           multiline={true}
           style={[
             styles.addressInput,
@@ -524,7 +545,10 @@ export default function ServiceRequest(props) {
           value={description}
           onFocus={() => setIsFocusedDescription(true)}
           onBlur={() => setIsFocusedDescription(false)}
-          onChangeText={text => setDescription(text)}
+          onChangeText={text => {
+            setDescriptionError('');
+            setDescription(text);
+          }}
           multiline={true}
           style={[
             styles.descriptionInput,
@@ -620,7 +644,6 @@ export default function ServiceRequest(props) {
                   }}
                   resizeMode="cover"
                   style={styles.mediaFull}
-                  controls={true}
                 />
               )}
             </View>

@@ -287,14 +287,14 @@ export const actCreateServiceRequestRequest = (requestService, token) => {
         }),
       });
       if (response.status === 200) {
-        dispatch(createRequestSuccess());
-      } else {
         const json = await response.json();
-        if (json.errorsMsg[0] === 'Your account has been banned') {
+        if (json[0] === 'Your account has been banned') {
           dispatch(actAccountBanned());
         } else {
-          dispatch(createRequestFailure());
+          dispatch(createRequestSuccess());
         }
+      } else {
+        dispatch(createRequestFailure());
       }
     } catch (error) {
       dispatch(createRequestFailure());

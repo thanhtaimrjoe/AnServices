@@ -355,7 +355,6 @@ export default function RequestDetail(props) {
                   style={styles.mediaFull}
                   poster={IconURL.loadingVideoImg}
                   posterResizeMode={'cover'}
-                  controls={true}
                 />
               )}
             </View>
