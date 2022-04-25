@@ -17,7 +17,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import IconURL from '../../../style/IconURL';
 
 export default function RequestDetail(props) {
-  const {serviceRequest, requestDetail, contractInfo, contractParentInfo} =
+  const {serviceRequestInfo, requestDetail, contractInfo, contractParentInfo} =
     props;
   //state --- pause
   const [pause, setPause] = useState(false);
@@ -25,10 +25,6 @@ export default function RequestDetail(props) {
   const [mediaItem, setMediaItem] = useState();
   //state --- showMediaViewDialog
   const [showMediaViewDialog, setShowMediaViewDialog] = useState(false);
-  //state --- contractItem
-  const [contractItem, setContractItem] = useState();
-  //state --- showContractDialog
-  const [showContractDialog, setShowContractDialog] = useState(false);
 
   //package information
   const packages = [
@@ -110,12 +106,12 @@ export default function RequestDetail(props) {
 
   //button --- cancel request service
   const onCancelServiceRequest = () => {
-    if (serviceRequest.serviceRequestId) {
+    if (serviceRequestInfo.serviceRequestId) {
       Alert.alert('Thông báo', 'Bạn có chắc muốn hủy yêu cầu này?', [
         {
           text: 'Có',
           onPress: () => {
-            props.onCancelServiceRequest(serviceRequest.serviceRequestId);
+            props.onCancelServiceRequest(serviceRequestInfo.serviceRequestId);
           },
         },
         {
@@ -136,7 +132,6 @@ export default function RequestDetail(props) {
 
   //btn --- view contract detail
   const onViewContractDetail = contractItem => {
-    setShowContractDialog(false);
     props.onViewContractDetail(contractItem);
   };
 
@@ -153,7 +148,7 @@ export default function RequestDetail(props) {
       <View style={styles.packageContainer}>
         <Text style={styles.packageTitle}>Gói yêu cầu đã chọn</Text>
         {packages.map((item, index) => {
-          if (item.packageId === serviceRequest.serviceRequestPackage) {
+          if (item.packageId === serviceRequestInfo.serviceRequestPackage) {
             return (
               <View key={index} style={styles.packageItemContainer}>
                 <Image
@@ -276,20 +271,24 @@ export default function RequestDetail(props) {
       <View style={styles.fullNameContainer}>
         <Text style={styles.fullNameTitle}>Họ và tên chủ công trình</Text>
         <View style={styles.fullNameView}>
-          <Text style={styles.fullNameText}>{serviceRequest.customerName}</Text>
+          <Text style={styles.fullNameText}>
+            {serviceRequestInfo.customerName}
+          </Text>
         </View>
       </View>
       <View style={styles.phoneContainer}>
         <Text style={styles.phoneTitle}>Số điện thoại chủ công trình</Text>
         <View style={styles.phoneView}>
-          <Text style={styles.phoneText}>{serviceRequest.customerPhone}</Text>
+          <Text style={styles.phoneText}>
+            {serviceRequestInfo.customerPhone}
+          </Text>
         </View>
       </View>
       <View style={styles.addressContainer}>
         <Text style={styles.addressTitle}>Địa chỉ</Text>
         <View style={styles.addressView}>
           <Text style={styles.addressText}>
-            {serviceRequest.customerAddress}
+            {serviceRequestInfo.customerAddress}
           </Text>
         </View>
       </View>
@@ -297,43 +296,48 @@ export default function RequestDetail(props) {
         <Text style={styles.descriptionTitle}>Mô tả tình trạng</Text>
         <View style={styles.descriptionView}>
           <Text style={styles.descriptionText}>
-            {serviceRequest.serviceRequestDescription}
+            {serviceRequestInfo.serviceRequestDescription}
           </Text>
         </View>
       </View>
       <View style={styles.mediaContainer}>
         <Text style={styles.mediaTitle}>Ảnh hoặc video</Text>
         <View style={styles.mediaFileContainer}>
-          {serviceRequest.tblMedia.map((item, index) => {
-            if (!item.mediaUrl.includes('.mp4')) {
-              return (
-                <TouchableOpacity key={index} onPress={() => onViewMedia(item)}>
-                  <Image
-                    style={styles.mediaView}
-                    source={{uri: item.mediaUrl}}
-                  />
-                </TouchableOpacity>
-              );
-            } else {
-              return (
-                <TouchableOpacity key={index} onPress={() => onViewMedia(item)}>
-                  <Video
-                    style={styles.mediaView}
-                    source={{uri: item.mediaUrl}}
-                    posterResizeMode={'cover'}
-                    paused={pause}
-                    onLoad={() => {
-                      setPause(true);
-                    }}
-                  />
-                  <Image
-                    source={{uri: IconURL.playVideoImg}}
-                    style={styles.playImg}
-                  />
-                </TouchableOpacity>
-              );
-            }
-          })}
+          {serviceRequestInfo.tblMedia &&
+            serviceRequestInfo.tblMedia.map((item, index) => {
+              if (!item.mediaUrl.includes('.mp4')) {
+                return (
+                  <TouchableOpacity
+                    key={index}
+                    onPress={() => onViewMedia(item)}>
+                    <Image
+                      style={styles.mediaView}
+                      source={{uri: item.mediaUrl}}
+                    />
+                  </TouchableOpacity>
+                );
+              } else {
+                return (
+                  <TouchableOpacity
+                    key={index}
+                    onPress={() => onViewMedia(item)}>
+                    <Video
+                      style={styles.mediaView}
+                      source={{uri: item.mediaUrl}}
+                      posterResizeMode={'cover'}
+                      paused={pause}
+                      onLoad={() => {
+                        setPause(true);
+                      }}
+                    />
+                    <Image
+                      source={{uri: IconURL.playVideoImg}}
+                      style={styles.playImg}
+                    />
+                  </TouchableOpacity>
+                );
+              }
+            })}
         </View>
       </View>
       {mediaItem && (
@@ -364,24 +368,48 @@ export default function RequestDetail(props) {
       {contractInfo.contractTitle && !contractInfo.errorsMsg && (
         <View style={styles.contractContainer}>
           <Text style={styles.contractTitle}>Hợp đồng</Text>
-          <TouchableOpacity
-            style={styles.contractItemContainer}
-            onPress={() => onViewContractDetail(contractInfo)}>
-            <Image
-              source={{uri: IconURL.contractImg}}
-              style={styles.contractItemImg}
-            />
-            <Text style={styles.contractItemName}>
-              {contractInfo.contractTitle}
-            </Text>
-            <View style={styles.contractItemStatus}>
-              <Text style={styles.contractItemStatusText}>
-                {contractInfo.contractStatus === 2 && 'Đang chờ'}
-                {contractInfo.contractStatus === 7 && 'Sửa lại'}
-                {contractInfo.contractStatus === 3 && 'Đồng ý'}
+          {serviceRequestInfo.serviceRequestStatus !== 8 ? (
+            <TouchableOpacity
+              style={styles.contractItemContainer}
+              onPress={() => onViewContractDetail(contractInfo)}>
+              <Image
+                source={{uri: IconURL.contractImg}}
+                style={styles.contractItemImg}
+              />
+              <Text style={styles.contractItemName}>
+                {contractInfo.contractTitle}
               </Text>
+
+              {serviceRequestInfo.serviceRequestStatus !== 8 && (
+                <View style={styles.contractItemStatus}>
+                  <Text style={styles.contractItemStatusText}>
+                    {contractInfo.contractStatus === 2 && 'Đang chờ'}
+                    {contractInfo.contractStatus === 7 && 'Sửa lại'}
+                    {contractInfo.contractStatus === 3 && 'Đồng ý'}
+                  </Text>
+                </View>
+              )}
+            </TouchableOpacity>
+          ) : (
+            <View style={styles.contractItemContainer}>
+              <Image
+                source={{uri: IconURL.contractImg}}
+                style={styles.contractItemImg}
+              />
+              <Text style={styles.contractItemName}>
+                {contractInfo.contractTitle}
+              </Text>
+              {serviceRequestInfo.serviceRequestStatus !== 8 && (
+                <View style={styles.contractItemStatus}>
+                  <Text style={styles.contractItemStatusText}>
+                    {contractInfo.contractStatus === 2 && 'Đang chờ'}
+                    {contractInfo.contractStatus === 7 && 'Sửa lại'}
+                    {contractInfo.contractStatus === 3 && 'Đồng ý'}
+                  </Text>
+                </View>
+              )}
             </View>
-          </TouchableOpacity>
+          )}
         </View>
       )}
       {contractParentInfo.contractTitle && !contractParentInfo.errorsMsg && (
@@ -407,16 +435,16 @@ export default function RequestDetail(props) {
           </TouchableOpacity>
         </View>
       )}
-      {serviceRequest.serviceRequestStatus === 13 && (
+      {serviceRequestInfo.serviceRequestStatus === 13 && (
         <View style={styles.invoiceContainer}>
           <Text style={styles.invoiceTitle}>Hóa đơn</Text>
           <TouchableOpacity
             style={styles.invoiceItemContainer}
             onPress={() =>
               onShowInvoice(
-                serviceRequest.serviceRequestId,
-                serviceRequest.promotionId,
-                serviceRequest.serviceRequestReference,
+                serviceRequestInfo.serviceRequestId,
+                serviceRequestInfo.promotionId,
+                serviceRequestInfo.serviceRequestReference,
               )
             }>
             <Image
@@ -427,8 +455,8 @@ export default function RequestDetail(props) {
           </TouchableOpacity>
         </View>
       )}
-      {(serviceRequest.serviceRequestStatus === 2 ||
-        serviceRequest.serviceRequestStatus === 15) && (
+      {(serviceRequestInfo.serviceRequestStatus === 2 ||
+        serviceRequestInfo.serviceRequestStatus === 15) && (
         <TouchableOpacity
           style={styles.cancelBtn}
           onPress={onCancelServiceRequest}>

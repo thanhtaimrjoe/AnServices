@@ -468,6 +468,7 @@ export default function ServiceRequest(props) {
         <Text style={styles.fullNameTitle}>Họ và tên chủ công trình</Text>
         <TextInput
           value={fullName}
+          maxLength={100}
           onFocus={() => setIsFocusedFullName(true)}
           onBlur={() => setIsFocusedFullName(false)}
           onChangeText={text => {

@@ -4,6 +4,7 @@ import message from './message';
 import user from './user';
 import userInfo from './userInfo';
 import serviceRequest from './serviceRequest';
+import serviceRequestInfo from './serviceRequestInfo';
 import otp from './otp';
 import requestDetail from './requestDetail';
 import invoice from './invoice';
@@ -18,6 +19,7 @@ const myReducer = combineReducers({
   user,
   userInfo,
   serviceRequest,
+  serviceRequestInfo,
   otp,
   requestDetail,
   invoice,

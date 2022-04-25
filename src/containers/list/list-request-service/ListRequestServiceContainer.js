@@ -85,7 +85,8 @@ export default function ListRequestServiceContainer(props) {
   //button --- navigate to request detail
   const onShowRequestDetail = serviceRequest => {
     navigation.navigate('RequestDetailContainer', {
-      serviceRequest: serviceRequest,
+      serviceRequestId: serviceRequest.serviceRequestId,
+      serviceRequestReference: serviceRequest.serviceRequestReference,
     });
   };
 

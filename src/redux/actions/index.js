@@ -406,6 +406,37 @@ export const actResetRequestDetail = () => {
     type: types.RESET_REQUEST_DETAIL,
   };
 };
+//call api --- authen
+export const actGetServiceRequestByIDRequest = (serviceRequestId, token) => {
+  return async dispatch => {
+    try {
+      const response = await fetch(
+        API + 'Service/GetServiceRequestByID?id=' + serviceRequestId,
+        {
+          method: 'GET',
+          headers: {
+            Authorization: token,
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+        },
+      );
+      if (response.status === 200) {
+        const json = await response.json();
+        if (json) {
+          dispatch(actGetServiceRequestByID(json));
+        }
+      }
+    } catch (error) {}
+  };
+};
+//get service request info
+export const actGetServiceRequestByID = serviceRequestInfo => {
+  return {
+    type: types.GET_SERVICE_REQUEST_INFO,
+    serviceRequestInfo,
+  };
+};
 //call api*** --- authen
 export const actCancelServiceRequestRequest = (serviceRequestId, token) => {
   return async dispatch => {

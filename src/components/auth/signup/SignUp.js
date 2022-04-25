@@ -74,10 +74,14 @@ export default function SignUp(props) {
           <View style={styles.inputContainer}>
             <Text style={styles.inputTitle}>Họ và tên</Text>
             <TextInput
+              maxLength={100}
               style={styles.inputField}
               placeholder="Nhập họ và tên"
               placeholderTextColor={Color.placeholder}
-              onChangeText={text => setFullName(text)}
+              onChangeText={text => {
+                setFullNameError('');
+                setFullName(text);
+              }}
             />
             <Text style={styles.errorMsg}>{fullNameError}</Text>
           </View>
@@ -88,7 +92,10 @@ export default function SignUp(props) {
               placeholder="Nhập email"
               placeholderTextColor={Color.placeholder}
               keyboardType="email-address"
-              onChangeText={text => setEmail(text)}
+              onChangeText={text => {
+                setEmailError('');
+                setEmail(text);
+              }}
             />
             <Text style={styles.errorMsg}>{emailError}</Text>
           </View>
@@ -98,7 +105,10 @@ export default function SignUp(props) {
               style={styles.inputField}
               placeholder="Nhập địa chỉ"
               placeholderTextColor={Color.placeholder}
-              onChangeText={text => setAddress(text)}
+              onChangeText={text => {
+                setAddressError('');
+                setAddress(text);
+              }}
             />
             <Text style={styles.errorMsg}>{addressError}</Text>
           </View>

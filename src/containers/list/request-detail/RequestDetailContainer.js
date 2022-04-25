@@ -11,14 +11,17 @@ import {
   actGetContractByServiceRequestIDRequest,
   actGetContractParentByServiceRequestReferenceRequest,
   actResetContractParent,
+  actGetServiceRequestByIDRequest,
 } from '../../../redux/actions/index';
 
 export default function RequestDetailContainer(props) {
   const {navigation} = props;
   //get param from previous page
-  const {serviceRequest} = props.route.params;
+  const {serviceRequestId, serviceRequestReference} = props.route.params;
   //reduer --- user
   const user = useSelector(state => state.user);
+  //reduer --- serviceRequestInfo
+  const serviceRequestInfo = useSelector(state => state.serviceRequestInfo);
   //reducer --- requestDetail
   const requestDetail = useSelector(state => state.requestDetail);
   //reduer --- message
@@ -32,6 +35,9 @@ export default function RequestDetailContainer(props) {
 
   //get dispatch
   const dispatch = useDispatch();
+  //call api --- get service request by id
+  const getServiceRequestByID = (serviceRequestId, token) =>
+    dispatch(actGetServiceRequestByIDRequest(serviceRequestId, token));
   //call api --- get request service details by request service id
   const getAllRequestServiceDetailsByRequestServiceIDRequest = (
     serviceRequestId,
@@ -78,21 +84,19 @@ export default function RequestDetailContainer(props) {
 
   useEffect(() => {
     resetRequestDetail();
+    getServiceRequestByID(serviceRequestId, token);
     getAllRequestServiceDetailsByRequestServiceIDRequest(
-      serviceRequest.serviceRequestId,
+      serviceRequestId,
       token,
     );
     resetContractParent();
-    if (serviceRequest.serviceRequestReference !== null) {
+    if (serviceRequestReference !== null) {
       getContractParentByServiceRequestReference(
-        serviceRequest.serviceRequestReference,
+        serviceRequestReference,
         token,
       );
     }
-    getContractByServiceRequestIDRequest(
-      serviceRequest.serviceRequestId,
-      token,
-    );
+    getContractByServiceRequestIDRequest(serviceRequestId, token);
     if (message === 'CANCEL_SERVICE_REQUEST_SUCCESS') {
       Alert.alert('Thông báo', 'Bạn đã hủy yêu cầu thành công', [
         {
@@ -181,25 +185,20 @@ export default function RequestDetailContainer(props) {
 
   //button --- create service request
   const onCreateServiceRequest = reworkService => {
-    //get list media url
-    const mediaURL = [];
-    serviceRequest.tblMedia.map((item, index) => {
-      mediaURL.push(item.mediaUrl);
-    });
     const reworkDescription =
-      serviceRequest.serviceRequestDescription + ' (làm lại yêu cầu mới)';
+      serviceRequestInfo.serviceRequestDescription + ' (làm lại yêu cầu mới)';
     //create requestService
     const serviceRequestRework = {
       customerId: user.id,
-      customerName: serviceRequest.customerName,
-      customerPhone: serviceRequest.customerPhone,
-      customerAddress: serviceRequest.customerAddress,
-      requestServicePackage: serviceRequest.serviceRequestPackage,
+      customerName: serviceRequestInfo.customerName,
+      customerPhone: serviceRequestInfo.customerPhone,
+      customerAddress: serviceRequestInfo.customerAddress,
+      requestServicePackage: serviceRequestInfo.serviceRequestPackage,
       serviceList: reworkService,
       requestServiceDescription: reworkDescription,
       mediaList: null,
-      promotionID: serviceRequest.promotionId,
-      serviceRequestIDParent: serviceRequest.serviceRequestId,
+      promotionID: serviceRequestInfo.promotionId,
+      serviceRequestIDParent: serviceRequestInfo.serviceRequestId,
     };
     navigation.navigate('ServiceRequestContainer', {
       serviceRequestRework: serviceRequestRework,
@@ -208,7 +207,7 @@ export default function RequestDetailContainer(props) {
 
   return (
     <RequestDetail
-      serviceRequest={serviceRequest}
+      serviceRequestInfo={serviceRequestInfo}
       requestDetail={requestDetail}
       contractInfo={contractInfo}
       contractParentInfo={contractParentInfo}
