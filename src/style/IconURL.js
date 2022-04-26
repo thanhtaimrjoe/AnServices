@@ -2,6 +2,8 @@ export default {
   /* ------ LOGIN PAGE ------ */
   loginImg:
     'https://firebasestorage.googleapis.com/v0/b/anservices.appspot.com/o/Image%2Fmobile.png?alt=media&token=95bd67fb-6c7e-49fd-9358-bd8a22ecd2a9',
+  AnServicesLogo:
+    'https://firebasestorage.googleapis.com/v0/b/anservices.appspot.com/o/Icon%2Frepair.png?alt=media&token=41e0bb4b-c2c3-4f00-8aac-46df1b316a7a',
   /* ------ VERIFY OTP PAGE ------ */
   verifyOTPImg:
     'https://firebasestorage.googleapis.com/v0/b/anservices.appspot.com/o/Image%2Fverifyotp.png?alt=media&token=77001948-317d-48ea-8bfb-d853871565f4',

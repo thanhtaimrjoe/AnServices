@@ -9,8 +9,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   image: {
-    width: 305,
-    height: 222,
+    width: '50%',
+    height: '25%',
+
     marginBottom: 20,
   },
   bigText: {

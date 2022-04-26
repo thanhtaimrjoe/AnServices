@@ -44,8 +44,8 @@ export default function Login(props) {
     <KeyboardAvoidingView style={{flex: 1}}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.container}>
-          <Image style={styles.image} source={{uri: IconURL.loginImg}} />
-          <Text style={styles.bigText}>Đăng nhập</Text>
+          <Image style={styles.image} source={{uri: IconURL.AnServicesLogo}} />
+          <Text style={styles.bigText}>AnServices</Text>
           <Text style={styles.smallText}>
             Chúng tôi sẽ gửi mã xác nhận gồm 6 chữ số ngay sau khi bạn nhập số
             điện thoại
