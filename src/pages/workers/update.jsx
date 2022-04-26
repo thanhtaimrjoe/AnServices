@@ -73,26 +73,31 @@ const UpdateReportAttribute = (props) => {
   const onUpdateWorker = () => {
     const update = normalizeReportForm(formData);
 
-    // setTypeJobId(update.update.typeJobId);
     let validate = true;
-    // if (!update.update.fullName && update.update.fullName === "" && update.update.fullName === undefined) {
     if (update.update.fullName.length === 0 || update.update.fullName === undefined) {
       validate = false;
+      message.error('Vui lòng nhập tên thợ');
     }
     if (update.update.phoneNumber.length === 0 || update.update.phoneNumber === undefined) {
       validate = false;
+      message.error('Vui lòng nhập số điện thoại');
     }
-    if(!update.update.phoneNumber.match(/(0[3|5|7|8|9])+([0-9]{8})\b/)) {
+    if (!update.update.phoneNumber.match(/(0[3|5|7|8|9])+([0-9]{8})\b/)) {
       validate = false;
+      message.error('Vui lòng nhập đúng số điện thoại 10 số');
     }
-    // if(!update.update.typeJobId || update.update.typeJobId === undefined) {
-    //   validate = false;
-    //   message.warning("Vui lòng chọn nhóm thợ")
-    // }
-    if(!validate) {
-      message.error("Vui lòng điền đầy đủ thông tin cần thiết")
+    if (
+      !update.update.email.match(
+        /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+      )
+    ) {
+      validate = false;
+      message.error('Vui lòng kiểm tra email đúng định dạng');
     }
-    if(validate === true) {
+    if (!validate) {
+      message.error('Vui lòng điền đầy đủ thông tin cần thiết');
+    }
+    if (validate === true) {
       const createContractValues = {
         workerId: update.update.userID,
         workerName: update.update.fullName,
@@ -103,17 +108,14 @@ const UpdateReportAttribute = (props) => {
         typeJobId: update.update.typeJobID,
       };
       return updateWorker(createContractValues).then((res) => {
-        console.log('firstres', res)
-        console.log('firstres1', createContractValues)
-        console.log('firstres2', update)
-        if(res.status === 400) {
-          message.error("Số điện thoại đã tồn tại hoặc email sai định dạng vui lòng kiểm tra lại")
+        if (res.status === 400) {
+          message.error('Số điện thoại đã tồn tại');
         }
-        if(res.status === 500) {
-          message.error("Vui lòng kiểm tra lại thông tin đã gửi")
+        if (res.status === 500) {
+          message.error('Vui lòng kiểm tra lại thông tin đã gửi');
         }
-        else {
-          message.success("Cập nhật thông tin thợ thành công")
+        if (res.length > 0) {
+          message.success('Cập nhật thông tin thợ thành công');
           onBackList();
         }
       });

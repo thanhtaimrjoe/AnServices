@@ -30,30 +30,24 @@ const CreateWorker = (props) => {
 
   const onCreateWorker = (values) => {
     const createWorkerData = normalizeReportForm(values);
-      // setCreatedWorker({ ...values, userID : res });
-    
+    // setCreatedWorker({ ...values, userID : res });
+
     return createWorker(createWorkerData).then((res) => {
       // if(res.errorsMsg !== "Create Successfull"){
       //   console.log('record02', res.errorsMsg)
       // }
-      if(res.status === 400) {
-        message.error("Email sai định dạng");
-      }
-      if(res.status === 500) {
-        message.error("Số điện thoại đã tồn tại");
+      if (res.status === 400) {
+        message.error('Số điện thoại đã tồn tại');
       } else {
-        message.success("Đã tạo tài khoản thợ thành công");
+        message.success('Đã tạo tài khoản thợ thành công');
         history.replace('/workers/list');
       }
     });
-    
   };
 
   const onBackList = () => {
     history.replace('/workers/list');
   };
-
-  
 
   // if (createdWorker !== null) {
   //   return (

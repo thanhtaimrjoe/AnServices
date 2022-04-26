@@ -10,11 +10,13 @@ import {
   buildWorkerTypeJobOption,
   buildNumberOption,
   buildRequestServiceStatusOption,
-
-  
 } from './utils';
 
-import { getAllRequestService, getAllService, getAllServiceRequestStatusOrDate } from '@/services/requestservices';
+import {
+  getAllRequestService,
+  getAllService,
+  getAllServiceRequestStatusOrDate,
+} from '@/services/requestservices';
 import { getAllWorkers, getWorkerById } from '@/services/workers';
 import { getAllTypeJob } from '@/services/typejobs';
 
@@ -80,9 +82,7 @@ const CommonSelect = ({
       //   changeSearch(val);
       // }}
       notFoundContent={fetchingData ? <Spin size="small" /> : null}
-      filterOption={(input, option) =>
-        option.input >= 0
-      }
+      filterOption={(input, option) => option.input >= 0}
       {...props}
       onChange={(selectedValue, data) => {
         props.onChange(selectedValue, data);
@@ -118,10 +118,7 @@ const SelectStatusOfCustomer = (props) => {
 // WORKER
 const SelectWorkerByTypeJob = (props) => {
   return (
-    <Select
-      placeholder="Vui lòng chọn nghề của thợ"
-      {...props}
-    >
+    <Select placeholder="Vui lòng chọn nghề của thợ" {...props}>
       <Option value={1}>Thợ nhôm - kính</Option>
       <Option value={2}>Thợ cơ khí</Option>
       <Option value={3}>Thợ sơn</Option>
@@ -181,7 +178,6 @@ const SelectWorkerPhoneNumber = (props) => {
 //   );
 // };
 
-
 // REQUEST SERVICE
 
 const SelectRequestServiceStatus = (props) => {
@@ -232,17 +228,30 @@ const SelectRequestServiceStatus = (props) => {
   );
 };
 
-const months = ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12']
-const days = ['Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7', 'Chủ Nhật']
+const months = [
+  'Tháng 1',
+  'Tháng 2',
+  'Tháng 3',
+  'Tháng 4',
+  'Tháng 5',
+  'Tháng 6',
+  'Tháng 7',
+  'Tháng 8',
+  'Tháng 9',
+  'Tháng 10',
+  'Tháng 11',
+  'Tháng 12',
+];
+const days = ['Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7', 'Chủ Nhật'];
 const dateFormatList = ['DD-MM-YYYY', 'YY-MM-DD'];
 
 const locale = {
   localize: {
-    month: n => months[n],
-    day: n => days[n]
+    month: (n) => months[n],
+    day: (n) => days[n],
   },
-  formatLong: {}
-}
+  formatLong: {},
+};
 
 const SelectRequestServiceDate = (props) => {
   return (
@@ -255,9 +264,9 @@ const SelectRequestServiceDate = (props) => {
         onSearch={getAllServiceRequestStatusOrDate}
         {...props}
        /> */}
-      <DatePicker 
-        style={{ width: '100%' }} 
-        placeholder="Vui lòng chọn ngày gửi yêu cầu" 
+      <DatePicker
+        style={{ width: '100%' }}
+        placeholder="Vui lòng chọn ngày gửi yêu cầu"
         locale={locale}
         fetchOnFirst
         buildOptions={buildRequestServiceDateOption}
@@ -327,10 +336,7 @@ CommonSelect.SelectRequestServiceDate = SelectRequestServiceDate;
 CommonSelect.SelectRequestServicePriority = SelectRequestServicePriority;
 CommonSelect.SelectRequestServicePackage = SelectRequestServicePackage;
 
-
 // ==============================================================================
-
-
 
 CommonSelect.defaultProps = {
   onSelectItem: (selectedValue, storeData) => null,
@@ -342,23 +348,21 @@ CommonSelect.defaultProps = {
 };
 
 export {
-// ==============================================================================
+  // ==============================================================================
   // CUSTOMER
   SelectStatusOfCustomer,
-
   // WORKER
   SelectWorkerPhoneNumber,
   SelectWorkerName,
   SelectWorkerTypeJob,
   SelectWorkerByTypeJob,
-
   // REQUEST SERVICE
   SelectRequestServiceStatus,
   SelectRequestServiceDate,
   SelectRequestServicePriority,
   SelectRequestServicePackage,
 
-// ==============================================================================
+  // ==============================================================================
 };
 
 export default CommonSelect;

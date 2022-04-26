@@ -182,20 +182,21 @@ const Analysis = () => {
 
   useEffect(() => {
     dashboard().then((res) => {
-      setPending(res.serviceStatusStatistics.pending);
-      setSurveying(res.serviceStatusStatistics.surveying);
-      setAgreed(res.serviceStatusStatistics.agreed);
-      setProcessing(res.serviceStatusStatistics.processing);
-      setPayment(res.serviceStatusStatistics.payment);
-      setAccomplished(res.serviceStatusStatistics.accomplished);
-      setCancel(res.serviceStatusStatistics.cancel);
-      setDeny(res.serviceStatusStatistics.deny);
+      if (res.serviceStatusStatistics !== null) {
+        setPending(res.serviceStatusStatistics.pending);
+        setSurveying(res.serviceStatusStatistics.surveying);
+        setAgreed(res.serviceStatusStatistics.agreed);
+        setProcessing(res.serviceStatusStatistics.processing);
+        setPayment(res.serviceStatusStatistics.payment);
+        setAccomplished(res.serviceStatusStatistics.accomplished);
+        setCancel(res.serviceStatusStatistics.cancel);
+        setDeny(res.serviceStatusStatistics.deny);
+      }
       setSatisfiedRequestDetail(res.satisfiedRequestDetail);
       setUnsatisfiedRequestDetail(res.unsatisfiedRequestDetail);
       setReworkRequestDetail(res.reworkRequestDetail);
       setTotalCustomers(res.totalCustomers);
       setTotalWorkers(res.totalWorkers);
-
       defaultYearPickerChange();
     });
 
@@ -430,7 +431,6 @@ const Analysis = () => {
   } else {
     // salesPieData = salesType === 'rating' ? ratingTypeData : accountTypeData;
     salesPieData = salesType === 'rating' ? ratingTypeData : requestServiceTypeData;
-
   }
 
   // DỊCH VỤ ĐÃ NHẬN
@@ -445,11 +445,11 @@ const Analysis = () => {
   const completeServiceRequestData = [];
   for (let i = 0; i < 12; i += 1) {
     completeServiceRequestData.push({
-    x: `Tháng ${i + 1}`,
-        y: completeServiceRequestArray[i],
+      x: `Tháng ${i + 1}`,
+      y: completeServiceRequestArray[i],
     });
   }
-  
+
   // DỊCH VỤ ĐÃ TỪ CHỐI
   const cancelServiceRequestData = [];
   for (let i = 0; i < 12; i += 1) {
@@ -458,9 +458,9 @@ const Analysis = () => {
       y: cancelServiceRequestArray[i],
     });
   }
-  console.log('cancelServiceRequestArray', cancelServiceRequestArray)
+  console.log('cancelServiceRequestArray', cancelServiceRequestArray);
 
-  console.log('cancelServiceRequestData', cancelServiceRequestData)
+  console.log('cancelServiceRequestData', cancelServiceRequestData);
 
   // TỔNG DOANH SỐ
   const RevenuByYearData = [];
@@ -471,7 +471,7 @@ const Analysis = () => {
     });
   }
 
- //
+  //
   const handleChangeSalesType = (e) => {
     setSalesType(e.target.value);
   };
@@ -491,8 +491,8 @@ const Analysis = () => {
         <Suspense fallback={null}>
           <SalesCard
             // yearPickerValue={yearPickerValue}
-            salesData={salesData || [] }
-            completeServiceRequestData={completeServiceRequestData || [] }
+            salesData={salesData || []}
+            completeServiceRequestData={completeServiceRequestData || []}
             cancelServiceRequestData={cancelServiceRequestData || []}
             isActive={isActive}
             // handleQuarterPickerChange={handleYearPickerChange}

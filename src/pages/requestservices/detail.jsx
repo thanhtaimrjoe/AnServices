@@ -360,18 +360,18 @@ const DetailServiceRequest = (props) => {
     getAllServiceRequestDetailsByServiceRequestID(updateRequestServiceState.serviceRequestId)
       // getTest(updateRequestServiceState.serviceRequestId)
       .then((record) => {
-        if(record.length > 0) {
+        if (record.length > 0) {
           const requestServiceRecordTmp = record;
-        requestServiceRecordTmp.map((item) => {
-          const items = item;
-          getWorkerByServiceID(item.serviceId).then((record1) => {
-            items.worker = record1;
-            record1.map((item1, index) => {
-              items.worker[index].task = item1.tblRepairDetails.length;
+          requestServiceRecordTmp.map((item) => {
+            const items = item;
+            getWorkerByServiceID(item.serviceId).then((record1) => {
+              items.worker = record1;
+              record1.map((item1, index) => {
+                items.worker[index].task = item1.tblRepairDetails.length;
+              });
             });
           });
-        });
-        setRequestServiceDetail(requestServiceRecordTmp);
+          setRequestServiceDetail(requestServiceRecordTmp);
         }
         setRequestServiceDetail(record);
         setIsLoad(true);
@@ -418,7 +418,7 @@ const DetailServiceRequest = (props) => {
     }
   }, [isLoad]);
 
-  console.log('firsttime02', requestServiceRecord)
+  console.log('firsttime02', requestServiceRecord);
   const [requestMaterialRecord, setRequestMaterialRecord] = useState([]);
   const [contractRecord, setContractRecord] = useState([]);
   const [imgReportRecord, setImgReportRecord] = useState([]);
@@ -499,13 +499,10 @@ const DetailServiceRequest = (props) => {
     }
 
     // load thợ theo service id
-    if(isLoad && updateRequestServiceState) {
-
+    if (isLoad && updateRequestServiceState) {
       if (requestServiceRecord.length > 0) {
-        
       }
     }
-    
 
     // set service price to requestServiceRecord
     requestServiceRecord.map((item, index) => {
@@ -1478,6 +1475,10 @@ const DetailServiceRequest = (props) => {
           text: 'Đã đồng ý',
           status: 'Success',
         },
+        8: {
+          text: 'Đã hủy',
+          status: 'Warning',
+        },
       },
     },
     {
@@ -1510,58 +1511,6 @@ const DetailServiceRequest = (props) => {
                 </Button>
               </Space>
             )}
-            <Modal
-              title="Từ chối"
-              visible={visible1}
-              onOk={onDenyModal}
-              confirmLoading={confirmLoading}
-              onCancel={handleCancel}
-            >
-              <ProForm.Item name="message" label="Ghi chú" row={6}>
-                <Input.TextArea
-                  placeholder="Nhập lý do từ chối"
-                  row={6}
-                  style={{ width: '450px' }}
-                  onChange={onChangeMessages}
-                />
-              </ProForm.Item>
-            </Modal>
-            <Modal
-              title="Điều chỉnh"
-              visible={visible}
-              onOk={onAdjustedModal}
-              confirmLoading={confirmLoading}
-              onCancel={handleCancel}
-            >
-              <div>
-                <ProForm.Item
-                  name="quantityNew"
-                  label="Số lượng"
-                  rules={[
-                    {
-                      required: true,
-                      type: 'integer',
-                      message: 'Vui lòng nhập số lượng',
-                    },
-                  ]}
-                >
-                  <InputNumber
-                    placeholder="Nhập số lượng"
-                    style={{ width: '450px' }}
-                    min={1}
-                    onChange={onChangeAdjustedQuantityNew}
-                  />
-                </ProForm.Item>
-                <ProForm.Item name="message" label="Ghi chú" row={6}>
-                  <Input.TextArea
-                    placeholder="Nhập ghi chú cho thợ"
-                    row={6}
-                    style={{ width: '450px' }}
-                    onChange={onChangeMessages}
-                  />
-                </ProForm.Item>
-              </div>
-            </Modal>
           </Space>
         );
       },
@@ -1989,18 +1938,20 @@ const DetailServiceRequest = (props) => {
             >
               Gửi hợp đồng
             </Button>
-            <Button
-              // danger={true}
-              disabled={disableInvoice || disableWaitForPayAndCompletedServicerRequest}
-              loading={sendInvoiceConfirmLoading}
-              type="primary"
-              style={{ width: '25%' }}
-              onClick={() => {
-                onCreateInvoice();
-              }}
-            >
-              Gửi hoá đơn
-            </Button>
+            {newRequestServiceState && newRequestServiceState.serviceRequestStatus === 17 && (
+              <Button
+                // danger={true}
+                disabled={disableInvoice || disableWaitForPayAndCompletedServicerRequest}
+                loading={sendInvoiceConfirmLoading}
+                type="primary"
+                style={{ width: '25%' }}
+                onClick={() => {
+                  onCreateInvoice();
+                }}
+              >
+                Gửi hóa đơn
+              </Button>
+            )}
           </Row>
 
           {/* <Row>
@@ -2078,7 +2029,7 @@ const DetailServiceRequest = (props) => {
                     style={{ width: '180px' }}
                     onClick={() => showModalInvoice()}
                   >
-                    Xem hoá đơn
+                    Xem hóa đơn
                   </Button>
                 </Row>
               )}
@@ -2377,7 +2328,59 @@ const DetailServiceRequest = (props) => {
           >
             <div className={styles.style}>Tải lại trang</div>
           </Button> */}
-
+          {/* ĐIỀU CHỈNH VÀ TỪ CHỐI VẬT LIỆU */}
+          <Modal
+            title="Từ chối"
+            visible={visible1}
+            onOk={onDenyModal}
+            confirmLoading={confirmLoading}
+            onCancel={handleCancel}
+          >
+            <ProForm.Item name="message" label="Ghi chú" row={6}>
+              <Input.TextArea
+                placeholder="Nhập lý do từ chối"
+                row={6}
+                style={{ width: '450px' }}
+                onChange={onChangeMessages}
+              />
+            </ProForm.Item>
+          </Modal>
+          <Modal
+            title="Điều chỉnh"
+            visible={visible}
+            onOk={onAdjustedModal}
+            confirmLoading={confirmLoading}
+            onCancel={handleCancel}
+          >
+            <div>
+              <ProForm.Item
+                name="quantityNew"
+                label="Số lượng"
+                rules={[
+                  {
+                    required: true,
+                    type: 'integer',
+                    message: 'Vui lòng nhập số lượng',
+                  },
+                ]}
+              >
+                <InputNumber
+                  placeholder="Nhập số lượng"
+                  style={{ width: '450px' }}
+                  min={1}
+                  onChange={onChangeAdjustedQuantityNew}
+                />
+              </ProForm.Item>
+              <ProForm.Item name="message" label="Ghi chú" row={6}>
+                <Input.TextArea
+                  placeholder="Nhập ghi chú cho thợ"
+                  row={6}
+                  style={{ width: '450px' }}
+                  onChange={onChangeMessages}
+                />
+              </ProForm.Item>
+            </div>
+          </Modal>
           {/* XEM ẢNH & VIDEO */}
           <Modal
             title="Hình ảnh & video"
