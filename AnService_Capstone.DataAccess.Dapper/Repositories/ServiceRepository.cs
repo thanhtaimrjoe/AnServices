@@ -974,24 +974,24 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             }
         }*/
 
-        /*public async Task<Dashboard.ServiceStatusStatistic> CountServiceStatus()
+        public async Task<Dashboard.ServiceStatusStatistic> CountServiceStatus()
         {
-            var query = "SELECT [Chưa xử lý] as Pending," +
-                "[Đã từ chối] as [Deny]," +
-                "[Đã đồng ý] as Agreed," +
-                "[Đang xử lý] as Processing," +
-                "[Khách hàng đã hủy] as Cancel," +
-                "[Đã hoàn thành] as Accomplished," +
-                "[Chờ thanh toán] as Payment," +
-                "[Đang khảo sát] as Surveying " +
-                "FROM (SELECT StatusName as [Status], " +
+            var query = "SELECT [2] as Pending," +
+                "[1] as [Deny]," +
+                "[3] as Agreed," +
+                "[6] as Processing," +
+                "[8] as Cancel," +
+                "[13] as Accomplished," +
+                "[14] as Payment," +
+                "[15] as Surveying " +
+                "FROM (SELECT ServiceRequestStatus as [Status], " +
                 "COUNT(1) [Sales Count] " +
-                "FROM tblServiceRequest sr join tblStatus s on sr.ServiceRequestStatus = s.StatusID " +
+                "FROM tblServiceRequest " +
                 "where ServiceRequestStatus != 5 " +
-                "GROUP BY StatusName) AS MontlySalesData " +
+                "GROUP BY ServiceRequestStatus) AS MontlySalesData " +
                 "PIVOT( SUM([Sales Count]) " +
-                "FOR [Status] IN ([Chưa xử lý],[Đã từ chối],[Đã đồng ý],[Đang xử lý],[Khách hàng đã hủy]," +
-                "[Đã hoàn thành],[Chờ thanh toán],[Đang khảo sát])) AS MNamePivot";
+                "FOR [Status] IN ([2],[1],[3],[6],[8]," +
+                "[13],[14],[15])) AS MNamePivot";
 
             using (var conn = _context.CreateConnection())
             {
@@ -1000,7 +1000,7 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
                 conn.Close();
                 return res;
             }
-        }*/
+        }
 
         public async Task<IEnumerable<Dashboard.AmountOfSalesInYear>> SumRevenueOfInvoiceByYear(int quarter, int year)
         {

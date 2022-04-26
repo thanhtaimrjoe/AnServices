@@ -594,7 +594,7 @@ namespace AnService_Capstone.Controllers
             }
 
             var res1 = await _serviceRepository.AmountOfSaleList(year, 0);
-            /*var res2 = await _serviceRepository.CountServiceStatus();*/
+            var res2 = await _serviceRepository.CountServiceStatus();
             /*var res3 = await _promotionRepository.CountPromotionIsUsed();*/
             var res4 = await _serviceRepository.CountRequestServiceDetail(11);
             var res5 = await _serviceRepository.CountRequestServiceDetail(12);
@@ -617,7 +617,7 @@ namespace AnService_Capstone.Controllers
             var res22 = await _invoiceRepository.AmountOfInvoice(year, quarter);
 
             dashboard.ReceivedServiceRequest = res1.FirstOrDefault();
-            /*dashboard.ServiceStatusStatistics = res2;*/
+            dashboard.ServiceStatusStatistics = res2;
             /*dashboard.PromotionIsUsed = res3;*/
             dashboard.SatisfiedRequestDetail = res4;
             dashboard.UnsatisfiedRequestDetail = res5;
