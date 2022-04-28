@@ -4,6 +4,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import ChangePhoneNumber from '../../../components/personal/change-phone-number/ChangePhoneNumber';
 import {
   actCheckPhoneNumberExistOrNotRequest,
+  actGetWorkerByIDRequest,
   actResetMessage,
   actSendSmsByPhoneNumberRequest,
 } from '../../../redux/actions';
@@ -33,8 +34,12 @@ export default function ChangePhoneNumberContainer(props) {
   //call api --- send sms to new phone number
   const sendSmsByPhoneNumber = (phoneNumber, token) =>
     dispatch(actSendSmsByPhoneNumberRequest(phoneNumber, token));
+  //call api --- get worker infomation
+  const getWorkerByIDRequest = (userID, token) =>
+    dispatch(actGetWorkerByIDRequest(userID, token));
 
   useEffect(() => {
+    getWorkerByIDRequest(user.id, token);
     if (message === 'PHONE_NUMBER_WAS_EXIST') {
       Alert.alert('Thông báo', 'Số điện thoại mới này đã được đăng ký');
       setLoading(false);
