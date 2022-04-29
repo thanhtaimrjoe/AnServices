@@ -37,18 +37,51 @@ namespace AnService_Capstone.DataAccess.Dapper.Services
         {
             bool chechExist = false;
             bool res = false;
+            List<int> list = new List<int>();
 
             chechExist = await _repariRepository.CheckRepairDetailExist(job.RequestDetailId, job.MainWorker);
             var detail = await _serviceRepository.GetRequestDetailByID(job.RequestDetailId);
+            var mainWorker = await _repariRepository.GetRepairDetailMainWorkerByRequestDetailID(job.RequestDetailId);
 
             if (chechExist)
             {
                 res = await _serviceRepository.AssignWorkerToRequest(job.RequestDetailId, job.MainWorker, 1, job.Priority);
+                _ = await _repariRepository.UpdateStatusRepairDetail((int)mainWorker.RepairDetailId);
             }
 
 
             if (job.WorkerList != null)
             {
+                var subWorkerList = await _repariRepository.GetRepairDetailSubWorkerByRequestDetailID(job.RequestDetailId);
+                if (subWorkerList != null)
+                {
+                    foreach (var subWorker in subWorkerList)
+                    {
+                        list.Add((int)subWorker.WorkerId);
+                    }
+
+                    var result = list.Except(job.WorkerList).ToArray();
+                    list.Clear();
+
+                    foreach (var subWorker in subWorkerList)
+                    {
+                        foreach (var item in result)
+                        {
+                            if (subWorker.WorkerId == item)
+                            {
+                                list.Add(subWorker.RepairDetailId);
+                            }
+                        }
+                    }
+                    if (result != null)
+                    {
+                        foreach (var item in list)
+                        {
+                            _ = await _repariRepository.UpdateStatusRepairDetail(item);
+                        }
+                    }
+                }
+                
                 foreach (var worker in job.WorkerList)
                 {
                     chechExist = await _repariRepository.CheckRepairDetailExist(job.RequestDetailId, worker);

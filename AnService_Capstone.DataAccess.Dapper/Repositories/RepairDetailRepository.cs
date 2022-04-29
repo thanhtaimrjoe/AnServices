@@ -38,6 +38,43 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             }
         }
 
+        public async Task<IEnumerable<TblRepairDetail>> GetRepairDetailSubWorkerByRequestDetailID(int id)
+        {
+            var query = "select RepairDetailID, repair.RequestDetailID, WorkerID, RepairDateBegin, RepairDateEnd, IsPrimary, RequestDetailPriority, UserID, FullName, PhoneNumber, Email, Status " +
+                "from ((tblRepairDetail repair join tblUsers u on repair.WorkerID = u.UserID) " +
+                "join tblRequestDetails detail on detail.RequestDetailID = repair.RequestDetailID) " +
+                "join tblServiceRequest rs on rs.ServiceRequestID = detail.ServiceRequestID " +
+                "where repair.RequestDetailID = @RequestDetailID and IsPrimary = 0";
+            /*using (var connection = _dapperContext.CreateConnection())
+            {
+                connection.Open();
+                var res = await connection.QueryAsync<TblRepairDetail>(query, new { @RequestDetailID = id});
+                connection.Close();
+                if (!res.Any())
+                {
+                    return null;
+                }
+                return res;
+            }*/
+            using (var connection = _dapperContext.CreateConnection())
+            {
+                connection.Open();
+                var res = await connection.QueryAsync<TblRepairDetail, TblUser, TblRepairDetail>(query, (repair, user) =>
+                {
+                    repair.Worker = user;
+                    /*repair.RequestDetail = detail;
+                    repair.RequestDetail.Service = service;*/
+                    return repair;
+                }, param: new { RequestDetailID = id }, splitOn: "RequestDetailID, ServiceID, UserID");
+                connection.Close();
+                if (!res.Any())
+                {
+                    return null;
+                }
+                return res;
+            }
+        }
+
         public async Task<IEnumerable<TblRepairDetail>> GetRepairDetailByServiceRequestID(int id)
         {
             var query = "select RepairDetailID, repair.RequestDetailID, WorkerID, RepairDateBegin, RepairDateEnd, IsPrimary, RequestDetailPriority, UserID, FullName, PhoneNumber, Email, Status " +
@@ -75,29 +112,61 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             }
         }
 
-        public async Task<bool> UpdateStatusRepairApproveByID(IEnumerable<TblRepairDetail> listRepair)
+        public async Task<bool> UpdateStatusRepairDetail(int listRepair)
         {
-            var query = "update tblRepairDetail set RepairStatus = 3, RepairDateEnd = @RepairDateEnd " +
-                "where RepairDetailID = @RepairDetailID";
+            var query = "delete from tblRepairDetail where RepairDetailID = @RepairDetailID";
             
-            foreach (var item in listRepair)
-            {
-                var parameters = new DynamicParameters();
-                parameters.Add("RepairDateEnd", DateTime.Now, DbType.DateTime);
-                parameters.Add("RepairDetailID", item.RepairDetailId, DbType.Int32);
+            var parameters = new DynamicParameters();
+            parameters.Add("RepairDetailID", listRepair, DbType.Int32);
 
-                using (var connection = _dapperContext.CreateConnection())
+            using (var connection = _dapperContext.CreateConnection())
+            {
+                connection.Open();
+                var res = await connection.ExecuteAsync(query, parameters);
+                connection.Close();
+                if (res == 0)
                 {
-                    connection.Open();
-                    var res = await connection.ExecuteAsync(query, parameters);
-                    connection.Close();
-                    if (res == 0)
-                    {
-                        return false;
-                    }
+                    return false;
                 }
             }
             return true;
+        }
+
+        public async Task<TblRepairDetail> GetRepairDetailMainWorkerByRequestDetailID(int id)
+        {
+            var query = "select RepairDetailID, repair.RequestDetailID, WorkerID, RepairDateBegin, RepairDateEnd, IsPrimary, RequestDetailPriority, UserID, FullName, PhoneNumber, Email, Status " +
+                "from ((tblRepairDetail repair join tblUsers u on repair.WorkerID = u.UserID) " +
+                "join tblRequestDetails detail on detail.RequestDetailID = repair.RequestDetailID) " +
+                "join tblServiceRequest rs on rs.ServiceRequestID = detail.ServiceRequestID " +
+                "where repair.RequestDetailID = @RequestDetailID and IsPrimary = 1";
+            /*using (var connection = _dapperContext.CreateConnection())
+            {
+                connection.Open();
+                var res = await connection.QueryAsync<TblRepairDetail>(query, new { @RequestDetailID = id});
+                connection.Close();
+                if (!res.Any())
+                {
+                    return null;
+                }
+                return res;
+            }*/
+            using (var connection = _dapperContext.CreateConnection())
+            {
+                connection.Open();
+                var res = await connection.QueryAsync<TblRepairDetail, TblUser, TblRepairDetail>(query, (repair, user) =>
+                {
+                    repair.Worker = user;
+                    /*repair.RequestDetail = detail;
+                    repair.RequestDetail.Service = service;*/
+                    return repair;
+                }, param: new { RequestDetailID = id }, splitOn: "RequestDetailID, ServiceID, UserID");
+                connection.Close();
+                if (!res.Any())
+                {
+                    return null;
+                }
+                return res.FirstOrDefault();
+            }
         }
     }
 }
