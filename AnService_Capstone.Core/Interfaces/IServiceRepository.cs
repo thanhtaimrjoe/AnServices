@@ -71,7 +71,7 @@ namespace AnService_Capstone.Core.Interfaces
 
         public void BackgroundServiceTask();
 
-        public Task<int> CountRequestServiceDetail(int status);
+        public Task<int> CountRequestServiceDetail(int status, int year, int quarter);
 
         /*public Task<int> CountServiceRequest(int status);*/
 
@@ -83,7 +83,7 @@ namespace AnService_Capstone.Core.Interfaces
 
         public Task<IEnumerable<Dashboard.AmountOfSalesInYear>> SumRevenueOfContractByYear(int quarter, int year);
 
-        public Task<Dashboard.ServiceStatusStatistic> CountServiceStatus();
+        public Task<Dashboard.ServiceStatusStatistic> CountServiceStatus(int year, int quarter);
 
         public Task<IEnumerable<Dashboard.WorkerTask>> CountTaskOfWorker();
 

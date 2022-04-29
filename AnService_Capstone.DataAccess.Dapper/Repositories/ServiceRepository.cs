@@ -816,14 +816,24 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             throw new NotImplementedException();
         }*/
 
-        public async Task<int> CountRequestServiceDetail(int status)
+        public async Task<int> CountRequestServiceDetail(int status, int year, int quarter)
         {
-            var query = "select count(*) from tblRequestDetails where RequestDetailStatus = @RequestDetailStatus";
+            string query;
+            if (quarter == 0)
+            {
+                query = "select count(*) from tblRequestDetails where RequestDetailStatus = @RequestDetailStatus " +
+                "and YEAR(ServiceRequestCreateDate) = @YEAR and not DATEPART(QUARTER, ServiceRequestCreateDate) = @QUARTER";
+            }
+            else
+            {
+                query = "select count(*) from tblRequestDetails where RequestDetailStatus = @RequestDetailStatus " +
+              "and YEAR(ServiceRequestCreateDate) = @YEAR and DATEPART(QUARTER, ServiceRequestCreateDate) = @QUARTER";
+            }
 
             using (var conn = _context.CreateConnection())
             {
                 conn.Open();
-                var res = await conn.QueryFirstOrDefaultAsync<int>(query, new { @RequestDetailStatus = status });
+                var res = await conn.QueryFirstOrDefaultAsync<int>(query, new { @RequestDetailStatus = status, @YEAR = year, @QUARTER = quarter });
                 conn.Close();
                 return res;
             }
@@ -974,9 +984,12 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             }
         }*/
 
-        public async Task<Dashboard.ServiceStatusStatistic> CountServiceStatus()
+        public async Task<Dashboard.ServiceStatusStatistic> CountServiceStatus(int year, int quarter)
         {
-            var query = "SELECT [2] as Pending," +
+            string query;
+            if (quarter == 0)
+            {
+                query = "SELECT [2] as Pending," +
                 "[1] as [Deny]," +
                 "[3] as Agreed," +
                 "[6] as Processing," +
@@ -987,16 +1000,36 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
                 "FROM (SELECT ServiceRequestStatus as [Status], " +
                 "COUNT(1) [Sales Count] " +
                 "FROM tblServiceRequest " +
-                "where ServiceRequestStatus != 5 " +
+                "where ServiceRequestStatus != 5 and YEAR(ServiceRequestCreateDate) = @YEAR and not DATEPART(QUARTER, ServiceRequestCreateDate) = @QUARTER " +
                 "GROUP BY ServiceRequestStatus) AS MontlySalesData " +
                 "PIVOT( SUM([Sales Count]) " +
                 "FOR [Status] IN ([2],[1],[3],[6],[8]," +
                 "[13],[14],[15])) AS MNamePivot";
-
+            }
+            else
+            {
+                query = "SELECT [2] as Pending," +
+                "[1] as [Deny]," +
+                "[3] as Agreed," +
+                "[6] as Processing," +
+                "[8] as Cancel," +
+                "[13] as Accomplished," +
+                "[14] as Payment," +
+                "[15] as Surveying " +
+                "FROM (SELECT ServiceRequestStatus as [Status], " +
+                "COUNT(1) [Sales Count] " +
+                "FROM tblServiceRequest " +
+                "where ServiceRequestStatus != 5 and YEAR(ServiceRequestCreateDate) = @YEAR and DATEPART(QUARTER, ServiceRequestCreateDate) = @QUARTER " +
+                "GROUP BY ServiceRequestStatus) AS MontlySalesData " +
+                "PIVOT( SUM([Sales Count]) " +
+                "FOR [Status] IN ([2],[1],[3],[6],[8]," +
+                "[13],[14],[15])) AS MNamePivot";
+            }
+            
             using (var conn = _context.CreateConnection())
             {
                 conn.Open();
-                var res = await conn.QueryFirstOrDefaultAsync<Dashboard.ServiceStatusStatistic>(query);
+                var res = await conn.QueryFirstOrDefaultAsync<Dashboard.ServiceStatusStatistic>(query, new {@YEAR = year, @QUARTER = quarter});
                 conn.Close();
                 return res;
             }

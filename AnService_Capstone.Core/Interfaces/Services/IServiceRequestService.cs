@@ -11,11 +11,11 @@ namespace AnService_Capstone.Core.Interfaces.Services
 {
     public interface IServiceRequestService
     {
-        public Task<int> CountSatisfiedRequestDetail();
+        public Task<int> CountSatisfiedRequestDetail(int year, int quarter);
 
-        public Task<int> CountUnsatisfiedRequestDetail();
+        public Task<int> CountUnsatisfiedRequestDetail(int year, int quarter);
 
-        public Task<int> CountReworkRequestDetail();
+        public Task<int> CountReworkRequestDetail(int year, int quarter);
 
         public Task<ErrorResponse> CreateServiceRequest(CreateService model);
 

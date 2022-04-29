@@ -497,10 +497,10 @@ namespace AnService_Capstone.Controllers
         [HttpGet]
         [Route("[action]")]
         [Authorize(Roles = "Staff")]
-        public async Task<IActionResult> CountSatisfiedRequestDetail()
+        public async Task<IActionResult> CountSatisfiedRequestDetail(int year, int quarter)
         {
             /*var res = await _serviceRepository.CountRequestServiceDetail(11);*/
-            return Ok(await _serviceRequestService.CountSatisfiedRequestDetail());
+            return Ok(await _serviceRequestService.CountSatisfiedRequestDetail(year, quarter));
         }
 
         /// <summary>
@@ -510,11 +510,11 @@ namespace AnService_Capstone.Controllers
         [HttpGet]
         [Route("[action]")]
         [Authorize(Roles = "Staff")]
-        public async Task<IActionResult> CountUnsatisfiedRequestDetail()
+        public async Task<IActionResult> CountUnsatisfiedRequestDetail(int year, int quarter)
         {
             /* var res = await _serviceRepository.CountRequestServiceDetail(12);
              return Ok(res);*/
-            return Ok(await _serviceRequestService.CountUnsatisfiedRequestDetail());
+            return Ok(await _serviceRequestService.CountUnsatisfiedRequestDetail(year, quarter));
         }
 
         /// <summary>
@@ -524,11 +524,11 @@ namespace AnService_Capstone.Controllers
         [HttpGet]
         [Route("[action]")]
         [Authorize(Roles = "Staff")]
-        public async Task<IActionResult> CountReworkRequestDetail()
+        public async Task<IActionResult> CountReworkRequestDetail(int year, int quarter)
         {
             /*var res = await _serviceRepository.CountRequestServiceDetail(16);
             return Ok(res);*/
-            return Ok(await _serviceRequestService.CountReworkRequestDetail());
+            return Ok(await _serviceRequestService.CountReworkRequestDetail(year, quarter));
         }
 
         /*/// <summary>
@@ -594,12 +594,12 @@ namespace AnService_Capstone.Controllers
             }
 
             var res1 = await _serviceRepository.AmountOfSaleList(year, 0);
-            var res2 = await _serviceRepository.CountServiceStatus();
+            var res2 = await _serviceRepository.CountServiceStatus(year, quarter);
             /*var res3 = await _promotionRepository.CountPromotionIsUsed();*/
-            var res4 = await _serviceRepository.CountRequestServiceDetail(11);
-            var res5 = await _serviceRepository.CountRequestServiceDetail(12);
+            var res4 = await _serviceRepository.CountRequestServiceDetail(11, year, quarter);
+            var res5 = await _serviceRepository.CountRequestServiceDetail(12, year, quarter);
             var res6 = await _serviceRepository.SumRevenueOfInvoiceByYear(quarter, year);
-            var res7 = await _serviceRepository.CountRequestServiceDetail(16);
+            var res7 = await _serviceRepository.CountRequestServiceDetail(16, year, quarter);
             var res8 = await _serviceRepository.AmountOfSaleList(year, 1);
             var res9 = await _serviceRepository.AmountOfSaleList(year, 2);
             var res10 = await _userRepository.GetAllCustomers(null, "", "");

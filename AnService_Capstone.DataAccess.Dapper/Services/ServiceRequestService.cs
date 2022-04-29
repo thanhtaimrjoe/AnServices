@@ -158,21 +158,21 @@ namespace AnService_Capstone.DataAccess.Dapper.Services
             return new ErrorResponse("Update Fail");
         }
 
-        public async Task<int> CountReworkRequestDetail()
+        public async Task<int> CountReworkRequestDetail(int year, int quarter)
         {
-            var res = await _serviceRepository.CountRequestServiceDetail(16);
+            var res = await _serviceRepository.CountRequestServiceDetail(16, year, quarter);
             return res;
         }
 
-        public async Task<int> CountSatisfiedRequestDetail()
+        public async Task<int> CountSatisfiedRequestDetail(int year, int quarter)
         {
-            var res = await _serviceRepository.CountRequestServiceDetail(11);
+            var res = await _serviceRepository.CountRequestServiceDetail(11, year, quarter);
             return res;
         }
 
-        public async Task<int> CountUnsatisfiedRequestDetail()
+        public async Task<int> CountUnsatisfiedRequestDetail(int year, int quarter)
         {
-            var res = await _serviceRepository.CountRequestServiceDetail(12);
+            var res = await _serviceRepository.CountRequestServiceDetail(12, year, quarter);
             return res;
         }
 
