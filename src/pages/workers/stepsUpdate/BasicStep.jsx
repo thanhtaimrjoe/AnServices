@@ -4,7 +4,7 @@ import ProForm from '@ant-design/pro-form';
 import { Col, Input, Row } from 'antd';
 
 
-const BasicStep = ({ typeJobId }) => {
+const BasicStep = () => {
   return (
     <div bordered={false} style={{ width: '200%', marginBottom: '4em' }}>
       <div bordered={false} style={{ width: '100%', marginBottom: '2em' }}>
@@ -32,7 +32,7 @@ const BasicStep = ({ typeJobId }) => {
               {
                 required: true,
                 pattern: /(0[3|5|7|8|9])+([0-9]{8})\b/,
-                message: "Vui lòng nhập sđt với 10 chữ số"
+                message: "Vui lòng nhập đúng số điện thoại 10 số"
               }
             ]}
           >
@@ -53,6 +53,12 @@ const BasicStep = ({ typeJobId }) => {
           <ProForm.Item
             name="email"
             label="Email"
+            rules={[
+              {
+                pattern: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                message: "Vui lòng kiểm tra lại định dạng email"
+              }
+            ]}
           >
             <Input placeholder="Nhập email nếu có" />
           </ProForm.Item>
@@ -61,9 +67,7 @@ const BasicStep = ({ typeJobId }) => {
       <Row gutter={16}>
         <Col span={12}>
           <ProForm.Item
-            // name={typeJobId}
             name="typeJobID"
-            // initialValue={typeJobId}
             label="Nhóm thợ"
             rules={[
               {
@@ -77,21 +81,6 @@ const BasicStep = ({ typeJobId }) => {
             <CommonSelect.SelectWorkerByTypeJob />
           </ProForm.Item>
         </Col>
-        {/* <Col span={12}>
-          <ProForm.Item
-            name="typeJobId"
-            label="Nhóm thợ"
-            rules={[
-              {
-                pattern: /^[0-9]*$/,
-                type: 'integer',
-                message: "Chỉ được chọn trên thanh chọn"
-              }
-            ]}
-          >
-            <CommonSelect.SelectWorkerByTypeJob />
-          </ProForm.Item>
-        </Col> */}
       </Row>
       </div>
     </div>

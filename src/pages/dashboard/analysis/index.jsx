@@ -182,14 +182,17 @@ const Analysis = () => {
 
   useEffect(() => {
     dashboard().then((res) => {
-      setPending(res.serviceStatusStatistics.pending);
-      setSurveying(res.serviceStatusStatistics.surveying);
-      setAgreed(res.serviceStatusStatistics.agreed);
-      setProcessing(res.serviceStatusStatistics.processing);
-      setPayment(res.serviceStatusStatistics.payment);
-      setAccomplished(res.serviceStatusStatistics.accomplished);
-      setCancel(res.serviceStatusStatistics.cancel);
-      setDeny(res.serviceStatusStatistics.deny);
+      if(res.serviceStatusStatistics !== null) {
+        setPending(res.serviceStatusStatistics.pending);
+        setSurveying(res.serviceStatusStatistics.surveying);
+        setAgreed(res.serviceStatusStatistics.agreed);
+        setProcessing(res.serviceStatusStatistics.processing);
+        setPayment(res.serviceStatusStatistics.payment);
+        setAccomplished(res.serviceStatusStatistics.accomplished);
+        setCancel(res.serviceStatusStatistics.cancel);
+        setDeny(res.serviceStatusStatistics.deny);
+      }
+      
       setSatisfiedRequestDetail(res.satisfiedRequestDetail);
       setUnsatisfiedRequestDetail(res.unsatisfiedRequestDetail);
       setReworkRequestDetail(res.reworkRequestDetail);

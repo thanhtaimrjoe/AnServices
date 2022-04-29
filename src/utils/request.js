@@ -100,13 +100,13 @@ request.interceptors.response.use((response, options) => {
         description: `Yêu cầu của bạn tới ${response.url} đã bị cấm`,
       });
       break;
-    case 404:
-      if (method !== 'GET')
-        notification.error({
-          message: response.statusText,
-          description: codeMessage[404],
-        });
-      break;
+    // case 404:
+    //   if (method !== 'GET')
+    //     notification.error({
+    //       message: response.statusText,
+    //       description: codeMessage[404],
+    //     });
+    //   break;
     case 405:
       notification.error({
         message: response.statusText,

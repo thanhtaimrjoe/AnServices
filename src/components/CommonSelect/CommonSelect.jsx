@@ -95,27 +95,54 @@ const CommonSelect = ({
 };
 // ==============================================================================
 // CUSTOMER
-const SelectStatusOfCustomer = (props) => {
+const InputCustomerByName = (props) => {
   return (
-    <CommonSelect
-      placeholder="Trạng thái tài khoản"
-      fetchOnFirst
-      options={[
-        {
-          value: 4,
-          label: 'Đang hoạt động',
-        },
-        {
-          value: 10,
-          label: 'Đã bị chặn',
-        },
-      ]}
+    <Input
+      placeholder="Vui lòng nhập tên của khách hàng"
       {...props}
     />
   );
 };
 
+const InputCustomerByPhone = (props) => {
+  return (
+    <Input
+      placeholder="Vui lòng nhập số điện thoại của khách hàng"
+      {...props}
+    />
+  );
+};
+
+const SelectStatusOfCustomer = (props) => {
+  return (
+    <Select
+      placeholder="Vui lòng chọn trạng thái của khách hàng"
+      {...props}
+    >
+      <Option value={4}>Đang hoạt động</Option>
+      <Option value={10}>Đã bị chặn</Option>
+    </Select>
+  );
+};
+
 // WORKER
+const InputWorkerByName = (props) => {
+  return (
+    <Input
+      placeholder="Vui lòng nhập tên của thợ"
+      {...props}
+    />
+  );
+};
+
+const InputWorkerByPhone = (props) => {
+  return (
+    <Input
+      placeholder="Vui lòng nhập số điện thoại của thợ"
+      {...props}
+    />
+  );
+};
 const SelectWorkerByTypeJob = (props) => {
   return (
     <Select
@@ -244,6 +271,11 @@ const locale = {
   formatLong: {}
 }
 
+function onChange(date, dateString) {
+  console.log('firstdate', date)
+  console.log('firstdateString', dateString)
+};
+
 const SelectRequestServiceDate = (props) => {
   return (
     <Input.Group compact>
@@ -260,7 +292,6 @@ const SelectRequestServiceDate = (props) => {
         placeholder="Vui lòng chọn ngày gửi yêu cầu" 
         locale={locale}
         fetchOnFirst
-        buildOptions={buildRequestServiceDateOption}
         onSearch={getAllServiceRequestStatusOrDate}
         format="D/M/YYYY"
         {...props}
@@ -317,15 +348,25 @@ const SelectRequestServicePackage = (props) => {
   );
 };
 // ==============================================================================
+CommonSelect.InputCustomerByName = InputCustomerByName;
+CommonSelect.InputCustomerByPhone = InputCustomerByPhone;
 CommonSelect.SelectStatusOfCustomer = SelectStatusOfCustomer;
+
+
+CommonSelect.InputWorkerByName = InputWorkerByName;
+CommonSelect.InputWorkerByPhone = InputWorkerByPhone;
 CommonSelect.SelectWorkerPhoneNumber = SelectWorkerPhoneNumber;
 CommonSelect.SelectWorkerName = SelectWorkerName;
 CommonSelect.SelectWorkerTypeJob = SelectWorkerTypeJob;
 CommonSelect.SelectWorkerByTypeJob = SelectWorkerByTypeJob;
+
 CommonSelect.SelectRequestServiceStatus = SelectRequestServiceStatus;
 CommonSelect.SelectRequestServiceDate = SelectRequestServiceDate;
 CommonSelect.SelectRequestServicePriority = SelectRequestServicePriority;
 CommonSelect.SelectRequestServicePackage = SelectRequestServicePackage;
+
+
+
 
 
 // ==============================================================================
@@ -344,9 +385,13 @@ CommonSelect.defaultProps = {
 export {
 // ==============================================================================
   // CUSTOMER
+  InputCustomerByName,
+  InputCustomerByPhone,
   SelectStatusOfCustomer,
 
   // WORKER
+  InputWorkerByName,
+  InputWorkerByPhone,
   SelectWorkerPhoneNumber,
   SelectWorkerName,
   SelectWorkerTypeJob,

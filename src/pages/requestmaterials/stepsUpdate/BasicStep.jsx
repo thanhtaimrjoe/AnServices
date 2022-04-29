@@ -15,9 +15,7 @@ const BasicStep = ({
   const [Record, setRecord] = useState([]);
   useEffect(() => {
     getRequestMaterialByID(2).then((record) => {
-      console.log('test1', record);
       setRecord(record);
-      console.log('test11', record);
     });
   }, []);
   return (

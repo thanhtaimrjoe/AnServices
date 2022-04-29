@@ -1,11 +1,17 @@
-import { SelectRequestServiceStatus } from '@/components/CommonSelect/CommonSelect';
-import { Button, Input, Space } from 'antd';
+import {
+  InputCustomerByName,
+  InputCustomerByPhone,
+  SelectRequestServiceStatus,
+  SelectStatusOfCustomer,
+} from '@/components/CommonSelect/CommonSelect';
+import { Button, DatePicker, Input, Space } from 'antd';
 import moment, { updateLocale } from 'moment';
 import { Link } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 import { SelectWorkerByTypeJob } from '@/components/CommonSelect/CommonSelect';
 import { SelectRequestServiceDate } from '@/components/CommonSelect/CommonSelect';
 
+// =========================================================================
 // ACCOUNTS
 export const ACCOUNTS = [
   {
@@ -14,8 +20,8 @@ export const ACCOUNTS = [
     key: 'index',
     search: false,
     render: (text, object, index) => {
-      return <div>{index+1}</div>
-    }
+      return <div>{index + 1}</div>;
+    },
   },
   {
     title: 'Mã khách hàng',
@@ -30,12 +36,17 @@ export const ACCOUNTS = [
     render: (text, record) => {
       return <Link to={{ pathname: `/accounts/detail`, state: record }}>{record.fullName}</Link>;
     },
+    renderFormItem: (item, props) => {
+      return <InputCustomerByName {...props} />;
+    },
   },
   {
-    id:'accounts.sdt',
     title: 'Số điện thoại',
     dataIndex: 'phoneNumber',
     key: 'phoneNumber',
+    renderFormItem: (item, props) => {
+      return <InputCustomerByPhone {...props} />;
+    },
   },
   {
     title: 'Địa chỉ',
@@ -60,6 +71,9 @@ export const ACCOUNTS = [
         status: 'Error',
       },
     },
+    renderFormItem: (item, props) => {
+      return <SelectStatusOfCustomer name="" {...props} />;
+    },
   },
   {
     title: 'Hành động',
@@ -68,103 +82,13 @@ export const ACCOUNTS = [
     render: (text, record) => {
       const updateCustomerState = { ...record };
       return (
-      <Space size="middle">
-        <a><Link to={{ pathname: `/accounts/detail`, state: updateCustomerState }}>Chi tiết</Link></a>
-        {/* <a><Link to={{ pathname: `/accounts/update`, state: updateCustomerState }}>Cập nhật</Link></a> */}
-      </Space>
-      )
-    },
-  },
-];
-
-// =========================================================================
-// WORKER
-export const WORKERS = [
-  {
-    title: 'STT',
-    dataIndex: 'index',
-    search: false,
-    render: (text, record, index) => {
-      return <div>{index+1}</div>
-    }
-  },
-  {
-    title: 'Mã của thợ',
-    dataIndex: 'userID',
-    show: false,
-    search: false,
-  },
-  {
-    title: 'Tên thợ',
-    dataIndex: 'fullName',
-    key: 'fullName',
-    render: (text, record) => {
-      return <Link to={{ pathname: `/workers/detail`, state: record }}>{record.fullName}</Link>;
-    },
-    // renderFormItem: (item, props) => <SelectWorkerName name="" {...props} />,
-  },
-  {
-    title: 'Số điện thoại',
-    dataIndex: 'phoneNumber',
-    key: 'phoneNumber',
-    // renderFormItem: (item, props) => <SelectWorkerPhoneNumber name="" {...props} />,
-  },
-
-  {
-    title: 'Email',
-    dataIndex: 'email',
-    show: false,
-    search: false,
-  },
-  {
-    title: 'Nhóm Thợ',
-    key: 'typeJobId',
-    dataIndex: 'typeJobId',
-    // render: (text, record) => {
-    //   return <div>{record.typeJob.typeJobName}</div>
-    // },
-    valueEnum: {
-      1: {
-        text: 'Thợ nhôm - kính',
-        status: 'success',
-      },
-      2: {
-        text: 'Thợ cơ khí',
-      },
-      3: {
-        text: 'Thợ sơn',
-      },
-      4: {
-        text: 'Thợ xây',
-      },
-      5: {
-        text: 'Thợ điện nước',
-      },
-      6: {
-        text: 'Thợ điện lạnh',
-      },
-      7: {
-        text: 'Thợ thạch cao',
-      },
-    },
-    valueType: 'select',
-
-  //   renderFormItem: (item, props) => {
-  //     return <SelectWorkerByTypeJob name="" {...props} />;
-  //   },
-  },
-  {
-    title: 'Hành động',
-    key: 'action',
-    search: false,
-    render: (text, record) => {
-      const updateWorkerState = { ...record };
-      return (
-      <Space size="middle">
-        {/* <a><Link to={{ pathname: `/workers/detail`, state: updateWorkerState }}>Chi tiết</Link></a> */}
-        <a><Link to={{ pathname: `/workers/update`, state: updateWorkerState }}>Cập nhật</Link></a>
-      </Space>
-      )
+        <Space size="middle">
+          <a>
+            <Link to={{ pathname: `/accounts/detail`, state: updateCustomerState }}>Chi tiết</Link>
+          </a>
+          {/* <a><Link to={{ pathname: `/accounts/update`, state: updateCustomerState }}>Cập nhật</Link></a> */}
+        </Space>
+      );
     },
   },
 ];
@@ -176,8 +100,8 @@ export const SERVICEREQUEST = [
     dataIndex: 'index',
     search: false,
     render: (text, object, index) => {
-      return <div>{index+1}</div>
-    }
+      return <div>{index + 1}</div>;
+    },
   },
   {
     title: 'Mã dịch vụ',
@@ -192,7 +116,11 @@ export const SERVICEREQUEST = [
     key: 'serviceRequestDescription',
     search: false,
     render: (text, record) => {
-      return <Link to={{ pathname: `/requestservices/detail`, state: record }}>{record.serviceRequestDescription}</Link>;
+      return (
+        <Link to={{ pathname: `/requestservices/detail`, state: record }}>
+          {record.serviceRequestDescription}
+        </Link>
+      );
     },
   },
   {
@@ -204,7 +132,6 @@ export const SERVICEREQUEST = [
     render: (text, record) => {
       return <div>{moment(record.serviceRequestCreateDate).format('D/M/Y')}</div>;
     },
-
     renderFormItem: (item, props) => {
       return <SelectRequestServiceDate {...props} />;
     }
@@ -215,7 +142,7 @@ export const SERVICEREQUEST = [
     key: 'serviceRequestPackage',
     // show: false,
     search: false,
-    tip:'Gói 1: Chỉ thuê nhân công, vật tư có sẵn - Gói 2: Thuê cả nhân công và vật tư',
+    tip: 'Gói 1: Chỉ thuê nhân công, vật tư có sẵn - Gói 2: Thuê cả nhân công và vật tư',
     valueEnum: {
       1: {
         text: 'Gói 1',
@@ -277,11 +204,15 @@ export const SERVICEREQUEST = [
     render: (text, record) => {
       const updateRequestServiceState = { ...record };
       return (
-      <Space size="middle">
-        {/* <a>Invite {record.name}</a> */}
-        <a><Link to={{ pathname: `/requestservices/detail`, state: updateRequestServiceState }}>Chi tiết</Link></a>
-      </Space>
-      )
+        <Space size="middle">
+          {/* <a>Invite {record.name}</a> */}
+          <a>
+            <Link to={{ pathname: `/requestservices/detail`, state: updateRequestServiceState }}>
+              Chi tiết
+            </Link>
+          </a>
+        </Space>
+      );
     },
   },
 ];
@@ -318,7 +249,7 @@ export const REQUESTMATERIAL = [
     //   }} >
     //     {record.reviewer.name}
     //   </Link>
-    // } 
+    // }
   },
   {
     title: 'Khách hàng',
@@ -353,10 +284,14 @@ export const REQUESTMATERIAL = [
     render: (text, record) => {
       const updateRequestSMaterialState = { ...record };
       return (
-      <Space size="middle">
-        <a><Link to={{ pathname: `/requestmaterials/update`, state: updateRequestSMaterialState }}>Chi tiết</Link></a>
-      </Space>
-      )
+        <Space size="middle">
+          <a>
+            <Link to={{ pathname: `/requestmaterials/update`, state: updateRequestSMaterialState }}>
+              Chi tiết
+            </Link>
+          </a>
+        </Space>
+      );
     },
   },
 ];
@@ -371,8 +306,8 @@ export const REQUESTMATERIAL = [
 //     console.log('values' ,formData)
 //     console.log('values1', updateStatusRequestMaterial({"reviewerId": formData, update }))
 //     console.log('values' , formData)
-  
-  // });
+
+// });
 // };
 
 // INVOICE
@@ -383,7 +318,6 @@ export const INVOICE = [
     key: 'id',
     // show: false,
     search: false,
-    
   },
   {
     title: 'Ngày tạo',
@@ -391,7 +325,6 @@ export const INVOICE = [
     key: 'date',
     // show: false,
     search: false,
-    
   },
   {
     title: 'Tổng giá',
@@ -412,6 +345,3 @@ export const INVOICE = [
     ),
   },
 ];
-
-
-

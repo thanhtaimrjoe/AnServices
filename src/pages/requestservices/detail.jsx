@@ -23,6 +23,7 @@ import {
   DatePicker,
   BackTop,
   Table,
+  notification
 } from 'antd';
 // import { updateReportAttribute } from '@/services/reportattribute';
 import AsyncButton from '@/components/AsyncButton';
@@ -169,7 +170,8 @@ const DetailServiceRequest = (props) => {
 
       const url = await storage.ref('files').child(fileName).getDownloadURL();
       if (url) {
-        message.success(`Tải ${file.name} lên thành công`);
+        console.log('Tải file lên thành công')
+        // message.success(`Tải ${file.name} lên thành công`);
         setUrl(url);
         return url;
       }
@@ -183,7 +185,6 @@ const DetailServiceRequest = (props) => {
   const [previewTitle, setPreviewTitle] = useState('');
   const [fileImageInvoice, setFileImageInvoice] = useState();
   const [fileImageName, setFileImageName] = useState();
-
   const saveImageInvoice = (e) => {
     let validate = true;
 
@@ -263,7 +264,23 @@ const DetailServiceRequest = (props) => {
     setPreviewVisible(true);
     setPreviewTitle(imgs.originFileObj.name);
   };
-
+  // Data cho chi tiết dịch vụ table
+  const [requestServiceRecord, setRequestServiceDetail] = useState([]);
+  const [staffCoordinatorRecord, setStaffCoordinatorRecord] = useState([]);
+  // ====================
+  const [requestMaterialRecord, setRequestMaterialRecord] = useState([]);
+  const [contractRecord, setContractRecord] = useState([]);
+  const [imgReportRecord, setImgReportRecord] = useState([]);
+  const [reportRequestService, setReportRequestService] = useState([]);
+  const [priorityData, setPriorityData] = useState();
+  const [messageDataRecord, setMessageDataRecord] = useState();
+  const [quantityNewDataRecord, setQuantityNewDataRecord] = useState();
+  const [materialIdDataRecord, setMaterialIdDataRecord] = useState();
+  const [contractIDRecord, setContractIDRecord] = useState();
+  // tạo hợp đồng
+  const [contractUrl, setContractUrl] = useState();
+  const createContractFile =
+    'https://firebasestorage.googleapis.com/v0/b/anservices.appspot.com/o/files%2Fmau-hop-dong-thi-cong-xay-dung.docx?alt=media&token=070b2352-1ae8-42a4-9850-182a8910a5a6';
   // ======================================
 
   const steps = [
@@ -289,73 +306,73 @@ const DetailServiceRequest = (props) => {
 
   useEffect(() => {
     // form.setFieldsValue(updateRequestServiceState);
-    getServiceRequestByID(updateRequestServiceState.serviceRequestId).then((res) => {
-      setNewRequestServiceState(res);
-      setCustomerName(res.customerName);
-      setCustomerPhone(res.customerPhone);
-      setCustomerAddress(res.customerAddress);
-      setServiceRequestPackage(res.serviceRequestPackage);
-      setServiceRequestDescription(res.serviceRequestDescription);
-      setUserID(res.customer.userId);
-      setFullName(res.customer.fullName);
-      setPhoneNumber(res.customer.phoneNumber);
-      setAddress(res.customer.address);
-      setServiceRequestReference(res.serviceRequestReference);
-      setServiceRequestCreateDate(res.serviceRequestCreateDate.split('T', 1));
-      setServiceRequestCreateDate(moment(res.serviceRequestCreateDate).format('DD/MM/YYYY'));
-
-      if (res.serviceRequestStatus === 15) {
-        setDisableRejectServicerRequest(false);
-        setDisableCreateContract(false);
-      }
-
-      if (res.serviceRequestStatus === 2) {
-        setDisableSurveyingServicerRequest(false);
-        setDisableRejectServicerRequest(false);
-      }
-
-      if (res.serviceRequestStatus === 14) {
-        setDisableCompleteServicerRequest(false);
-      }
-
-      if (res.serviceRequestStatus === 13 || res.serviceRequestStatus === 14) {
-        setDisableWaitForPayAndCompletedServicerRequest(true);
-        if (isLoad && updateRequestServiceState) {
-          getInfomationInvoiceByServiceRequestID(updateRequestServiceState.serviceRequestId).then(
-            (respones) => {
-              if (respones.status === 404) {
-                // message.warning('Yêu cầu này chưa có hoá đơn');
-                console.log('Chưa có hoá đơn, status 404, dòng 310');
-              } else {
-                console.log('Đã có hoá đơn, status 20, dòng 330');
-                setContractStartDate(moment(respones.contractStartDate).format('DD/MM/YYYY'));
-                setContractEndDate(moment(respones.contractEndDate).format('DD/MM/YYYY'));
-                setContractDeposit(respones.contractDeposit * 100);
-                setContractDeposit1(respones.contractDeposit);
-                setContractTotalPrice(
-                  respones.contractTotalPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','),
-                );
-                setContractTotalPrice1(respones.contractTotalPrice);
-                setContractDetails(respones.details);
-                if (respones.promotionID === 0) {
-                  setPromotionValue(0);
-                } else {
-                  getInformationPromotionByID(respones.promotionID).then((record) => {
-                    setPromotionValue(record.promotionValue);
-                  });
-                }
-              }
-            },
-          );
+    if(isLoad) {
+      getServiceRequestByID(updateRequestServiceState.serviceRequestId).then((res) => {
+        console.log("firsthihihihi")
+        setNewRequestServiceState(res);
+        setCustomerName(res.customerName);
+        setCustomerPhone(res.customerPhone);
+        setCustomerAddress(res.customerAddress);
+        setServiceRequestPackage(res.serviceRequestPackage);
+        setServiceRequestDescription(res.serviceRequestDescription);
+        setUserID(res.customer.userId);
+        setFullName(res.customer.fullName);
+        setPhoneNumber(res.customer.phoneNumber);
+        setAddress(res.customer.address);
+        setServiceRequestReference(res.serviceRequestReference);
+        setServiceRequestCreateDate(res.serviceRequestCreateDate.split('T', 1));
+        setServiceRequestCreateDate(moment(res.serviceRequestCreateDate).format('DD/MM/YYYY'));
+  
+        if (res.serviceRequestStatus === 15) {
+          setDisableRejectServicerRequest(false);
+          setDisableCreateContract(false);
         }
-      }
-      setIsLoad(true);
-    });
+  
+        if (res.serviceRequestStatus === 2) {
+          setDisableSurveyingServicerRequest(false);
+          setDisableRejectServicerRequest(false);
+        }
+  
+        if (res.serviceRequestStatus === 14) {
+          setDisableCompleteServicerRequest(false);
+        }
+  
+        if (res.serviceRequestStatus === 13 || res.serviceRequestStatus === 14) {
+          setDisableWaitForPayAndCompletedServicerRequest(true);
+          if (isLoad && updateRequestServiceState) {
+            getInfomationInvoiceByServiceRequestID(updateRequestServiceState.serviceRequestId).then(
+              (respones) => {
+                if (respones.status === 404) {
+                  // message.warning('Yêu cầu này chưa có hoá đơn');
+                } else {
+                  setContractStartDate(moment(respones.contractStartDate).format('DD/MM/YYYY'));
+                  setContractEndDate(moment(respones.contractEndDate).format('DD/MM/YYYY'));
+                  setContractDeposit(respones.contractDeposit * 100);
+                  setContractDeposit1(respones.contractDeposit);
+                  setContractTotalPrice(
+                    respones.contractTotalPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','),
+                  );
+                  setContractTotalPrice1(respones.contractTotalPrice);
+                  setContractDetails(respones.details);
+                  if (respones.promotionID === 0) {
+                    setPromotionValue(0);
+                  } else {
+                    getInformationPromotionByID(respones.promotionID).then((record) => {
+                      setPromotionValue(record.promotionValue);
+                    });
+                  }
+                }
+              },
+            );
+          }
+        }
+        setIsLoad(true);
+      }).catch(setIsLoad(false));
+    }
+    setIsLoad(false)
   }, [isLoad]);
 
-  // Data cho chi tiết dịch vụ table
-  const [requestServiceRecord, setRequestServiceDetail] = useState([]);
-  const [staffCoordinatorRecord, setStaffCoordinatorRecord] = useState([]);
+  
   useEffect(() => {
     getAllServiceRequestDetailsByServiceRequestID(updateRequestServiceState.serviceRequestId)
       // getTest(updateRequestServiceState.serviceRequestId)
@@ -418,24 +435,7 @@ const DetailServiceRequest = (props) => {
     }
   }, [isLoad]);
 
-  console.log('firsttime02', requestServiceRecord)
-  const [requestMaterialRecord, setRequestMaterialRecord] = useState([]);
-  const [contractRecord, setContractRecord] = useState([]);
-  const [imgReportRecord, setImgReportRecord] = useState([]);
-  const [reportRequestService, setReportRequestService] = useState([]);
-  const [priorityData, setPriorityData] = useState();
-  const [messageDataRecord, setMessageDataRecord] = useState();
-  const [quantityNewDataRecord, setQuantityNewDataRecord] = useState();
-  const [materialIdDataRecord, setMaterialIdDataRecord] = useState();
-  const [contractIDRecord, setContractIDRecord] = useState();
-
-  // ====================
-  // tạo hợp đồng
-  const [contractUrl, setContractUrl] = useState();
-  const createContractFile =
-    'https://firebasestorage.googleapis.com/v0/b/anservices.appspot.com/o/files%2Fmau-hop-dong-thi-cong-xay-dung.docx?alt=media&token=070b2352-1ae8-42a4-9850-182a8910a5a6';
-  // ====================
-
+  
   useEffect(() => {
     // Data cho danh sách thợ và hợp đồng
     if (isLoad && updateRequestServiceState) {
@@ -524,25 +524,28 @@ const DetailServiceRequest = (props) => {
 
   // ===========================================
 
-  const images = updateRequestServiceState.tblMedia.map((img, index) => {
-    if (!img.mediaUrl.includes('.mp4')) {
+  let images = null;
+  if(newRequestServiceState) {
+    images = updateRequestServiceState.tblMedia.map((img, index) => {
+      if (!img.mediaUrl.includes('.mp4')) {
+        return (
+          <Image
+            style={{ width: '150px', height: '200px', paddingLeft: '5px' }}
+            width={150}
+            src={img.mediaUrl}
+          ></Image>
+        );
+      }
       return (
-        <Image
+        <video
+          controls
           style={{ width: '150px', height: '200px', paddingLeft: '5px' }}
-          width={150}
+          key={img.mediaId}
           src={img.mediaUrl}
-        ></Image>
+        />
       );
-    }
-    return (
-      <video
-        controls
-        style={{ width: '150px', height: '200px', paddingLeft: '5px' }}
-        key={img.mediaId}
-        src={img.mediaUrl}
-      />
-    );
-  });
+    });
+  } 
 
   if (updateRequestServiceState == null) {
     return (
@@ -558,9 +561,10 @@ const DetailServiceRequest = (props) => {
     // const update = normalizeReportForm(formData);
     return cancelServiceRequest(updateRequestServiceState.serviceRequestId).then(
       () => history.replace('/requestservices/list'),
-      message.success(
-        `Yêu cầu '${updateRequestServiceState.serviceRequestDescription}' đã được từ chối thành công`,
-      ),
+      notification.success({
+        description: `Yêu cầu '${updateRequestServiceState.serviceRequestDescription}' đã được từ chối thành công`,
+        message: 'Thành công',
+      }),
     );
   };
 
@@ -568,7 +572,10 @@ const DetailServiceRequest = (props) => {
     // const update = normalizeReportForm(formData);
     return reworkRequestDetail(value.requestDetailId).then(
       (res) => window.location.reload(),
-      message.success(`Dịch vụ ${value?.service?.serviceName} đã được yêu cầu làm lại`),
+      notification.success({
+        description: `Dịch vụ '${value?.service?.serviceName}' đã được yêu cầu làm lại`,
+        message: 'Thành công',
+      }),
     );
   };
 
@@ -576,9 +583,10 @@ const DetailServiceRequest = (props) => {
     // const update = normalizeReportForm(formData);
     return surveyingServiceRequest(updateRequestServiceState.serviceRequestId).then(
       () => history.replace('/requestservices/list'),
-      message.success(
-        `Yêu cầu '${updateRequestServiceState.serviceRequestDescription}' đã được goi khảo sát thành công`,
-      ),
+      notification.success({
+        description: `Yêu cầu '${updateRequestServiceState.serviceRequestDescription}' đã được goi khảo sát thành công`,
+        message: 'Thành công',
+      }),
     );
   };
 
@@ -586,9 +594,10 @@ const DetailServiceRequest = (props) => {
     // const update = normalizeReportForm(formData);
     return completeServiceRequest(updateRequestServiceState.serviceRequestId).then(
       () => history.replace('/requestservices/list'),
-      message.success(
-        `Yêu cầu '${updateRequestServiceState.serviceRequestDescription}' hoàn thành`,
-      ),
+      notification.success({
+        description: `Yêu cầu '${updateRequestServiceState.serviceRequestDescription}' đã hoàn thành`,
+        message: 'Thành công',
+      }),
     );
   };
 
@@ -763,7 +772,7 @@ const DetailServiceRequest = (props) => {
 
     const update = normalizeReportForm(formData);
     return approveStatusRequestMaterial(values, update).then(() => {
-      message.success(`Đã đồng ý yêu cầu vật tư thành công `);
+      message.success(`Đã đồng ý yêu cầu vật tư thành công`);
       window.location.reload(true);
     });
   };
@@ -788,7 +797,36 @@ const DetailServiceRequest = (props) => {
   };
 
   const showModalConfirmContract = () => {
-    setVisibleConfirmContract(true);
+    let validate = true;
+    const filesFormats = ['application/pdf'];
+    const isRightFormat = filesFormats.includes(file.type);
+    const isLt2M = file.size / 1024 / 1024 < 2;
+
+    if (file.length === 0) {
+      message.warning('Vui lòng chọn file hợp đồng!');
+      validate = false;
+    } else if (!isRightFormat) {
+      message.error('Bạn chỉ có thể tải lên file pdf. Vui lòng chọn lại!');
+      validate = false;
+    } else if (!isLt2M) {
+      message.error('File phải nhỏ hơn 2MB! Vui lòng chọn lại!');
+      validate = false;
+    }
+    if (!contractStartDateData) {
+      validate = false;
+      message.warning('Chưa chọn ngày bắt đầu thi công');
+    }
+    if (!contractEndDateData) {
+      validate = false;
+      message.warning('Chưa chọn ngày kết thúc thi công');
+    }
+    if(updatePriceRequestDetailsData.length === 0) {
+      validate = false;
+      message.warning('Chưa nhập giá trị sửa chữa');
+    }
+    if (validate) {
+      setVisibleConfirmContract(true);
+    }
   };
 
   const showModalSendInvoiceToCustomer = () => {
@@ -925,6 +963,11 @@ const DetailServiceRequest = (props) => {
       validate = false;
       message.warning('Chưa chọn ngày kết thúc thi công');
     }
+    if(updatePriceRequestDetailsData.length === 0) {
+      validate = false;
+      message.warning('Chưa nhập giá trị sửa chữa');
+    }
+
     if (validate) {
       setConfirmLoading(true);
       const returnUrl = await upload();
@@ -943,7 +986,10 @@ const DetailServiceRequest = (props) => {
         const createContractData = normalizeReportForm(createContractValues);
         return createContract(createContractData)
           .then((res) => {
-            message.success('Gửi hợp đồng thành công');
+            notification.success({
+              description: `Gửi hợp đồng ${createContractData.update.username} thành công`,
+              message: 'Thành công',
+            });
             // setTimeout(() => {
             //   window.location.reload();
             // }, 2000);
@@ -1087,7 +1133,7 @@ const DetailServiceRequest = (props) => {
         },
         16: {
           text: 'Làm lại yêu cầu',
-          status: 'Success',
+          status: 'Warning',
         },
       },
     },
@@ -1478,6 +1524,10 @@ const DetailServiceRequest = (props) => {
           text: 'Đã đồng ý',
           status: 'Success',
         },
+        8: {
+          text: 'Thợ đã huỷ',
+          status: 'Warning',
+        },
       },
     },
     {
@@ -1488,7 +1538,7 @@ const DetailServiceRequest = (props) => {
         const updateRequestMaterialState = { ...record };
         return (
           <Space size="middle">
-            {record?.status !== 3 && record?.status !== 1 && (
+            {record?.status !== 3 && record?.status !== 1 && record?.status !== 8 && (
               <Space>
                 <Button
                   type="primary"
@@ -1510,7 +1560,7 @@ const DetailServiceRequest = (props) => {
                 </Button>
               </Space>
             )}
-            <Modal
+            {/* <Modal
               title="Từ chối"
               visible={visible1}
               onOk={onDenyModal}
@@ -1561,7 +1611,7 @@ const DetailServiceRequest = (props) => {
                   />
                 </ProForm.Item>
               </div>
-            </Modal>
+            </Modal> */}
           </Space>
         );
       },
@@ -1989,18 +2039,21 @@ const DetailServiceRequest = (props) => {
             >
               Gửi hợp đồng
             </Button>
-            <Button
-              // danger={true}
-              disabled={disableInvoice || disableWaitForPayAndCompletedServicerRequest}
-              loading={sendInvoiceConfirmLoading}
-              type="primary"
-              style={{ width: '25%' }}
-              onClick={() => {
-                onCreateInvoice();
-              }}
-            >
-              Gửi hoá đơn
-            </Button>
+            {newRequestServiceState && newRequestServiceState.serviceRequestStatus === 17 && (
+              <Button
+                // danger={true}
+                disabled={disableInvoice || disableWaitForPayAndCompletedServicerRequest}
+                loading={sendInvoiceConfirmLoading}
+                type="primary"
+                style={{ width: '25%' }}
+                onClick={() => {
+                  onCreateInvoice();
+                }}
+              >
+                Gửi hoá đơn
+              </Button>
+            )}
+            
           </Row>
 
           {/* <Row>
@@ -2378,10 +2431,68 @@ const DetailServiceRequest = (props) => {
             <div className={styles.style}>Tải lại trang</div>
           </Button> */}
 
+          {/* XEM DANH SÁCH CHI TIẾT VẬT TƯ MODAL */}
+          <Modal
+              title="Từ chối"
+              visible={visible1}
+              onOk={onDenyModal}
+              confirmLoading={confirmLoading}
+              onCancel={handleCancel}
+              okText="Xác nhận"
+              cancelText="Huỷ"
+            >
+              <ProForm.Item name="message" label="Ghi chú" row={6}>
+                <Input.TextArea
+                  placeholder="Nhập lý do từ chối"
+                  row={6}
+                  style={{ width: '450px' }}
+                  onChange={onChangeMessages}
+                />
+              </ProForm.Item>
+            </Modal>
+            <Modal
+              title="Điều chỉnh"
+              visible={visible}
+              onOk={onAdjustedModal}
+              confirmLoading={confirmLoading}
+              onCancel={handleCancel}
+              okText="Xác nhận"
+              cancelText="Huỷ"
+            >
+              <div>
+                <ProForm.Item
+                  name="quantityNew"
+                  label="Số lượng"
+                  rules={[
+                    {
+                      required: true,
+                      type: 'integer',
+                      message: 'Vui lòng nhập số lượng',
+                    },
+                  ]}
+                >
+                  <InputNumber
+                    placeholder="Nhập số lượng"
+                    style={{ width: '450px' }}
+                    min={1}
+                    onChange={onChangeAdjustedQuantityNew}
+                  />
+                </ProForm.Item>
+                <ProForm.Item name="message" label="Ghi chú" row={6}>
+                  <Input.TextArea
+                    placeholder="Nhập ghi chú cho thợ"
+                    row={6}
+                    style={{ width: '450px' }}
+                    onChange={onChangeMessages}
+                  />
+                </ProForm.Item>
+              </div>
+            </Modal>
           {/* XEM ẢNH & VIDEO */}
           <Modal
             title="Hình ảnh & video"
             visible={visible2}
+            footer={null}
             onOk={() => handleCancel()}
             confirmLoading={confirmLoading}
             onCancel={handleCancel}
@@ -2414,7 +2525,9 @@ const DetailServiceRequest = (props) => {
               btnProps={{ type: 'default', icon: <RollbackOutlined /> }}
               onClick={onBackList}
             />
-            <AsyncButton
+
+            {newRequestServiceState && newRequestServiceState.serviceRequestStatus === 2 && (
+              <AsyncButton
               title="Đã gọi khảo sát"
               btnProps={{
                 type: 'dashed',
@@ -2423,22 +2536,25 @@ const DetailServiceRequest = (props) => {
               }}
               onClick={onSurveyingServiceRequest}
             />
-
-            <AsyncButton
-              title="Từ chối"
-              isNeedConfirm={{
-                title: 'Xác nhận từ chối',
-                content: 'Bạn có muốn từ chối yêu cầu này không?',
-                okText: 'Xác nhận',
-                cancelText: 'Huỷ',
-              }}
-              btnProps={{
-                type: 'danger',
-                icon: <CloseOutlined />,
-                disabled: disableRejectServicerRequest,
-              }}
-              onClick={onRejectorCancelServiceRequest}
-            />
+            )} 
+            
+            {newRequestServiceState && (newRequestServiceState.serviceRequestStatus === 2 || newRequestServiceState.serviceRequestStatus === 15) && (
+              <AsyncButton
+                title="Từ chối"
+                isNeedConfirm={{
+                  title: 'Xác nhận từ chối',
+                  content: 'Bạn có muốn từ chối yêu cầu này không?',
+                  okText: 'Xác nhận',
+                  cancelText: 'Huỷ',
+                }}
+                btnProps={{
+                  type: 'danger',
+                  icon: <CloseOutlined />,
+                  disabled: disableRejectServicerRequest,
+                }}
+                onClick={onRejectorCancelServiceRequest}
+              />
+            )}
 
             <AsyncButton
               title="Hoàn Thành"

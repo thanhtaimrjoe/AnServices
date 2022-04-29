@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/jsx-key */
 import { PlusOutlined } from '@ant-design/icons';
-import { Button, Card, Col, Descriptions, Drawer, message, Row, Space } from 'antd';
+import { Button, Card, Col, Descriptions, Drawer, message, notification, Row, Space } from 'antd';
 import React, { useRef, useState, useEffect } from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
 import AsyncButton from '@/components/AsyncButton';
@@ -9,7 +9,7 @@ import ResoTable from '@/components/ResoTable/ResoTable';
 // import { WORKERS } from '@/utils/constrains';
 import { removeWorker, rule, getAllWorkers, getWorkerById } from '@/services/workers';
 import { Link } from 'react-router-dom';
-import { SelectWorkerByTypeJob } from '@/components/CommonSelect/CommonSelect';
+import { InputWorkerByName, InputWorkerByPhone, SelectWorkerByTypeJob } from '@/components/CommonSelect/CommonSelect';
 import moment from 'moment';
 
 const WorkerList = ({ history }) => {
@@ -90,11 +90,17 @@ const WorkerList = ({ history }) => {
           </Space>
         );
       },
+      renderFormItem: (item, props) => {
+        return <InputWorkerByName {...props} />;
+      },
     },
     {
       title: 'Số điện thoại',
       dataIndex: 'phoneNumber',
       key: 'phoneNumber',
+      renderFormItem: (item, props) => {
+        return <InputWorkerByPhone {...props} />;
+      },
     },
 
     {
@@ -144,7 +150,6 @@ const WorkerList = ({ history }) => {
         const updateWorkerState = { ...record };
         return (
           <Space size="middle">
-            {/* <a><Link to={{ pathname: `/workers/detail`, state: updateWorkerState }}>Chi tiết</Link></a> */}
             <a>
               <Link to={{ pathname: `/workers/update`, state: updateWorkerState }}>Cập nhật</Link>
             </a>
@@ -160,7 +165,10 @@ const WorkerList = ({ history }) => {
 
   const deleteWorkerHandler = () => {
     return removeWorker(selectedRows[0]).then((res) => {
-      message.success("Xoá thợ thành công");
+      notification.success({
+        description: `Xoá thợ thành công`,
+        message: 'Thành công',
+      });
       ref.current?.reload();
     });
   };

@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import { FooterToolbar, PageContainer } from '@ant-design/pro-layout';
-import { Card, Form, Typography, Row, Empty, message } from 'antd';
+import { Card, Form, Typography, Row, Empty, message, notification } from 'antd';
 // import { updateReportAttribute } from '@/services/reportattribute';
 import AsyncButton from '@/components/AsyncButton';
 import { useHistory } from 'umi';
@@ -74,10 +74,17 @@ const DetailWorker = (props) => {
   const onBanCustomer = () => {
     return banUserByUserID(updateCustomerState.userID).then((res) => {
       if(res.status === 200) {
+        notification.success({
+          description: `Chặn khách hàng '${updateCustomerState.fullName}' thành công`,
+          message: 'Thành công',
+        });
         onBackList()
-        message.success('Chặn người dùng thành công')
+
       } else {
-        message.error('Chặn người dùng không thành công')
+        notification.error({
+          description: `Chặn khách hàng '${updateCustomerState.fullName}' thất bại`,
+          message: 'Thất bại',
+        });
         // setTimeout(() => {
         //   window.location.reload()
         // }, 2000);
@@ -89,10 +96,16 @@ const DetailWorker = (props) => {
   const onUnbanCustomer = () => {
     return unbanUserByUserID(updateCustomerState.userID).then((res) => {
       if(res.status === 500) {
-        message.error('Gỡ chặn người dùng không thành công')
+        notification.error({
+          description: `Gỡ chặn khách hàng '${updateCustomerState.fullName}' thất bại`,
+          message: 'Thất bại',
+        });
       } else {
+        notification.success({
+          description: `Gỡ chặn khách hàng '${updateCustomerState.fullName}' thành công`,
+          message: 'Thành công',
+        });
         onBackList()
-        message.success('Gỡ chặn người dùng thành công')
       }
       setDisableUnban(true);
     });
@@ -118,7 +131,7 @@ const DetailWorker = (props) => {
           <Row style={{ width: '100%' }}>{steps[currentStep].content()}</Row>
           <FooterToolbar>
             <AsyncButton
-              title="Chặn người dùng"
+              title="Chặn khách hàng"
               isNeedConfirm={{
                 title: 'Xác nhận chặn khách hàng',
                 content: 'Bạn có muốn chặn khách hàng này không',
@@ -129,7 +142,7 @@ const DetailWorker = (props) => {
               onClick={onBanCustomer}
             />
             <AsyncButton
-              title="Gỡ chặn người dùng"
+              title="Gỡ chặn khách hàng"
               isNeedConfirm={{
                 title: 'Xác nhận gỡ chặn khách hàng',
                 content: 'Bạn có muốn gỡ chặn khách hàng này không',

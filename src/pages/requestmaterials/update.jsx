@@ -44,9 +44,6 @@ const UpdateRequestMaterial = (props) => {
   useEffect(() => {
     // form.setFieldsValue(updateRequestMaterialState);
     getRequestMaterialByID(updateRequestMaterialState.usedMaterialId).then((res) => {
-      console.log('object1', updateRequestMaterialState)
-      console.log('object11', modalText.message === 'abc')
-
       setMaterialName(res.material.materialName);
       setUnit(res.material.unit);
       setFullName(res.worker.fullName);
@@ -72,7 +69,6 @@ const UpdateRequestMaterial = (props) => {
     const update = normalizeReportForm(formData);
     return approveStatusRequestMaterial(updateRequestMaterialState.usedMaterialId, update).then(() =>
       history.replace('/requestmaterials/list'),
-      console.log('object123', updateRequestMaterialState.id)
     );
   };
   // const onRejectRequestMaterial = () => {
@@ -106,9 +102,6 @@ const UpdateRequestMaterial = (props) => {
     setConfirmLoading(true);
     return denyStatusRequestMaterial(updateRequestMaterialState.usedMaterialId, updateRequestMaterialState.message, update).then((res) => {
     setModalText({ ...values, message: res });
-    console.log("value1", setModalText(updateRequestMaterialState.message, update))
-    console.log("value11", values)
-
       
     // history.replace('/requestmaterials/list'),
     });

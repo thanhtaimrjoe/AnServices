@@ -25,10 +25,8 @@ const ImageUploader = ({ multiple = false, onChange: onChangeForm, ...props }) =
 
   useEffect(() => {
     setFileList(props.fileList != null ? props.fileList : null);
-    // console.log('abc', ) 
     fetch('https://localhost:44337/api/v1/brands')
     .then(response => response.json())
-    .then(data => console.log('asd', data));
     
     
   }, [props.fileList]);

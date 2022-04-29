@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { FooterToolbar, PageContainer } from '@ant-design/pro-layout';
-import { Form, Typography, Space, Result, Button, message } from 'antd';
+import { Form, Typography, Space, Result, Button, message, notification } from 'antd';
 import BasicStep from './stepsCreate/BasicStep';
 import { useHistory } from 'umi';
 import { normalizeReportForm } from '@/utils/utils';
@@ -22,7 +22,6 @@ const CreateWorker = (props) => {
   const [form] = Form.useForm();
   const history = useHistory();
   const [workerType, setWorkerType] = useState(+type);
-  const [createdWorker, setCreatedWorker] = useState(null);
 
   useEffect(() => {
     form.setFieldsValue({ product_type_id: +type });
@@ -30,30 +29,26 @@ const CreateWorker = (props) => {
 
   const onCreateWorker = (values) => {
     const createWorkerData = normalizeReportForm(values);
-      // setCreatedWorker({ ...values, userID : res });
-    
+    // setCreatedWorker({ ...values, userID : res });
     return createWorker(createWorkerData).then((res) => {
-      // if(res.errorsMsg !== "Create Successfull"){
-      //   console.log('record02', res.errorsMsg)
-      // }
-      if(res.status === 400) {
-        message.error("Email sai định dạng");
-      }
-      if(res.status === 500) {
-        message.error("Số điện thoại đã tồn tại");
+      if (res.status === 400) {
+        notification.error({
+          description: `Số điện thoại '${createWorkerData.update.phoneNumber}' đã tồn tại, vui lòng nhập số khác`,
+          message: 'Thất bại',
+        });
       } else {
-        message.success("Đã tạo tài khoản thợ thành công");
+        notification.success({
+          description: `Đã tạo tài khoản thợ thành công`,
+          message: 'Thành công',
+        });
         history.replace('/workers/list');
       }
     });
-    
   };
 
   const onBackList = () => {
     history.replace('/workers/list');
   };
-
-  
 
   // if (createdWorker !== null) {
   //   return (

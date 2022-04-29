@@ -61,7 +61,6 @@ const BasicStep = ({ createDate, status }) => {
             // initialValue={status}
             label="Trạng thái tài khoản"
           >
-            {/* <CommonSelect.SelectStatusOfCustomer disabled /> */}
             {status === 4 ? (<Input readOnly value={"Đang hoạt động"} placeholder='Không có' />) : (<Input readOnly value={"Đã bị chặn"} placeholder='Không có' />)}
           </ProForm.Item>
         </Col>

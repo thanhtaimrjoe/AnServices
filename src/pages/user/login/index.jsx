@@ -25,42 +25,41 @@ const Login = ({ history, ...props }) => {
 
   const handleSubmit = (values) => {
     const data = { username: values.userName, password: values.Password };
-    console.log(data)
     AccountLogin(data).then((res) => {
-      console.log('roledata', data);
-      console.log('rolelogin', res);
-      // console.log('rolelogin', res.userRole);
       if (res.status === 400) {
         const defaultLoginFailureMessage = intl.formatMessage({
           id: 'pages.login.400',
           defaultMessage: 'Vui lòng nhập tài khoản hoặc mật khẩu',
         });
-        message.error(defaultLoginFailureMessage);
-
-        // notification.open({ message: 'Sai mật khẩu' });
+        // message.error(defaultLoginFailureMessage);
+        notification.error({ 
+          description: `Vui lòng nhập tài khoản hoặc mật khẩu`,
+          message: 'Đăng nhập thất bại' });
       }
       if (res.status === 404) {
         const defaultLoginFailureMessage = intl.formatMessage({
           id: 'pages.login.404',
           defaultMessage: 'Sai tài khoản hoặc mật khẩu',
         });
-        message.error(defaultLoginFailureMessage);
-
-        // notification.open({ message: 'Sai tài khoản hoặc mật khẩu' });
+        // message.error(defaultLoginFailureMessage);
+        notification.error({ 
+          description: `Sai tài khoản hoặc mật khẩu`,
+          message: 'Đăng nhập thất bại' });
       }
       if(res.userRole === "Staff") {
         const defaultLoginSuccessMessage = intl.formatMessage({
           id: 'pages.login.success',
           defaultMessage: 'Đăng nhập thành công',
         });
-        message.success(defaultLoginSuccessMessage);
+        // message.success(defaultLoginSuccessMessage);
+        notification.success({ message: 'Đăng nhập thành công' });
+
         if (res.token) {
           localStorage.setItem('USER_ID', res.id);
           localStorage.setItem('USER_TOKEN', res.token);
           localStorage.setItem('EXPIRED', res.expired);
           localStorage.setItem('ACCOUNT_ROLE', res.userRole);
           localStorage.setItem('USERNAME', res.fullName);
-          // history.push('/welcome');
           history.push('/dashboard/analysis');
         } 
       } 
@@ -74,7 +73,6 @@ const Login = ({ history, ...props }) => {
         localStorage.removeItem('USER_TOKEN', res.token);
         // history.push('User/LoginStaff')
         history.push('login')
-
       }
 
     });

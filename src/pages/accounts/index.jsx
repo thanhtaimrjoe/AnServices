@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/jsx-key */
-import { Card, message } from 'antd';
+import { Card, message, notification } from 'antd';
 import React, { useRef, useState, useEffect } from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
 import AsyncButton from '@/components/AsyncButton';
@@ -27,9 +27,15 @@ const AccountList = () => {
   const banAccountHandler = () => {
     return banUserByUserID(selectedRows[0]).then((res) => {
       if(res.status === 500) {
-        message.error("Chặn người dùng thất bại")
+        notification.error({
+          description: 'Chặn khách hàng thất bại',
+          message: 'Thất bại',
+        });
       } else {
-        message.success("Chặn người dùng thành công")
+        notification.success({
+          description: `Chặn khách hàng thành công`,
+          message: 'Thành công',
+        });
         ref.current?.reload()
       }
     });
