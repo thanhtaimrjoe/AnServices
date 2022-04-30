@@ -231,19 +231,19 @@
             <param name="status"></param>
             <returns></returns>
         </member>
-        <member name="M:AnService_Capstone.Controllers.ServiceController.CountSatisfiedRequestDetail">
+        <member name="M:AnService_Capstone.Controllers.ServiceController.CountSatisfiedRequestDetail(System.Int32,System.Int32)">
             <summary>
             dashboard
             </summary>
             <returns></returns>
         </member>
-        <member name="M:AnService_Capstone.Controllers.ServiceController.CountUnsatisfiedRequestDetail">
+        <member name="M:AnService_Capstone.Controllers.ServiceController.CountUnsatisfiedRequestDetail(System.Int32,System.Int32)">
             <summary>
             dashboard
             </summary>
             <returns></returns>
         </member>
-        <member name="M:AnService_Capstone.Controllers.ServiceController.CountReworkRequestDetail">
+        <member name="M:AnService_Capstone.Controllers.ServiceController.CountReworkRequestDetail(System.Int32,System.Int32)">
             <summary>
             dashboard
             </summary>

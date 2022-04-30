@@ -46,7 +46,10 @@ namespace AnService_Capstone.DataAccess.Dapper.Services
             if (chechExist)
             {
                 res = await _serviceRepository.AssignWorkerToRequest(job.RequestDetailId, job.MainWorker, 1, job.Priority);
-                _ = await _repariRepository.UpdateStatusRepairDetail((int)mainWorker.RepairDetailId);
+                if (mainWorker != null)
+                {
+                    _ = await _repariRepository.UpdateStatusRepairDetail((int)mainWorker.RepairDetailId);
+                }
             }
 
 
@@ -234,12 +237,42 @@ namespace AnService_Capstone.DataAccess.Dapper.Services
             /*var result = await _serviceRepository.GetAllServiceRequestDetailsByServiceRequestID(id); 
             return result;*/
             IEnumerable<TblRequestDetail> result;
+            IEnumerable<TblRequestDetail> result2;
+            List<TblRequestDetail> tmp = new List<TblRequestDetail>();
+            List<int> tmpInt = new List<int>();
+            List<int> tmpInt2 = new List<int>();
 
             result = await _serviceRepository.GetAllInformationServiceRequestDetailsByServiceRequestID(id);
+            result2 = await _serviceRepository.GetAllServiceRequestDetailsByServiceRequestID(id);
 
             if (result == null)
             {
-                result = await _serviceRepository.GetAllServiceRequestDetailsByServiceRequestID(id);
+                return result2;
+            }
+            else
+            {
+                if (result2.Count() > result.Count())
+                {
+                    foreach (var item in result)
+                    {
+                        tmp.Add(item);
+                        tmpInt.Add(item.RequestDetailId);
+                    }
+
+                    foreach (var item in result2)
+                    {
+                        tmpInt2.Add(item.RequestDetailId);
+                    }
+                    
+                    var tmp2 = tmpInt2.Except(tmpInt).ToArray();
+
+                    foreach (var item in tmp2)
+                    {
+                        var detail = await _serviceRepository.GetRequestDetailByID2(item);
+                        tmp.Add(detail);
+                    }
+                    return tmp;
+                }
             }
             return result;
         }

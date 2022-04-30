@@ -69,6 +69,8 @@ namespace AnService_Capstone.Core.Interfaces
 
         public Task<TblRequestDetail> GetRequestDetailByID(int id);
 
+        public Task<TblRequestDetail> GetRequestDetailByID2(int id);
+
         public void BackgroundServiceTask();
 
         public Task<int> CountRequestServiceDetail(int status, int year, int quarter);

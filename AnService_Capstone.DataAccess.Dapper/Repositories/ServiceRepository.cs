@@ -821,12 +821,12 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
             string query;
             if (quarter == 0)
             {
-                query = "select count(*) from tblRequestDetails where RequestDetailStatus = @RequestDetailStatus " +
+                query = "select count(*) from tblRequestDetails detail join tblServiceRequest sr on detail.ServiceRequestID = sr.ServiceRequestID where RequestDetailStatus = @RequestDetailStatus " +
                 "and YEAR(ServiceRequestCreateDate) = @YEAR and not DATEPART(QUARTER, ServiceRequestCreateDate) = @QUARTER";
             }
             else
             {
-                query = "select count(*) from tblRequestDetails where RequestDetailStatus = @RequestDetailStatus " +
+                query = "select count(*) from tblRequestDetails detail join tblServiceRequest sr on detail.ServiceRequestID = sr.ServiceRequestID where RequestDetailStatus = @RequestDetailStatus " +
               "and YEAR(ServiceRequestCreateDate) = @YEAR and DATEPART(QUARTER, ServiceRequestCreateDate) = @QUARTER";
             }
 
@@ -1133,6 +1133,32 @@ namespace AnService_Capstone.DataAccess.Dapper.Repositories
                 var res = await conn.QueryAsync<Dashboard.AmountOfSalesInYear>(query, new { @Quarter = quarter, @ServiceRequestCreateDate = year });
                 conn.Close();
                 return res;
+            }
+        }
+
+        public async Task<TblRequestDetail> GetRequestDetailByID2(int id)
+        {
+            var query = "select detail.RequestDetailID, ServiceRequestID, RequestDetailStatus, RequestDetailPrice, detail.ServiceID, ser.ServiceID, ServiceName, ServiceDescription, ServiceImg, TypeServiceID, TypeServiceDecription  " +
+                "from (tblRequestDetails detail join tblServices ser on detail.ServiceID = ser.ServiceID) " +
+                "join tblTypeService typeser on typeser.TypeServiceID = ser.TypeService " +
+                "where detail.RequestDetailID = @RequestDetailID";
+
+            using (var connection = _context.CreateConnection())
+            {
+                connection.Open();
+                var res = await connection.QueryAsync<TblRequestDetail, TblService, TblTypeService, TblRequestDetail>(query, (requestDetail, service, type) =>
+                {
+                    requestDetail.Service = service;
+                    requestDetail.Service.TypeServiceNavigation = type;
+                    return requestDetail;
+
+                }, param: new { @RequestDetailID = id }, splitOn: "ServiceID, TypeServiceID");
+                connection.Close();
+                /*if (res.Count() == 0)
+                {
+                    return null;
+                }*/
+                return res.FirstOrDefault();
             }
         }
     }
