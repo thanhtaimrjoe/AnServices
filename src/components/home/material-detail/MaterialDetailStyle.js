@@ -3,7 +3,6 @@ import Color from '../../../style/Color';
 const styles = StyleSheet.create({
   container: {
     backgroundColor: Color.background1,
-    paddingHorizontal: 15,
     flex: 1,
   },
   //service button
@@ -12,6 +11,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginTop: 15,
     marginBottom: 20,
+    marginHorizontal: 15,
   },
   serviceButtonContainer: {
     width: '30%',
@@ -41,14 +41,25 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: Color.second,
   },
+  //material request container
+  materialRequestContainer: {
+    backgroundColor: Color.white,
+    borderTopColor: Color.field,
+    borderTopWidth: 5,
+    borderBottomColor: Color.field,
+    borderBottomWidth: 5,
+  },
   //material list
   materialListItemContainer: {
     marginBottom: 20,
+    marginHorizontal: 15,
   },
   materialTitle: {
     fontSize: 18,
     color: Color.primary,
     fontWeight: '500',
+    marginTop: 15,
+    marginHorizontal: 15,
   },
   //material item
   materialContainer: {
@@ -226,12 +237,16 @@ const styles = StyleSheet.create({
     color: Color.white,
   },
   //report
-  reportProblemListContainer: {},
   reportTitle: {
     fontSize: 18,
     color: Color.primary,
     fontWeight: '500',
-    marginBottom: 15,
+    marginTop: 15,
+    marginHorizontal: 15,
+  },
+  reportListContainer: {
+    marginHorizontal: 15,
+    marginBottom: 20,
   },
   //Report Item
   reportProblemItem: {
@@ -241,7 +256,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: Color.request,
     borderRadius: 10,
-    marginBottom: 15,
+    marginTop: 15,
   },
   reportProblemItemImg: {
     width: 40,
@@ -255,7 +270,7 @@ const styles = StyleSheet.create({
   },
   //error message from api
   errorView: {
-    paddingVertical: 50,
+    paddingVertical: 15,
     alignItems: 'center',
   },
   errorMsg: {
@@ -263,9 +278,9 @@ const styles = StyleSheet.create({
     color: Color.primary,
   },
   errorImg: {
-    marginBottom: 20,
-    width: 80,
-    height: 80,
+    marginBottom: 15,
+    width: 100,
+    height: 100,
   },
   //loading screen
   loadingScreen: {

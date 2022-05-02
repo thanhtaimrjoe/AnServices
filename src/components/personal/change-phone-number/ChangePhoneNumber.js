@@ -31,14 +31,24 @@ export default function ChangePhoneNumber(props) {
     setOldPhoneNumberError('');
     setNewPhoneNumberError('');
     //validate old phone number
-    if (!oldPhoneNumber.match(/(0[3|5|7|8|9])+([0-9]{8})\b/)) {
-      setOldPhoneNumberError('Số điện thoại cũ không đúng');
+    if (oldPhoneNumber.trim().length === 0) {
+      setOldPhoneNumberError('Bạn chưa nhập số điện thoại cũ');
       result = false;
+    } else {
+      if (!oldPhoneNumber.match(/(0[3|5|7|8|9])+([0-9]{8})\b/)) {
+        setOldPhoneNumberError('Số điện thoại cũ không hợp lệ');
+        result = false;
+      }
     }
     //validate new phone number
-    if (!newPhoneNumber.match(/(0[3|5|7|8|9])+([0-9]{8})\b/)) {
-      setNewPhoneNumberError('Số điện thoại mới không đúng');
+    if (newPhoneNumber.trim().length === 0) {
+      setNewPhoneNumberError('Bạn chưa nhập số điện thoại mới');
       result = false;
+    } else {
+      if (!newPhoneNumber.match(/(0[3|5|7|8|9])+([0-9]{8})\b/)) {
+        setNewPhoneNumberError('Số điện thoại mới không hợp lệ');
+        result = false;
+      }
     }
     return result;
   };
@@ -65,7 +75,10 @@ export default function ChangePhoneNumber(props) {
             <Text style={styles.phoneNumberTitle}>Số điện thoại cũ</Text>
             <TextInput
               maxLength={10}
-              onChangeText={text => setOldPhoneNumber(text)}
+              onChangeText={text => {
+                setOldPhoneNumber(text);
+                setOldPhoneNumberError('');
+              }}
               placeholder="Nhập số điện thoại cũ"
               placeholderTextColor={Color.placeholder}
               keyboardType="number-pad"
@@ -77,7 +90,10 @@ export default function ChangePhoneNumber(props) {
             <Text style={styles.phoneNumberTitle}>Số điện thoại mới</Text>
             <TextInput
               maxLength={10}
-              onChangeText={text => setNewPhoneNumber(text)}
+              onChangeText={text => {
+                setNewPhoneNumber(text);
+                setNewPhoneNumberError('');
+              }}
               placeholder="Nhập số điện thoại mới"
               placeholderTextColor={Color.placeholder}
               keyboardType="numeric"

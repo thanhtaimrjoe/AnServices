@@ -165,6 +165,7 @@ const styles = StyleSheet.create({
   dialogTitle: {
     fontSize: 18,
     color: Color.primary,
+    marginVertical: 15,
   },
   //media dialog
   dialogMediaBtn: {

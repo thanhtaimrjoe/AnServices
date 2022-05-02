@@ -55,8 +55,8 @@ export default function RequestMaterial(props) {
 
   //handle quantity
   const onHandleQuantity = (text, index) => {
-    if (text.length > 0) {
-      materialList[index].quantity = parseFloat(text);
+    if (text.length > 0 && text !== '.' && text !== '-') {
+      materialList[index].quantity = parseInt(text);
     } else {
       materialList[index].quantity = '';
     }
@@ -181,6 +181,7 @@ export default function RequestMaterial(props) {
                 maxLength={8}
                 keyboardType="numeric"
                 style={styles.materialQuantity}
+                value={materialList[index].quantity + ''}
                 onChangeText={text => onHandleQuantity(text, index)}
               />
               {item.id !== 55 && (

@@ -167,126 +167,131 @@ export default function MaterialDetail(props) {
           </View>
         )}
       </View>
-      <Text style={styles.materialTitle}>Danh sách vật liệu yêu cầu</Text>
-      {usedMaterial.length === 0 && (
-        <View style={styles.loadingScreen}>
-          <Loading />
-        </View>
-      )}
-      {usedMaterial.errorsMsg && (
-        <View style={styles.errorView}>
-          <Image source={{uri: IconURL.notFoundImg}} style={styles.errorImg} />
-          <Text style={styles.errorMsg}>Chưa có yêu cầu vật liệu nào</Text>
-        </View>
-      )}
-      <View style={styles.materialListItemContainer}>
-        {usedMaterial.length > 0 &&
-          !usedMaterial.errorsMsg &&
-          usedMaterial.map((item, index) => {
-            return (
-              <View key={index} style={styles.materialContainer}>
-                <View style={styles.materialMainInfoContainer}>
-                  <View style={styles.materialMainTextContainer}>
-                    <Text style={styles.materialName}>
-                      {item.material.materialName}
-                    </Text>
-                    {item.note !== '' ? (
-                      <Text style={styles.materialNote}>{item.note}</Text>
-                    ) : (
-                      <Text style={styles.materialNoNote}>""</Text>
-                    )}
-                    <View style={styles.materialQuantityContainer}>
-                      <Text style={styles.materialQuantityTitle}>
-                        Số lượng:
+      <View style={styles.materialRequestContainer}>
+        <Text style={styles.materialTitle}>Danh sách yêu cầu vật liệu</Text>
+        {usedMaterial.length === 0 && (
+          <View style={styles.loadingScreen}>
+            <Loading />
+          </View>
+        )}
+        {usedMaterial.errorsMsg && (
+          <View style={styles.errorView}>
+            <Image
+              source={{uri: IconURL.notFoundImg}}
+              style={styles.errorImg}
+            />
+            <Text style={styles.errorMsg}>Chưa có yêu cầu vật liệu nào</Text>
+          </View>
+        )}
+        <View style={styles.materialListItemContainer}>
+          {usedMaterial.length > 0 &&
+            !usedMaterial.errorsMsg &&
+            usedMaterial.map((item, index) => {
+              return (
+                <View key={index} style={styles.materialContainer}>
+                  <View style={styles.materialMainInfoContainer}>
+                    <View style={styles.materialMainTextContainer}>
+                      <Text style={styles.materialName}>
+                        {item.material.materialName}
                       </Text>
-                      {item.quantityNew !== 0 ? (
-                        <Text style={styles.materialQuantityDeny}>
-                          {item.quantity}
-                        </Text>
+                      {item.note !== '' ? (
+                        <Text style={styles.materialNote}>{item.note}</Text>
                       ) : (
-                        <Text style={styles.materialQuantity}>
-                          {item.quantity}
-                        </Text>
+                        <Text style={styles.materialNoNote}>""</Text>
                       )}
-                      {item.quantityNew !== 0 && (
-                        <Text style={styles.materialQuantity}>
-                          {item.quantityNew}
+                      <View style={styles.materialQuantityContainer}>
+                        <Text style={styles.materialQuantityTitle}>
+                          Số lượng:
                         </Text>
-                      )}
-                    </View>
-                  </View>
-                  <View style={styles.materialIconContainer}>
-                    {item.status === 3 && (
-                      <Image
-                        source={{uri: IconURL.materialApprove}}
-                        style={styles.materialIcon}
-                      />
-                    )}
-                    {item.status === 1 && (
-                      <Image
-                        source={{uri: IconURL.materialDeny}}
-                        style={styles.materialIcon}
-                      />
-                    )}
-                    {item.status === 2 && (
-                      <Image
-                        source={{uri: IconURL.materialPending}}
-                        style={styles.materialIcon}
-                      />
-                    )}
-                    {item.status === 8 && (
-                      <Image
-                        source={{uri: IconURL.materialDeny}}
-                        style={styles.materialIcon}
-                      />
-                    )}
-                    {(requestDetailStatus === 2 ||
-                      requestDetailStatus === 6) && (
-                      <View style={styles.materialOtherContainer}>
-                        <TouchableOpacity
-                          style={styles.materialButtonContainer}
-                          onPress={() => onShowRequestMaterialDialog(item)}>
-                          <Image
-                            source={{uri: IconURL.plus}}
-                            style={styles.materialIcon}
-                          />
-                        </TouchableOpacity>
-                        {item.status === 3 ||
-                        item.status === 1 ||
-                        item.status === 8 ? (
-                          <View style={styles.materialButtonContainer}>
-                            <Image
-                              source={{uri: IconURL.cancelDisalbe}}
-                              style={styles.materialIcon}
-                            />
-                          </View>
+                        {item.quantityNew !== 0 ? (
+                          <Text style={styles.materialQuantityDeny}>
+                            {item.quantity}
+                          </Text>
                         ) : (
+                          <Text style={styles.materialQuantity}>
+                            {item.quantity}
+                          </Text>
+                        )}
+                        {item.quantityNew !== 0 && (
+                          <Text style={styles.materialQuantity}>
+                            {item.quantityNew}
+                          </Text>
+                        )}
+                      </View>
+                    </View>
+                    <View style={styles.materialIconContainer}>
+                      {item.status === 3 && (
+                        <Image
+                          source={{uri: IconURL.materialApprove}}
+                          style={styles.materialIcon}
+                        />
+                      )}
+                      {item.status === 1 && (
+                        <Image
+                          source={{uri: IconURL.materialDeny}}
+                          style={styles.materialIcon}
+                        />
+                      )}
+                      {item.status === 2 && (
+                        <Image
+                          source={{uri: IconURL.materialPending}}
+                          style={styles.materialIcon}
+                        />
+                      )}
+                      {item.status === 8 && (
+                        <Image
+                          source={{uri: IconURL.materialDeny}}
+                          style={styles.materialIcon}
+                        />
+                      )}
+                      {(requestDetailStatus === 2 ||
+                        requestDetailStatus === 6) && (
+                        <View style={styles.materialOtherContainer}>
                           <TouchableOpacity
                             style={styles.materialButtonContainer}
-                            onPress={() =>
-                              onCancelRequestMaterial(item.usedMaterialId)
-                            }>
+                            onPress={() => onShowRequestMaterialDialog(item)}>
                             <Image
-                              source={{uri: IconURL.cancel}}
+                              source={{uri: IconURL.plus}}
                               style={styles.materialIcon}
                             />
                           </TouchableOpacity>
-                        )}
-                      </View>
-                    )}
-                  </View>
-                </View>
-                {item.message && (
-                  <View style={styles.messageContainer}>
-                    <Text style={styles.messageTitle}>Tin nhắn</Text>
-                    <View style={styles.messageMainContainer}>
-                      <Text>{item.message}</Text>
+                          {item.status === 3 ||
+                          item.status === 1 ||
+                          item.status === 8 ? (
+                            <View style={styles.materialButtonContainer}>
+                              <Image
+                                source={{uri: IconURL.cancelDisalbe}}
+                                style={styles.materialIcon}
+                              />
+                            </View>
+                          ) : (
+                            <TouchableOpacity
+                              style={styles.materialButtonContainer}
+                              onPress={() =>
+                                onCancelRequestMaterial(item.usedMaterialId)
+                              }>
+                              <Image
+                                source={{uri: IconURL.cancel}}
+                                style={styles.materialIcon}
+                              />
+                            </TouchableOpacity>
+                          )}
+                        </View>
+                      )}
                     </View>
                   </View>
-                )}
-              </View>
-            );
-          })}
+                  {item.message && (
+                    <View style={styles.messageContainer}>
+                      <Text style={styles.messageTitle}>Tin nhắn</Text>
+                      <View style={styles.messageMainContainer}>
+                        <Text>{item.message}</Text>
+                      </View>
+                    </View>
+                  )}
+                </View>
+              );
+            })}
+        </View>
       </View>
       {materialItem && (
         <Modal transparent={true} visible={showRequestMaterialDialog}>
@@ -359,34 +364,36 @@ export default function MaterialDetail(props) {
       {report.errorsMsg && (
         <View style={styles.errorView}>
           <Image source={{uri: IconURL.notFoundImg}} style={styles.errorImg} />
-          <Text style={styles.errorMsg}>Hiện tại bạn chưa có báo cáo nào</Text>
+          <Text style={styles.errorMsg}>Chưa có báo cáo nào</Text>
         </View>
       )}
-      {report.length > 0 &&
-        !report.errorsMsg &&
-        report.map((item, index) => {
-          return (
-            <TouchableOpacity
-              key={index}
-              style={styles.reportProblemItem}
-              onPress={() => onShowReportDetail(item)}>
-              {item.reportTitle === 'Báo cáo vấn đề' ? (
-                <Image
-                  source={{uri: IconURL.problemImg}}
-                  style={styles.reportProblemItemImg}
-                />
-              ) : (
-                <Image
-                  source={{uri: IconURL.completeImg}}
-                  style={styles.reportProblemItemImg}
-                />
-              )}
-              <Text style={styles.reportProblemItemName}>
-                {item.reportDescription}
-              </Text>
-            </TouchableOpacity>
-          );
-        })}
+      <View style={styles.reportListContainer}>
+        {report.length > 0 &&
+          !report.errorsMsg &&
+          report.map((item, index) => {
+            return (
+              <TouchableOpacity
+                key={index}
+                style={styles.reportProblemItem}
+                onPress={() => onShowReportDetail(item)}>
+                {item.reportTitle === 'Báo cáo vấn đề' ? (
+                  <Image
+                    source={{uri: IconURL.problemImg}}
+                    style={styles.reportProblemItemImg}
+                  />
+                ) : (
+                  <Image
+                    source={{uri: IconURL.completeImg}}
+                    style={styles.reportProblemItemImg}
+                  />
+                )}
+                <Text style={styles.reportProblemItemName}>
+                  {item.reportDescription}
+                </Text>
+              </TouchableOpacity>
+            );
+          })}
+      </View>
     </ScrollView>
   );
 }
