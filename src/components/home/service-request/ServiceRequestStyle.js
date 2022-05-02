@@ -58,6 +58,11 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: Color.primary,
   },
+  dialogMediaTitle: {
+    fontSize: 18,
+    color: Color.primary,
+    marginVertical: 15,
+  },
   exitIconContainer: {
     paddingHorizontal: 8,
   },

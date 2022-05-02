@@ -43,7 +43,7 @@ export default {
   loadingVideoImg:
     'https://firebasestorage.googleapis.com/v0/b/anservices.appspot.com/o/Icon%2Fvideo-loading.png?alt=media&token=4fc8ad35-f872-4144-8486-b93662b8ee3f',
   notFoundImg:
-    'https://firebasestorage.googleapis.com/v0/b/anservices.appspot.com/o/Icon%2Fnot-found.png?alt=media&token=e02893aa-0e10-43e2-bbbc-b07f2a34ddf9',
+    'https://firebasestorage.googleapis.com/v0/b/anservices.appspot.com/o/Icon%2Fno-data.png?alt=media&token=c2ee19e4-214e-45bb-9729-757a2a20fb4c',
   /* ------ PROMOTION MANAGEMENT ------ */
   promotionImg:
     'https://firebasestorage.googleapis.com/v0/b/anservices.appspot.com/o/Icon%2Fcoupon.png?alt=media&token=3e587f6d-0dfd-4a53-8bec-fc490f47c0f6',

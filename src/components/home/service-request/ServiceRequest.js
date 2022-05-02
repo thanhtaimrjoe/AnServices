@@ -516,7 +516,7 @@ export default function ServiceRequest(props) {
         <Text style={styles.errorMessage}>{phoneNumberError}</Text>
       </View>
       <View style={styles.addressContainer}>
-        <Text style={styles.addressTitle}>Địa chỉ</Text>
+        <Text style={styles.addressTitle}>Địa chỉ công trình</Text>
         <TextInput
           value={address}
           onFocus={() => setIsFocusedAddress(true)}
@@ -611,7 +611,7 @@ export default function ServiceRequest(props) {
         <TouchableWithoutFeedback onPress={() => setShowMediaDialog(false)}>
           <View style={styles.dialogBackground}>
             <View style={styles.dialogContainer}>
-              <Text style={styles.dialogTitle}>Chọn ảnh hoặc video</Text>
+              <Text style={styles.dialogMediaTitle}>Chọn ảnh hoặc video</Text>
               <TouchableOpacity
                 style={styles.dialogMediaBtn}
                 onPress={onOpenCamera}>

@@ -13,7 +13,6 @@ import React, {useEffect, useState} from 'react';
 import {styles} from './RequestDetailStyle';
 import Color from '../../../style/Color';
 import Video from 'react-native-video';
-import Icon from 'react-native-vector-icons/FontAwesome5';
 import IconURL from '../../../style/IconURL';
 
 export default function RequestDetail(props) {
@@ -133,6 +132,19 @@ export default function RequestDetail(props) {
   //btn --- view contract detail
   const onViewContractDetail = contractItem => {
     props.onViewContractDetail(contractItem);
+  };
+
+  //check only unsatified service => disable invoice button
+  const checkOnlyUnsatifiedService = () => {
+    var result = true;
+    requestDetail.map((item, index) => {
+      if (item.requestDetailStatus === 12) {
+        result = false;
+      } else {
+        result = true;
+      }
+    });
+    return result;
   };
 
   return (
@@ -324,6 +336,7 @@ export default function RequestDetail(props) {
                     <Video
                       style={styles.mediaView}
                       source={{uri: item.mediaUrl}}
+                      poster={IconURL.loadingVideoImg}
                       posterResizeMode={'cover'}
                       paused={pause}
                       onLoad={() => {
@@ -435,26 +448,27 @@ export default function RequestDetail(props) {
           </TouchableOpacity>
         </View>
       )}
-      {serviceRequestInfo.serviceRequestStatus === 13 && (
-        <View style={styles.invoiceContainer}>
-          <Text style={styles.invoiceTitle}>Hóa đơn</Text>
-          <TouchableOpacity
-            style={styles.invoiceItemContainer}
-            onPress={() =>
-              onShowInvoice(
-                serviceRequestInfo.serviceRequestId,
-                serviceRequestInfo.promotionId,
-                serviceRequestInfo.serviceRequestReference,
-              )
-            }>
-            <Image
-              source={{uri: IconURL.invoiceImg}}
-              style={styles.invoiceItemImg}
-            />
-            <Text style={styles.invoiceItemName}>Hóa đơn</Text>
-          </TouchableOpacity>
-        </View>
-      )}
+      {serviceRequestInfo.serviceRequestStatus === 13 &&
+        checkOnlyUnsatifiedService() && (
+          <View style={styles.invoiceContainer}>
+            <Text style={styles.invoiceTitle}>Hóa đơn</Text>
+            <TouchableOpacity
+              style={styles.invoiceItemContainer}
+              onPress={() =>
+                onShowInvoice(
+                  serviceRequestInfo.serviceRequestId,
+                  serviceRequestInfo.promotionId,
+                  serviceRequestInfo.serviceRequestReference,
+                )
+              }>
+              <Image
+                source={{uri: IconURL.invoiceImg}}
+                style={styles.invoiceItemImg}
+              />
+              <Text style={styles.invoiceItemName}>Hóa đơn</Text>
+            </TouchableOpacity>
+          </View>
+        )}
       {(serviceRequestInfo.serviceRequestStatus === 2 ||
         serviceRequestInfo.serviceRequestStatus === 15) && (
         <TouchableOpacity
