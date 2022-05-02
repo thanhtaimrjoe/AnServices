@@ -82,7 +82,7 @@ export default function PersonalInformation(props) {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
         <View style={styles.fullNameContainer}>
-          <Text style={styles.fullNameTitle}>Họ và tên chủ công trình</Text>
+          <Text style={styles.fullNameTitle}>Họ và tên</Text>
           <TextInput
             value={fullName}
             onFocus={() => setIsFocusedFullName(true)}
