@@ -83,7 +83,7 @@ export default function LoginContainer(props) {
   //navigate to verify otp
   const navigateToVerifyOTP = () => {
     const convertedPhoneNumber = convertPhoneNumber(phoneNumber);
-    //sendSmsByPhoneNumber(convertedPhoneNumber);
+    sendSmsByPhoneNumber(convertedPhoneNumber);
     setLoading(false);
     //navigate to verify otp page
     navigation.navigate('VerifyOTPContainer', {

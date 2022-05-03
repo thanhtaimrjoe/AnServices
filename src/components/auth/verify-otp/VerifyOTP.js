@@ -48,7 +48,7 @@ export default function VerifyOTP(props) {
   const onVerifyOTP = () => {
     //check code equal 6 number or not
     if (code.length < 6) {
-      Alert.alert('Invalid', 'Wrong! Your inputed code was wrong');
+      Alert.alert('Thông báo', 'Mã OTP phải đủ 6 số, vui lòng thử lại');
     } else {
       props.onVerifyOTP(code);
     }

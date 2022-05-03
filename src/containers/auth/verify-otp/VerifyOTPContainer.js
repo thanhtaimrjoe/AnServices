@@ -23,25 +23,22 @@ export default function VerifyOTPContainer(props) {
   //button --- check inputted code with otp -> navigate to home page
   const onVerifyOTP = code => {
     //if inputed code correct
-    //if (code === otp) {
-    if (user.id) {
-      //navigate to home page
-      navigation.dispatch(
-        CommonActions.reset({
-          index: 1,
-          routes: [{name: 'BottomTab'}],
-        }),
-      );
+    if (code === otp) {
+      if (user.id) {
+        //navigate to home page
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 1,
+            routes: [{name: 'BottomTab'}],
+          }),
+        );
+      } else {
+        //navigate to sign up page
+        navigation.replace('SignUpContainer', {phoneNumber: phoneNumber});
+      }
     } else {
-      //navigate to sign up page
-      navigation.replace('SignUpContainer', {phoneNumber: phoneNumber});
+      Alert.alert('Thông báo', 'Mã OTP không khớp, vui lòng thử lại');
     }
-    // } else {
-    //   Alert.alert(
-    //     'Thông báo',
-    //     'Mã OTP bạn đã nhập không khớp, vui lòng thử lại',
-    //   );
-    // }
   };
 
   //button --- re-send otp
