@@ -147,7 +147,6 @@ const UpdateRequestMaterial = (props) => {
   };
 
   const handleCancel = () => {
-    // console.log('Clicked cancel button');
     setVisible(false);
     setVisible1(false);
   };

@@ -12,7 +12,7 @@ import { fakeChartData } from './service';
 import PageLoading from './components/PageLoading';
 import { getTimeDistance } from './utils/utils';
 import styles from './style.less';
-import { dashboard, dashboardgetArray } from '@/services/dashboard';
+import { dashboard, dashboardByQuarterAndYear, dashboardgetArray } from '@/services/dashboard';
 import moment from 'moment';
 
 const Analysis = () => {
@@ -20,6 +20,8 @@ const Analysis = () => {
   // const [currentTabKey, setCurrentTabKey] = useState('');
   // const [yearPickerValue, setYearPickerValue] = useState(getTimeDistance('year'));
   const [yearPickerValue, setYearPickerValue] = useState();
+  const [quarterInYearPickerPart2, setQuarterInYearPickerPart2] = useState();
+  const [yearPickerPart2, setYearPickerPart2] = useState(new Date().getFullYear());
 
   const { loading, data } = useRequest(fakeChartData);
   const [pending, setPending] = useState();
@@ -36,22 +38,960 @@ const Analysis = () => {
   const [totalCustomers, setTotalCustomers] = useState();
   const [totalWorkers, setTotalWorkers] = useState();
 
-  const [receivedServiceRequest, setReceivedServiceRequest] = useState();
-  const [receivedServiceRequestArray, setReceivedServiceRequestArray] = useState([]);
-  const [completeServiceRequestArray, setCompleteServiceRequestArray] = useState([]);
-  const [cancelServiceRequestArray, setCancelServiceRequestArray] = useState([]);
+  const [receivedServiceRequestArrayPart2, setReceivedServiceRequestArrayPart2] = useState([]);
+  const [receivedServiceRequestByQuarterArrayPart2,setReceivedServiceRequestByQuarterArrayPart2] = useState([]);
+  const [completeServiceRequestArrayPart2, setCompleteServiceRequestArrayPart2] = useState([]);
+  const [
+    completeServiceRequestByQuarterArrayPart2,
+    setCompleteServiceRequestByQuarterArrayPart2,
+  ] = useState([]);
+  const [cancelServiceRequestArrayPart2, setCancelServiceRequestArrayPart2] = useState([]);
+  const [
+    cancelServiceRequestByQuarterArrayPart2,
+    setCancelServiceRequestByQuarterArrayPart2,
+  ] = useState([]);
   const [revenueByYearArray, setRevenueByYearArray] = useState([]);
-
   const thisYear = new Date();
 
-  const defaultYearPickerChange = () => {
+  const handleQuarterPickerChangePart2 = (values) => {
+    setQuarterInYearPickerPart2(values);
+    if (values === undefined) {
+      dashboardgetArray(yearPickerPart2).then((res) => {
+        if (res.receivedServiceRequest !== null) {
+          receivedServiceRequestArrayPart2.splice(0, 12);
+          receivedServiceRequestByQuarterArrayPart2.splice(0, 3);
+          setReceivedServiceRequestArrayPart2([
+            ...receivedServiceRequestArrayPart2,
+            res.receivedServiceRequest.january,
+            res.receivedServiceRequest.february,
+            res.receivedServiceRequest.march,
+            res.receivedServiceRequest.april,
+            res.receivedServiceRequest.may,
+            res.receivedServiceRequest.june,
+            res.receivedServiceRequest.july,
+            res.receivedServiceRequest.august,
+            res.receivedServiceRequest.september,
+            res.receivedServiceRequest.october,
+            res.receivedServiceRequest.november,
+            res.receivedServiceRequest.december,
+          ]);
+
+          if (values === 1) {
+            receivedServiceRequestByQuarterArrayPart2.splice(0, 3);
+            setReceivedServiceRequestArrayPart2([
+              ...receivedServiceRequestByQuarterArrayPart2,
+              res.receivedServiceRequest.january,
+              res.receivedServiceRequest.february,
+              res.receivedServiceRequest.march,
+            ]);
+          }
+          if (values === 2) {
+            receivedServiceRequestByQuarterArrayPart2.splice(0, 3);
+            setReceivedServiceRequestArrayPart2([
+              ...receivedServiceRequestByQuarterArrayPart2,
+              res.receivedServiceRequest.april,
+              res.receivedServiceRequest.may,
+              res.receivedServiceRequest.june,
+            ]);
+          }
+          if (values === 3) {
+            receivedServiceRequestByQuarterArrayPart2.splice(0, 3);
+            setReceivedServiceRequestArrayPart2([
+              ...receivedServiceRequestByQuarterArrayPart2,
+              res.receivedServiceRequest.july,
+              res.receivedServiceRequest.august,
+              res.receivedServiceRequest.september,
+            ]);
+          }
+          if (values === 4) {
+            receivedServiceRequestByQuarterArrayPart2.splice(0, 3);
+            setReceivedServiceRequestArrayPart2([
+              ...receivedServiceRequestByQuarterArrayPart2,
+              res.receivedServiceRequest.october,
+              res.receivedServiceRequest.november,
+              res.receivedServiceRequest.december,
+            ]);
+          }
+        } else {
+          receivedServiceRequestArrayPart2.splice(0, 12);
+          receivedServiceRequestByQuarterArrayPart2.splice(0, 3);
+
+          setReceivedServiceRequestArrayPart2([
+            ...receivedServiceRequestArrayPart2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+          ]);
+
+          setReceivedServiceRequestByQuarterArrayPart2([
+            ...receivedServiceRequestByQuarterArrayPart2,
+            0,
+            0,
+            0,
+          ]);
+        }
+
+        if (res.completeServiceRequest !== null) {
+          completeServiceRequestArrayPart2.splice(0, 12);
+          completeServiceRequestByQuarterArrayPart2.splice(0, 3);
+
+          setCompleteServiceRequestArrayPart2([
+            ...completeServiceRequestArrayPart2,
+            res.completeServiceRequest.january,
+            res.completeServiceRequest.february,
+            res.completeServiceRequest.march,
+            res.completeServiceRequest.april,
+            res.completeServiceRequest.may,
+            res.completeServiceRequest.june,
+            res.completeServiceRequest.july,
+            res.completeServiceRequest.august,
+            res.completeServiceRequest.september,
+            res.completeServiceRequest.october,
+            res.completeServiceRequest.november,
+            res.completeServiceRequest.december,
+          ]);
+
+          if (values === 1) {
+            completeServiceRequestByQuarterArrayPart2.splice(0, 3);
+            setCompleteServiceRequestByQuarterArrayPart2([
+              ...completeServiceRequestByQuarterArrayPart2,
+              res.receivedServiceRequest.january,
+              res.receivedServiceRequest.february,
+              res.receivedServiceRequest.march,
+            ]);
+          }
+          if (values === 2) {
+            completeServiceRequestByQuarterArrayPart2.splice(0, 3);
+            setCompleteServiceRequestByQuarterArrayPart2([
+              ...completeServiceRequestByQuarterArrayPart2,
+              res.receivedServiceRequest.april,
+              res.receivedServiceRequest.may,
+              res.receivedServiceRequest.june,
+            ]);
+          }
+          if (values === 3) {
+            completeServiceRequestByQuarterArrayPart2.splice(0, 3);
+            setCompleteServiceRequestByQuarterArrayPart2([
+              ...completeServiceRequestByQuarterArrayPart2,
+              res.receivedServiceRequest.july,
+              res.receivedServiceRequest.august,
+              res.receivedServiceRequest.september,
+            ]);
+          }
+          if (values === 4) {
+            completeServiceRequestByQuarterArrayPart2.splice(0, 3);
+            setCompleteServiceRequestByQuarterArrayPart2([
+              ...completeServiceRequestByQuarterArrayPart2,
+              res.receivedServiceRequest.october,
+              res.receivedServiceRequest.november,
+              res.receivedServiceRequest.december,
+            ]);
+          }
+        } else {
+          completeServiceRequestArrayPart2.splice(0, 12);
+          completeServiceRequestByQuarterArrayPart2.splice(0, 3);
+
+          setCompleteServiceRequestArrayPart2([
+            ...completeServiceRequestArrayPart2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+          ]);
+          setCompleteServiceRequestByQuarterArrayPart2([
+            ...receivedServiceRequestByQuarterArrayPart2,
+            0,
+            0,
+            0,
+          ]);
+        }
+
+        if (res.cancelServiceRequest !== null) {
+          cancelServiceRequestArrayPart2.splice(0, 12);
+          cancelServiceRequestByQuarterArrayPart2.splice(0, 3);
+          setCancelServiceRequestArrayPart2([
+            ...cancelServiceRequestArrayPart2,
+            res.cancelServiceRequest.january,
+            res.cancelServiceRequest.february,
+            res.cancelServiceRequest.march,
+            res.cancelServiceRequest.april,
+            res.cancelServiceRequest.may,
+            res.cancelServiceRequest.june,
+            res.cancelServiceRequest.july,
+            res.cancelServiceRequest.august,
+            res.cancelServiceRequest.september,
+            res.cancelServiceRequest.october,
+            res.cancelServiceRequest.november,
+            res.cancelServiceRequest.december,
+          ]);
+
+          if (values === 1) {
+            cancelServiceRequestByQuarterArrayPart2.splice(0, 3);
+            setCancelServiceRequestByQuarterArrayPart2([
+              ...cancelServiceRequestByQuarterArrayPart2,
+              res.receivedServiceRequest.january,
+              res.receivedServiceRequest.february,
+              res.receivedServiceRequest.march,
+            ]);
+          }
+          if (values === 2) {
+            cancelServiceRequestByQuarterArrayPart2.splice(0, 3);
+            setCancelServiceRequestByQuarterArrayPart2([
+              ...cancelServiceRequestByQuarterArrayPart2,
+              res.receivedServiceRequest.april,
+              res.receivedServiceRequest.may,
+              res.receivedServiceRequest.june,
+            ]);
+          }
+          if (values === 3) {
+            cancelServiceRequestByQuarterArrayPart2.splice(0, 3);
+            setCancelServiceRequestByQuarterArrayPart2([
+              ...cancelServiceRequestByQuarterArrayPart2,
+              res.receivedServiceRequest.july,
+              res.receivedServiceRequest.august,
+              res.receivedServiceRequest.september,
+            ]);
+          }
+          if (values === 4) {
+            cancelServiceRequestByQuarterArrayPart2.splice(0, 3);
+            setCancelServiceRequestByQuarterArrayPart2([
+              ...cancelServiceRequestByQuarterArrayPart2,
+              res.receivedServiceRequest.october,
+              res.receivedServiceRequest.november,
+              res.receivedServiceRequest.december,
+            ]);
+          }
+        } else {
+          cancelServiceRequestArrayPart2.splice(0, 12);
+          cancelServiceRequestByQuarterArrayPart2.splice(0, 3);
+
+          setCancelServiceRequestArrayPart2([
+            ...cancelServiceRequestArrayPart2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+          ]);
+
+          setCancelServiceRequestByQuarterArrayPart2([
+            ...receivedServiceRequestByQuarterArrayPart2,
+            0,
+            0,
+            0,
+          ]);
+        }
+
+        if(res.serviceStatusStatistics !== null) {
+          setPending(res.serviceStatusStatistics.pending);
+          setSurveying(res.serviceStatusStatistics.surveying);
+          setAgreed(res.serviceStatusStatistics.agreed);
+          setProcessing(res.serviceStatusStatistics.processing);
+          setPayment(res.serviceStatusStatistics.payment);
+          setAccomplished(res.serviceStatusStatistics.accomplished);
+          setCancel(res.serviceStatusStatistics.cancel);
+          setDeny(res.serviceStatusStatistics.deny);
+        } else {
+          setPending(0)
+          setSurveying(0)
+          setAgreed(0)
+          setProcessing(0)
+          setPayment(0)
+          setAccomplished(0)
+          setCancel(0)
+          setDeny(0)
+  
+        }
+
+        setSatisfiedRequestDetail(res.satisfiedRequestDetail);
+        setUnsatisfiedRequestDetail(res.unsatisfiedRequestDetail);
+        setReworkRequestDetail(res.reworkRequestDetail);
+        setTotalCustomers(res.totalCustomers);
+        setTotalWorkers(res.totalWorkers);
+      });
+    } else {
+      dashboardByQuarterAndYear(values, yearPickerPart2).then((res) => {
+        if (res.receivedServiceRequest !== null) {
+          receivedServiceRequestArrayPart2.splice(0, 12);
+          receivedServiceRequestByQuarterArrayPart2.splice(0, 3);
+
+          if (values === 1) {
+            receivedServiceRequestArrayPart2.splice(0, 12);
+            receivedServiceRequestByQuarterArrayPart2.splice(0, 3);
+            setReceivedServiceRequestByQuarterArrayPart2([
+              ...receivedServiceRequestByQuarterArrayPart2,
+              res.receivedServiceRequest.january,
+              res.receivedServiceRequest.february,
+              res.receivedServiceRequest.march,
+            ]);
+          }
+          if (values === 2) {
+            receivedServiceRequestArrayPart2.splice(0, 12);
+            receivedServiceRequestByQuarterArrayPart2.splice(0, 3);
+            setReceivedServiceRequestByQuarterArrayPart2([
+              ...receivedServiceRequestByQuarterArrayPart2,
+              res.receivedServiceRequest.april,
+              res.receivedServiceRequest.may,
+              res.receivedServiceRequest.june,
+            ]);
+          }
+          if (values === 3) {
+            receivedServiceRequestArrayPart2.splice(0, 12);
+            receivedServiceRequestByQuarterArrayPart2.splice(0, 3);
+            setReceivedServiceRequestByQuarterArrayPart2([
+              ...receivedServiceRequestByQuarterArrayPart2,
+              res.receivedServiceRequest.july,
+              res.receivedServiceRequest.august,
+              res.receivedServiceRequest.september,
+            ]);
+          }
+          if (values === 4) {
+            receivedServiceRequestArrayPart2.splice(0, 12);
+            receivedServiceRequestByQuarterArrayPart2.splice(0, 3);
+            setReceivedServiceRequestByQuarterArrayPart2([
+              ...receivedServiceRequestByQuarterArrayPart2,
+              res.receivedServiceRequest.october,
+              res.receivedServiceRequest.november,
+              res.receivedServiceRequest.december,
+            ]);
+          }
+        } else {
+          receivedServiceRequestArrayPart2.splice(0, 12);
+          receivedServiceRequestByQuarterArrayPart2.splice(0, 3);
+
+          setReceivedServiceRequestArrayPart2([
+            ...receivedServiceRequestArrayPart2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+          ]);
+
+          setReceivedServiceRequestByQuarterArrayPart2([
+            ...receivedServiceRequestByQuarterArrayPart2,
+            0,
+            0,
+            0,
+          ]);
+        }
+
+        if (res.completeServiceRequest !== null) {
+          completeServiceRequestArrayPart2.splice(0, 12);
+          completeServiceRequestByQuarterArrayPart2.splice(0, 3);
+          if (values === 1) {
+            completeServiceRequestArrayPart2.splice(0, 12);
+            completeServiceRequestByQuarterArrayPart2.splice(0, 3);
+            setCompleteServiceRequestByQuarterArrayPart2([
+              ...completeServiceRequestByQuarterArrayPart2,
+              res.completeServiceRequest.january,
+              res.completeServiceRequest.february,
+              res.completeServiceRequest.march,
+            ]);
+          }
+          if (values === 2) {
+            completeServiceRequestArrayPart2.splice(0, 12);
+            completeServiceRequestByQuarterArrayPart2.splice(0, 3);
+            setCompleteServiceRequestByQuarterArrayPart2([
+              ...completeServiceRequestByQuarterArrayPart2,
+              res.completeServiceRequest.april,
+              res.completeServiceRequest.may,
+              res.completeServiceRequest.june,
+            ]);
+          }
+          if (values === 3) {
+            completeServiceRequestArrayPart2.splice(0, 12);
+            completeServiceRequestByQuarterArrayPart2.splice(0, 3);
+            setCompleteServiceRequestByQuarterArrayPart2([
+              ...completeServiceRequestByQuarterArrayPart2,
+              res.completeServiceRequest.july,
+              res.completeServiceRequest.august,
+              res.completeServiceRequest.september,
+            ]);
+          }
+          if (values === 4) {
+            completeServiceRequestArrayPart2.splice(0, 12);
+            completeServiceRequestByQuarterArrayPart2.splice(0, 3);
+            setCompleteServiceRequestByQuarterArrayPart2([
+              ...completeServiceRequestByQuarterArrayPart2,
+              res.completeServiceRequest.october,
+              res.completeServiceRequest.november,
+              res.completeServiceRequest.december,
+            ]);
+          }
+        } else {
+          completeServiceRequestArrayPart2.splice(0, 12);
+          setCompleteServiceRequestArrayPart2([
+            ...completeServiceRequestArrayPart2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+          ]);
+        }
+
+        if (res.cancelServiceRequest !== null) {
+          cancelServiceRequestArrayPart2.splice(0, 12);
+          cancelServiceRequestByQuarterArrayPart2.splice(0, 3);
+          if (values === 1) {
+            cancelServiceRequestArrayPart2.splice(0, 12);
+            cancelServiceRequestByQuarterArrayPart2.splice(0, 3);
+            setCancelServiceRequestByQuarterArrayPart2([
+              ...cancelServiceRequestByQuarterArrayPart2,
+              res.cancelServiceRequest.january,
+              res.cancelServiceRequest.february,
+              res.cancelServiceRequest.march,
+            ]);
+          }
+          if (values === 2) {
+            cancelServiceRequestArrayPart2.splice(0, 12);
+            cancelServiceRequestByQuarterArrayPart2.splice(0, 3);
+            setCancelServiceRequestByQuarterArrayPart2([
+              ...cancelServiceRequestByQuarterArrayPart2,
+              res.cancelServiceRequest.april,
+              res.cancelServiceRequest.may,
+              res.cancelServiceRequest.june,
+            ]);
+          }
+          if (values === 3) {
+            cancelServiceRequestArrayPart2.splice(0, 12);
+            cancelServiceRequestByQuarterArrayPart2.splice(0, 3);
+            setCancelServiceRequestByQuarterArrayPart2([
+              ...cancelServiceRequestByQuarterArrayPart2,
+              res.cancelServiceRequest.july,
+              res.cancelServiceRequest.august,
+              res.cancelServiceRequest.september,
+            ]);
+          }
+          if (values === 4) {
+            cancelServiceRequestArrayPart2.splice(0, 12);
+            cancelServiceRequestByQuarterArrayPart2.splice(0, 3);
+            setCancelServiceRequestByQuarterArrayPart2([
+              ...cancelServiceRequestByQuarterArrayPart2,
+              res.cancelServiceRequest.october,
+              res.cancelServiceRequest.november,
+              res.cancelServiceRequest.december,
+            ]);
+          }
+        } else {
+          cancelServiceRequestArrayPart2.splice(0, 12);
+          setCancelServiceRequestArrayPart2([
+            ...cancelServiceRequestArrayPart2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+          ]);
+        }
+
+        if(res.serviceStatusStatistics !== null) {
+          setPending(res.serviceStatusStatistics.pending);
+          setSurveying(res.serviceStatusStatistics.surveying);
+          setAgreed(res.serviceStatusStatistics.agreed);
+          setProcessing(res.serviceStatusStatistics.processing);
+          setPayment(res.serviceStatusStatistics.payment);
+          setAccomplished(res.serviceStatusStatistics.accomplished);
+          setCancel(res.serviceStatusStatistics.cancel);
+          setDeny(res.serviceStatusStatistics.deny);
+        } else {
+          setPending(0)
+          setSurveying(0)
+          setAgreed(0)
+          setProcessing(0)
+          setPayment(0)
+          setAccomplished(0)
+          setCancel(0)
+          setDeny(0)
+  
+        }
+
+        setSatisfiedRequestDetail(res.satisfiedRequestDetail);
+        setUnsatisfiedRequestDetail(res.unsatisfiedRequestDetail);
+        setReworkRequestDetail(res.reworkRequestDetail);
+        setTotalCustomers(res.totalCustomers);
+        setTotalWorkers(res.totalWorkers);
+
+
+      });
+    }
+  };
+
+  const handleYearPickerChangePart2 = (values, dateString) => {
+    setYearPickerPart2(dateString);
+    if ((values === undefined || values === null) && quarterInYearPickerPart2 === undefined) {
+      dashboardgetArray(yearPickerPart2).then((res) => {
+        if (res.receivedServiceRequest !== null) {
+          receivedServiceRequestArrayPart2.splice(0, 12);
+          setReceivedServiceRequestArrayPart2([
+            ...receivedServiceRequestArrayPart2,
+            res.receivedServiceRequest.january,
+            res.receivedServiceRequest.february,
+            res.receivedServiceRequest.march,
+            res.receivedServiceRequest.april,
+            res.receivedServiceRequest.may,
+            res.receivedServiceRequest.june,
+            res.receivedServiceRequest.july,
+            res.receivedServiceRequest.august,
+            res.receivedServiceRequest.september,
+            res.receivedServiceRequest.october,
+            res.receivedServiceRequest.november,
+            res.receivedServiceRequest.december,
+          ]);
+        } else {
+          receivedServiceRequestArrayPart2.splice(0, 12);
+          setReceivedServiceRequestArrayPart2([
+            ...receivedServiceRequestArrayPart2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+          ]);
+        }
+  
+        if (res.completeServiceRequest !== null) {
+          completeServiceRequestArrayPart2.splice(0, 12);
+          setCompleteServiceRequestArrayPart2([
+            ...completeServiceRequestArrayPart2,
+            res.completeServiceRequest.january,
+            res.completeServiceRequest.february,
+            res.completeServiceRequest.march,
+            res.completeServiceRequest.april,
+            res.completeServiceRequest.may,
+            res.completeServiceRequest.june,
+            res.completeServiceRequest.july,
+            res.completeServiceRequest.august,
+            res.completeServiceRequest.september,
+            res.completeServiceRequest.october,
+            res.completeServiceRequest.november,
+            res.completeServiceRequest.december,
+          ]);
+        } else {
+          completeServiceRequestArrayPart2.splice(0, 12);
+          setCompleteServiceRequestArrayPart2([
+            ...completeServiceRequestArrayPart2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+          ]);
+        }
+  
+        if (res.cancelServiceRequest !== null) {
+          cancelServiceRequestArrayPart2.splice(0, 12);
+          setCancelServiceRequestArrayPart2([
+            ...cancelServiceRequestArrayPart2,
+            res.cancelServiceRequest.january,
+            res.cancelServiceRequest.february,
+            res.cancelServiceRequest.march,
+            res.cancelServiceRequest.april,
+            res.cancelServiceRequest.may,
+            res.cancelServiceRequest.june,
+            res.cancelServiceRequest.july,
+            res.cancelServiceRequest.august,
+            res.cancelServiceRequest.september,
+            res.cancelServiceRequest.october,
+            res.cancelServiceRequest.november,
+            res.cancelServiceRequest.december,
+          ]);
+        } else {
+          cancelServiceRequestArrayPart2.splice(0, 12);
+          setCancelServiceRequestArrayPart2([
+            ...cancelServiceRequestArrayPart2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+          ]);
+        }
+  
+        if(res.serviceStatusStatistics !== null) {
+          setPending(res.serviceStatusStatistics.pending);
+          setSurveying(res.serviceStatusStatistics.surveying);
+          setAgreed(res.serviceStatusStatistics.agreed);
+          setProcessing(res.serviceStatusStatistics.processing);
+          setPayment(res.serviceStatusStatistics.payment);
+          setAccomplished(res.serviceStatusStatistics.accomplished);
+          setCancel(res.serviceStatusStatistics.cancel);
+          setDeny(res.serviceStatusStatistics.deny);
+        } else {
+          setPending(0)
+          setSurveying(0)
+          setAgreed(0)
+          setProcessing(0)
+          setPayment(0)
+          setAccomplished(0)
+          setCancel(0)
+          setDeny(0)
+  
+        }
+  
+        setSatisfiedRequestDetail(res.satisfiedRequestDetail);
+        setUnsatisfiedRequestDetail(res.unsatisfiedRequestDetail);
+        setReworkRequestDetail(res.reworkRequestDetail);
+        setTotalCustomers(res.totalCustomers);
+        setTotalWorkers(res.totalWorkers);
+  
+      });
+    } else if(quarterInYearPickerPart2 === undefined) {
+      dashboardgetArray(dateString).then((res) => {
+        if (res.receivedServiceRequest !== null) {
+          receivedServiceRequestArrayPart2.splice(0, 12);
+          setReceivedServiceRequestArrayPart2([
+            ...receivedServiceRequestArrayPart2,
+            res.receivedServiceRequest.january,
+            res.receivedServiceRequest.february,
+            res.receivedServiceRequest.march,
+            res.receivedServiceRequest.april,
+            res.receivedServiceRequest.may,
+            res.receivedServiceRequest.june,
+            res.receivedServiceRequest.july,
+            res.receivedServiceRequest.august,
+            res.receivedServiceRequest.september,
+            res.receivedServiceRequest.october,
+            res.receivedServiceRequest.november,
+            res.receivedServiceRequest.december,
+          ]);
+        } else {
+          receivedServiceRequestArrayPart2.splice(0, 12);
+          setReceivedServiceRequestArrayPart2([
+            ...receivedServiceRequestArrayPart2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+          ]);
+        }
+  
+        if (res.completeServiceRequest !== null) {
+          completeServiceRequestArrayPart2.splice(0, 12);
+          setCompleteServiceRequestArrayPart2([
+            ...completeServiceRequestArrayPart2,
+            res.completeServiceRequest.january,
+            res.completeServiceRequest.february,
+            res.completeServiceRequest.march,
+            res.completeServiceRequest.april,
+            res.completeServiceRequest.may,
+            res.completeServiceRequest.june,
+            res.completeServiceRequest.july,
+            res.completeServiceRequest.august,
+            res.completeServiceRequest.september,
+            res.completeServiceRequest.october,
+            res.completeServiceRequest.november,
+            res.completeServiceRequest.december,
+          ]);
+        } else {
+          completeServiceRequestArrayPart2.splice(0, 12);
+          setCompleteServiceRequestArrayPart2([
+            ...completeServiceRequestArrayPart2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+          ]);
+        }
+  
+        if (res.cancelServiceRequest !== null) {
+          cancelServiceRequestArrayPart2.splice(0, 12);
+          setCancelServiceRequestArrayPart2([
+            ...cancelServiceRequestArrayPart2,
+            res.cancelServiceRequest.january,
+            res.cancelServiceRequest.february,
+            res.cancelServiceRequest.march,
+            res.cancelServiceRequest.april,
+            res.cancelServiceRequest.may,
+            res.cancelServiceRequest.june,
+            res.cancelServiceRequest.july,
+            res.cancelServiceRequest.august,
+            res.cancelServiceRequest.september,
+            res.cancelServiceRequest.october,
+            res.cancelServiceRequest.november,
+            res.cancelServiceRequest.december,
+          ]);
+        } else {
+          cancelServiceRequestArrayPart2.splice(0, 12);
+          setCancelServiceRequestArrayPart2([
+            ...cancelServiceRequestArrayPart2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+          ]);
+        }
+
+        if(res.serviceStatusStatistics !== null) {
+          setPending(res.serviceStatusStatistics.pending);
+          setSurveying(res.serviceStatusStatistics.surveying);
+          setAgreed(res.serviceStatusStatistics.agreed);
+          setProcessing(res.serviceStatusStatistics.processing);
+          setPayment(res.serviceStatusStatistics.payment);
+          setAccomplished(res.serviceStatusStatistics.accomplished);
+          setCancel(res.serviceStatusStatistics.cancel);
+          setDeny(res.serviceStatusStatistics.deny);
+        } else {
+          setPending(0)
+          setSurveying(0)
+          setAgreed(0)
+          setProcessing(0)
+          setPayment(0)
+          setAccomplished(0)
+          setCancel(0)
+          setDeny(0)
+  
+        }
+
+        setSatisfiedRequestDetail(res.satisfiedRequestDetail);
+        setUnsatisfiedRequestDetail(res.unsatisfiedRequestDetail);
+        setReworkRequestDetail(res.reworkRequestDetail);
+        setTotalCustomers(res.totalCustomers);
+        setTotalWorkers(res.totalWorkers);
+
+
+      });
+    } else {
+      dashboardByQuarterAndYear(quarterInYearPickerPart2, dateString).then((res) => {
+        if (res.receivedServiceRequest !== null) {
+          receivedServiceRequestArrayPart2.splice(0, 12);
+          setReceivedServiceRequestArrayPart2([
+            ...receivedServiceRequestArrayPart2,
+            res.receivedServiceRequest.january,
+            res.receivedServiceRequest.february,
+            res.receivedServiceRequest.march,
+            res.receivedServiceRequest.april,
+            res.receivedServiceRequest.may,
+            res.receivedServiceRequest.june,
+            res.receivedServiceRequest.july,
+            res.receivedServiceRequest.august,
+            res.receivedServiceRequest.september,
+            res.receivedServiceRequest.october,
+            res.receivedServiceRequest.november,
+            res.receivedServiceRequest.december,
+          ]);
+        } else {
+          receivedServiceRequestArrayPart2.splice(0, 12);
+          setReceivedServiceRequestArrayPart2([
+            ...receivedServiceRequestArrayPart2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+          ]);
+        }
+  
+        if (res.completeServiceRequest !== null) {
+          completeServiceRequestArrayPart2.splice(0, 12);
+          setCompleteServiceRequestArrayPart2([
+            ...completeServiceRequestArrayPart2,
+            res.completeServiceRequest.january,
+            res.completeServiceRequest.february,
+            res.completeServiceRequest.march,
+            res.completeServiceRequest.april,
+            res.completeServiceRequest.may,
+            res.completeServiceRequest.june,
+            res.completeServiceRequest.july,
+            res.completeServiceRequest.august,
+            res.completeServiceRequest.september,
+            res.completeServiceRequest.october,
+            res.completeServiceRequest.november,
+            res.completeServiceRequest.december,
+          ]);
+        } else {
+          completeServiceRequestArrayPart2.splice(0, 12);
+          setCompleteServiceRequestArrayPart2([
+            ...completeServiceRequestArrayPart2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+          ]);
+        }
+  
+        if (res.cancelServiceRequest !== null) {
+          cancelServiceRequestArrayPart2.splice(0, 12);
+          setCancelServiceRequestArrayPart2([
+            ...cancelServiceRequestArrayPart2,
+            res.cancelServiceRequest.january,
+            res.cancelServiceRequest.february,
+            res.cancelServiceRequest.march,
+            res.cancelServiceRequest.april,
+            res.cancelServiceRequest.may,
+            res.cancelServiceRequest.june,
+            res.cancelServiceRequest.july,
+            res.cancelServiceRequest.august,
+            res.cancelServiceRequest.september,
+            res.cancelServiceRequest.october,
+            res.cancelServiceRequest.november,
+            res.cancelServiceRequest.december,
+          ]);
+        } else {
+          cancelServiceRequestArrayPart2.splice(0, 12);
+          setCancelServiceRequestArrayPart2([
+            ...cancelServiceRequestArrayPart2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+          ]);
+        }
+
+        if(res.serviceStatusStatistics !== null) {
+          setPending(res.serviceStatusStatistics.pending);
+          setSurveying(res.serviceStatusStatistics.surveying);
+          setAgreed(res.serviceStatusStatistics.agreed);
+          setProcessing(res.serviceStatusStatistics.processing);
+          setPayment(res.serviceStatusStatistics.payment);
+          setAccomplished(res.serviceStatusStatistics.accomplished);
+          setCancel(res.serviceStatusStatistics.cancel);
+          setDeny(res.serviceStatusStatistics.deny);
+        } else {
+          setPending(0)
+          setSurveying(0)
+          setAgreed(0)
+          setProcessing(0)
+          setPayment(0)
+          setAccomplished(0)
+          setCancel(0)
+          setDeny(0)
+  
+        }
+
+        setSatisfiedRequestDetail(res.satisfiedRequestDetail);
+        setUnsatisfiedRequestDetail(res.unsatisfiedRequestDetail);
+        setReworkRequestDetail(res.reworkRequestDetail);
+        setTotalCustomers(res.totalCustomers);
+        setTotalWorkers(res.totalWorkers);
+
+
+      });
+    }
+  };
+
+  const defaultYearPickerChangePart2 = () => {
     const defaultThisYear = thisYear.getFullYear();
     setYearPickerValue(defaultThisYear);
     dashboardgetArray(defaultThisYear).then((res) => {
       if (res.receivedServiceRequest !== null) {
-        receivedServiceRequestArray.splice(0, 12);
-        setReceivedServiceRequestArray([
-          ...receivedServiceRequestArray,
+        receivedServiceRequestArrayPart2.splice(0, 12);
+        setReceivedServiceRequestArrayPart2([
+          ...receivedServiceRequestArrayPart2,
           res.receivedServiceRequest.january,
           res.receivedServiceRequest.february,
           res.receivedServiceRequest.march,
@@ -66,9 +1006,9 @@ const Analysis = () => {
           res.receivedServiceRequest.december,
         ]);
       } else {
-        receivedServiceRequestArray.splice(0, 12);
-        setReceivedServiceRequestArray([
-          ...receivedServiceRequestArray,
+        receivedServiceRequestArrayPart2.splice(0, 12);
+        setReceivedServiceRequestArrayPart2([
+          ...receivedServiceRequestArrayPart2,
           0,
           0,
           0,
@@ -85,9 +1025,9 @@ const Analysis = () => {
       }
 
       if (res.completeServiceRequest !== null) {
-        completeServiceRequestArray.splice(0, 12);
-        setCompleteServiceRequestArray([
-          ...completeServiceRequestArray,
+        completeServiceRequestArrayPart2.splice(0, 12);
+        setCompleteServiceRequestArrayPart2([
+          ...completeServiceRequestArrayPart2,
           res.completeServiceRequest.january,
           res.completeServiceRequest.february,
           res.completeServiceRequest.march,
@@ -102,9 +1042,9 @@ const Analysis = () => {
           res.completeServiceRequest.december,
         ]);
       } else {
-        completeServiceRequestArray.splice(0, 12);
-        setCompleteServiceRequestArray([
-          ...completeServiceRequestArray,
+        completeServiceRequestArrayPart2.splice(0, 12);
+        setCompleteServiceRequestArrayPart2([
+          ...completeServiceRequestArrayPart2,
           0,
           0,
           0,
@@ -121,9 +1061,9 @@ const Analysis = () => {
       }
 
       if (res.cancelServiceRequest !== null) {
-        cancelServiceRequestArray.splice(0, 12);
-        setCancelServiceRequestArray([
-          ...cancelServiceRequestArray,
+        cancelServiceRequestArrayPart2.splice(0, 12);
+        setCancelServiceRequestArrayPart2([
+          ...cancelServiceRequestArrayPart2,
           res.cancelServiceRequest.january,
           res.cancelServiceRequest.february,
           res.cancelServiceRequest.march,
@@ -138,9 +1078,9 @@ const Analysis = () => {
           res.cancelServiceRequest.december,
         ]);
       } else {
-        cancelServiceRequestArray.splice(0, 12);
-        setCancelServiceRequestArray([
-          ...cancelServiceRequestArray,
+        cancelServiceRequestArrayPart2.splice(0, 12);
+        setCancelServiceRequestArrayPart2([
+          ...cancelServiceRequestArrayPart2,
           0,
           0,
           0,
@@ -156,32 +1096,6 @@ const Analysis = () => {
         ]);
       }
 
-      if (res.revenueOfContractByYear !== null) {
-        revenueByYearArray.splice(0, 12);
-        setRevenueByYearArray([
-          ...revenueByYearArray,
-          res.revenueOfContractByYear.january,
-          res.revenueOfContractByYear.february,
-          res.revenueOfContractByYear.march,
-          res.revenueOfContractByYear.april,
-          res.revenueOfContractByYear.may,
-          res.revenueOfContractByYear.june,
-          res.revenueOfContractByYear.july,
-          res.revenueOfContractByYear.august,
-          res.revenueOfContractByYear.september,
-          res.revenueOfContractByYear.october,
-          res.revenueOfContractByYear.november,
-          res.revenueOfContractByYear.december,
-        ]);
-      } else {
-        revenueByYearArray.splice(0, 12);
-        setRevenueByYearArray([...revenueByYearArray, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
-      }
-    });
-  };
-
-  useEffect(() => {
-    dashboard().then((res) => {
       if(res.serviceStatusStatistics !== null) {
         setPending(res.serviceStatusStatistics.pending);
         setSurveying(res.serviceStatusStatistics.surveying);
@@ -191,22 +1105,32 @@ const Analysis = () => {
         setAccomplished(res.serviceStatusStatistics.accomplished);
         setCancel(res.serviceStatusStatistics.cancel);
         setDeny(res.serviceStatusStatistics.deny);
+      } else {
+        setPending(0)
+        setSurveying(0)
+        setAgreed(0)
+        setProcessing(0)
+        setPayment(0)
+        setAccomplished(0)
+        setCancel(0)
+        setDeny(0)
+
       }
-      
+
       setSatisfiedRequestDetail(res.satisfiedRequestDetail);
       setUnsatisfiedRequestDetail(res.unsatisfiedRequestDetail);
       setReworkRequestDetail(res.reworkRequestDetail);
       setTotalCustomers(res.totalCustomers);
       setTotalWorkers(res.totalWorkers);
 
-      defaultYearPickerChange();
     });
+  };
 
-    // return () => {
-    //   second
-    // }
+  useEffect(() => {
+    defaultYearPickerChangePart2();
   }, []);
 
+  // Danh mục
   const requestServiceTypeData = [
     {
       x: 'DV chưa xử lý',
@@ -273,141 +1197,6 @@ const Analysis = () => {
     console.log('recordtype', type);
   };
 
-  const handleYearPickerChange = (value, dateString) => {
-    setYearPickerValue(dateString);
-    dashboardgetArray(dateString).then((res) => {
-      if (res.receivedServiceRequest !== null) {
-        receivedServiceRequestArray.splice(0, 12);
-        setReceivedServiceRequestArray([
-          ...receivedServiceRequestArray,
-          res.receivedServiceRequest.january,
-          res.receivedServiceRequest.february,
-          res.receivedServiceRequest.march,
-          res.receivedServiceRequest.april,
-          res.receivedServiceRequest.may,
-          res.receivedServiceRequest.june,
-          res.receivedServiceRequest.july,
-          res.receivedServiceRequest.august,
-          res.receivedServiceRequest.september,
-          res.receivedServiceRequest.october,
-          res.receivedServiceRequest.november,
-          res.receivedServiceRequest.december,
-        ]);
-      } else {
-        receivedServiceRequestArray.splice(0, 12);
-        setReceivedServiceRequestArray([
-          ...receivedServiceRequestArray,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-        ]);
-      }
-
-      if (res.completeServiceRequest !== null) {
-        completeServiceRequestArray.splice(0, 12);
-        setCompleteServiceRequestArray([
-          ...completeServiceRequestArray,
-          res.completeServiceRequest.january,
-          res.completeServiceRequest.february,
-          res.completeServiceRequest.march,
-          res.completeServiceRequest.april,
-          res.completeServiceRequest.may,
-          res.completeServiceRequest.june,
-          res.completeServiceRequest.july,
-          res.completeServiceRequest.august,
-          res.completeServiceRequest.september,
-          res.completeServiceRequest.october,
-          res.completeServiceRequest.november,
-          res.completeServiceRequest.december,
-        ]);
-      } else {
-        completeServiceRequestArray.splice(0, 12);
-        setCompleteServiceRequestArray([
-          ...completeServiceRequestArray,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-        ]);
-      }
-
-      if (res.cancelServiceRequest !== null) {
-        cancelServiceRequestArray.splice(0, 12);
-        setCancelServiceRequestArray([
-          ...cancelServiceRequestArray,
-          res.cancelServiceRequest.january,
-          res.cancelServiceRequest.february,
-          res.cancelServiceRequest.march,
-          res.cancelServiceRequest.april,
-          res.cancelServiceRequest.may,
-          res.cancelServiceRequest.june,
-          res.cancelServiceRequest.july,
-          res.cancelServiceRequest.august,
-          res.cancelServiceRequest.september,
-          res.cancelServiceRequest.october,
-          res.cancelServiceRequest.november,
-          res.cancelServiceRequest.december,
-        ]);
-      } else {
-        cancelServiceRequestArray.splice(0, 12);
-        setCancelServiceRequestArray([
-          ...cancelServiceRequestArray,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-        ]);
-      }
-
-      if (res.revenueOfContractByYear !== null) {
-        revenueByYearArray.splice(0, 12);
-        setRevenueByYearArray([
-          ...revenueByYearArray,
-          res.revenueOfContractByYear.january,
-          res.revenueOfContractByYear.february,
-          res.revenueOfContractByYear.march,
-          res.revenueOfContractByYear.april,
-          res.revenueOfContractByYear.may,
-          res.revenueOfContractByYear.june,
-          res.revenueOfContractByYear.july,
-          res.revenueOfContractByYear.august,
-          res.revenueOfContractByYear.september,
-          res.revenueOfContractByYear.october,
-          res.revenueOfContractByYear.november,
-          res.revenueOfContractByYear.december,
-        ]);
-      } else {
-        revenueByYearArray.splice(0, 12);
-        setRevenueByYearArray([...revenueByYearArray, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
-      }
-    });
-  };
-
   const isActive = (type) => {
     if (!yearPickerValue) {
       return '';
@@ -435,13 +1224,136 @@ const Analysis = () => {
     salesPieData = salesType === 'rating' ? ratingTypeData : requestServiceTypeData;
 
   }
+  // SO SÁNH CẢ 3 DỊCH VỤ
+  const compare3ServicesRequestData = [];
+
+  console.log('receivedServiceRequestArrayPart2', receivedServiceRequestArrayPart2)
+  console.log('receivedServiceRequestByQuarterArrayPart2', receivedServiceRequestByQuarterArrayPart2)
+
+  if(receivedServiceRequestArrayPart2.length > 0) {
+    for (let i = 0; i < 12; i += 1) {
+      compare3ServicesRequestData.push({
+        name: `Đã nhận`,
+        x: `Tháng ${i + 1}`,
+        y: receivedServiceRequestArrayPart2[i],
+      });
+    }
+    for (let i = 0; i < 12; i += 1) {
+      compare3ServicesRequestData.push({
+        name: `Hoàn thành`,
+        x: `Tháng ${i + 1}`,
+        y: completeServiceRequestArrayPart2[i],
+      });
+    }
+    for (let i = 0; i < 12; i += 1) {
+      compare3ServicesRequestData.push({
+        name: `Đã huỷ`,
+        x: `Tháng ${i + 1}`,
+        y: cancelServiceRequestArrayPart2[i],
+      });
+    }
+  } else if(receivedServiceRequestByQuarterArrayPart2.length > 0) {
+    if(quarterInYearPickerPart2 === 1) {
+      for (let i = 0; i < 3; i += 1) {
+        compare3ServicesRequestData.push({
+          name: `Đã nhận`,
+          x: `Tháng ${i + 1}`,
+          y: receivedServiceRequestByQuarterArrayPart2[i],
+        });
+      }
+      for (let i = 0; i < 3; i += 1) {
+        compare3ServicesRequestData.push({
+          name: `Hoàn thành`,
+          x: `Tháng ${i + 1}`,
+          y: completeServiceRequestByQuarterArrayPart2[i],
+        });
+      }
+      for (let i = 0; i < 3; i += 1) {
+        compare3ServicesRequestData.push({
+          name: `Đã huỷ`,
+          x: `Tháng ${i + 1}`,
+          y: cancelServiceRequestByQuarterArrayPart2[i],
+        });
+      }
+    }
+    if(quarterInYearPickerPart2 === 2) {
+      for (let i = 0; i < 3; i += 1) {
+        compare3ServicesRequestData.push({
+          name: `Đã nhận`,
+          x: `Tháng ${i + 4}`,
+          y: receivedServiceRequestByQuarterArrayPart2[i],
+        });
+      }
+      for (let i = 0; i < 3; i += 1) {
+        compare3ServicesRequestData.push({
+          name: `Hoàn thành`,
+          x: `Tháng ${i + 4}`,
+          y: completeServiceRequestByQuarterArrayPart2[i],
+        });
+      }
+      for (let i = 0; i < 3; i += 1) {
+        compare3ServicesRequestData.push({
+          name: `Đã huỷ`,
+          x: `Tháng ${i + 4}`,
+          y: cancelServiceRequestByQuarterArrayPart2[i],
+        });
+      }
+    }
+    if(quarterInYearPickerPart2 === 3) {
+      for (let i = 0; i < 3; i += 1) {
+        compare3ServicesRequestData.push({
+          name: `Đã nhận`,
+          x: `Tháng ${i + 7}`,
+          y: receivedServiceRequestByQuarterArrayPart2[i],
+        });
+      }
+      for (let i = 0; i < 3; i += 1) {
+        compare3ServicesRequestData.push({
+          name: `Hoàn thành`,
+          x: `Tháng ${i + 7}`,
+          y: completeServiceRequestByQuarterArrayPart2[i],
+        });
+      }
+      for (let i = 0; i < 3; i += 1) {
+        compare3ServicesRequestData.push({
+          name: `Đã huỷ`,
+          x: `Tháng ${i + 7}`,
+          y: cancelServiceRequestByQuarterArrayPart2[i],
+        });
+      }
+    }
+    if(quarterInYearPickerPart2 === 4) {
+      for (let i = 0; i < 3; i += 1) {
+        compare3ServicesRequestData.push({
+          name: `Đã nhận`,
+          x: `Tháng ${i + 10}`,
+          y: receivedServiceRequestByQuarterArrayPart2[i],
+        });
+      }
+      for (let i = 0; i < 3; i += 1) {
+        compare3ServicesRequestData.push({
+          name: `Hoàn thành`,
+          x: `Tháng ${i + 10}`,
+          y: completeServiceRequestByQuarterArrayPart2[i],
+        });
+      }
+      for (let i = 0; i < 3; i += 1) {
+        compare3ServicesRequestData.push({
+          name: `Đã huỷ`,
+          x: `Tháng ${i + 10}`,
+          y: cancelServiceRequestByQuarterArrayPart2[i],
+        });
+      }
+    }
+  }
+  
 
   // DỊCH VỤ ĐÃ NHẬN
   const salesData = [];
   for (let i = 0; i < 12; i += 1) {
     salesData.push({
       x: `Tháng ${i + 1}`,
-      y: receivedServiceRequestArray[i],
+      y: receivedServiceRequestArrayPart2[i],
     });
   }
   // DỊCH VỤ ĐÃ HOÀN THÀNH
@@ -449,7 +1361,7 @@ const Analysis = () => {
   for (let i = 0; i < 12; i += 1) {
     completeServiceRequestData.push({
     x: `Tháng ${i + 1}`,
-        y: completeServiceRequestArray[i],
+        y: completeServiceRequestArrayPart2[i],
     });
   }
   
@@ -458,12 +1370,9 @@ const Analysis = () => {
   for (let i = 0; i < 12; i += 1) {
     cancelServiceRequestData.push({
       x: `Tháng ${i + 1}`,
-      y: cancelServiceRequestArray[i],
+      y: cancelServiceRequestArrayPart2[i],
     });
   }
-  console.log('cancelServiceRequestArray', cancelServiceRequestArray)
-
-  console.log('cancelServiceRequestData', cancelServiceRequestData)
 
   // TỔNG DOANH SỐ
   const RevenuByYearData = [];
@@ -497,11 +1406,11 @@ const Analysis = () => {
             salesData={salesData || [] }
             completeServiceRequestData={completeServiceRequestData || [] }
             cancelServiceRequestData={cancelServiceRequestData || []}
-            isActive={isActive}
-            // handleQuarterPickerChange={handleYearPickerChange}
-            handleYearPickerChange={handleYearPickerChange}
+            compare3ServicesRequestData={compare3ServicesRequestData || []}
+            // isActive={isActive}
+            handleQuarterPickerChange={handleQuarterPickerChangePart2}
+            handleYearPickerChange={handleYearPickerChangePart2}
             loading={loading}
-            selectYear={selectYear}
           />
         </Suspense>
 
@@ -511,7 +1420,7 @@ const Analysis = () => {
             marginTop: 24,
           }}
         >
-          <Col xl={12} lg={24} md={24} sm={24} xs={24}>
+          {/* <Col xl={12} lg={24} md={24} sm={24} xs={24}>
             <Suspense fallback={null}>
               <TopSearch
                 loading={loading}
@@ -520,7 +1429,7 @@ const Analysis = () => {
                 // dropdownGroup={dropdownGroup}
               />
             </Suspense>
-          </Col>
+          </Col> */}
           <Col xl={12} lg={24} md={24} sm={24} xs={24}>
             <Suspense fallback={null}>
               <ProportionSales

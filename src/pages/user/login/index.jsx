@@ -5,6 +5,7 @@ import ProForm, { ProFormText } from '@ant-design/pro-form';
 import { useIntl, connect, FormattedMessage, useModel } from 'umi';
 import { AccountLogin } from '@/services/login';
 import styles from './index.less';
+import component from '@/locales/en-US/component';
 
 const LoginMessage = ({ content }) => (
   <Alert
@@ -74,7 +75,6 @@ const Login = ({ history, ...props }) => {
         // history.push('User/LoginStaff')
         history.push('login')
       }
-
     });
   };
 

@@ -44,19 +44,23 @@ const ProportionSales = ({
         angleField="y"
         colorField="x"
         data={salesPieData}
+        innerRadius={0.64}
+        appendPadding={10}
         legend={{
           visible: false,
         }}
         label={{
           visible: true,
           type: 'spider',
+
           formatter: (text, item) => {
             // eslint-disable-next-line no-underscore-dangle
             return `${item._origin.x}: ${numeral(item._origin.y).format('0,0')}`;
           },
         }}
         statistic={{
-          totalLabel: 'Tất cả yêu cầu',
+          // totalLabel: 'Tất cả yêu cầu',
+          title: false,
         }}
       />
     </div>

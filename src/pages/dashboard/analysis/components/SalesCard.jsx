@@ -1,9 +1,10 @@
-import { Card, Col, DatePicker, Row, Tabs } from 'antd';
-import { Column } from '@ant-design/charts';
+import { Card, Col, DatePicker, Row, Select, Tabs } from 'antd';
+// import { Column } from '@ant-design/charts';
+import { Column } from '@ant-design/plots';
 import numeral from 'numeral';
 import styles from '../style.less';
 import moment from 'moment';
-import { dashboard } from '@/services/dashboard';
+import { dashboard, dashboardgetArray } from '@/services/dashboard';
 import React, { useEffect, useState } from 'react';
 
 
@@ -18,54 +19,125 @@ for (let i = 0; i < 6; i += 1) {
 }
 
 const SalesCard = ({
+  compare3ServicesRequestData,
   salesData,
   completeServiceRequestData,
   cancelServiceRequestData,
-  isActive,
   handleYearPickerChange,
+  handleQuarterPickerChange,
+  defaultYearPicker,
   loading,
-  selectYear,
   yearPickerValue,
 }) => {
   const thisYear = new Date();
   const [workerTasks, setWorkerTasks] = useState([]);
+  const { Option } = Select;
+  const [workerReceivedServiceListData, setWorkerReceivedServiceListData] = useState([]);
+  const [workerHaveMostSatisfiedRequestDetailListData, setWorkerHaveMostSatisfiedRequestDetailListData] = useState([]);
+  const [workerHaveMostUnsatisfiedRequestDetailListData, setWorkerHaveMostUnsatisfiedRequestDetailListData] = useState([]);
 
+  const defaultYearPickerChangePart2 = () => {
+    const defaultThisYear = thisYear.getFullYear();
+    dashboardgetArray(defaultThisYear).then((res) => {
+      if (res.workerTasks !== null) {
+        res.workerTasks.map((item) => {
+          workerReceivedServiceListData.push({
+            title: `${item.fullName}`,
+            total: item.times,
+          })
+        })
+      } else {
+        workerReceivedServiceListData.splice(workerReceivedServiceListData.length);
+        setWorkerReceivedServiceListData([
+          ...workerReceivedServiceListData,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+        ]);
+      }
 
-  // const sortRevenue = revenueByYearArray.sort(function(a,b){return b-a});
+      if (res.workerTasks !== null) {
+        res.workerTasks.map((item) => {
+          workerHaveMostSatisfiedRequestDetailListData.push({
+            title: `${item.fullName}`,
+            total: item.done,
+          })
+          workerHaveMostSatisfiedRequestDetailListData.sort(function(a, b){return b.total - a.total});
+        })
+      } else {
+        workerHaveMostSatisfiedRequestDetailListData.splice(workerReceivedServiceListData.length);
+        setWorkerHaveMostSatisfiedRequestDetailListData([
+          ...workerHaveMostSatisfiedRequestDetailListData,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+        ]);
+      }
+
+      if (res.workerTasks !== null) {
+        res.workerTasks.map((item) => {
+          workerHaveMostUnsatisfiedRequestDetailListData.push({
+            title: `${item.fullName}`,
+            total: item.bad,
+          })
+          workerHaveMostUnsatisfiedRequestDetailListData.sort(function(a, b){return b.total - a.total});
+        })
+      } else {
+        workerHaveMostUnsatisfiedRequestDetailListData.splice(workerReceivedServiceListData.length);
+        setWorkerHaveMostUnsatisfiedRequestDetailListData([
+          ...workerHaveMostUnsatisfiedRequestDetailListData,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+        ]);
+      }
+    });
+  };
 
   useEffect(() => {
-    dashboard().then((res) => {
-      setWorkerTasks(res.workerTasks)
-    });
+    defaultYearPickerChangePart2();
+    // dashboard().then((res) => {
+    //   setWorkerTasks(res.workerTasks)
+
+    //   res.workerTasks.map((item) => {
+    //     workerReceivedServiceListData.push({
+    //       title: `${item.fullName}`,
+    //       total: item.times,
+    //     })
+    //   })
+
+    //   res.workerTasks.map((item) => {
+    //     workerHaveMostSatisfiedRequestDetailListData.push({
+    //       title: `${item.fullName}`,
+    //       total: item.done,
+    //     })
+    //     workerHaveMostSatisfiedRequestDetailListData.sort(function(a, b){return b.total - a.total});
+    //   })
+
+    //   res.workerTasks.map((item) => {
+    //     workerHaveMostUnsatisfiedRequestDetailListData.push({
+    //       title: `${item.fullName}`,
+    //       total: item.bad,
+    //     })
+    //     workerHaveMostUnsatisfiedRequestDetailListData.sort(function(a, b){return b.total - a.total});
+    //   })
+
+
+    // });
 
   }, []);
-
-  const workerReceivedServiceListData = [];
-
-  workerTasks.map((item) => {
-    workerReceivedServiceListData.push({
-      title: `${item.fullName}`,
-      total: item.times,
-    })
-  })
-
-  const workerHaveMostSatisfiedRequestDetailListData = [];
-
-  workerTasks.map((item) => {
-    workerHaveMostSatisfiedRequestDetailListData.push({
-      title: `${item.fullName}`,
-      total: item.done,
-    })
-  })
-
-  const workerHaveMostUnsatisfiedRequestDetailListData = [];
-
-  workerTasks.map((item) => {
-    workerHaveMostUnsatisfiedRequestDetailListData.push({
-      title: `${item.fullName}`,
-      total: item.bad,
-    })
-  })
 
   return (
     <Card
@@ -80,12 +152,25 @@ const SalesCard = ({
         <Tabs
           tabBarExtraContent={
             <div className={styles.salesExtraWrap}>
+              <Select
+                onChange={handleQuarterPickerChange}
+                placeholder="Chọn quý"
+                style={{ width: 120, marginRight: 10 }}
+                allowClear
+              >
+                <Option value={1}>Quý 1</Option>
+                <Option value={2}>Quý 2</Option>
+                <Option value={3}>Quý 3</Option>
+                <Option value={4}>Quý 4</Option>
+              </Select>
+
               <DatePicker
+                allowClear={false}
                 picker="year"
                 style={{
                   width: 256,
                 }}
-                value={yearPickerValue}
+                value={defaultYearPicker}
                 onChange={handleYearPickerChange}
                 defaultValue={moment(thisYear.getFullYear(), 'YYYY')}
                 placeholder="Chọn năm"
@@ -102,6 +187,63 @@ const SalesCard = ({
             marginBottom: 24,
           }}
         >
+          <TabPane tab="Tất cả dịch vụ" key="allServiceRequest">
+            <Row>
+              <Col xl={22} lg={12} md={12} sm={24} xs={24}>
+                <div className={styles.salesBar}>
+                  <Column
+                    isGroup={true}
+                    height={300}
+                    forceFit
+                    dodgePadding={2}
+                    data={compare3ServicesRequestData}
+                    xField="x"
+                    yField="y"
+                    seriesField="name"
+                    layout= {[
+                      // 柱形图数据标签位置自动调整
+                      {
+                        type: 'interval-adjust-position',
+                      }, // 数据标签防遮挡
+                      {
+                        type: 'interval-hide-overlap',
+                      }, // 数据标签文颜色自动调整
+                      {
+                        type: 'adjust-color',
+                      },
+                    ]}
+                    xAxis={{
+                      visible: true,
+                      title: {
+                        visible: false,
+                      },
+                    }}
+                    yAxis={{
+                      visible: true,
+                      title: {
+                        visible: false,
+                      },
+                    }}
+                    title={{
+                      visible: false,
+                      text: 'Không biết là gì 1',
+                      style: {
+                        fontSize: 14,
+                      },
+                    }}
+                    meta={{
+                      x: {
+                        alias: ' ',
+                      },
+                      y: {
+                        alias: 'Yêu cầu đã nhận',
+                      },
+                    }}
+                  />
+                </div>
+              </Col>
+            </Row>
+          </TabPane>
           <TabPane tab="Dịch vụ đã nhận" key="receivedServiceRequest">
             <Row>
               <Col xl={16} lg={12} md={12} sm={24} xs={24}>
@@ -146,7 +288,7 @@ const SalesCard = ({
                 <div className={styles.salesRank}>
                   <h4 className={styles.rankingTitle}>Xếp hạng thợ nhận nhiều yêu cầu nhất</h4>
                   <ul className={styles.rankingList}>
-                    {workerReceivedServiceListData.map((item, i) => (
+                    {workerReceivedServiceListData.slice(0, 7).map((item, i) => (
                       <li key={item.title}>
                         <span
                           className={`${styles.rankingItemNumber} ${i < 3 ? styles.active : ''}`}
@@ -210,7 +352,7 @@ const SalesCard = ({
                 <div className={styles.salesRank}>
                   <h4 className={styles.rankingTitle}>Xếp hạng thợ nhận nhiều dịch vụ hài lòng nhất</h4>
                   <ul className={styles.rankingList}>
-                    {workerHaveMostSatisfiedRequestDetailListData.map((item, i) => (
+                    {workerHaveMostSatisfiedRequestDetailListData.slice(0, 7).map((item, i) => (
                       <li key={item.title}>
                         <span
                           className={`${styles.rankingItemNumber} ${i < 3 ? styles.active : ''}`}
@@ -220,7 +362,7 @@ const SalesCard = ({
                         <span className={styles.rankingItemTitle} title={item.title}>
                           {item.title}
                         </span>
-                        <span>{numeral(item.total).format('0,0')}</span>
+                        <span>{numeral(item.total).format('0,0')} dịch vụ</span>
                       </li>
                     ))}
                   </ul>
@@ -272,7 +414,7 @@ const SalesCard = ({
                 <div className={styles.salesRank}>
                   <h4 className={styles.rankingTitle}>Xếp hạng thợ nhận nhiều dịch vụ không hài lòng nhất</h4>
                   <ul className={styles.rankingList}>
-                    {workerHaveMostUnsatisfiedRequestDetailListData.map((item, i) => (
+                    {workerHaveMostUnsatisfiedRequestDetailListData.slice(0, 7).map((item, i) => (
                       <li key={item.title}>
                         <span
                           className={`${styles.rankingItemNumber} ${i < 3 ? styles.active : ''}`}
@@ -282,7 +424,7 @@ const SalesCard = ({
                         <span className={styles.rankingItemTitle} title={item.title}>
                           {item.title}
                         </span>
-                        <span>{numeral(item.total).format('0,0')}</span>
+                        <span>{numeral(item.total).format('0,0')} dịch vụ</span>
                       </li>
                     ))}
                   </ul>

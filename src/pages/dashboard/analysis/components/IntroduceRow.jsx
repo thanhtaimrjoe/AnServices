@@ -1,6 +1,18 @@
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { TinyArea, TinyColumn, Progress } from '@ant-design/charts';
-import { Card, Col, DatePicker, Row, Select, Space, Tabs, Tooltip, message } from 'antd';
+import {
+  Card,
+  Col,
+  DatePicker,
+  Row,
+  Select,
+  Space,
+  Tabs,
+  Tooltip,
+  message,
+  Modal,
+  Descriptions,
+} from 'antd';
 import numeral from 'numeral';
 import { ChartCard, Field } from './Charts';
 import Trend from './Trend';
@@ -12,6 +24,7 @@ import moment from 'moment';
 import TabPane from '@ant-design/pro-card/lib/components/TabPane';
 import { Column } from '@antv/g2plot';
 import ProTable from '@ant-design/pro-table';
+import { set } from 'lodash';
 
 const thisYear = new Date();
 const { Option } = Select;
@@ -36,25 +49,32 @@ const IntroduceRow = ({ loading, RevenuByYearData }) => {
   const [quarterInYearPickerPart1, setQuarterInYearPickerPart1] = useState();
   const [yearPickerPart1, setYearPickerPart1] = useState(new Date().getFullYear());
 
-  const [disableQuarter2Part1, setDisableQuarter2Part1] = useState(true);
-  const [disableQuarter3Part1, setDisableQuarter3Part1] = useState(true);
-  const [disableQuarter4Part1, setDisableQuarter4Part1] = useState(true);
-
   // Lưu vào mảng khi chọn năm
   const [revenueOfContractByYearArrayPart1, setRevenueOfContractByYearArrayPart1] = useState([]);
   const [revenueOfContractByQuarterArrayPart1, setRevenueByQuarterArrayPart1] = useState([]);
 
   const [revenueOfInvoiceByYearArrayPart1, setRevenueOfInvoiceByYearArrayPart1] = useState([]);
-  const [revenueOfInvoiceByQuarterArrayPart1, setRevenueOfInvoiceByQuarterArrayPart1] = useState([]);
+  const [revenueOfInvoiceByQuarterArrayPart1, setRevenueOfInvoiceByQuarterArrayPart1] = useState(
+    [],
+  );
 
   const [receivedServiceRequestArrayPart1, setReceivedServiceRequestArrayPart1] = useState([]);
-  const [receivedServiceRequestByQuarterArrayPart1, setReceivedServiceRequestByQuarterArrayPart1] = useState([]);
+  const [
+    receivedServiceRequestByQuarterArrayPart1,
+    setReceivedServiceRequestByQuarterArrayPart1,
+  ] = useState([]);
 
   const [completeServiceRequestArrayPart1, setCompleteServiceRequestArrayPart1] = useState([]);
-  const [completeServiceRequestByQuarterArrayPart1, setCompleteServiceRequestByQuarterArrayPart1] = useState([]);
+  const [
+    completeServiceRequestByQuarterArrayPart1,
+    setCompleteServiceRequestByQuarterArrayPart1,
+  ] = useState([]);
 
   const [cancelServiceRequestArrayPart1, setCancelServiceRequestArrayPart1] = useState([]);
-  const [cancelServiceRequestByQuarterArrayPart1, setCancelServiceRequestByQuarterArrayPart1] = useState([]);
+  const [
+    cancelServiceRequestByQuarterArrayPart1,
+    setCancelServiceRequestByQuarterArrayPart1,
+  ] = useState([]);
 
   const [contractListPart1, setContractListPart1] = useState([]);
   const [invoiceListPart1, setInvoiceListPart1] = useState([]);
@@ -62,13 +82,9 @@ const IntroduceRow = ({ loading, RevenuByYearData }) => {
   const [amountOfInvoiceArrayPart1, setAmountOfInvoiceArrayPart1] = useState([]);
   const [amountOfInvoiceByQuarterArrayPart1, setAmountOfInvoiceByQuarterArrayPart1] = useState([]);
 
-
-
-
-  // //////////////////////////////////////////////
-  // PART 2
-  const [quarterInYearPickerPart2, setQuarterInYearPickerPart2] = useState();
-  const [yearPickerPart2, setYearPickerPart2] = useState(new Date().getFullYear());
+  const [visibleInvoice, setVisibleInvoice] = React.useState(false);
+  const [invoiceRecord, setInvoiceRecord] = useState([]);
+  const [invoicePriceDetailRecord, setInvoicePriceDetailRecord] = useState([]);
 
   // ===========================================================================
   const handleQuarterPickerChangePart1 = (values) => {
@@ -130,7 +146,6 @@ const IntroduceRow = ({ loading, RevenuByYearData }) => {
               res.receivedServiceRequest.december,
             ]);
           }
-
         } else {
           receivedServiceRequestArrayPart1.splice(0, 12);
           receivedServiceRequestByQuarterArrayPart1.splice(0, 3);
@@ -151,8 +166,12 @@ const IntroduceRow = ({ loading, RevenuByYearData }) => {
             0,
           ]);
 
-          setReceivedServiceRequestByQuarterArrayPart1([...receivedServiceRequestByQuarterArrayPart1, 0, 0, 0]);
-
+          setReceivedServiceRequestByQuarterArrayPart1([
+            ...receivedServiceRequestByQuarterArrayPart1,
+            0,
+            0,
+            0,
+          ]);
         }
 
         if (res.completeServiceRequest !== null) {
@@ -230,8 +249,12 @@ const IntroduceRow = ({ loading, RevenuByYearData }) => {
             0,
             0,
           ]);
-          setCompleteServiceRequestByQuarterArrayPart1([...receivedServiceRequestByQuarterArrayPart1, 0, 0, 0]);
-
+          setCompleteServiceRequestByQuarterArrayPart1([
+            ...receivedServiceRequestByQuarterArrayPart1,
+            0,
+            0,
+            0,
+          ]);
         }
 
         if (res.cancelServiceRequest !== null) {
@@ -309,8 +332,12 @@ const IntroduceRow = ({ loading, RevenuByYearData }) => {
             0,
           ]);
 
-          setCancelServiceRequestByQuarterArrayPart1([...receivedServiceRequestByQuarterArrayPart1, 0, 0, 0]);
-
+          setCancelServiceRequestByQuarterArrayPart1([
+            ...receivedServiceRequestByQuarterArrayPart1,
+            0,
+            0,
+            0,
+          ]);
         }
 
         if (res.revenueOfContractByYear !== null) {
@@ -332,8 +359,6 @@ const IntroduceRow = ({ loading, RevenuByYearData }) => {
             res.revenueOfContractByYear.november,
             res.revenueOfContractByYear.december,
           ]);
-
-          
 
           if (values === 1) {
             revenueOfContractByQuarterArrayPart1.splice(0, 3);
@@ -389,7 +414,7 @@ const IntroduceRow = ({ loading, RevenuByYearData }) => {
             0,
             0,
           ]);
-          
+
           setRevenueByQuarterArrayPart1([...revenueOfContractByQuarterArrayPart1, 0, 0, 0]);
         }
 
@@ -467,7 +492,7 @@ const IntroduceRow = ({ loading, RevenuByYearData }) => {
             0,
             0,
           ]);
-          
+
           setRevenueOfInvoiceByQuarterArrayPart1([...revenueOfInvoiceByQuarterArrayPart1, 0, 0, 0]);
         }
 
@@ -545,26 +570,25 @@ const IntroduceRow = ({ loading, RevenuByYearData }) => {
             0,
             0,
           ]);
-          
+
           setAmountOfInvoiceByQuarterArrayPart1([...amountOfInvoiceByQuarterArrayPart1, 0, 0, 0]);
         }
 
-        if(res.contractList.length !== 0) {
+        if (res.contractList.length !== 0) {
           setContractListPart1([]);
           setContractListPart1(res.contractList);
         } else {
           setContractListPart1([]);
-          message.error("Không có thông tin để hiển thị cho danh sách hợp đồng")
+          message.error('Không có thông tin để hiển thị cho danh sách hợp đồng');
         }
 
-        if(res.invoiceList.length !== 0) {
+        if (res.invoiceList.length !== 0) {
           setInvoiceListPart1([]);
           setInvoiceListPart1(res.invoiceList);
         } else {
           setInvoiceListPart1([]);
-          message.error("Không có thông tin để hiển thị cho danh sách hoá đơn")
+          message.error('Không có thông tin để hiển thị cho danh sách hoá đơn');
         }
-       
       });
     } else {
       dashboardByQuarterAndYear(values, yearPickerPart1).then((res) => {
@@ -623,7 +647,6 @@ const IntroduceRow = ({ loading, RevenuByYearData }) => {
               res.receivedServiceRequest.december,
             ]);
           }
-
         } else {
           receivedServiceRequestArrayPart1.splice(0, 12);
           receivedServiceRequestByQuarterArrayPart1.splice(0, 3);
@@ -644,8 +667,12 @@ const IntroduceRow = ({ loading, RevenuByYearData }) => {
             0,
           ]);
 
-          setReceivedServiceRequestByQuarterArrayPart1([...receivedServiceRequestByQuarterArrayPart1, 0, 0, 0]);
-
+          setReceivedServiceRequestByQuarterArrayPart1([
+            ...receivedServiceRequestByQuarterArrayPart1,
+            0,
+            0,
+            0,
+          ]);
         }
 
         if (res.completeServiceRequest !== null) {
@@ -868,7 +895,7 @@ const IntroduceRow = ({ loading, RevenuByYearData }) => {
             0,
             0,
           ]);
-          
+
           setRevenueOfInvoiceByQuarterArrayPart1([...revenueOfInvoiceByQuarterArrayPart1, 0, 0, 0]);
         }
 
@@ -946,52 +973,52 @@ const IntroduceRow = ({ loading, RevenuByYearData }) => {
             0,
             0,
           ]);
-          
+
           setAmountOfInvoiceByQuarterArrayPart1([...amountOfInvoiceByQuarterArrayPart1, 0, 0, 0]);
         }
 
-        if(res.contractList.length !== 0) {
-          if(values === 1) {
+        if (res.contractList.length !== 0) {
+          if (values === 1) {
             setContractListPart1([]);
             setContractListPart1(res.contractList);
           }
-          if(values === 2) {
+          if (values === 2) {
             setContractListPart1([]);
             setContractListPart1(res.contractList);
           }
-          if(values === 3) {
+          if (values === 3) {
             setContractListPart1([]);
             setContractListPart1(res.contractList);
           }
-          if(values === 4) {
+          if (values === 4) {
             setContractListPart1([]);
             setContractListPart1(res.contractList);
           }
         } else {
           setContractListPart1([]);
-          message.error("Không có thông tin để hiển thị cho danh sách hợp đồng")
+          message.error('Không có thông tin để hiển thị cho danh sách hợp đồng');
         }
 
-        if(res.invoiceList.length !== 0) {
-          if(values === 1) {
+        if (res.invoiceList.length !== 0) {
+          if (values === 1) {
             setInvoiceListPart1([]);
             setInvoiceListPart1(res.invoiceList);
           }
-          if(values === 2) {
+          if (values === 2) {
             setInvoiceListPart1([]);
             setInvoiceListPart1(res.invoiceList);
           }
-          if(values === 3) {
+          if (values === 3) {
             setInvoiceListPart1([]);
             setInvoiceListPart1(res.invoiceList);
           }
-          if(values === 4) {
+          if (values === 4) {
             setInvoiceListPart1([]);
             setInvoiceListPart1(res.invoiceList);
           }
         } else {
           setInvoiceListPart1([]);
-          message.error("Không có thông tin để hiển thị cho danh sách hoá đơn")
+          message.error('Không có thông tin để hiển thị cho danh sách hoá đơn');
         }
       });
     }
@@ -999,7 +1026,241 @@ const IntroduceRow = ({ loading, RevenuByYearData }) => {
 
   const handleYearPickerChangePart1 = (values, dateString) => {
     setYearPickerPart1(dateString);
-    if (quarterInYearPickerPart1 === undefined) {
+    if ((values === undefined || values === null) && quarterInYearPickerPart1 === undefined) {
+      dashboardgetArray(yearPickerPart1).then((res) => {
+        if (res.receivedServiceRequest !== null) {
+          receivedServiceRequestArrayPart1.splice(0, 12);
+          setReceivedServiceRequestArrayPart1([
+            ...receivedServiceRequestArrayPart1,
+            res.receivedServiceRequest.january,
+            res.receivedServiceRequest.february,
+            res.receivedServiceRequest.march,
+            res.receivedServiceRequest.april,
+            res.receivedServiceRequest.may,
+            res.receivedServiceRequest.june,
+            res.receivedServiceRequest.july,
+            res.receivedServiceRequest.august,
+            res.receivedServiceRequest.september,
+            res.receivedServiceRequest.october,
+            res.receivedServiceRequest.november,
+            res.receivedServiceRequest.december,
+          ]);
+        } else {
+          receivedServiceRequestArrayPart1.splice(0, 12);
+          setReceivedServiceRequestArrayPart1([
+            ...receivedServiceRequestArrayPart1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+          ]);
+        }
+
+        if (res.completeServiceRequest !== null) {
+          completeServiceRequestArrayPart1.splice(0, 12);
+          setCompleteServiceRequestArrayPart1([
+            ...completeServiceRequestArrayPart1,
+            res.completeServiceRequest.january,
+            res.completeServiceRequest.february,
+            res.completeServiceRequest.march,
+            res.completeServiceRequest.april,
+            res.completeServiceRequest.may,
+            res.completeServiceRequest.june,
+            res.completeServiceRequest.july,
+            res.completeServiceRequest.august,
+            res.completeServiceRequest.september,
+            res.completeServiceRequest.october,
+            res.completeServiceRequest.november,
+            res.completeServiceRequest.december,
+          ]);
+        } else {
+          completeServiceRequestArrayPart1.splice(0, 12);
+          setCompleteServiceRequestArrayPart1([
+            ...completeServiceRequestArrayPart1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+          ]);
+        }
+
+        if (res.cancelServiceRequest !== null) {
+          cancelServiceRequestArrayPart1.splice(0, 12);
+          setCancelServiceRequestArrayPart1([
+            ...cancelServiceRequestArrayPart1,
+            res.cancelServiceRequest.january,
+            res.cancelServiceRequest.february,
+            res.cancelServiceRequest.march,
+            res.cancelServiceRequest.april,
+            res.cancelServiceRequest.may,
+            res.cancelServiceRequest.june,
+            res.cancelServiceRequest.july,
+            res.cancelServiceRequest.august,
+            res.cancelServiceRequest.september,
+            res.cancelServiceRequest.october,
+            res.cancelServiceRequest.november,
+            res.cancelServiceRequest.december,
+          ]);
+        } else {
+          cancelServiceRequestArrayPart1.splice(0, 12);
+          setCancelServiceRequestArrayPart1([
+            ...cancelServiceRequestArrayPart1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+          ]);
+        }
+
+        if (res.revenueOfContractByYear !== null) {
+          revenueOfContractByYearArrayPart1.splice(0, 12);
+          setRevenueOfContractByYearArrayPart1([
+            ...revenueOfContractByYearArrayPart1,
+            res.revenueOfContractByYear.january,
+            res.revenueOfContractByYear.february,
+            res.revenueOfContractByYear.march,
+            res.revenueOfContractByYear.april,
+            res.revenueOfContractByYear.may,
+            res.revenueOfContractByYear.june,
+            res.revenueOfContractByYear.july,
+            res.revenueOfContractByYear.august,
+            res.revenueOfContractByYear.september,
+            res.revenueOfContractByYear.october,
+            res.revenueOfContractByYear.november,
+            res.revenueOfContractByYear.december,
+          ]);
+        } else {
+          revenueOfContractByYearArrayPart1.splice(0, 12);
+          setRevenueOfContractByYearArrayPart1([
+            ...revenueOfContractByYearArrayPart1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+          ]);
+        }
+
+        if (res.revenueOfInvoiceByYear !== null) {
+          revenueOfInvoiceByYearArrayPart1.splice(0, 12);
+          setRevenueOfInvoiceByYearArrayPart1([
+            ...revenueOfInvoiceByYearArrayPart1,
+            res.revenueOfInvoiceByYear.january,
+            res.revenueOfInvoiceByYear.february,
+            res.revenueOfInvoiceByYear.march,
+            res.revenueOfInvoiceByYear.april,
+            res.revenueOfInvoiceByYear.may,
+            res.revenueOfInvoiceByYear.june,
+            res.revenueOfInvoiceByYear.july,
+            res.revenueOfInvoiceByYear.august,
+            res.revenueOfInvoiceByYear.september,
+            res.revenueOfInvoiceByYear.october,
+            res.revenueOfInvoiceByYear.november,
+            res.revenueOfInvoiceByYear.december,
+          ]);
+        } else {
+          revenueOfInvoiceByYearArrayPart1.splice(0, 12);
+          setRevenueOfInvoiceByYearArrayPart1([
+            ...revenueOfInvoiceByYearArrayPart1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+          ]);
+        }
+
+        if (res.amountOfInvoice !== null) {
+          amountOfInvoiceArrayPart1.splice(0, 12);
+          setAmountOfInvoiceArrayPart1([
+            ...amountOfInvoiceArrayPart1,
+            res.amountOfInvoice.january,
+            res.amountOfInvoice.february,
+            res.amountOfInvoice.march,
+            res.amountOfInvoice.april,
+            res.amountOfInvoice.may,
+            res.amountOfInvoice.june,
+            res.amountOfInvoice.july,
+            res.amountOfInvoice.august,
+            res.amountOfInvoice.september,
+            res.amountOfInvoice.october,
+            res.amountOfInvoice.november,
+            res.amountOfInvoice.december,
+          ]);
+        } else {
+          amountOfInvoiceArrayPart1.splice(0, 12);
+          setAmountOfInvoiceArrayPart1([
+            ...amountOfInvoiceArrayPart1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+          ]);
+        }
+
+        if (res.contractList.length !== 0) {
+          setContractListPart1([]);
+          setContractListPart1(res.contractList);
+        } else {
+          setContractListPart1([]);
+          message.error('Không có thông tin để hiển thị cho danh sách hợp đồng');
+        }
+
+        if (res.invoiceList.length !== 0) {
+          setInvoiceListPart1([]);
+          setInvoiceListPart1(res.invoiceList);
+        } else {
+          setInvoiceListPart1([]);
+          message.error('Không có thông tin để hiển thị cho danh sách hoá đơn');
+        }
+      });
+    } else if (quarterInYearPickerPart1 === undefined) {
       dashboardgetArray(dateString).then((res) => {
         if (res.receivedServiceRequest !== null) {
           receivedServiceRequestArrayPart1.splice(0, 12);
@@ -1179,7 +1440,6 @@ const IntroduceRow = ({ loading, RevenuByYearData }) => {
             0,
             0,
           ]);
-          
         }
 
         if (res.amountOfInvoice !== null) {
@@ -1218,22 +1478,21 @@ const IntroduceRow = ({ loading, RevenuByYearData }) => {
           ]);
         }
 
-        if(res.contractList.length !== 0) {
+        if (res.contractList.length !== 0) {
           setContractListPart1([]);
           setContractListPart1(res.contractList);
         } else {
           setContractListPart1([]);
-          message.error("Không có thông tin để hiển thị cho danh sách hợp đồng")
+          message.error('Không có thông tin để hiển thị cho danh sách hợp đồng');
         }
 
-        if(res.invoiceList.length !== 0) {
+        if (res.invoiceList.length !== 0) {
           setInvoiceListPart1([]);
           setInvoiceListPart1(res.invoiceList);
         } else {
           setInvoiceListPart1([]);
-          message.error("Không có thông tin để hiển thị cho danh sách hoá đơn")
+          message.error('Không có thông tin để hiển thị cho danh sách hoá đơn');
         }
-
       });
     } else {
       dashboardByQuarterAndYear(quarterInYearPickerPart1, dateString).then((res) => {
@@ -1453,20 +1712,20 @@ const IntroduceRow = ({ loading, RevenuByYearData }) => {
           ]);
         }
 
-        if(res.contractList.length !== 0) {
+        if (res.contractList.length !== 0) {
           setContractListPart1([]);
           setContractListPart1(res.contractList);
         } else {
           setContractListPart1([]);
-          message.error("Không có thông tin để hiển thị cho danh sách hợp đồng")
+          message.error('Không có thông tin để hiển thị cho danh sách hợp đồng');
         }
 
-        if(res.invoiceList.length !== 0) {
+        if (res.invoiceList.length !== 0) {
           setInvoiceListPart1([]);
           setInvoiceListPart1(res.invoiceList);
         } else {
           setInvoiceListPart1([]);
-          message.error("Không có thông tin để hiển thị cho danh sách hoá đơn")
+          message.error('Không có thông tin để hiển thị cho danh sách hoá đơn');
         }
       });
     }
@@ -1636,7 +1895,6 @@ const IntroduceRow = ({ loading, RevenuByYearData }) => {
           res.revenueOfInvoiceByYear.november,
           res.revenueOfInvoiceByYear.december,
         ]);
-        
       } else {
         revenueOfInvoiceByYearArrayPart1.splice(0, 12);
         setRevenueOfInvoiceByYearArrayPart1([
@@ -1692,16 +1950,16 @@ const IntroduceRow = ({ loading, RevenuByYearData }) => {
         ]);
       }
 
-      if(res.contractList.length !== 0) {
+      if (res.contractList.length !== 0) {
         setContractListPart1(res.contractList);
       } else {
-        message.error("Không có thông tin để hiển thị cho danh sách hợp đồng")
+        message.error('Không có thông tin để hiển thị cho danh sách hợp đồng');
       }
 
-      if(res.invoiceList.length !== 0) {
+      if (res.invoiceList.length !== 0) {
         setInvoiceListPart1(res.invoiceList);
       } else {
-        message.error("Không có thông tin để hiển thị cho danh sách hoá đơn")
+        message.error('Không có thông tin để hiển thị cho danh sách hoá đơn');
       }
     });
   };
@@ -1842,7 +2100,6 @@ const IntroduceRow = ({ loading, RevenuByYearData }) => {
         revenueByYearArray.splice(0, 12);
         setRevenueByYearArray([...revenueByYearArray, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
       }
-
     });
   };
 
@@ -2073,15 +2330,19 @@ const IntroduceRow = ({ loading, RevenuByYearData }) => {
       search: false,
       render: (text, record) => {
         return <div>{moment(record.contractCreateDate).format('D/M/Y')}</div>;
-      }
+      },
     },
     {
       title: 'Số tiền trong hợp động',
       dataIndex: 'contractTotalPrice',
       search: false,
       render: (text, record) => {
-        return <div>{record.contractTotalPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')} VND</div>
-      }
+        return (
+          <div>
+            {record.contractTotalPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')} VND
+          </div>
+        );
+      },
     },
     {
       title: 'Hành đồng',
@@ -2097,7 +2358,7 @@ const IntroduceRow = ({ loading, RevenuByYearData }) => {
     },
   ];
 
-// REVENUE BY INVOICE
+  // REVENUE BY INVOICE
   let revenueOfInvoiceInYear = 0;
   let maxRevenueByInvoice = 0;
   maxRevenueByInvoice = Math.max(...revenueOfInvoiceByYearArrayPart1);
@@ -2117,13 +2378,9 @@ const IntroduceRow = ({ loading, RevenuByYearData }) => {
     maxRevenueByInvoice = Math.max(...revenueOfInvoiceByQuarterArrayPart1);
   }
 
-  console.log('invoiceListPart1', invoiceListPart1)
-
   invoiceListPart1.forEach((element) => {
     revenueOfInvoiceInYear += element.contractTotalPrice;
   });
-
-
 
   // INVOICE
   let invoiceOfYear = 0;
@@ -2142,13 +2399,47 @@ const IntroduceRow = ({ loading, RevenuByYearData }) => {
     revenueFromPaidInvoicesOfYear += element;
   });
 
-
-
-
-
   // function onOpenContractWindown(event) {
   //   window.open(event.contractUrl);
   // }
+
+  // SHOW INVOICE
+  const usedServivesPrice = invoicePriceDetailRecord.reduce(
+    (item, index) => (item = item + index.requestDetailPrice),
+    0,
+  );
+
+  let promotionValue = 0;
+  if (invoiceRecord.promotionValue === 0) {
+    promotionValue = 0;
+  }
+
+  const contractDepositPrice = invoiceRecord.contractTotalPrice * invoiceRecord.contractDeposit;
+  const promotionValuePrice = usedServivesPrice * promotionValue;
+  const VATPrice = usedServivesPrice * 0.1;
+  const officialPrice = usedServivesPrice - contractDepositPrice - promotionValuePrice + VATPrice;
+
+  const usedServivesPriceFormat = usedServivesPrice
+    .toString()
+    .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  const contractDepositPriceFormat = contractDepositPrice
+    .toString()
+    .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  const promotionValuePriceFormat = promotionValuePrice
+    .toString()
+    .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  const VATPriceFormat = VATPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  const officialPriceFormat = officialPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+  const showModalInvoice = (record) => {
+    setInvoiceRecord(record);
+    setInvoicePriceDetailRecord(record.details);
+    setVisibleInvoice(true);
+  };
+
+  const handleCancel = () => {
+    setVisibleInvoice(false);
+  };
 
   const INVOICELIST = [
     {
@@ -2170,15 +2461,19 @@ const IntroduceRow = ({ loading, RevenuByYearData }) => {
       search: false,
       render: (text, record) => {
         return <div>{moment(record.invoiceDateCreate).format('D/M/Y')}</div>;
-      }
+      },
     },
     {
       title: 'Số tiền trong hoá đơn',
       dataIndex: 'contractTotalPrice',
       search: false,
       render: (text, record) => {
-        return <div>{record.contractTotalPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')} VND</div>
-      }
+        return (
+          <div>
+            {record.contractTotalPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')} VND
+          </div>
+        );
+      },
     },
     {
       title: 'Hành đồng',
@@ -2187,8 +2482,42 @@ const IntroduceRow = ({ loading, RevenuByYearData }) => {
         const viewInvoice = { ...record };
         return (
           <Space>
-            <a>Xem hoá đơn</a>
+            <a onClick={() => showModalInvoice(record)}>Xem hoá đơn</a>
           </Space>
+        );
+      },
+    },
+  ];
+
+  const INVOICEMODAL = [
+    {
+      title: 'STT',
+      dataIndex: 'index',
+      key: 'requestDetailId',
+      search: false,
+      render: (text, object, index) => {
+        return <div>{index + 1}</div>;
+      },
+    },
+    {
+      title: 'Tên dịch vụ đã sử dụng',
+      dataIndex: 'serviceName',
+      key: 'serviceName',
+      search: false,
+      render: (text, record, index) => {
+        return <div>{record.service.serviceName}</div>;
+      },
+    },
+    {
+      title: 'Giá dịch vụ đã sử dụng',
+      dataIndex: 'requestDetailPrice',
+      key: 'requestDetailPrice',
+      search: false,
+      render: (text, record, index) => {
+        return (
+          <div>
+            {record.requestDetailPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')} VNĐ
+          </div>
         );
       },
     },
@@ -2227,6 +2556,7 @@ const IntroduceRow = ({ loading, RevenuByYearData }) => {
                   width: 256,
                 }}
                 // value={yearPickerValue}
+                allowClear={false}
                 onChange={handleYearPickerChangePart1}
                 defaultValue={moment(thisYear.getFullYear(), 'YYYY')}
                 placeholder="Chọn năm"
@@ -2255,7 +2585,7 @@ const IntroduceRow = ({ loading, RevenuByYearData }) => {
                     loading={loading}
                     total={() => `${numeral(revenueOfContractInYear).format('0,0')} VND`}
                     footer={
-                      <Space style={{flexDirection:'column', alignItems:'flex-start' }}>
+                      <Space style={{ flexDirection: 'column', alignItems: 'flex-start' }}>
                         <Field
                           label={`Tháng ${position} có số tiền cao nhất với:`}
                           value={`${numeral(max).format('0,0')} VND`}
@@ -2274,8 +2604,8 @@ const IntroduceRow = ({ loading, RevenuByYearData }) => {
                   >
                     <TinyArea
                       style={{
-                      //  left: true,
-                       marginRight: 70,
+                        //  left: true,
+                        marginRight: 70,
                       }}
                       color="#975FE4"
                       xField="x"
@@ -2296,7 +2626,7 @@ const IntroduceRow = ({ loading, RevenuByYearData }) => {
                     loading={loading}
                     total={() => `${numeral(revenueOfContractInYear).format('0,0')} VND`}
                     footer={
-                      <Space style={{flexDirection:'column', alignItems:'flex-start' }}>
+                      <Space style={{ flexDirection: 'column', alignItems: 'flex-start' }}>
                         <Field
                           label={`Tháng ${position} có số tiền cao nhất với:`}
                           value={`${numeral(max).format('0,0')} VND`}
@@ -2336,7 +2666,7 @@ const IntroduceRow = ({ loading, RevenuByYearData }) => {
                     loading={loading}
                     total={() => `${numeral(revenueOfInvoiceInYear).format('0,0')} VND`}
                     footer={
-                      <Space style={{flexDirection:'column', alignItems:'flex-start' }}>
+                      <Space style={{ flexDirection: 'column', alignItems: 'flex-start' }}>
                         <Field
                           label={`Tháng ${positionMaxRevenueByInvoice} có số tiền cao nhất với:`}
                           value={`${numeral(maxRevenueByInvoice).format('0,0')} VND`}
@@ -2350,8 +2680,6 @@ const IntroduceRow = ({ loading, RevenuByYearData }) => {
                           value={`${numeral(maxInvoice).format('0,0')}`}
                         />
                       </Space>
-                      
-                      
                     }
                     contentHeight={46}
                   >
@@ -2379,7 +2707,7 @@ const IntroduceRow = ({ loading, RevenuByYearData }) => {
                     loading={loading}
                     total={() => `${numeral(revenueOfInvoiceInYear).format('0,0')} VND`}
                     footer={
-                      <Space style={{flexDirection:'column', alignItems:'flex-start' }}>
+                      <Space style={{ flexDirection: 'column', alignItems: 'flex-start' }}>
                         <Field
                           label={`Tháng ${positionMaxRevenueByInvoice} có số tiền cao nhất với:`}
                           value={`${numeral(maxRevenueByInvoice).format('0,0')} VND`}
@@ -2461,7 +2789,7 @@ const IntroduceRow = ({ loading, RevenuByYearData }) => {
                     loading={loading}
                     total={() => `${numeral(revenueFromPaidInvoicesOfYear).format('0,0')} VND`}
                     footer={
-                      <Space style={{flexDirection:'column', alignItems:'flex-start' }}>
+                      <Space style={{ flexDirection: 'column', alignItems: 'flex-start' }}>
                         <Field
                           label={`Tháng ${positionMaxRevenueByInvoice} có doanh thu cao nhất với:`}
                           value={`${numeral(maxRevenueByInvoice).format('0,0')} VND`}
@@ -2475,15 +2803,13 @@ const IntroduceRow = ({ loading, RevenuByYearData }) => {
                           value={`${numeral(maxInvoice).format('0,0')}`}
                         />
                       </Space>
-                      
-                      
                     }
                     contentHeight={46}
                   >
                     <TinyArea
                       style={{
-                      //  left: true,
-                       marginRight: 70,
+                        //  left: true,
+                        marginRight: 70,
                       }}
                       color="#975FE4"
                       xField="x"
@@ -2500,11 +2826,11 @@ const IntroduceRow = ({ loading, RevenuByYearData }) => {
                   <ChartCard
                     style={{ height: '200px' }}
                     bordered={false}
-                    title={`Tổng doanh của năm ${yearPickerPart1}`}
+                    title={`Tổng doanh thu của năm ${yearPickerPart1}`}
                     loading={loading}
                     total={() => `${numeral(revenueFromPaidInvoicesOfYear).format('0,0')} VND`}
                     footer={
-                      <Space style={{flexDirection:'column', alignItems:'flex-start' }}>
+                      <Space style={{ flexDirection: 'column', alignItems: 'flex-start' }}>
                         <Field
                           label={`Tháng ${positionMaxRevenueByInvoice} có doanh thu cao nhất với:`}
                           value={`${numeral(maxRevenueByInvoice).format('0,0')} VND`}
@@ -2620,6 +2946,97 @@ const IntroduceRow = ({ loading, RevenuByYearData }) => {
           </TabPane>
         </Tabs>
       </div>
+      {/* XEM HOÁ ĐƠN */}
+      <Modal title="Hoá đơn" visible={visibleInvoice} footer={null} onCancel={handleCancel}>
+        <Descriptions>
+          <Descriptions.Item span={6} label="Tên chủ công trình" labelStyle={{ fontWeight: '500' }}>
+            {invoiceRecord.customerName}
+          </Descriptions.Item>
+          <Descriptions.Item span={6} label="Địa chỉ công trình" labelStyle={{ fontWeight: '500' }}>
+            {invoiceRecord.customerAddress}
+          </Descriptions.Item>
+          <Descriptions.Item span={6} label="SĐT chủ công trình" labelStyle={{ fontWeight: '500' }}>
+            {invoiceRecord.customerPhone}
+          </Descriptions.Item>
+          <Descriptions.Item span={6} label="Mô tả yêu cầu" labelStyle={{ fontWeight: '500' }}>
+            {invoiceRecord.serviceRequestDescription}
+          </Descriptions.Item>
+          <Descriptions.Item
+            span={6}
+            label="Ngày bắt đầu thi công"
+            labelStyle={{ fontWeight: '500' }}
+          >
+            {moment(invoiceRecord.contractStartDate).format('DD/MM/YYYY').split('T', 1)}
+          </Descriptions.Item>
+          <Descriptions.Item
+            span={6}
+            label="Ngày kết thúc thi công"
+            labelStyle={{ fontWeight: '500' }}
+          >
+            {moment(invoiceRecord.contractEndDate).format('DD/MM/YYYY').split('T', 1)}
+          </Descriptions.Item>
+          <Descriptions.Item span={6} label="Đặt cọc" labelStyle={{ fontWeight: '500' }}>
+            {invoiceRecord.contractDeposit * 100}%
+          </Descriptions.Item>
+        </Descriptions>
+        <ProTable
+          style={{
+            marginBottom: 24,
+          }}
+          pagination={false}
+          search={false}
+          options={false}
+          toolBarRender={false}
+          dataSource={invoicePriceDetailRecord}
+          columns={INVOICEMODAL}
+        />
+        <hr width="80%" align="center" color="black" />
+        <Descriptions
+          style={{
+            marginTop: 24,
+          }}
+        >
+          <Descriptions.Item
+            span={6}
+            label="Tổng tiền hợp đồng ban đầu"
+            labelStyle={{ fontWeight: '500' }}
+          >
+            {invoiceRecord.contractTotalPrice} VNĐ
+          </Descriptions.Item>
+          <Descriptions.Item
+            span={6}
+            label="Tổng tiền dịch vụ đã sử dụng"
+            labelStyle={{ fontWeight: '500' }}
+          >
+            {usedServivesPriceFormat} VNĐ
+          </Descriptions.Item>
+          <Descriptions.Item span={6} label="Trừ tiền đặt cọc" labelStyle={{ fontWeight: '500' }}>
+            -{contractDepositPriceFormat} VNĐ
+          </Descriptions.Item>
+          <Descriptions.Item
+            span={6}
+            label="Giảm giá theo voucher"
+            labelStyle={{ fontWeight: '500' }}
+          >
+            -{promotionValuePriceFormat} VNĐ
+          </Descriptions.Item>
+          <Descriptions.Item
+            span={6}
+            label="Thuế GTGT/VAT (10%)"
+            labelStyle={{ fontWeight: '500' }}
+          >
+            {VATPriceFormat} VNĐ
+          </Descriptions.Item>
+          <Descriptions.Item
+            span={6}
+            label="Thành tiền"
+            labelStyle={{ fontWeight: 'bold', color: 'red' }}
+          >
+            <b style={{ color: 'red' }}>{officialPriceFormat} VNĐ</b>
+          </Descriptions.Item>
+        </Descriptions>
+      </Modal>
+      ;
     </Card>
 
     // <Row gutter={24}>

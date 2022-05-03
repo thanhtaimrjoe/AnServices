@@ -68,20 +68,20 @@ request.interceptors.response.use((response, options) => {
     return response;
   }
   switch (status) {
-    case 200:
-      if (method !== 'GET')
-        notification.success({
-          message: 'Thành Công',
-          description: codeMessage[200],
-        });
-      break;
-    case 201:
-      if (method !== 'GET')
-        notification.success({
-          message: 'Thành Công',
-          description: codeMessage[201],
-        });
-      break;
+    // case 200:
+    //   if (method !== 'GET')
+    //     notification.success({
+    //       message: 'Thành Công',
+    //       description: codeMessage[200],
+    //     });
+    //   break;
+    // case 201:
+    //   if (method !== 'GET')
+    //     notification.success({
+    //       message: 'Thành Công',
+    //       description: codeMessage[201],
+    //     });
+    //   break;
     case 401:
       notification.error({
         message: 'Chưa được cấp phép',

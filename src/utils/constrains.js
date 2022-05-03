@@ -235,21 +235,6 @@ export const REQUESTMATERIAL = [
     title: 'Yêu cầu',
     dataIndex: 'requestServiceDescription',
     search: false,
-    // render: (text, record) => {
-    //   return <div>{record.requestServiceStatus.statusId}</div>;
-    // },
-    // render: (text, record) => {
-    //   // const updateReport = { ...record };
-    //   // updateReport.id = record.id;
-    //   console.log('abc123', record.reviewerId)
-    //   // return <a href={'/reviewers/detail'} >{record.reviewer.name}</a>
-    //   return <Link to={{
-    //     pathname: '/reviewers/detail',
-    //     state: { reviewerId: record.reviewerId }
-    //   }} >
-    //     {record.reviewer.name}
-    //   </Link>
-    // }
   },
   {
     title: 'Khách hàng',
@@ -295,20 +280,6 @@ export const REQUESTMATERIAL = [
     },
   },
 ];
-
-// const onChangeRequestMaterialStatus = (values) => {
-//   const update = normalizeReportForm(formData);
-//   // return updateStatusRequestMaterial({"reviewerId": updateRequestMaterialStatusState.campaignApply.reviewerId, "voucherId": updateRequestMaterialStatusState.campaignApply.campaign.voucherId}, update).then((res) => {
-//   return updateStatusRequestMaterial(formData, update).then((res) => {
-//     // setCreatedVoucher({ "reviewerId": updatePostState.campaignApply.reviewerId, "voucherId": updatePostState.campaignApply.campaign.voucherId});
-//     setChangeRequestMaterialStatus({ ...values, id: res });
-//     // console.log('values' ,{"reviewerId": updateRequestMaterialStatusState, "voucherId": updateRequestMaterialStatusState.campaignApply.campaign.voucherId})
-//     console.log('values' ,formData)
-//     console.log('values1', updateStatusRequestMaterial({"reviewerId": formData, update }))
-//     console.log('values' , formData)
-
-// });
-// };
 
 // INVOICE
 export const INVOICE = [
