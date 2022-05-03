@@ -47,7 +47,7 @@ export default function VerifyPhoneNumber(props) {
   const onVerifyOTP = () => {
     //check code equal 6 number or not
     if (code.length < 6) {
-      Alert.alert('Thông báo', 'Mã xác nhận phải đủ 6 số');
+      Alert.alert('Thông báo', 'Mã xác nhận phải đủ 6 số, vui lòng thử lại');
     } else {
       props.onVerifyOTP(code);
     }

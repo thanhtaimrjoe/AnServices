@@ -19,8 +19,6 @@ export default function LoginContainer(props) {
   const user = useSelector(state => state.user);
   //reducer --- message
   const message = useSelector(state => state.message);
-  //get token
-  const token = 'Bearer ' + user.token;
 
   useEffect(() => {
     //user role = worker

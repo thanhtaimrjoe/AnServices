@@ -62,15 +62,15 @@ export default function VerifyPhoneNumberContainer(props) {
   //button --- verify otp and change phone number
   const onVerifyOTP = code => {
     setLoading(true);
-    // if (otp === code) {
-    changePhoneNumber(user.id, newPhoneNumber, token);
-    // } else {
-    //   Alert.alert(
-    //     'Thông báo',
-    //     'Mã xác nhận bạn nhập không khớp.\nVui lòng thử lại',
-    //   );
-    //   setLoading(false);
-    // }
+    if (otp === code) {
+      changePhoneNumber(user.id, newPhoneNumber, token);
+    } else {
+      Alert.alert(
+        'Thông báo',
+        'Mã xác nhận bạn nhập không khớp.\nVui lòng thử lại',
+      );
+      setLoading(false);
+    }
   };
 
   //button --- resend otp

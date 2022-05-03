@@ -32,8 +32,8 @@ export default function ChangePhoneNumberContainer(props) {
   const checkPhoneNumberExistOrNot = newPhoneNumber =>
     dispatch(actCheckPhoneNumberExistOrNotRequest(newPhoneNumber));
   //call api --- send sms to new phone number
-  const sendSmsByPhoneNumber = (phoneNumber, token) =>
-    dispatch(actSendSmsByPhoneNumberRequest(phoneNumber, token));
+  const sendSmsByPhoneNumber = phoneNumber =>
+    dispatch(actSendSmsByPhoneNumberRequest(phoneNumber));
   //call api --- get worker infomation
   const getWorkerByIDRequest = (userID, token) =>
     dispatch(actGetWorkerByIDRequest(userID, token));
@@ -63,7 +63,7 @@ export default function ChangePhoneNumberContainer(props) {
     setLoading(false);
     resetMessage();
     const convertedPhoneNumber = convertPhoneNumber(phoneNumber);
-    //sendSmsByPhoneNumber(convertedPhoneNumber, token);
+    sendSmsByPhoneNumber(convertedPhoneNumber);
     navigation.navigate('VerifyPhoneNumberContainer', {
       newPhoneNumber: phoneNumber,
       convertedPhoneNumber: convertedPhoneNumber,
